@@ -1,0 +1,84 @@
+.athleticsModule {
+
+	.articleListItem {
+		background: transparent !important;
+	}
+
+	/* Selector bar */
+
+	.selectorBar {
+		margin: 0;
+		padding: 10px 0;
+		background: rgb(193,190,176);
+		text-align: center;
+
+		a {
+			.buttonMixin;
+			margin-right: 10px;
+
+			&:last-child {
+				margin-right: 0;
+			}
+		}
+	}
+
+	.articlesView .newsButton,
+	.scheduleView .scheduleButton,
+	.resultsView .resultsButton {
+		background-color: white;
+	}
+
+	/* Schedule view and results view */
+
+	.dmListItem.resultListItem {
+
+		a {
+			padding-right: 12px;
+
+			.dmRightIcon {
+				display: none;
+			}
+		}
+
+		.gameTime {
+			color: rgb(140,140,140);
+			font-size: 12px;
+			font-weight: normal;
+			margin-bottom: 4px;
+			text-transform: uppercase;
+		 }
+
+		.gameTitle {
+			color: black;
+		}
+
+		.dmListItemRightText {
+		}
+
+		.resultScore1, .resultScore2 {
+			background: rgb(82,45,128);
+			border-radius: 3px;
+			color: white;
+			display: inline-block;
+			font-size: 15px;
+			line-height: 25px;
+			height: 25px;
+			text-align: center;
+			width: 25px;
+		}
+
+		.resultScore1 {
+			margin-right: 5px;
+		}
+
+		.gameResult {
+		 	color: black;
+		 	font-size: 12px;
+		 	margin-top: 4px;
+		 	text-align: center;
+		 	text-transform: uppercase;
+		 	width: 55px;
+		}
+
+	}
+}

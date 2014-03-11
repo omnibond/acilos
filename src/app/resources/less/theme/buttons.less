@@ -1,0 +1,48 @@
+.buttonMixin {
+	background: darken(rgb(193, 190, 176), 25%);
+	border: none;
+	border-radius: 6px;
+	color: rgb(193, 190, 176);
+	display: inline-block;
+	font-size: 12px;
+	font-weight: bold;
+	height: 30px;
+	line-height: 30px;
+	padding: 0 7px;
+	text-align: center;
+	text-decoration: none;
+	text-transform: uppercase;
+	width: auto;
+	min-width: 80px;
+}
+
+.button {
+	.buttonMixin;
+
+	&:disabled {
+		background: darken(rgb(193, 190, 176), 15%);
+	}
+}
+
+.button.small {
+	min-width: 15px !important;
+}
+
+.no_touch .button {
+	&:hover {
+		background: darken(rgb(193, 190, 176), 35%);
+		text-decoration: none; /* Many buttons are also links, so must override a styles */
+	}
+}
+
+.button {
+	&:active {
+		background: darken(rgb(193, 190, 176), 35%);
+	}
+
+	/* Many buttons are also links, so must override a styles */
+	&:active {
+		color: rgb(193, 190, 176);
+		text-decoration: none;
+	}
+}

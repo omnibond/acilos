@@ -1,0 +1,77 @@
+.lightbox {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgb(0,0,0);
+	background-color: rgba(0,0,0,0.78);
+	z-index: 10000;
+
+	// space to reserve for arrows:
+	@verticalArrowSpace: 70px;
+	@horizontalArrowSpace: 70px;
+	@arrowMargin: 10px;
+
+	.lightboxDummy {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+
+		// on phone when in portrait, the arrows are beneath
+		@media (orientation:portrait) {
+			margin-bottom: @verticalArrowSpace;
+		}
+
+		@media (orientation: landscape) {
+			margin: @horizontalArrowSpace;
+		}
+
+
+		.lightboxContent {
+			position: absolute;
+			margin-left: auto;
+			margin-right: auto;
+			top: 50%;
+			left: 50%;
+		}
+	}
+
+	.lightboxArrow {
+		cursor: pointer;
+		position: absolute;
+		font-size: 50px;
+		color: #FFFFFF;
+
+		@media (orientation: landscape) {
+			top: 50%;
+		}
+
+		@media (orientation:portrait) {
+			bottom: @arrowMargin;
+		}
+	}
+
+	.lightboxNextArrow {
+		.icon-arrow-right;
+		position: absolute;
+		right: @arrowMargin;
+
+		@media (orientation:portrait) {
+			right: 25%;
+		}
+	}
+
+	.lightboxPrevArrow {
+		.icon-arrow-left;
+		position: absolute;
+		left: @arrowMargin;
+
+		@media (orientation:portrait) {
+			left: 25%;
+		}
+	}
+}
+

@@ -1,0 +1,63 @@
+
+@searchBarHeightInPhoneView: 50px;
+
+.searchBar {
+	height: 45px;
+	position: absolute;
+	right: 60px;
+	top: -59px;
+	width: 50%;
+
+	.textBoxWrapper {
+		left: 0;
+		position: absolute;
+		right: 110px;
+		top: 5px;
+	}
+
+	.mblTextBox {
+		border: none;
+		border-radius: 12px;
+		color: rgb(77,77,77);
+		font-size: 17px;
+		height: 20px;
+		margin-top: 3px;
+		padding: 5px 10px;
+		width: 100%;
+
+		&:focus {
+			outline: none;
+		}
+	}
+
+	.searchButton {
+		.buttonMixin;
+		margin-top: 8px;
+		position: absolute;
+		right: 0;
+	}
+}
+
+.dj_phone {
+	.searchBar {
+		background: #c1beb0;
+		height: @searchBarHeightInPhoneView;
+		right: 0;
+		top: 0px;
+		width: 100%;
+
+		.textBoxWrapper {
+			left: 10px;
+			right: 120px;
+		}
+
+		.mblTextBox {
+			margin-top: 5px;
+		}
+
+		.searchButton {
+			margin-top: 10px;
+			right: 10px;
+		}
+	}
+}

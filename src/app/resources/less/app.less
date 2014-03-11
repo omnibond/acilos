@@ -1,0 +1,728 @@
+@import "variables.less";
+
+/* dojo-mama css */
+@import "../../../dojo-mama/layout/responsiveTwoColumn/resources/layout.less";
+
+/* dojox/mobile css */
+@import "./dojox-mobile.less";
+
+/* custom theme */
+@import './theme/main.less';
+
+/*previous app themes */
+
+.barGraph {
+	.bar {
+	  fill: steelblue;
+	}
+
+	.bar:hover {
+	  fill: brown;
+	}
+
+	.axis {
+	  font: 10px sans-serif;
+	}
+
+	.axis path,
+	.axis line {
+	  fill: none;
+	  stroke: #000;
+	  shape-rendering: crispEdges;
+	}
+
+	.x.axis path {
+	  display: none;
+	}
+}
+
+.lineGraph {
+	.axis path,
+	.axis line {
+	  fill: none;
+	  stroke: #000;
+	  shape-rendering: crispEdges;
+	}
+
+	.x.axis path {
+	  display: none;
+	}
+
+	.line {
+	  fill: none;
+	  stroke: steelblue;
+	  stroke-width: 1.5px;
+	}
+}
+
+.blackBackDijitDialog {
+	color: transparent;
+	left: 0 !important;
+	top: 0 !important;
+	bottom: 0 !important;
+	right: 0 !important;
+	margin: auto;
+}
+
+.helpDijitDialog {
+	color: black;
+	width: 375px !important;
+	height: 275px !important;
+	top: 0 !important;
+	left: 0 !important;
+	right: 0 !important;
+	bottom: 0 !important;
+	margin: auto !important;
+	position: absolute !important;
+	overflow: hidden;
+}
+
+.calendarDialog {
+	color: black;
+}
+
+.helpTitle {
+	text-decoration: underline;
+}
+
+.optionsDropDownClass {
+	color: black;
+}
+
+.pieChart {
+	.arc path {
+	  stroke: #fff;
+	}
+}
+
+.twitterOrangeDiv {
+	float: left; 
+	color: #F66733;
+}
+
+.twitterOrangeDiv:hover {
+	float: left; 
+	color: #F66733;
+	text-decoration: underline;
+}
+
+.twitterBlueDiv {
+	float: left; 
+	color: #265AC9;
+}
+
+.twitterBlueDiv:hover {
+	float: left; 
+	color: #265AC9;
+	text-decoration: underline;
+}
+
+.tooltipDiv {   
+  position: absolute;           
+  text-align: center; 
+  display: inline-block;                
+  padding: 2px;             
+  font: 12px sans-serif;  
+  color: black;      
+  background: yellow;   
+  border: 0px;      
+  border-radius: 8px;           
+  pointer-events: none;         
+}
+
+.accountManItemClassGood {
+	background: #ffffff;
+	border: none;
+	border-bottom: 1px solid #e7e7de;
+	line-height: 60px;
+	font-weight: normal;
+}
+
+.accountManItemClassBad {
+	background: #b8b8b1;
+	border: 1px solid;
+	line-height: 60px;
+	font-weight: normal;
+}
+
+.feedAccordionItemClass{
+	background: #FFFFFF;
+	border-bottom: 1px solid;
+	border-color: #e7e7de;
+}
+
+.mblAccordionTitle {
+  position: absolute;
+  height: 0px;
+  width: 100%;
+  font-family: Helvetica;
+  font-size: 17px;
+  line-height: 30px;
+  vertical-align: middle;
+  white-space: nowrap;
+  border-top: none;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#fcfcfc), to(#e1e5e8), color-stop(0.2, #f0f2f3));
+  background-image: linear-gradient(to bottom, #fcfcfc 0%, #f0f2f3 20%, #e1e5e8 100%);
+}
+
+.radioCheckBox {
+	-webkit-transform: scale(2.2);
+	-moz-transform: scale(2.2);
+	-ms-transform: scale(2.2);
+	-o-transform: scale(2.2);
+	margin-left: 11px;
+	margin-right: 8px;
+	margin-top: 6px;
+}
+
+.dj_iphone .radioCheckBox {
+	-webkit-transform: scale(1.7);
+	-moz-transform: scale(1.7);
+	-ms-transform: scale(1.7);
+	-o-transform: scale(1.7);
+	margin-left: 11px;
+	margin-right: 8px;
+	margin-top: 6px;
+}
+
+.verticalIconClass {
+	position: absolute;
+}
+
+.divHoldClass {
+	margin-top: 6px;
+}
+
+.feedAccordionClass > .mblAccordionTitle {
+  position: relative;
+  height: 30px;
+  width: 100%;
+  font-family: Helvetica;
+  font-size: 17px;
+  line-height: 30px;
+  vertical-align: middle;
+  white-space: nowrap;
+  border-top: none;
+  background: inherit;
+}
+
+.feedCommentPaneLabelClass > .mblRoundRectList {
+	background:#FFFFFF;
+	border: none;
+}
+
+.feedScrollerRoundRectClass.mblEdgeToEdgeList {
+	background: #FFFFFF;
+	margin-top: 40px;
+}
+
+.feedScrollerRoundRectClassNoMarg.mblEdgeToEdgeList {
+	background: #FFFFFF;
+}
+
+.itemAccordionClass {
+	background:inherit;
+}
+
+.feedItemListItemClass.mblListItem.mblVariableHeight {
+	background: inherit;
+	padding: 0px 0px 0px 0px;
+	border-bottom: 1px solid;
+	border-color: #e7e7de;
+}
+
+.paneLeftClass {
+	background: #FFFFFF !important;
+	max-width: 20%;
+	float: left;
+}
+.paneRightClass {
+	background: inherit;
+	max-width: 80%;
+	display: inline-block;
+}
+.roundRectLeftClass.mblRoundRectList {
+	background: #FFFFFF !important;
+	margin: 3px 3px 16px 3px;
+	border: none;
+}
+.roundRectRightClass.mblRoundRectList {
+	background: inherit;
+	margin: 3px 3px 16px 3px;
+	border: none;
+}
+
+.refreshItemClass {
+	background:inherit;
+}
+
+.feedSearchErrorClass {
+	background:inherit;
+	border-bottom: 3px solid #000000;
+	border-top: 3px solid #000000;
+}
+
+.picItemClass.mblListItem {
+	-webkit-user-select: text;
+	padding: 5px 5px 0px 4px;
+	border:none;
+	background: inherit !important;
+}
+.starItemClass.mblListItem {
+	-webkit-user-select: text;
+	padding: 5px 5px 0px 4px;
+	border:none;
+	background: inherit !important;
+}
+.starButtonClass {
+	background: url(../img/starE.png) no-repeat 0 0;
+	margin-left: 8px;
+	height: 35px;
+	width: 35px;
+}
+.starButtonClassChecked {
+	background: url(../img/star.png) no-repeat 0 0;
+	margin-left: 8px;
+	height: 35px;
+	width: 35px;
+}
+.starClientButtonClass {
+	background: url(../img/profileE.png) no-repeat 0 0;
+	margin-left: 5px;
+	height: 35px;
+	width: 35px;
+}
+
+.optionsButtonClass {
+	background: url(../img/not-allowed-sign_small.png) no-repeat 0 0;
+	margin-left: 8px;
+	height: 35px;
+	width: 35px;
+}
+
+.unfriendButtonClass {
+	background: url(../img/not-allowed-sign_small.png) no-repeat 0 0;
+	margin-left: 8px;
+	height: 35px;
+	width: 35px;
+}
+
+.serviceLogo {
+	position:absolute;
+	right: 10px;
+	top: 6px;
+}
+.bodyCSS {
+	background: #ffffff;
+}
+.serviceButton {
+	background: #D0D7DB;
+	position:absolute;
+	left: 10px;
+	top: 6px;
+}
+.starClientButtonClassChecked {
+	background: url(../img/profile.png) no-repeat 0 0;
+	margin-left: 5px;
+	height: 35px;
+	width: 35px;
+}
+
+.feedNameServiceItemClass.mblListItem {
+	border:none;
+	background:inherit;
+	padding: 10px 0px 2px 0px;
+}
+
+.feedPicDateItemClass.mblListItem {
+	height:auto;
+	border:none;
+	background:inherit;
+	padding: 0px 0px 2px 0px;
+}
+
+.feedServiceDivItemClass {
+	margin-top: 5px;
+	margin-bottom: 1px;
+}	
+
+.feedDateDivItemClass {
+	margin-top:1px;
+}	
+
+.feedPicContentItemClass.mblListItem {
+	font-weight: normal;
+	height: auto;
+	border:none;
+	background:inherit;
+	padding: 2px 0px 2px 0px;
+}
+
+.feedTextTitleItemClass.mblListItem {
+	font-weight: normal;
+	font-size: 17px;
+	border:none;
+	background:inherit;
+	padding: 2px 0px 2px 0px;
+}
+
+.feedTextContentItemClass.mblListItem {
+	font-weight: normal;
+	font-size: 16px;
+	border:none;
+	background:inherit;
+	padding: 2px 0px 2px 0px;
+}
+
+.feedCommentItemClass.mblListItem {
+	font-weight: normal;
+	border:none;
+	background:inherit;
+	padding: 2px 0px 0px 0px;
+}
+
+//this one doesnt work so well but is needed for other css selectors
+.feedCommentPaneLabelClass {
+	font-weight: normal;
+	font-family: 'Century Gothic';
+	font-size: 25px;
+}
+
+.filterItemClass {
+	line-height: 33px;
+	font-weight: normal;
+	height: 33px; 
+	background: #7E93A8;
+}
+
+.borderlessListItemClass {
+	border:none;
+}
+
+.helpListItemClass {
+	border-bottom: 1px solid #c0c0c0 !important;
+}
+
+.postItemClass {
+	font-weight: normal;
+	background:inherit;
+}
+
+.searchKeyWordItemClass {
+	font-weight: normal;
+	background:#FFFFFF;
+}
+
+.searchUserItemClass {
+	font-weight: normal;
+	background: #FFFFFF;
+}
+
+.menuAccordionListItemClass {
+	font-weight: normal;
+	background:inherit;
+}
+
+.helpItemClass {
+	font-weight: normal;
+	background: #FFFFFF;
+	border: none;
+}
+
+.userMentionItemClass {
+	font-weight: normal;
+	background:inherit;
+}
+
+.googleMapsItemClass {
+	font-weight: normal;
+	background:inherit;
+}
+
+.contactsManCategoryClass {
+	font-size: 22px;
+	background: #7D7B7A;
+	margin: 0px 0px 0px;
+	border: 1px solid;
+}
+
+.commentLikeAccordionItemClass {
+	font-weight: normal;
+	background: #eeeeee;
+	font-size: 17px;
+	margin-right: 9px;
+	margin-left: 9px;
+	border: none;
+	width: 95.6%;
+}
+
+.displayAccClass {
+	font-weight: normal;
+	background:inherit;
+}
+
+.feedsManItemClass {
+	font-weight: normal;
+	background: #FFFFFF;
+}
+
+.feedsAccordionItemClass {
+	font-weight: normal;
+	background:inherit;
+}
+
+.contactsManItemClass { 
+	font-weight: normal;
+	background: #FFFFFF;
+}
+
+.FilterFeedGoButtonRoundRect {
+	margin-top: 10px;
+}
+
+.noMarginsNoPaddingClass {
+	margin: 0px 9px 0px;
+}
+
+.titleBar {
+	height: 45px;
+	position: absolute;
+	right: 70px;
+	top: -52px;
+}
+
+.roundTextBoxClass {
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border: 2px inset;
+	border-color: #e7e7e7;
+}
+
+.disabledTextBoxClass {
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border: 2px inset;
+	border-color: #e7e7e7;
+	background-color: #C3C5C9;
+}
+
+.buttonIconDiv {
+	float: right;
+	margin-right: 5px;
+}
+
+.dj_phone .selectorBar {
+	margin-top: 0px;
+}
+
+.selectorBar {
+	left: 0;
+	top: 0;
+	padding: 5px 0px !important;
+	text-align: right;
+	vertical-align: middle;
+	width: 100%;
+	float: left;
+	position: relative;
+	margin-left: 0px;
+	margin-top: 0px;
+	height: 25px !important;
+	z-index: 0;
+}
+
+.selectorButton {
+	border: none;
+	color: white;
+	font-weight: normal;
+	height: 31px;
+	width: 31px;
+	margin-right: 3px;
+	padding-left: 3px;
+	padding-top: 3px;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	margin-top: -3px;
+}
+
+.itemLightClass {
+	line-height: 33px;
+	font-weight: normal;
+	height: 33px;
+	border: 1px solid;
+}
+.itemDarkClass {
+	line-height: 33px;
+	font-weight: normal;
+	height: 33px;
+	border: none;
+	background: #BDC7D4;
+}
+
+.darkButton {
+	background: #6a7495;
+}
+
+.mblToolBarButton{
+	background: #9E9D90 !important;
+}
+
+.serviceSelector {
+	border: none;
+	padding: 0px;
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.mblListItem {
+	outline: none;
+	font-weight: normal !important;
+}
+
+.mblAccordionTitleTextBox {
+	outline: none;
+}
+
+.serviceIcon1 {
+	position: absolute;
+	right: 30px;
+	top: 15px;
+}
+
+.serviceIcon2 {
+	position: absolute;
+	right: 0;
+	margin-top: -35px;
+	margin-right: 19px;
+}
+
+.divListItem {
+	font-weight: normal;
+	background: #FFFFFF;
+	height: 40px;
+	line-height: 40px;
+	border: 1px solid #cdcbc3;
+	height: auto;
+	padding-left: 10px;
+	padding-right: 30px;
+	color: #000000;
+}
+
+.divListItemExtraPadding {
+	font-weight: normal;
+	background: #FFFFFF;
+	height: 40px;
+	line-height: 40px;
+	border: 1px solid #cdcbc3;
+	height: auto;
+	padding-left: 30px;
+	padding-right: 30px;
+	color: #000000;
+}
+
+.commentPane {
+	border: none;
+	margin-top: -6px;
+}
+
+.blackFont {
+	color: #000000;
+}
+
+.loginLogo {
+	height: 80px;
+	width: 80px;
+}
+
+.accountLogo {
+	height: 40px;
+	width: 40px;
+}
+
+.accountButtonAuth {
+	position: absolute;
+	bottom: 5px;
+	left: 10px
+}
+
+.accountButtonLogOut {
+	position: absolute;
+	bottom: 5px;
+	left: 75px
+}
+
+.accountDiv {
+	position: absolute;
+	bottom: -15px;
+	left: 155px
+}
+
+.floatLeftButton {
+	float: left;
+	margin-left: 3px !important;
+	margin-right: 0px;
+}
+
+.floatRightButton {
+	float: right;
+	margin-left: 0px;
+	margin-right: 3px !important;
+}
+
+.noBottomBorder {
+	border-bottom: none;
+}
+
+.checkIcon {
+	float:left;
+	margin-right: -25px;
+	margin-left: -25px;
+	margin-top: 6px
+}
+
+.fullWidthTextBox {
+	width: 99%;
+}
+
+.dj_iphone .fullWidthTextBox {
+	width: 96%;
+}
+
+.postButton {
+	height: 21px;
+	line-height: 21px;
+	position: relative;
+	margin-top: 1px;
+	margin-left: -1px;
+}
+
+.dj_iphone .adPositionClass {
+	bottom: -4px;
+	position: absolute;
+}
+
+.adPositionClass {
+	bottom: -5px;
+	position: absolute;
+}
+
+.dj_iphone .adPositionClass {
+    bottom: -4px;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+}
+
+.dj_android .adPositionClass {
+    bottom: -5px;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+}
+
+.adDivClass {
+    display: inline-block;
+}

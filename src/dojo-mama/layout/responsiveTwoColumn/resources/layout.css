@@ -1,0 +1,301 @@
+.dmGridList {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.dmGridListItemContainer {
+  padding: 0;
+  margin: 0;
+  float: left;
+  width: 25%;
+}
+.dmGridListItem {
+  overflow: hidden;
+  border: 1px solid blue;
+  padding: 1em;
+  margin: 1em .5em 0 .5em;
+}
+/* IE8 padding will be off a bit. Oh well! */
+/* margin for pad the first column on the left */
+.dmGridList li:nth-child(4n+1) > .dmGridListItem {
+  margin-left: 1em;
+}
+/* margin for the lsat column on the right */
+.dmGridList li:nth-child(4n) > .dmGridListItem {
+  margin-right: 1em;
+}
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+}
+/* Helper classes for responsive display */
+.dj_phone .hidden_phone {
+  display: none !important;
+}
+.dj_tablet .hidden_tablet {
+  display: none !important;
+}
+.left {
+  float: left;
+}
+.right {
+  float: right;
+}
+.hidden {
+  display: none !important;
+}
+.stretch {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+}
+/**
+ * TOP BAR
+ */
+/* Shared styles across top bar */
+.dmTitle,
+.dmMetaNav {
+  padding: 0;
+  margin: 0;
+  height: 70px;
+}
+.dmSubNav {
+  padding: 0;
+  margin: 0;
+  border: 0 !important;
+  height: 73px;
+}
+.dj_phone .dmSubNav {
+  height: 60px;
+}
+.dmTitle,
+.dmMetaNav {
+  border-bottom: 1px solid black;
+}
+/**
+ * Left & right panes, responsive classes
+ */
+/* Title heading */
+.dmTitleHeading {
+  padding: 20px 0 0 0;
+  margin: 0;
+  font-size: 1.1em;
+  width: auto;
+  height: 20px;
+  float: left;
+  margin-left: 1em !important;
+}
+/* Left pane */
+.dmLeftPane {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  height: 100%;
+  background: white;
+  z-index: 2;
+}
+.dj_tablet .dmLeftPane {
+  width: 220px;
+}
+.dj_phone .dmLeftPane {
+  width: 100%;
+}
+.dj_phone .dmLeftPane.dmHidden {
+  left: -100%;
+}
+/* Right pane */
+.dmRightPane {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+.dj_tablet .dmRightPane {
+  left: 220px;
+  right: 0;
+}
+.dj_phone .dmRightPane {
+  width: 100%;
+}
+.dj_phone .dmRightPane.dmHidden {
+  left: 100%;
+}
+/* Pane transitions for mobile */
+.dj_phone .dmLeftPane,
+.dj_phone .dmRightPane {
+  transition: left 0.3s;
+  -moz-transition: left 0.3s;
+  -o-transition: left 0.3s;
+  -webkit-transition: left 0.3s;
+}
+/* Module wrapper */
+.dmModuleContent {
+  position: absolute;
+  top: 143px;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  padding: 0;
+  margin: 0;
+}
+.dj_phone .dmModuleContent {
+  top: 60px;
+}
+/**
+ * PRIMARY NAV
+ */
+/* Primary nav list */
+.dmPrimaryNav {
+  position: absolute !important;
+  left: 0;
+  top: 70px;
+  bottom: 0;
+  width: 100%;
+}
+/**
+ * SECONDARY NAV
+ */
+/* Meta nav (menu bar, popup menu) and sub nav */
+/* Meta nav and sub nav container */
+.dmMetaNav,
+.dmSubNav {
+  width: 100%;
+}
+/* Menu bar, containing the popup menu */
+.dmMenuBar {
+  position: relative;
+  float: right;
+  margin-right: 1em !important;
+}
+/* Popup menu */
+/* Menu bar item */
+.dmMenuBarItem {
+  display: inline-block;
+  margin-left: 10px;
+  margin-top: 14px;
+  font-size: 13px;
+}
+/* Popup menu item */
+.dmPopupMenu {
+  display: none;
+  position: absolute;
+  background: white;
+  right: 0;
+  top: 55px;
+  z-index: 99;
+  border: 1px solid black;
+}
+.dmPopupMenu.visible {
+  display: block;
+}
+.dmPopupMenu .dmMenuBarItem {
+  display: block;
+  text-align: center;
+  margin-left: 0;
+  margin-top: 0;
+  font-size: 15px;
+  padding: 15px;
+}
+/* Sub nav (breadcrumbs, back functionality) */
+/* Sub nav container */
+.dj_tablet .dmSubNavTitle {
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 73px;
+  margin-left: 20px;
+}
+.dmSubNav > div,
+.dmSubNavBreadcrumbsContainer div {
+  height: 73px;
+  line-height: 73px;
+}
+.dj_phone .dmSubNav > div,
+.dj_phone .dmSubNavBreadcrumbsContainer div {
+  height: 60px;
+  line-height: 60px;
+  font-size: 20px;
+  font-weight: bold;
+}
+.dmSubNavBreadcrumbsContainer div {
+  float: left;
+  padding-left: .25em;
+  font-size: 20px;
+}
+.dmSubNavTitle,
+.dmSubNavBackButton,
+.dmSubNavBreadCrumbLabel {
+  cursor: pointer;
+}
+.dmSubNavMobileTitle,
+.dmSubNavBreadCrumbLastLabel {
+  cursor: default;
+}
+.dmSubNavTitle,
+.dmSubNavMobileTitle,
+.dmSubNavBackButton {
+  padding-left: .5em;
+}
+.dmSubNavTitleSeparator {
+  padding-left: .25em;
+}
+/* Module view transitions */
+.dmModuleView {
+  position: absolute !important;
+  top: 0;
+  bottom: 0;
+  height: auto !important;
+}
+.dj_tablet .dmModuleView {
+  left: 0;
+  right: 0;
+}
+.dj_tablet .dmModuleView.dmHiddenRight,
+.dj_tablet .dmModuleView.dmHiddenLeft {
+  display: none;
+}
+.dj_phone .dmModuleView {
+  width: 100%;
+}
+.dj_phone .dmModuleView.dmHiddenRight {
+  left: 100%;
+  overflow: hidden !important;
+}
+.dj_phone .dmModuleView.dmHiddenLeft {
+  left: -100%;
+  overflow: hidden !important;
+}
+.dj_phone .dmModuleViewTransition {
+  transition: left 0.3s;
+  -moz-transition: left 0.3s;
+  -o-transition: left 0.3s;
+  -webkit-transition: left 0.3s;
+  overflow: hidden !important;
+}
+/* Hide left pane and subnav when rootView is active */
+html.dj_tablet body.rootView .dmRightPane {
+  width: 100%;
+}
+html.dj_tablet body.rootView .dmSubNav {
+  display: none;
+}
+html.dj_tablet body.rootView .dmRightPane {
+  display: none;
+}
+html.dj_tablet body.rootView .dmModuleContent {
+  display: none;
+}
+/* No padding on ScrollableViews */
+.dmModuleView.mblScrollableView {
+  padding: 0 !important;
+}
+/* Override inline height on dojox.mobile.ScrollableView on iOS */
+.dmModuleView.mblScrollableView {
+  position: absolute !important;
+  height: auto !important;
+}

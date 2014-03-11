@@ -1,0 +1,2 @@
+export NODE_PATH=../src/util/less/lib
+node ./less/compile_less.js watch

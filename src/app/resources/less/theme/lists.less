@@ -1,0 +1,61 @@
+.mblEdgeToEdgeList {
+	margin: 0 10px;
+	background: transparent;
+}
+
+.dj_tablet .mblEdgeToEdgeList {
+	margin: 10px 15px;
+}
+
+.dmListItem {
+	border-bottom: 1px solid rgb(231, 231, 222);
+	color: rgb(55,55,55);
+	font-weight: normal;
+	margin-bottom: 0;
+	overflow: hidden;
+	position: relative;
+	padding: 15px 12px 15px 0;
+
+	&.dmLinkListItem {
+		padding: 0;
+
+		a {
+			overflow: hidden;
+			padding: 15px 20px 15px 0;
+
+			.dmRightIcon {
+				margin-top: -9px;
+				right: 0;
+				top: 50%;
+			}
+		}
+
+		a, a:visited, a:hover, a:active {
+			color: inherit;
+			text-decoration: inherit;
+		}
+	}
+
+	&:focus {
+		outline: none;
+	}
+
+	&:last-child {
+		border-bottom: none;
+	}
+
+	.dmListItemText {
+		color: #000000 !important;
+		overflow: hidden;
+	}
+
+	.dmListItemIcon {
+		margin: 0;
+	}
+
+	.dmListItemRightText {
+		font-weight: normal;
+		text-align: right;
+	}
+
+}

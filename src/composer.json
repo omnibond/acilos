@@ -1,0 +1,7 @@
+{
+    "require" : {
+        "nervetattoo/elasticsearch" : ">=2.0",
+	"slim/slim": "2.*",
+	"aws/aws-sdk-php": "2.*"
+    }
+}

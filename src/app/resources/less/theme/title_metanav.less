@@ -1,0 +1,159 @@
+.dmTitle, .dmMetaNav {
+	background-color: rgb(55, 55, 55);
+	border-bottom: 0;
+	height: 40px;
+	line-height: 1px;
+}
+
+.dmTitleHeading {
+	color: rgb(177,177,177);
+	font-size: 20px;
+	font-weight: bold;
+	letter-spacing: -1px;
+	outline: none;
+	text-decoration: none;
+}
+
+.no_touch .dmTitleHeading {
+	&:hover {
+		color: rgb(231, 231, 222);
+		text-decoration: none;
+	}
+}
+
+.dmTitleHeading {
+	&:active {
+		color: rgb(231, 231, 222);
+		text-decoration: none;
+	}
+}
+
+.dmMenuBar {
+	background: transparent;
+	height: 60px;
+	line-height: 65px;
+	margin-right: 0;
+	outline: none;
+	margin-top: -12px;
+
+	.dmMenuBarItem {
+		color: rgb(177,177,177);
+		cursor: pointer;
+		text-transform: uppercase;
+		text-decoration: none;
+		line-height: 1;
+		margin-left: 0;
+		margin-right: 10px;
+		margin-top: 0;
+		outline: none;
+	}
+
+	.dmMenuBarPopupItem {
+		.icon-list;
+		font-size: 24px;
+		padding: 10px;
+		margin-right: 10px;
+		margin-top: 5px;
+		position: relative;
+		top: 3px;
+		outline: none;
+	}
+
+	.dmPopupMenu {
+		background-color: rgb(55,55,55);
+		background-color: rgba(55,55,55,0.95);
+		border-color: rgb(238,239,230);
+		border-color: rgba(238,239,230,0.95);
+		border-style: solid;
+		border-width: 1px;
+		border-radius: 3px;
+		margin-right: 5px;
+
+		.dmMenuBarItem {
+			color: rgb(238,239,230);
+			margin: 0;
+			padding: 17px 20px;
+		}
+
+		.dmMenuBarItem:last-child {
+			border-bottom: none;
+		}
+	}
+
+	.dmPopupMenu:before {
+		background: transparent;
+		border-bottom: 10px solid rgba(238,239,230,0.95);
+		border-left: 10px solid transparent;
+		border-right: 10px solid transparent;
+		content: '';
+		height: 0;
+		position: absolute;
+		right: 16px;
+		top: -10px;
+		width: 0;
+	}
+
+	.dmPopupMenu:after {
+		background: transparent;
+		border-bottom: 9px solid rgba(55,55,55,1);
+		border-left: 9px solid transparent;
+		border-right: 9px solid transparent;
+		content: '';
+		height: 0;
+		position: absolute;
+		right: 17px;
+		top: -9px;
+		width: 0;
+	}
+}
+
+.no_touch .dmMenuBar {
+	.dmMenuBarItem {
+		&:hover {
+			color: rgb(231, 231, 222);
+			text-decoration: none;
+		}
+	}
+}
+
+.dmMenuBar {
+	.dmMenuBarItem {
+		&:active {
+			color: rgb(231, 231, 222);
+			text-decoration: none;
+		}
+	}
+}
+
+.dj_tablet .dmMenuBarPopupItem {
+	top: 5px;
+}
+
+.dmSubNav {
+	.dmMenuBarItem {
+		color: white;
+	}
+}
+
+.dj_phone {
+	.dmMenuBarPopupItem {
+		margin-right: 5px;
+	}
+
+	.dmPopupMenu:before {
+		right: 11px;
+	}
+
+	.dmPopupMenu:after {
+		right: 12px;
+	}
+}
+
+.dj_tablet {
+	.dmMenuBarPopupItem.dmMenuBarPopupItemHiddenTablet {
+		visibility: hidden;
+		margin-right: 15px;
+		padding: 0;
+		width: 0;
+	}
+}

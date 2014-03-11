@@ -1,0 +1,117 @@
+.linkContainer {
+
+	background: white;
+	height: 100%;
+	position: absolute;
+	width: 100%;
+	z-index: 99;
+
+	.header {
+		background: rgb(55,55,55);
+		border-top: 5px solid rgb(246, 103, 51);
+		height: 45px;
+		position: absolute;
+		width: 100%;
+
+		.backButton, .openButton {
+			height: 50px;
+			margin-top: -25px;
+			position: absolute;
+			text-decoration: none;
+			top: 50%;
+			width: 60px;
+
+			div {
+				background: darken(rgb(55,55,55), 15%);
+				font-size: 20px;
+				border: none;
+				border-radius: 6px;
+				color: white;
+				font-size: 18px;
+				height: 30px;
+				line-height: 30px;
+				margin-left: 10px;
+				margin-top: 10px;
+				outline: none;
+				text-align: center;
+				text-decoration: none;
+				width: 40px;
+			}
+
+			&:active {
+				div {
+					background: darken(rgb(55,55,55), 30%);
+				}
+			}
+		}
+
+		.backButton {
+			left: 10px;
+		}
+
+		.openButton {
+			right: 10px;
+		}
+
+		.title {
+			color: white;
+			font-size: 20px;
+			height: 45px;
+			line-height: 45px;
+			left: 70px;
+			overflow: hidden;
+			position: absolute;
+			right: 70px;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+	}
+
+	// For whatever reason, trying to absolutely position the iframe itself doesn't work.
+	// So the extra frameWrapper div is needed.
+	.frameWrapper {
+		bottom: 0;
+		position: absolute;
+		top: 50px;
+		width: 100%;
+		overflow: scroll;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	iframe {
+		border: 0;
+		height: 100%;
+		outline: 0;
+		width: 100%;
+	}
+
+}
+
+.dj_tablet {
+	.linkContainer {
+		.header {
+			height: 65px;
+
+			.title {
+				height: 65px;
+				line-height: 65px;
+			}
+		}
+
+		.frameWrapper {
+			top: 70px;
+		}
+	}
+}
+
+.no_touch {
+	.linkContainer {
+		.header {
+			.backButton, .shareButton {
+				div:hover {
+					background: darken(rgb(55,55,55), 30%);
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,38 @@
+SRC=../src
+VENDOR=$SRC
+DOJO_VERSION=1.9.0
+DOJO_TARGET=dojo-release-${DOJO_VERSION}-src
+DOJO_TARBALL=${DOJO_TARGET}.tar.gz
+
+# Download Dojo
+if [ ! -d $SRC/dojo ] || [ ! -d $SRC/dojox ] || [ ! -d $SRC/dijit ] || [ ! -d $SRC/util ]; then
+	echo "Downloading Dojo"
+	curl http://download.dojotoolkit.org/release-${DOJO_VERSION}/${DOJO_TARBALL} > ${DOJO_TARBALL}
+	echo "Unpacking Dojo"
+	tar -xzf ${DOJO_TARBALL}
+	mv ${DOJO_TARGET}/* ${SRC}
+	rmdir ${DOJO_TARGET}
+	rm ${DOJO_TARBALL}
+else
+	echo "Dojo libraries already present in src folder"
+fi
+
+# Check if composer is installed
+cd $VENDOR
+if [ -f composer.lock ]; then
+	rm composer.lock
+fi
+command -v composer
+if [ $? -ne 0 ]; then
+	echo ""
+	echo "Error. Could not find composer in your path"
+	echo "You may download it with:"
+	echo "  $ curl -sS https://getcomposer.org/installer | php"
+	echo "And run with:"
+	echo "  $ cd src/srv"
+	echo "  $ php /path/to/composer.phar install"
+else
+	# If so, run composer to install dependencies
+	composer install
+fi
+cd -

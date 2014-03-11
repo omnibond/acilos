@@ -1,0 +1,1 @@
+{"apiKey":"3l62srx3yqs0","secretKey":"SwhAkyWptttMJb7w","lredirect_uri":"http:\/\/richardgpc.clemson.edu\/oAuth\/linkedinAccess.php","color":""}

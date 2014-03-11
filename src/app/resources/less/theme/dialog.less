@@ -1,0 +1,64 @@
+.dialog {
+	background: rgb(55,55,55);
+	background: rgba(55,55,55,0.95);
+	border: 1px solid rgb(55,55,55);
+	border-radius: 6px;
+	height: 150px;
+	left: 50%;
+	margin-left: -140px;
+	margin-top: -75px;
+	position: absolute;
+	top: 50%;
+	width: 280px;
+	z-index: 100;
+
+	.dialogTitle {
+		border-bottom: 1px solid white;
+		color: white;
+		font-size: 20px;
+		font-weight: bold;
+		line-height: 49px;
+		height: 49px;
+		margin: 0 10px;
+		text-align: center;
+	}
+
+	.dialogMessage {
+		color: white;
+		font-size: 16px;
+		height: 35px;
+		padding: 10px;
+		text-align: center;
+	}
+
+	.dialogButtons {
+		height: 45px;
+		text-align: center;
+
+		.button {
+			background: transparent;
+			border: 1px solid white;
+			color: white;
+			margin-right: 10px;
+
+			&:last-child {
+				margin-right: 0;
+			}
+
+			&:active {
+				background: darken(rgb(55,55,55), 10%);
+			}
+		}
+	}
+}
+
+.dialogOverlay {
+	background: rgb(140,140,140);
+	background: rgba(140,140,140, 0.65);
+	height: 100%;
+	left: 0;
+	position: absolute;
+	top: 0;
+	width: 100%;
+	z-index: 99;
+}

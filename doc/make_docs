@@ -1,0 +1,6 @@
+cd js-doc-parse
+./parse.sh config=./config.js
+rm ../api-viewer/api_data/1.9/tree.json
+rm ../api-viewer/api_data/1.9/details.xml
+cp -v tree.json ../api-viewer/api_data/1.9
+cp -v details.xml ../api-viewer/api_data/1.9

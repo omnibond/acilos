@@ -1,0 +1,116 @@
+.dmSubNav {
+	background-color: rgb(55,55,55);
+	border-bottom: 5px solid darken(rgb(55,55,55), 5%);
+	line-height: 60px;
+	position: relative;
+	outline: none;
+}
+
+.dj_tablet .dmSubNav {
+	border: none;
+	line-height: 73px;
+}
+
+.dmSubNavTitle {
+	color: white;
+	display: block;
+	font-size: 20px;
+	left: 65px;
+	overflow: hidden;
+	position: absolute;
+	right: 50px;
+	text-overflow: ellipsis;
+	top: 0;
+	white-space: nowrap;
+
+	&:focus {
+		outline: none;
+	}
+}
+
+.dj_phone .dmSubNavTitle {
+	height: 35px;
+	line-height: 35px;
+}
+
+.dj_tablet .dmSubNavTitle {
+	left: 76px;
+	right: 60px;
+}
+
+.dmSubNavBackButton {
+	left: 0px;
+	height: 50px;
+	outline: none;
+	position: absolute;
+	top: 50%;
+	margin-top: -25px;
+	width: 60px;
+
+	div {
+		.icon-back;
+		font-size: 20px;
+		border: none;
+		border-radius: 6px;
+		color: white;
+		font-size: 18px;
+		height: 30px;
+		line-height: 30px;
+		margin-left: 10px;
+		margin-top: 10px;
+		outline: none;
+		text-align: center;
+		text-decoration: none;
+		width: 40px;
+	}
+}
+
+.dj_tablet .dmSubNavBackButton {
+	left: 10px;
+}
+
+.dmFullscreenButton {
+	.buttonMixin;
+	.icon-resize-enlarge;
+	color: white;
+	font-size: 20px;
+	height: 30px;
+	margin-top: -15px;
+	position: absolute;
+	right: 15px;
+	top: 50%;
+	width: 34px;
+	min-width: 15px !important;
+}
+
+.dj_phone {
+	.dmModuleContent {
+		top: 70px;
+	}
+}
+
+/* Subnav color for modules in meta nav */
+
+#genActiveModuleColor(@name, @color) {
+	.dmActiveModule_@{name} .dmSubNav {
+		background-color: @color;
+
+		.dmSubNavBackButton div, .dmFullscreenButton {
+			background-color: darken(@color, 15%);
+		}
+	}
+
+	.no_touch .dmActiveModule_@{name} {
+		.dmSubNavBackButton div:hover, .dmFullscreenButton:hover {
+			background-color: darken(@color, 30%);
+		}
+	}
+
+	.dmActiveModule_@{name} {
+		.dmSubNavBackButton:active div, .dmFullscreenButton:active {
+			background-color: darken(@color, 30%);
+		}
+	}
+}
+
+#genActiveModuleColor(feedback, #74808c);

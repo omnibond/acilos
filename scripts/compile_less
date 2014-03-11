@@ -1,0 +1,4 @@
+export NODE_PATH=../src/util/less/lib
+mkdir -p ../src/app/resources/css
+mkdir -p ../src/demo/resources/css
+node ./less/compile_less.js

@@ -1,0 +1,145 @@
+{
+    "settings": {
+	"number_of_shards": 1,
+	"number_of_replicas": 0,
+	 "analysis" : {
+            "analyzer": {
+                "searchIndex" : {
+                    "type" : "standard",
+                    "stopwords" : []
+                },
+                "searchIndex_autocomplete" : {
+                    "type" : "custom",
+                    "tokenizer" : "standard",
+                    "filter" : ["lowercase","autocomplete"]
+                }
+            },
+            "filter": {
+                "autocomplete" : {
+                    "type" : "edge_ngram",
+                    "min_gram" : 1,
+                    "max_gram" : 20
+                }
+            }
+        }
+    },
+    "mappings": {
+        "client": {
+            "properties": {
+                "data": {
+                    "properties": {
+                        "about": {
+                            "properties": {
+                                "description": {
+                                    "type": "string",
+                                    "index": "not_analyzed"
+                                },
+                                "link": {
+                                    "type": "string",
+                                    "index": "no"
+                                }
+                            }
+                        },
+                        "credentials": {
+                            "type": "object",
+                            "enabled": false
+                        },
+                        "displayName": {
+                            "type": "string"
+                        },
+			"circles": {
+                            "type": "string",
+			     "index": "not_analyzed"
+                        },
+			"givenName": {
+                            "type": "string"
+                        },
+                        "id": {
+                            "type": "string",
+                            "index": "not_analyzed"
+                        },
+                        "ownedBy": {
+                            "type": "string",
+                            "index": "not_analyzed"
+                        },
+			"owns": {
+				"type": "string"
+			},
+                        "post": {
+                            "properties": {
+                                "recentPost": {
+                                    "type": "string",
+                                    "index": "not_analyzed"
+                                },
+                                "recentPostTime": {
+                                    "type": "long"
+                                },
+                                "totalPosts": {
+                                    "type": "long"
+                                }
+                            }
+                        },
+			 "searchIndex": {
+                            "type" : "multi_field",
+                            "fields": {
+                                "searchIndex" : {
+                                    "type" : "string",
+                                    "analyzer" : "searchIndex"
+                                },
+                                "autocomplete" : {
+                                    "type" : "string",
+                                    "index_analyzer" : "searchIndex_autocomplete",
+				    "search_analyzer" : "searchIndex"
+                                }
+                            }
+                        },
+			"alphaIndex": {
+                            "type": "string",
+			    "index": "not_analyzed"
+                        },
+			"homeTown": {
+                            "type": "string",
+			     "index": "not_analyzed"
+                        },
+			"friendDegree": {
+                            "type": "string",
+			     "index": "not_analyzed"
+                        },
+			"friendStatus": {
+                            "type": "string",
+			     "index": "not_analyzed"
+                        },
+			"shh": {
+                            "type": "date",
+			    "format": "dateOptionalTime"
+                        },
+			"currentTown": {
+                            "type": "string",
+			     "index": "not_analyzed"
+                        },
+                        "starred": {
+                            "type": "string",
+                            "index": "not_analyzed"
+                        },
+			 "service": {
+                            "type": "string",
+                            "index": "not_analyzed"
+                        },
+			"isLiked": {
+                            "type": "string",
+                            "index": "not_analyzed"
+                        },
+			"isCommented": {
+                            "type": "string",
+                            "index": "not_analyzed"
+                        },
+			"isFavorited": {
+                            "type": "string",
+                            "index": "not_analyzed"
+                        }			
+                    }
+                }
+            }
+        }
+    }
+}

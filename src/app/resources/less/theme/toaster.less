@@ -1,0 +1,135 @@
+
+.toasterContainer {
+	//position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	margin: 0;
+
+	.toasterMessage {
+		position: relative;
+		background: rgba(55,55,55,0.95);
+		border-radius: 3px;
+		z-index: 10;
+		margin: 10px 15px;
+		padding: 7px 15px;
+		color: white;
+
+		&.toasterError {
+			background-color:  rgba(255, 48, 16, 0.90);
+		}
+		&.toasterSuccess {
+			background-color:  rgba(0, 255, 112, 0.90);
+		}
+		&.toasterWarning {
+			background-color:  rgba(255, 176, 0, 0.90);
+		}
+		&.toasterInformation {
+			background-color:  rgba(112, 112,  255, 0.90);
+		}
+
+	}
+}
+
+/*
+.toasterMessage {
+	background: rgba(55,55,55,0.95);
+	border-radius: 3px;
+	color: rgb(238,239,230);
+	height: auto;
+	left: 50%;
+	margin-left: -130px;
+	padding: 20px;
+	position: absolute;
+	top: 15px;
+	width: 220px;
+
+	-webkit-animation-duration: 0.75s;
+	-moz-animation-duration: 0.75s;
+	-o-animation-duration: 0.75s;
+	animation-duration: 0.75s;
+	-webkit-animation-fill-mode: both;
+	-moz-animation-fill-mode: both;
+	-o-animation-fill-mode: both;
+	animation-fill-mode: both;
+	-webkit-animation-name: fadeInDown;
+	-moz-animation-name: fadeInDown;
+	-o-animation-name: fadeInDown;
+	animation-name: fadeInDown;
+}
+
+@-webkit-keyframes fadeInDown {
+	0% {
+		opacity: 0;
+		-webkit-transform: translateY(-20px);
+	}
+
+	100% {
+		opacity: 1;
+		-webkit-transform: translateY(0);
+	}
+}
+
+@-moz-keyframes fadeInDown {
+	0% {
+		opacity: 0;
+		-moz-transform: translateY(-20px);
+	}
+
+	100% {
+		opacity: 1;
+		-moz-transform: translateY(0);
+	}
+}
+
+@-o-keyframes fadeInDown {
+	0% {
+		opacity: 0;
+		-o-transform: translateY(-20px);
+	}
+
+	100% {
+		opacity: 1;
+		-o-transform: translateY(0);
+	}
+}
+
+@keyframes fadeInDown {
+	0% {
+		opacity: 0;
+		transform: translateY(-20px);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.dj_tablet .toasterMessage {
+	margin-left: -220px;
+	top: 40px;
+	width: 400px;
+}
+
+*/
+
+.toasterClose {
+	cursor: pointer;
+	font-size: 24px;
+	font-weight: bold;
+	position: absolute;
+	text-align: center;
+	width: 34px;
+
+	right: 0;
+	top: 1px;
+
+	/*
+	margin-top: -16px;
+	right: 10px;
+	top: 50%;
+	height: 34px;
+	line-height: 34px;
+	*/
+}

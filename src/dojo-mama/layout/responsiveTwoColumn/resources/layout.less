@@ -1,0 +1,306 @@
+@import "./listItem.less";
+
+html, body {
+	height: 100%;
+	overflow: hidden;
+	position: relative;
+	-webkit-font-smoothing: antialiased;
+	-webkit-overflow-scrolling: touch;
+}
+
+.fullscreen_mode {
+
+	.dmLayout {
+		bottom: 0 !important;
+		left: 0 !important;
+		margin-left: 0 !important;
+		max-width: none !important;
+		top: 0 !important;
+	}
+
+	.dmLeftPane {
+		display: none !important;
+	}
+
+	.dmRightPane {
+		left: 0 !important;
+		width: 100% !important;
+	}
+
+	.dmModuleContent {
+		top: 103px !important;
+	}
+
+	.dmMetaNav {
+		display: none;
+	}
+
+	.dmRootView {
+		.dmLeftPane {
+			display: block !important;
+		}
+	}
+
+	.selectorBar {
+		width: 100%;
+	}
+}
+
+/* Helper classes for responsive display */
+.dj_phone .hidden_phone {
+	display: none !important;
+}
+.dj_tablet .hidden_tablet {
+	display: none !important;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+.hidden {
+	display: none !important;
+}
+
+.stretch {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: 0;
+}
+
+/**
+ * TOP BAR
+ */
+
+/* Shared styles across top bar */
+
+.dmTitle, .dmMetaNav {
+	padding: 0;
+	margin: 0;
+	height: 70px;
+	position: relative;
+}
+
+.dmSubNav {
+	padding: 0;
+	margin: 0;
+	border: 0;
+	height: 55px;
+}
+
+.dj_phone .dmSubNav {
+	height: 38px;
+	line-height: 38px;
+}
+
+.dmTitle, .dmMetaNav {
+	border-bottom: 1px solid black;
+}
+
+/**
+ * Left & right panes, responsive classes
+ */
+
+/* Title heading */
+.dmTitleHeading {
+	padding: 20px 0 0 0;
+	margin: 0;
+	font-size: 1.1em;
+	width: auto;
+	height: 20px;
+	float: left;
+	margin-left: 1em !important;
+}
+
+/* Left pane */
+
+.dmLeftPane {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	background: white;
+	z-index: 2;
+}
+.dj_tablet .dmLeftPane {
+	width: @primaryNavWidth;
+}
+.dj_phone .dmLeftPane, .dmRootView .dmLeftPane {
+	width: 100%;
+}
+
+/* Right pane */
+
+.dmRightPane {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+}
+.dj_tablet .dmRightPane {
+	left: @primaryNavWidth;
+}
+.dj_phone .dmRightPane {
+	left: 0;
+}
+
+/* Module wrapper */
+
+.dmModuleContent {
+	position: absolute;
+	top: 143px;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	padding: 0;
+	margin: 0;
+	margin-top: -49px;
+}
+.dj_phone .dmModuleContent {
+	top: 60px;
+	margin-top: -32px;
+	margin-left: -2px;
+}
+
+/**
+ * PRIMARY NAV
+ */
+
+/* Primary nav list */
+
+.dmPrimaryNav {
+	position: absolute !important;
+	left: 0;
+	top: 70px;
+	bottom: 0;
+	width: 100%;
+	margin-top: -30px;
+}
+
+
+/**
+ * SECONDARY NAV
+ */
+
+/* Meta nav (menu bar, popup menu) and sub nav */
+
+.dj_phone .dmMenuBarItem {
+	display: none;
+}
+
+.dj_phone .dmMenuBarItem.dmMenuBarPopupItem,
+.dj_phone .dmPopupMenu .dmMenuBarItem {
+	display: block;
+}
+
+/* Meta nav and sub nav container */
+.dmMetaNav, .dmSubNav {
+	width: 100%;
+}
+
+/* Menu bar, containing the popup menu */
+.dmMenuBar {
+	position: relative;
+	float: right;
+	margin-right: 1em;
+}
+
+/* Popup menu */
+.dmPopupMenu {
+}
+
+/* Menu bar item */
+.dmMenuBarItem {
+	display: inline-block;
+	margin-left: 10px;
+	margin-top: 14px;
+	font-size: 13px;
+}
+
+/* Popup menu item */
+.dmMetaNav, .dmTitle {
+	z-index: 9;
+}
+
+.dj_phone .dmSubNav {
+	z-index: 9;
+}
+
+.dmPopupMenu {
+	display: none;
+	position: absolute;
+	background: white;
+	right: 0;
+	top: 55px;
+	z-index: 9;
+	border: 1px solid black;
+}
+
+.dmPopupMenu.visible {
+	display: block;
+}
+
+.dmPopupMenu .dmMenuBarItem {
+	display: block;
+	text-align: center;
+	margin-left: 0;
+	margin-top: 0;
+	font-size: 15px;
+	padding: 15px;
+}
+
+/* Sub nav (breadcrumbs, back functionality) */
+
+/* Sub nav container */
+
+.dj_tablet .dmSubNavTitle {
+	line-height: 55px;
+}
+
+.dmSubNavTitle, .dmSubNavBackButton, .dmSubNavDropDownButton {
+	height: 73px;
+	line-height: 73px;
+}
+
+.dmSubNavBackButton {
+	cursor: pointer;
+}
+
+.dmSubNavModuleList {
+	position: absolute;
+	z-index: 99;
+}
+
+/* Module views */
+
+.dmModuleView {
+	position: absolute !important;
+	top: 0;
+	bottom: 0;
+	height: auto !important;
+}
+.dj_tablet .dmModuleView {
+	left: 0;
+	right: 0;
+}
+.dj_phone .dmModuleView {
+	width: 100%;
+}
+
+/* No padding on ScrollableViews */
+.dmModuleView.mblScrollableView {
+	padding: 0 !important;
+}
+
+/* Override inline height on dojox.mobile.ScrollableView on iOS */
+.dmModuleView.mblScrollableView {
+	position: absolute !important;
+	height: auto !important;
+}

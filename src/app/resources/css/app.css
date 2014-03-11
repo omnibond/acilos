@@ -1,0 +1,4061 @@
+@import url("../../../dojox/mobile/themes/custom/ToolBarButton.css");
+
+@import url("../../../dojox/mobile/themes/custom/RoundRectList.css");
+
+@import url("../../../dojox/mobile/themes/custom/EdgeToEdgeList.css");
+
+@import url("../../../dojox/mobile/themes/custom/ListItem.css");
+
+@import url("../../../dojox/mobile/themes/custom/ProgressIndicator.css");
+
+@import url("../../../dojox/mobile/themes/custom/Button.css");
+
+@import url("../../../dojox/mobile/themes/custom/ComboBox.css");
+
+@import url("../../../dojox/mobile/themes/custom/ScrollablePane.css");
+
+@import url("../../../dojox/mobile/themes/custom/SimpleDialog.css");
+
+@import url("../../../dojox/mobile/themes/custom/ValuePicker.css");
+/* dojo-mama variables */
+/* dojox/mobile/themes variables */
+/* dojo-mama css */
+.dmListItem {
+  list-style: none;
+}
+.dmListItem .dmListItemIcon {
+  float: left;
+}
+.dmListItem .dmListItemRightText {
+  float: right;
+}
+.dmListItem .dmRightIcon {
+  position: absolute;
+  right: 0;
+}
+.dmListItem.dmLinkListItem a {
+  display: block;
+}
+.dmListItem.dmLinkListItem a .dmRightIcon:before {
+  height: 100%;
+}
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  -webkit-overflow-scrolling: touch;
+}
+.fullscreen_mode .dmLayout {
+  bottom: 0 !important;
+  left: 0 !important;
+  margin-left: 0 !important;
+  max-width: none !important;
+  top: 0 !important;
+}
+.fullscreen_mode .dmLeftPane {
+  display: none !important;
+}
+.fullscreen_mode .dmRightPane {
+  left: 0 !important;
+  width: 100% !important;
+}
+.fullscreen_mode .dmModuleContent {
+  top: 103px !important;
+}
+.fullscreen_mode .dmMetaNav {
+  display: none;
+}
+.fullscreen_mode .dmRootView .dmLeftPane {
+  display: block !important;
+}
+.fullscreen_mode .selectorBar {
+  width: 100%;
+}
+/* Helper classes for responsive display */
+.dj_phone .hidden_phone {
+  display: none !important;
+}
+.dj_tablet .hidden_tablet {
+  display: none !important;
+}
+.left {
+  float: left;
+}
+.right {
+  float: right;
+}
+.hidden {
+  display: none !important;
+}
+.stretch {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+}
+/**
+ * TOP BAR
+ */
+/* Shared styles across top bar */
+.dmTitle,
+.dmMetaNav {
+  padding: 0;
+  margin: 0;
+  height: 70px;
+  position: relative;
+}
+.dmSubNav {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  height: 55px;
+}
+.dj_phone .dmSubNav {
+  height: 38px;
+  line-height: 38px;
+}
+.dmTitle,
+.dmMetaNav {
+  border-bottom: 1px solid black;
+}
+/**
+ * Left & right panes, responsive classes
+ */
+/* Title heading */
+.dmTitleHeading {
+  padding: 20px 0 0 0;
+  margin: 0;
+  font-size: 1.1em;
+  width: auto;
+  height: 20px;
+  float: left;
+  margin-left: 1em !important;
+}
+/* Left pane */
+.dmLeftPane {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background: white;
+  z-index: 2;
+}
+.dj_tablet .dmLeftPane {
+  width: 270px;
+}
+.dj_phone .dmLeftPane,
+.dmRootView .dmLeftPane {
+  width: 100%;
+}
+/* Right pane */
+.dmRightPane {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+}
+.dj_tablet .dmRightPane {
+  left: 270px;
+}
+.dj_phone .dmRightPane {
+  left: 0;
+}
+/* Module wrapper */
+.dmModuleContent {
+  position: absolute;
+  top: 143px;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  padding: 0;
+  margin: 0;
+  margin-top: -49px;
+}
+.dj_phone .dmModuleContent {
+  top: 60px;
+  margin-top: -32px;
+  margin-left: -2px;
+}
+/**
+ * PRIMARY NAV
+ */
+/* Primary nav list */
+.dmPrimaryNav {
+  position: absolute !important;
+  left: 0;
+  top: 70px;
+  bottom: 0;
+  width: 100%;
+  margin-top: -30px;
+}
+/**
+ * SECONDARY NAV
+ */
+/* Meta nav (menu bar, popup menu) and sub nav */
+.dj_phone .dmMenuBarItem {
+  display: none;
+}
+.dj_phone .dmMenuBarItem.dmMenuBarPopupItem,
+.dj_phone .dmPopupMenu .dmMenuBarItem {
+  display: block;
+}
+/* Meta nav and sub nav container */
+.dmMetaNav,
+.dmSubNav {
+  width: 100%;
+}
+/* Menu bar, containing the popup menu */
+.dmMenuBar {
+  position: relative;
+  float: right;
+  margin-right: 1em;
+}
+/* Popup menu */
+/* Menu bar item */
+.dmMenuBarItem {
+  display: inline-block;
+  margin-left: 10px;
+  margin-top: 14px;
+  font-size: 13px;
+}
+/* Popup menu item */
+.dmMetaNav,
+.dmTitle {
+  z-index: 9;
+}
+.dj_phone .dmSubNav {
+  z-index: 9;
+}
+.dmPopupMenu {
+  display: none;
+  position: absolute;
+  background: white;
+  right: 0;
+  top: 55px;
+  z-index: 9;
+  border: 1px solid black;
+}
+.dmPopupMenu.visible {
+  display: block;
+}
+.dmPopupMenu .dmMenuBarItem {
+  display: block;
+  text-align: center;
+  margin-left: 0;
+  margin-top: 0;
+  font-size: 15px;
+  padding: 15px;
+}
+/* Sub nav (breadcrumbs, back functionality) */
+/* Sub nav container */
+.dj_tablet .dmSubNavTitle {
+  line-height: 55px;
+}
+.dmSubNavTitle,
+.dmSubNavBackButton,
+.dmSubNavDropDownButton {
+  height: 73px;
+  line-height: 73px;
+}
+.dmSubNavBackButton {
+  cursor: pointer;
+}
+.dmSubNavModuleList {
+  position: absolute;
+  z-index: 99;
+}
+/* Module views */
+.dmModuleView {
+  position: absolute !important;
+  top: 0;
+  bottom: 0;
+  height: auto !important;
+}
+.dj_tablet .dmModuleView {
+  left: 0;
+  right: 0;
+}
+.dj_phone .dmModuleView {
+  width: 100%;
+}
+/* No padding on ScrollableViews */
+.dmModuleView.mblScrollableView {
+  padding: 0 !important;
+}
+/* Override inline height on dojox.mobile.ScrollableView on iOS */
+.dmModuleView.mblScrollableView {
+  position: absolute !important;
+  height: auto !important;
+}
+/* dojox/mobile css */
+/* base.css */
+html.mobile,
+.mobile body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+.mobile body {
+  overflow-x: hidden;
+  -webkit-text-size-adjust: none;
+  font-family: Helvetica;
+  font-size: 17px;
+  color: #000000;
+}
+.mblBackground {
+  background-color: #ba5377;
+}
+/* Button Colors */
+.mblColorBlue {
+  color: #deadbe;
+  background-color: #048bf4;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#48adfc), to(#048bf4));
+  background-image: linear-gradient(to bottom, #48adfc 0%, #048bf4 100%);
+}
+.mblColorBlue45 {
+  background-image: -webkit-gradient(linear, left top, right bottom, from(#048bf4), to(#48adfc));
+  background-image: linear-gradient(to right bottom, #048bf4 0%, #48adfc 100%);
+}
+/* Default Button Colors */
+.mblColorDefault {
+  color: #000000;
+  background-color: #993d5d;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#cd839d), to(#993d5d));
+  background-image: linear-gradient(to bottom, #cd839d 0%, #993d5d 100%);
+}
+.mblColorDefault45 {
+  background-image: -webkit-gradient(linear, left top, right bottom, from(#cd839d), to(#993d5d));
+  background-image: linear-gradient(to right bottom, #cd839d 0%, #993d5d 100%);
+}
+.mblColorDefaultSel {
+  color: #deadbe;
+  background-color: #883753;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#b74d72), to(#883753));
+  background-image: linear-gradient(to bottom, #b74d72 0%, #883753 100%);
+}
+.mblColorDefaultSel45 {
+  background-image: -webkit-gradient(linear, left top, right bottom, from(#b74d72), to(#883753));
+  background-image: linear-gradient(to right bottom, #b74d72 0%, #883753 100%);
+}
+.mblSpriteIcon {
+  position: absolute;
+}
+.mblSpriteIconParent {
+  position: relative;
+  font-size: 1px;
+}
+.mblImageIcon {
+  vertical-align: top;
+}
+/* use the less counterparts for new dependencies, if available */
+/*
+@import url("../../../dojox/mobile/themes/custom/Heading.css");
+@import url("../../../dojox/mobile/themes/custom/View.css");
+
+@import url("../../../dojox/mobile/themes/custom/RoundRect.css");
+@import url("../../../dojox/mobile/themes/custom/EdgeToEdgeCategory.css");
+@import url("../../../dojox/mobile/themes/custom/RoundRectCategory.css");*/
+/*@import url("../../../dojox/mobile/themes/custom/Switch.css"); */
+/* common styles */
+/*
+@import url("../../../dojox/mobile/themes/common/domButtons.css");
+@import url("../../../dojox/mobile/themes/common/transitions.css");
+*/
+/* widget styles */
+/*
+@import url("../../../dojox/mobile/themes/custom/Accordion.css");
+*/
+/*
+@import url("../../../dojox/mobile/themes/custom/Carousel.css");
+@import url("../../../dojox/mobile/themes/custom/CheckBox.css");
+@import url("../../../dojox/mobile/themes/custom/FixedSplitter.css");
+@import url("../../../dojox/mobile/themes/custom/GridLayout.css");
+@import url("../../../dojox/mobile/themes/custom/IconContainer.css");
+@import url("../../../dojox/mobile/themes/custom/IconMenu.css");
+@import url("../../../dojox/mobile/themes/custom/Opener.css");
+@import url("../../../dojox/mobile/themes/custom/PageIndicator.css");
+@import url("../../../dojox/mobile/themes/custom/ProgressBar.css");
+@import url("../../../dojox/mobile/themes/custom/RadioButton.css");
+*/
+/*
+@import url("../../../dojox/mobile/themes/custom/Slider.css");
+@import url("../../../dojox/mobile/themes/custom/SpinWheel.css");
+@import url("../../../dojox/mobile/themes/custom/TabBar.css");
+@import url("../../../dojox/mobile/themes/custom/TextArea.css");
+@import url("../../../dojox/mobile/themes/custom/SearchBox.css");
+@import url("../../../dojox/mobile/themes/custom/ToggleButton.css");
+@import url("../../../dojox/mobile/themes/custom/ValuePicker.css");
+@import url("../../../dojox/mobile/themes/custom/FormLayout.css");
+*/
+/* custom theme */
+/* icons.css -- my.Clemson icons and fonts */
+@font-face {
+  font-family: 'my-Clemson-Fonts';
+  src: url('../fonts/my-Clemson-Fonts.eot');
+  src: url('../fonts/my-Clemson-Fonts.eot?#iefix') format('embedded-opentype'), /* url('../fonts/my-Clemson-Fonts.woff') format('woff'), */
+   url('../fonts/my-Clemson-Fonts.ttf') format('truetype'), url('../fonts/my-Clemson-Fonts.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+.dmSubNavBackButton,
+.dmMenuBarPopupItem,
+.icon-phone,
+.icon-mail,
+.icon-pencil,
+.icon-vcard,
+.icon-map,
+.icon-printer,
+.icon-chat,
+.icon-graduation,
+.icon-camera,
+.icon-calendar,
+.icon-publish,
+.icon-suitcase,
+.icon-cross,
+.icon-arrow-left,
+.icon-arrow-right,
+.icon-book,
+.icon-back,
+.icon-list,
+.icon-video,
+.icon-screen,
+.icon-location,
+.icon-paw,
+.icon-chevron-right-large,
+.icon-chevron-right-medium,
+.icon-chevron-right-small,
+.icon-play,
+.icon-pause,
+.icon-volume,
+.icon-sound,
+.icon-arrow-down,
+.icon-arrow-up,
+.icon-marker,
+.icon-resize-enlarge,
+.icon-resize-shrink,
+.icon-export,
+.icon-refresh,
+.icon-chevron-left-large,
+.icon-chevron-left-medium,
+.icon-chevron-left-small,
+.icon-link {
+  font-family: 'my-Clemson-Fonts';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+}
+/* ignore font face when using Cufon on windows phone */
+.cufon {
+  padding-bottom: 6px;
+}
+.cufon:before {
+  content: '' !important;
+}
+.icon-phone:before {
+  content: "\e000";
+}
+.icon-mail:before {
+  content: "\e001";
+}
+.icon-pencil:before {
+  content: "\e002";
+}
+.icon-vcard:before {
+  content: "\e003";
+}
+.icon-map:before {
+  content: "\e004";
+}
+.icon-printer:before {
+  content: "\e005";
+}
+.icon-chat:before {
+  content: "\e006";
+}
+.icon-graduation:before {
+  content: "\e008";
+}
+.icon-camera:before {
+  content: "\e009";
+}
+.icon-calendar:before {
+  content: "\e00a";
+}
+.icon-publish:before {
+  content: "\e00b";
+}
+.icon-suitcase:before {
+  content: "\e00c";
+}
+.icon-cross:before {
+  content: "\e00d";
+}
+.icon-arrow-left:before {
+  content: "\e00e";
+}
+.icon-arrow-right:before {
+  content: "\e00f";
+}
+.icon-book:before {
+  content: "\e010";
+}
+.icon-back:before {
+  content: "\e007";
+}
+.icon-list:before {
+  content: "\e011";
+}
+.icon-video:before {
+  content: "\e012";
+}
+.icon-screen:before {
+  content: "\e013";
+}
+.icon-location:before {
+  content: "\e014";
+}
+.icon-paw:before {
+  content: "\e01a";
+}
+.icon-cross:before {
+  content: "\e016";
+}
+.icon-chevron-right-large:before {
+  content: "\e017";
+}
+.icon-chevron-right-medium:before {
+  content: "\e018";
+}
+.icon-chevron-right-small:before {
+  content: "\e019";
+}
+.icon-play:before {
+  content: "\e015";
+}
+.icon-pause:before {
+  content: "\e01b";
+}
+.icon-volume:before {
+  content: "\e01c";
+}
+.icon-sound:before {
+  content: "\e01d";
+}
+.icon-arrow-down:before {
+  content: "\e01e";
+}
+.icon-arrow-up:before {
+  content: "\e01f";
+}
+.icon-marker:before {
+  content: "\e020";
+}
+.icon-resize-enlarge:before {
+  content: "\e021";
+}
+.icon-resize-shrink:before {
+  content: "\e022";
+}
+.icon-export:before {
+  content: "\e023";
+}
+.icon-refresh:before {
+  content: "\e024";
+}
+.icon-chevron-left-large:before {
+  content: "\e025";
+}
+.icon-chevron-left-small:before {
+  content: "\e026";
+}
+.icon-chevron-left-medium:before {
+  content: "\e027";
+}
+.icon-link:before {
+  content: "\e028";
+}
+.buttonMixin {
+  background: #87826a;
+  border: none;
+  border-radius: 6px;
+  color: #c1beb0;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: bold;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 7px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  width: auto;
+  min-width: 80px;
+}
+.button {
+  background: #87826a;
+  border: none;
+  border-radius: 6px;
+  color: #c1beb0;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: bold;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 7px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  width: auto;
+  min-width: 80px;
+}
+.button:disabled {
+  background: #9f9b85;
+}
+.button.small {
+  min-width: 15px !important;
+}
+.no_touch .button:hover {
+  background: #6b6754;
+  text-decoration: none;
+  /* Many buttons are also links, so must override a styles */
+
+}
+.button {
+  /* Many buttons are also links, so must override a styles */
+
+}
+.button:active {
+  background: #6b6754;
+}
+.button:active {
+  color: #c1beb0;
+  text-decoration: none;
+}
+/* Colors for primary nav items and subnav */
+.dmNavBackgroundColor_mainFeed {
+  background-color: #39c463;
+  background-image: none;
+  border: none;
+  color: white;
+  font-weight: bold;
+}
+.dmActiveModule_mainFeed .dmModuleContent {
+  border-left: 2px solid #39c463;
+}
+.dmSelectedPrimaryNavItem_mainFeed .dmModuleContent {
+  border-left: 2px solid #39c463;
+}
+.dmActiveModule_mainFeed .selectorBar {
+  background-color: #288945;
+}
+.dmSelectedPrimaryNavItem_mainFeed .selectorBar {
+  background-color: #288945;
+}
+.dmActiveModule_mainFeed .selectorButton {
+  background: #39c463;
+}
+.dmSelectedPrimaryNavItem_mainFeed .selectorButton {
+  background: #39c463;
+}
+.dmPrimaryNavItem_mainFeed .dmPrimaryNavItemColor {
+  background-color: #39c463;
+}
+.dmPrimaryNavItem_mainFeed .dmPrimaryNavItemContent {
+  background-color: #288945;
+}
+.dmPrimaryNavItem_mainFeed a {
+  text-decoration: none;
+}
+.dmSelectedPrimaryNavItem_mainFeed .dmSubNav {
+  background-color: #39c463;
+}
+.dmSelectedPrimaryNavItem_mainFeed .dmSubNav .dmSubNavBackButton div,
+.dmSelectedPrimaryNavItem_mainFeed .dmSubNav .dmFullscreenButton {
+  background-color: #288945;
+}
+.no_touch .dmSelectedPrimaryNavItem_mainFeed .dmSubNavBackButton div:hover,
+.no_touch .dmSelectedPrimaryNavItem_mainFeed .dmFullscreenButton:hover {
+  background-color: #174d27;
+}
+.dmSelectedPrimaryNavItem_mainFeed .dmSubNavBackButton:active div,
+.dmSelectedPrimaryNavItem_mainFeed .dmFullscreenButton:active {
+  background-color: #174d27;
+}
+.dj_phone .dmSelectedPrimaryNavItem_mainFeed .dmSubNav {
+  border-bottom: none;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_mainFeed.dmPrimaryNavItemSelected {
+  background-color: #288945;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_mainFeed.dmPrimaryNavItemSelected .dmPrimaryNavItemIcon {
+  border-right: none;
+  color: white;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_mainFeed.dmPrimaryNavItemSelected .dmPrimaryNavItemLabel {
+  color: white;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_mainFeed a,
+.dmRootView .dmPrimaryNav .dmPrimaryNavItem_mainFeed a {
+  background-color: #288945;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_mainFeed a {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_mainFeed a .dmPrimaryNavItemColor {
+  bottom: 5px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_mainFeed a:active {
+  outline: none;
+  position: relative;
+  top: 5px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_mainFeed a:active .dmPrimaryNavItemColor {
+  bottom: 0;
+}
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_mainFeed .dmPrimaryNavItemColor:hover {
+  background-color: #58ce7b;
+}
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_mainFeed .dmPrimaryNavItemColor:hover ~ .dmPrimaryNavItemIcon,
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_mainFeed .dmPrimaryNavItemColor:hover ~ .dmPrimaryNavItemLabel {
+  color: #288945;
+}
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_mainFeed .dmPrimaryNavItemColor:active {
+  background-color: #58ce7b;
+}
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_mainFeed .dmPrimaryNavItemColor:active ~ .dmPrimaryNavItemIcon,
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_mainFeed .dmPrimaryNavItemColor:active ~ .dmPrimaryNavItemLabel {
+  color: #288945;
+}
+.dmNavBackgroundColor_feeds {
+  background-color: #f66733;
+  background-image: none;
+  border: none;
+  color: white;
+  font-weight: bold;
+}
+.dmActiveModule_feeds .dmModuleContent {
+  border-left: 2px solid #f66733;
+}
+.dmSelectedPrimaryNavItem_feeds .dmModuleContent {
+  border-left: 2px solid #f66733;
+}
+.dmActiveModule_feeds .selectorBar {
+  background-color: #d33f09;
+}
+.dmSelectedPrimaryNavItem_feeds .selectorBar {
+  background-color: #d33f09;
+}
+.dmActiveModule_feeds .selectorButton {
+  background: #f66733;
+}
+.dmSelectedPrimaryNavItem_feeds .selectorButton {
+  background: #f66733;
+}
+.dmPrimaryNavItem_feeds .dmPrimaryNavItemColor {
+  background-color: #f66733;
+}
+.dmPrimaryNavItem_feeds .dmPrimaryNavItemContent {
+  background-color: #d33f09;
+}
+.dmPrimaryNavItem_feeds a {
+  text-decoration: none;
+}
+.dmSelectedPrimaryNavItem_feeds .dmSubNav {
+  background-color: #f66733;
+}
+.dmSelectedPrimaryNavItem_feeds .dmSubNav .dmSubNavBackButton div,
+.dmSelectedPrimaryNavItem_feeds .dmSubNav .dmFullscreenButton {
+  background-color: #d33f09;
+}
+.no_touch .dmSelectedPrimaryNavItem_feeds .dmSubNavBackButton div:hover,
+.no_touch .dmSelectedPrimaryNavItem_feeds .dmFullscreenButton:hover {
+  background-color: #8a2906;
+}
+.dmSelectedPrimaryNavItem_feeds .dmSubNavBackButton:active div,
+.dmSelectedPrimaryNavItem_feeds .dmFullscreenButton:active {
+  background-color: #8a2906;
+}
+.dj_phone .dmSelectedPrimaryNavItem_feeds .dmSubNav {
+  border-bottom: none;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_feeds.dmPrimaryNavItemSelected {
+  background-color: #d33f09;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_feeds.dmPrimaryNavItemSelected .dmPrimaryNavItemIcon {
+  border-right: none;
+  color: white;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_feeds.dmPrimaryNavItemSelected .dmPrimaryNavItemLabel {
+  color: white;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_feeds a,
+.dmRootView .dmPrimaryNav .dmPrimaryNavItem_feeds a {
+  background-color: #d33f09;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_feeds a {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_feeds a .dmPrimaryNavItemColor {
+  bottom: 5px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_feeds a:active {
+  outline: none;
+  position: relative;
+  top: 5px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_feeds a:active .dmPrimaryNavItemColor {
+  bottom: 0;
+}
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_feeds .dmPrimaryNavItemColor:hover {
+  background-color: #f8845a;
+}
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_feeds .dmPrimaryNavItemColor:hover ~ .dmPrimaryNavItemIcon,
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_feeds .dmPrimaryNavItemColor:hover ~ .dmPrimaryNavItemLabel {
+  color: #d33f09;
+}
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_feeds .dmPrimaryNavItemColor:active {
+  background-color: #f8845a;
+}
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_feeds .dmPrimaryNavItemColor:active ~ .dmPrimaryNavItemIcon,
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_feeds .dmPrimaryNavItemColor:active ~ .dmPrimaryNavItemLabel {
+  color: #d33f09;
+}
+.dmNavBackgroundColor_people {
+  background-color: #e32252;
+  background-image: none;
+  border: none;
+  color: white;
+  font-weight: bold;
+}
+.dmActiveModule_people .dmModuleContent {
+  border-left: 2px solid #e32252;
+}
+.dmSelectedPrimaryNavItem_people .dmModuleContent {
+  border-left: 2px solid #e32252;
+}
+.dmActiveModule_people .selectorBar {
+  background-color: #a41538;
+}
+.dmSelectedPrimaryNavItem_people .selectorBar {
+  background-color: #a41538;
+}
+.dmActiveModule_people .selectorButton {
+  background: #e32252;
+}
+.dmSelectedPrimaryNavItem_people .selectorButton {
+  background: #e32252;
+}
+.dmPrimaryNavItem_people .dmPrimaryNavItemColor {
+  background-color: #e32252;
+}
+.dmPrimaryNavItem_people .dmPrimaryNavItemContent {
+  background-color: #a41538;
+}
+.dmPrimaryNavItem_people a {
+  text-decoration: none;
+}
+.dmSelectedPrimaryNavItem_people .dmSubNav {
+  background-color: #e32252;
+}
+.dmSelectedPrimaryNavItem_people .dmSubNav .dmSubNavBackButton div,
+.dmSelectedPrimaryNavItem_people .dmSubNav .dmFullscreenButton {
+  background-color: #a41538;
+}
+.no_touch .dmSelectedPrimaryNavItem_people .dmSubNavBackButton div:hover,
+.no_touch .dmSelectedPrimaryNavItem_people .dmFullscreenButton:hover {
+  background-color: #600c21;
+}
+.dmSelectedPrimaryNavItem_people .dmSubNavBackButton:active div,
+.dmSelectedPrimaryNavItem_people .dmFullscreenButton:active {
+  background-color: #600c21;
+}
+.dj_phone .dmSelectedPrimaryNavItem_people .dmSubNav {
+  border-bottom: none;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_people.dmPrimaryNavItemSelected {
+  background-color: #a41538;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_people.dmPrimaryNavItemSelected .dmPrimaryNavItemIcon {
+  border-right: none;
+  color: white;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_people.dmPrimaryNavItemSelected .dmPrimaryNavItemLabel {
+  color: white;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_people a,
+.dmRootView .dmPrimaryNav .dmPrimaryNavItem_people a {
+  background-color: #a41538;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_people a {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_people a .dmPrimaryNavItemColor {
+  bottom: 5px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_people a:active {
+  outline: none;
+  position: relative;
+  top: 5px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_people a:active .dmPrimaryNavItemColor {
+  bottom: 0;
+}
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_people .dmPrimaryNavItemColor:hover {
+  background-color: #e8466e;
+}
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_people .dmPrimaryNavItemColor:hover ~ .dmPrimaryNavItemIcon,
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_people .dmPrimaryNavItemColor:hover ~ .dmPrimaryNavItemLabel {
+  color: #a41538;
+}
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_people .dmPrimaryNavItemColor:active {
+  background-color: #e8466e;
+}
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_people .dmPrimaryNavItemColor:active ~ .dmPrimaryNavItemIcon,
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_people .dmPrimaryNavItemColor:active ~ .dmPrimaryNavItemLabel {
+  color: #a41538;
+}
+.dmNavBackgroundColor_favorites {
+  background-color: #41cccc;
+  background-image: none;
+  border: none;
+  color: white;
+  font-weight: bold;
+}
+.dmActiveModule_favorites .dmModuleContent {
+  border-left: 2px solid #41cccc;
+}
+.dmSelectedPrimaryNavItem_favorites .dmModuleContent {
+  border-left: 2px solid #41cccc;
+}
+.dmActiveModule_favorites .selectorBar {
+  background-color: #299898;
+}
+.dmSelectedPrimaryNavItem_favorites .selectorBar {
+  background-color: #299898;
+}
+.dmActiveModule_favorites .selectorButton {
+  background: #41cccc;
+}
+.dmSelectedPrimaryNavItem_favorites .selectorButton {
+  background: #41cccc;
+}
+.dmPrimaryNavItem_favorites .dmPrimaryNavItemColor {
+  background-color: #41cccc;
+}
+.dmPrimaryNavItem_favorites .dmPrimaryNavItemContent {
+  background-color: #299898;
+}
+.dmPrimaryNavItem_favorites a {
+  text-decoration: none;
+}
+.dmSelectedPrimaryNavItem_favorites .dmSubNav {
+  background-color: #41cccc;
+}
+.dmSelectedPrimaryNavItem_favorites .dmSubNav .dmSubNavBackButton div,
+.dmSelectedPrimaryNavItem_favorites .dmSubNav .dmFullscreenButton {
+  background-color: #299898;
+}
+.no_touch .dmSelectedPrimaryNavItem_favorites .dmSubNavBackButton div:hover,
+.no_touch .dmSelectedPrimaryNavItem_favorites .dmFullscreenButton:hover {
+  background-color: #195b5b;
+}
+.dmSelectedPrimaryNavItem_favorites .dmSubNavBackButton:active div,
+.dmSelectedPrimaryNavItem_favorites .dmFullscreenButton:active {
+  background-color: #195b5b;
+}
+.dj_phone .dmSelectedPrimaryNavItem_favorites .dmSubNav {
+  border-bottom: none;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_favorites.dmPrimaryNavItemSelected {
+  background-color: #299898;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_favorites.dmPrimaryNavItemSelected .dmPrimaryNavItemIcon {
+  border-right: none;
+  color: white;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_favorites.dmPrimaryNavItemSelected .dmPrimaryNavItemLabel {
+  color: white;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_favorites a,
+.dmRootView .dmPrimaryNav .dmPrimaryNavItem_favorites a {
+  background-color: #299898;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_favorites a {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_favorites a .dmPrimaryNavItemColor {
+  bottom: 5px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_favorites a:active {
+  outline: none;
+  position: relative;
+  top: 5px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_favorites a:active .dmPrimaryNavItemColor {
+  bottom: 0;
+}
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_favorites .dmPrimaryNavItemColor:hover {
+  background-color: #61d5d5;
+}
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_favorites .dmPrimaryNavItemColor:hover ~ .dmPrimaryNavItemIcon,
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_favorites .dmPrimaryNavItemColor:hover ~ .dmPrimaryNavItemLabel {
+  color: #299898;
+}
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_favorites .dmPrimaryNavItemColor:active {
+  background-color: #61d5d5;
+}
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_favorites .dmPrimaryNavItemColor:active ~ .dmPrimaryNavItemIcon,
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_favorites .dmPrimaryNavItemColor:active ~ .dmPrimaryNavItemLabel {
+  color: #299898;
+}
+.dmNavBackgroundColor_search {
+  background-color: #8f5929;
+  background-image: none;
+  border: none;
+  color: white;
+  font-weight: bold;
+}
+.dmActiveModule_search .dmModuleContent {
+  border-left: 2px solid #8f5929;
+}
+.dmSelectedPrimaryNavItem_search .dmModuleContent {
+  border-left: 2px solid #8f5929;
+}
+.dmActiveModule_search .selectorBar {
+  background-color: #543418;
+}
+.dmSelectedPrimaryNavItem_search .selectorBar {
+  background-color: #543418;
+}
+.dmActiveModule_search .selectorButton {
+  background: #8f5929;
+}
+.dmSelectedPrimaryNavItem_search .selectorButton {
+  background: #8f5929;
+}
+.dmPrimaryNavItem_search .dmPrimaryNavItemColor {
+  background-color: #8f5929;
+}
+.dmPrimaryNavItem_search .dmPrimaryNavItemContent {
+  background-color: #543418;
+}
+.dmPrimaryNavItem_search a {
+  text-decoration: none;
+}
+.dmSelectedPrimaryNavItem_search .dmSubNav {
+  background-color: #8f5929;
+}
+.dmSelectedPrimaryNavItem_search .dmSubNav .dmSubNavBackButton div,
+.dmSelectedPrimaryNavItem_search .dmSubNav .dmFullscreenButton {
+  background-color: #543418;
+}
+.no_touch .dmSelectedPrimaryNavItem_search .dmSubNavBackButton div:hover,
+.no_touch .dmSelectedPrimaryNavItem_search .dmFullscreenButton:hover {
+  background-color: #180f07;
+}
+.dmSelectedPrimaryNavItem_search .dmSubNavBackButton:active div,
+.dmSelectedPrimaryNavItem_search .dmFullscreenButton:active {
+  background-color: #180f07;
+}
+.dj_phone .dmSelectedPrimaryNavItem_search .dmSubNav {
+  border-bottom: none;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_search.dmPrimaryNavItemSelected {
+  background-color: #543418;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_search.dmPrimaryNavItemSelected .dmPrimaryNavItemIcon {
+  border-right: none;
+  color: white;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_search.dmPrimaryNavItemSelected .dmPrimaryNavItemLabel {
+  color: white;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_search a,
+.dmRootView .dmPrimaryNav .dmPrimaryNavItem_search a {
+  background-color: #543418;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_search a {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_search a .dmPrimaryNavItemColor {
+  bottom: 5px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_search a:active {
+  outline: none;
+  position: relative;
+  top: 5px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_search a:active .dmPrimaryNavItemColor {
+  bottom: 0;
+}
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_search .dmPrimaryNavItemColor:hover {
+  background-color: #af6d32;
+}
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_search .dmPrimaryNavItemColor:hover ~ .dmPrimaryNavItemIcon,
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_search .dmPrimaryNavItemColor:hover ~ .dmPrimaryNavItemLabel {
+  color: #543418;
+}
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_search .dmPrimaryNavItemColor:active {
+  background-color: #af6d32;
+}
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_search .dmPrimaryNavItemColor:active ~ .dmPrimaryNavItemIcon,
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_search .dmPrimaryNavItemColor:active ~ .dmPrimaryNavItemLabel {
+  color: #543418;
+}
+.dmNavBackgroundColor_analytics {
+  background-color: #8868e8;
+  background-image: none;
+  border: none;
+  color: white;
+  font-weight: bold;
+}
+.dmActiveModule_analytics .dmModuleContent {
+  border-left: 2px solid #8868e8;
+}
+.dmSelectedPrimaryNavItem_analytics .dmModuleContent {
+  border-left: 2px solid #8868e8;
+}
+.dmActiveModule_analytics .selectorBar {
+  background-color: #5426de;
+}
+.dmSelectedPrimaryNavItem_analytics .selectorBar {
+  background-color: #5426de;
+}
+.dmActiveModule_analytics .selectorButton {
+  background: #8868e8;
+}
+.dmSelectedPrimaryNavItem_analytics .selectorButton {
+  background: #8868e8;
+}
+.dmPrimaryNavItem_analytics .dmPrimaryNavItemColor {
+  background-color: #8868e8;
+}
+.dmPrimaryNavItem_analytics .dmPrimaryNavItemContent {
+  background-color: #5426de;
+}
+.dmPrimaryNavItem_analytics a {
+  text-decoration: none;
+}
+.dmSelectedPrimaryNavItem_analytics .dmSubNav {
+  background-color: #8868e8;
+}
+.dmSelectedPrimaryNavItem_analytics .dmSubNav .dmSubNavBackButton div,
+.dmSelectedPrimaryNavItem_analytics .dmSubNav .dmFullscreenButton {
+  background-color: #5426de;
+}
+.no_touch .dmSelectedPrimaryNavItem_analytics .dmSubNavBackButton div:hover,
+.no_touch .dmSelectedPrimaryNavItem_analytics .dmFullscreenButton:hover {
+  background-color: #3a189f;
+}
+.dmSelectedPrimaryNavItem_analytics .dmSubNavBackButton:active div,
+.dmSelectedPrimaryNavItem_analytics .dmFullscreenButton:active {
+  background-color: #3a189f;
+}
+.dj_phone .dmSelectedPrimaryNavItem_analytics .dmSubNav {
+  border-bottom: none;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_analytics.dmPrimaryNavItemSelected {
+  background-color: #5426de;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_analytics.dmPrimaryNavItemSelected .dmPrimaryNavItemIcon {
+  border-right: none;
+  color: white;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_analytics.dmPrimaryNavItemSelected .dmPrimaryNavItemLabel {
+  color: white;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_analytics a,
+.dmRootView .dmPrimaryNav .dmPrimaryNavItem_analytics a {
+  background-color: #5426de;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_analytics a {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_analytics a .dmPrimaryNavItemColor {
+  bottom: 5px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_analytics a:active {
+  outline: none;
+  position: relative;
+  top: 5px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_analytics a:active .dmPrimaryNavItemColor {
+  bottom: 0;
+}
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_analytics .dmPrimaryNavItemColor:hover {
+  background-color: #a48bed;
+}
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_analytics .dmPrimaryNavItemColor:hover ~ .dmPrimaryNavItemIcon,
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_analytics .dmPrimaryNavItemColor:hover ~ .dmPrimaryNavItemLabel {
+  color: #5426de;
+}
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_analytics .dmPrimaryNavItemColor:active {
+  background-color: #a48bed;
+}
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_analytics .dmPrimaryNavItemColor:active ~ .dmPrimaryNavItemIcon,
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_analytics .dmPrimaryNavItemColor:active ~ .dmPrimaryNavItemLabel {
+  color: #5426de;
+}
+.dmNavBackgroundColor_post {
+  background-color: #0066ff;
+  background-image: none;
+  border: none;
+  color: white;
+  font-weight: bold;
+}
+.dmActiveModule_post .dmModuleContent {
+  border-left: 2px solid #0066ff;
+}
+.dmSelectedPrimaryNavItem_post .dmModuleContent {
+  border-left: 2px solid #0066ff;
+}
+.dmActiveModule_post .selectorBar {
+  background-color: #0047b3;
+}
+.dmSelectedPrimaryNavItem_post .selectorBar {
+  background-color: #0047b3;
+}
+.dmActiveModule_post .selectorButton {
+  background: #0066ff;
+}
+.dmSelectedPrimaryNavItem_post .selectorButton {
+  background: #0066ff;
+}
+.dmPrimaryNavItem_post .dmPrimaryNavItemColor {
+  background-color: #0066ff;
+}
+.dmPrimaryNavItem_post .dmPrimaryNavItemContent {
+  background-color: #0047b3;
+}
+.dmPrimaryNavItem_post a {
+  text-decoration: none;
+}
+.dmSelectedPrimaryNavItem_post .dmSubNav {
+  background-color: #0066ff;
+}
+.dmSelectedPrimaryNavItem_post .dmSubNav .dmSubNavBackButton div,
+.dmSelectedPrimaryNavItem_post .dmSubNav .dmFullscreenButton {
+  background-color: #0047b3;
+}
+.no_touch .dmSelectedPrimaryNavItem_post .dmSubNavBackButton div:hover,
+.no_touch .dmSelectedPrimaryNavItem_post .dmFullscreenButton:hover {
+  background-color: #002966;
+}
+.dmSelectedPrimaryNavItem_post .dmSubNavBackButton:active div,
+.dmSelectedPrimaryNavItem_post .dmFullscreenButton:active {
+  background-color: #002966;
+}
+.dj_phone .dmSelectedPrimaryNavItem_post .dmSubNav {
+  border-bottom: none;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_post.dmPrimaryNavItemSelected {
+  background-color: #0047b3;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_post.dmPrimaryNavItemSelected .dmPrimaryNavItemIcon {
+  border-right: none;
+  color: white;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_post.dmPrimaryNavItemSelected .dmPrimaryNavItemLabel {
+  color: white;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_post a,
+.dmRootView .dmPrimaryNav .dmPrimaryNavItem_post a {
+  background-color: #0047b3;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_post a {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_post a .dmPrimaryNavItemColor {
+  bottom: 5px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_post a:active {
+  outline: none;
+  position: relative;
+  top: 5px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_post a:active .dmPrimaryNavItemColor {
+  bottom: 0;
+}
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_post .dmPrimaryNavItemColor:hover {
+  background-color: #297eff;
+}
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_post .dmPrimaryNavItemColor:hover ~ .dmPrimaryNavItemIcon,
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_post .dmPrimaryNavItemColor:hover ~ .dmPrimaryNavItemLabel {
+  color: #0047b3;
+}
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_post .dmPrimaryNavItemColor:active {
+  background-color: #297eff;
+}
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_post .dmPrimaryNavItemColor:active ~ .dmPrimaryNavItemIcon,
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_post .dmPrimaryNavItemColor:active ~ .dmPrimaryNavItemLabel {
+  color: #0047b3;
+}
+.dmNavBackgroundColor_settings {
+  background-color: #ffcc00;
+  background-image: none;
+  border: none;
+  color: white;
+  font-weight: bold;
+}
+.dmActiveModule_settings .dmModuleContent {
+  border-left: 2px solid #ffcc00;
+}
+.dmSelectedPrimaryNavItem_settings .dmModuleContent {
+  border-left: 2px solid #ffcc00;
+}
+.dmActiveModule_settings .selectorBar {
+  background-color: #b38f00;
+}
+.dmSelectedPrimaryNavItem_settings .selectorBar {
+  background-color: #b38f00;
+}
+.dmActiveModule_settings .selectorButton {
+  background: #ffcc00;
+}
+.dmSelectedPrimaryNavItem_settings .selectorButton {
+  background: #ffcc00;
+}
+.dmPrimaryNavItem_settings .dmPrimaryNavItemColor {
+  background-color: #ffcc00;
+}
+.dmPrimaryNavItem_settings .dmPrimaryNavItemContent {
+  background-color: #b38f00;
+}
+.dmPrimaryNavItem_settings a {
+  text-decoration: none;
+}
+.dmSelectedPrimaryNavItem_settings .dmSubNav {
+  background-color: #ffcc00;
+}
+.dmSelectedPrimaryNavItem_settings .dmSubNav .dmSubNavBackButton div,
+.dmSelectedPrimaryNavItem_settings .dmSubNav .dmFullscreenButton {
+  background-color: #b38f00;
+}
+.no_touch .dmSelectedPrimaryNavItem_settings .dmSubNavBackButton div:hover,
+.no_touch .dmSelectedPrimaryNavItem_settings .dmFullscreenButton:hover {
+  background-color: #665200;
+}
+.dmSelectedPrimaryNavItem_settings .dmSubNavBackButton:active div,
+.dmSelectedPrimaryNavItem_settings .dmFullscreenButton:active {
+  background-color: #665200;
+}
+.dj_phone .dmSelectedPrimaryNavItem_settings .dmSubNav {
+  border-bottom: none;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_settings.dmPrimaryNavItemSelected {
+  background-color: #b38f00;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_settings.dmPrimaryNavItemSelected .dmPrimaryNavItemIcon {
+  border-right: none;
+  color: white;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_settings.dmPrimaryNavItemSelected .dmPrimaryNavItemLabel {
+  color: white;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_settings a,
+.dmRootView .dmPrimaryNav .dmPrimaryNavItem_settings a {
+  background-color: #b38f00;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_settings a {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_settings a .dmPrimaryNavItemColor {
+  bottom: 5px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_settings a:active {
+  outline: none;
+  position: relative;
+  top: 5px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_settings a:active .dmPrimaryNavItemColor {
+  bottom: 0;
+}
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_settings .dmPrimaryNavItemColor:hover {
+  background-color: #ffd429;
+}
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_settings .dmPrimaryNavItemColor:hover ~ .dmPrimaryNavItemIcon,
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_settings .dmPrimaryNavItemColor:hover ~ .dmPrimaryNavItemLabel {
+  color: #b38f00;
+}
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_settings .dmPrimaryNavItemColor:active {
+  background-color: #ffd429;
+}
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_settings .dmPrimaryNavItemColor:active ~ .dmPrimaryNavItemIcon,
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_settings .dmPrimaryNavItemColor:active ~ .dmPrimaryNavItemLabel {
+  color: #b38f00;
+}
+.dmNavBackgroundColor_help {
+  background-color: #b33da5;
+  background-image: none;
+  border: none;
+  color: white;
+  font-weight: bold;
+}
+.dmActiveModule_help .dmModuleContent {
+  border-left: 2px solid #b33da5;
+}
+.dmSelectedPrimaryNavItem_help .dmModuleContent {
+  border-left: 2px solid #b33da5;
+}
+.dmActiveModule_help .selectorBar {
+  background-color: #7a2a70;
+}
+.dmSelectedPrimaryNavItem_help .selectorBar {
+  background-color: #7a2a70;
+}
+.dmActiveModule_help .selectorButton {
+  background: #b33da5;
+}
+.dmSelectedPrimaryNavItem_help .selectorButton {
+  background: #b33da5;
+}
+.dmPrimaryNavItem_help .dmPrimaryNavItemColor {
+  background-color: #b33da5;
+}
+.dmPrimaryNavItem_help .dmPrimaryNavItemContent {
+  background-color: #7a2a70;
+}
+.dmPrimaryNavItem_help a {
+  text-decoration: none;
+}
+.dmSelectedPrimaryNavItem_help .dmSubNav {
+  background-color: #b33da5;
+}
+.dmSelectedPrimaryNavItem_help .dmSubNav .dmSubNavBackButton div,
+.dmSelectedPrimaryNavItem_help .dmSubNav .dmFullscreenButton {
+  background-color: #7a2a70;
+}
+.no_touch .dmSelectedPrimaryNavItem_help .dmSubNavBackButton div:hover,
+.no_touch .dmSelectedPrimaryNavItem_help .dmFullscreenButton:hover {
+  background-color: #41163c;
+}
+.dmSelectedPrimaryNavItem_help .dmSubNavBackButton:active div,
+.dmSelectedPrimaryNavItem_help .dmFullscreenButton:active {
+  background-color: #41163c;
+}
+.dj_phone .dmSelectedPrimaryNavItem_help .dmSubNav {
+  border-bottom: none;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_help.dmPrimaryNavItemSelected {
+  background-color: #7a2a70;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_help.dmPrimaryNavItemSelected .dmPrimaryNavItemIcon {
+  border-right: none;
+  color: white;
+}
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_help.dmPrimaryNavItemSelected .dmPrimaryNavItemLabel {
+  color: white;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_help a,
+.dmRootView .dmPrimaryNav .dmPrimaryNavItem_help a {
+  background-color: #7a2a70;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_help a {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_help a .dmPrimaryNavItemColor {
+  bottom: 5px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_help a:active {
+  outline: none;
+  position: relative;
+  top: 5px;
+}
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_help a:active .dmPrimaryNavItemColor {
+  bottom: 0;
+}
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_help .dmPrimaryNavItemColor:hover {
+  background-color: #c554b7;
+}
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_help .dmPrimaryNavItemColor:hover ~ .dmPrimaryNavItemIcon,
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_help .dmPrimaryNavItemColor:hover ~ .dmPrimaryNavItemLabel {
+  color: #7a2a70;
+}
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_help .dmPrimaryNavItemColor:active {
+  background-color: #c554b7;
+}
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_help .dmPrimaryNavItemColor:active ~ .dmPrimaryNavItemIcon,
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_help .dmPrimaryNavItemColor:active ~ .dmPrimaryNavItemLabel {
+  color: #7a2a70;
+}
+/* Content in primary nav items in tablet root view */
+.dmPrimaryNavItem_mainFeed .dmPrimaryNavItemContent:before {
+  content: 'See what\'s new';
+  margin-left: 10px;
+}
+.dmPrimaryNavItem_feeds .dmPrimaryNavItemContent:before {
+  content: 'View saved feeds';
+  margin-left: 10px;
+}
+.dmPrimaryNavItem_people .dmPrimaryNavItemContent:before {
+  content: 'View by contact';
+  margin-left: 10px;
+}
+.dmPrimaryNavItem_favorites .dmPrimaryNavItemContent:before {
+  content: 'Your favorite posts';
+  margin-left: 10px;
+}
+.dmPrimaryNavItem_search .dmPrimaryNavItemContent:before {
+  content: 'Search through your feeds';
+  margin-left: 10px;
+}
+.dmPrimaryNavItem_analytics .dmPrimaryNavItemContent:before {
+  content: 'Analyze your friends';
+  margin-left: 10px;
+}
+.dmPrimaryNavItem_post .dmPrimaryNavItemContent:before {
+  content: 'Post, Tweet, Blog';
+  margin-left: 10px;
+}
+.dmPrimaryNavItem_settings .dmPrimaryNavItemContent:before {
+  content: 'Edit the app settings';
+  margin-left: 10px;
+}
+.dmPrimaryNavItem_help .dmPrimaryNavItemContent:before {
+  content: 'Information about the app';
+  margin-left: 10px;
+}
+/* Primary nav icons */
+.dmPrimaryNavItem_mainFeed .dmPrimaryNavItemIcon {
+  font-family: 'my-Clemson-Fonts';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+}
+.dmPrimaryNavItem_mainFeed .dmPrimaryNavItemIcon:before {
+  content: "\e010";
+}
+.dmPrimaryNavItem_feeds .dmPrimaryNavItemIcon {
+  font-family: 'my-Clemson-Fonts';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+}
+.dmPrimaryNavItem_feeds .dmPrimaryNavItemIcon:before {
+  content: "\e006";
+}
+.dmPrimaryNavItem_people .dmPrimaryNavItemIcon {
+  font-family: 'my-Clemson-Fonts';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+}
+.dmPrimaryNavItem_people .dmPrimaryNavItemIcon:before {
+  content: "\e008";
+}
+.dmPrimaryNavItem_favorites .dmPrimaryNavItemIcon {
+  font-family: 'my-Clemson-Fonts';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+}
+.dmPrimaryNavItem_favorites .dmPrimaryNavItemIcon:before {
+  content: "\e00c";
+}
+.dmPrimaryNavItem_search .dmPrimaryNavItemIcon {
+  font-family: 'my-Clemson-Fonts';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+}
+.dmPrimaryNavItem_search .dmPrimaryNavItemIcon:before {
+  content: "\e01d";
+}
+.dmPrimaryNavItem_analytics .dmPrimaryNavItemIcon {
+  font-family: 'my-Clemson-Fonts';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+}
+.dmPrimaryNavItem_analytics .dmPrimaryNavItemIcon:before {
+  content: "\e004";
+}
+.dmPrimaryNavItem_post .dmPrimaryNavItemIcon {
+  font-family: 'my-Clemson-Fonts';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+}
+.dmPrimaryNavItem_post .dmPrimaryNavItemIcon:before {
+  content: "\e00b";
+}
+.dmPrimaryNavItem_settings .dmPrimaryNavItemIcon {
+  font-family: 'my-Clemson-Fonts';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+}
+.dmPrimaryNavItem_settings .dmPrimaryNavItemIcon:before {
+  content: "\e003";
+}
+.dmPrimaryNavItem_help .dmPrimaryNavItemIcon {
+  font-family: 'my-Clemson-Fonts';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+}
+.dmPrimaryNavItem_help .dmPrimaryNavItemIcon:before {
+  content: "\e028";
+}
+.dmPrimaryNav {
+  background-color: #ffffff;
+}
+.dmPrimaryNav ul {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+.dmPrimaryNav li {
+  background-color: #eeeeee;
+  color: white;
+  list-style-type: none;
+  overflow: hidden;
+  cursor: pointer;
+}
+.dmPrimaryNav .dmPrimaryNavItemLabel {
+  float: left;
+}
+.dmPrimaryNav .dmPrimaryNavItemIcon {
+  float: left;
+}
+.dj_tablet .dmPrimaryNav li {
+  font-size: 15px;
+  font-weight: bold;
+  height: 55px;
+  padding: 0;
+  position: relative;
+  transition: background-color 0.3s;
+  -moz-transition: background-color 0.3s;
+  -o-transition: background-color 0.3s;
+  -webkit-transition: background-color 0.3s;
+  width: 100%;
+}
+.dj_tablet .dmPrimaryNav li:focus {
+  background-color: white;
+}
+.dj_tablet .dmPrimaryNav li:nth-child(even) {
+  background-color: #ffffff;
+}
+.dj_tablet .dmPrimaryNavItemColor {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  top: 0;
+  width: 5px;
+  transition: width 0.3s;
+  -moz-transition: width 0.3s;
+  -o-transition: width 0.3s;
+  -webkit-transition: width 0.3s;
+  z-index: 1;
+}
+.dj_tablet .dmPrimaryNavItemIcon {
+  color: #828282;
+  font-size: 24px;
+  line-height: 55px;
+  margin-left: 5px;
+  position: relative;
+  text-align: center;
+  transition: color 0.3s;
+  -moz-transition: color 0.3s;
+  -o-transition: color 0.3s;
+  -webkit-transition: color 0.3s;
+  width: 55px;
+  z-index: 2;
+}
+.dj_tablet .dmPrimaryNavItemLabel {
+  color: #828282;
+  left: 72px;
+  line-height: 55px;
+  position: absolute;
+  text-transform: uppercase;
+  transition: color 0.3s;
+  -moz-transition: color 0.3s;
+  -o-transition: color 0.3s;
+  -webkit-transition: color 0.3s;
+  z-index: 2;
+}
+.dj_tablet .dmPrimaryNavItemContent {
+  display: none;
+}
+.dj_tablet .dmPrimaryNavItemSelected {
+  background-color: white;
+}
+.dj_tablet .dmPrimaryNavItemSelected .dmPrimaryNavItemColor {
+  width: 60px;
+}
+.dj_tablet .dmPrimaryNavItemSelected .dmPrimaryNavItemIcon {
+  color: white;
+}
+.dj_tablet .dmRootView .dmPrimaryNav ul {
+  margin-top: 21px;
+}
+.dj_tablet .dmRootView .dmPrimaryNav li {
+  border-bottom: none;
+  display: inline-block;
+  height: 105px;
+  margin-bottom: 16px;
+  margin-left: 4.347%;
+  width: 43.478%;
+}
+@media (min-width: 650px) {
+  .dj_tablet .dmRootView .dmPrimaryNav li {
+    margin-left: 2.941%;
+    width: 29.411%;
+  }
+}
+@media (min-width: 900px) {
+  .dj_tablet .dmRootView .dmPrimaryNav li {
+    margin-left: 2.222%;
+    width: 22.222%;
+  }
+}
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItemColor {
+  bottom: 40px;
+  transition: background-color 0.3s;
+  -moz-transition: background-color 0.3s;
+  -o-transition: background-color 0.3s;
+  -webkit-transition: background-color 0.3s;
+  width: 100%;
+}
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItemIcon {
+  border-right: none;
+  color: white;
+  font-size: 30px;
+  line-height: 65px;
+  margin-left: 0;
+  pointer-events: none;
+  width: 65px;
+}
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItemLabel {
+  color: white;
+  font-size: 22px;
+  font-weight: normal;
+  left: 65px;
+  line-height: 65px;
+  pointer-events: none;
+  text-transform: none;
+  transition: color 0.3s;
+  -moz-transition: color 0.3s;
+  -o-transition: color 0.3s;
+  -webkit-transition: color 0.3s;
+}
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItemContent {
+  color: #ffffff;
+  color: rgba(255, 255, 255, 0.7);
+  display: block;
+  clear: left;
+  font-weight: normal;
+  float: left;
+  height: 40px;
+  line-height: 40px;
+  position: relative;
+  width: 100%;
+  z-index: 2;
+}
+.no_touch.dj_tablet .dmPrimaryNav li a:hover .dmPrimaryNavItemIcon,
+.no_touch.dj_tablet .dmPrimaryNav li a:hover .dmPrimaryNavItemLabel {
+  color: #373737;
+}
+.no_touch.dj_tablet .dmPrimaryNav li.dmPrimaryNavItemSelected a:hover .dmPrimaryNavItemIcon,
+.no_touch.dj_tablet .dmPrimaryNav li.dmPrimaryNavItemSelected a:hover .dmPrimaryNavItemLabel {
+  color: white;
+}
+.no_touch.dj_tablet .dmRootView .dmPrimaryNav {
+  /*.dmPrimaryNavItemContent {
+				&:hover {
+					color: white;
+				}
+			}*/
+
+}
+.no_touch.dj_tablet .dmRootView .dmPrimaryNav li a:hover .dmPrimaryNavItemIcon,
+.no_touch.dj_tablet .dmRootView .dmPrimaryNav li a:hover .dmPrimaryNavItemLabel {
+  color: white;
+}
+.dj_tablet .dmPrimaryNav li a:active .dmPrimaryNavItemIcon,
+.dj_tablet .dmPrimaryNav li a:active .dmPrimaryNavItemLabel {
+  color: #373737;
+}
+.dj_tablet .dmPrimaryNav li.dmPrimaryNavItemSelected a:active .dmPrimaryNavItemIcon,
+.dj_tablet .dmPrimaryNav li.dmPrimaryNavItemSelected a:active .dmPrimaryNavItemLabel {
+  color: white;
+}
+.dj_tablet .dmRootView .dmPrimaryNav {
+  /*.dmPrimaryNavItemContent {
+				&:active {
+					color: white;
+				}
+			}*/
+
+}
+.dj_tablet .dmRootView .dmPrimaryNav li a:active .dmPrimaryNavItemIcon,
+.dj_tablet .dmRootView .dmPrimaryNav li a:active .dmPrimaryNavItemLabel {
+  color: white;
+}
+.dj_phone .dmPrimaryNav {
+  border-right: none;
+}
+.dj_phone .dmPrimaryNav ul {
+  margin: 10px 0 0;
+}
+.dj_phone .dmPrimaryNav li {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  display: inline-block;
+  font-size: 16px;
+  height: 48px;
+  line-height: 48px;
+  margin: 0 0 7px 4.0625%;
+  position: relative;
+  width: 43.90625%;
+}
+.dj_phone .dmPrimaryNav li a {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -o-border-radius: 3px;
+  padding: 0 10px;
+}
+.dj_phone .dmPrimaryNav li .dmPrimaryNavItemColor {
+  -webkit-border-top-left-radius: 3px;
+  -webkit-border-top-right-radius: 3px;
+  -moz-border-radius-topleft: 3px;
+  -moz-border-radius-topright: 3px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 1;
+}
+.dj_phone .dmPrimaryNav li .dmPrimaryNavItemIcon {
+  color: white;
+  font-size: 18px;
+  line-height: 48px;
+  position: relative;
+  /* z-index only works on positioned elements */
+
+  top: -2px;
+  z-index: 2;
+  /* Bring in front of color node */
+
+}
+.dj_phone .dmPrimaryNav li .dmPrimaryNavItemLabel {
+  color: white;
+  font-size: 16px;
+  left: 37px;
+  line-height: 45px;
+  position: absolute;
+  text-overflow: ellipsis;
+  right: 10px;
+  z-index: 2;
+  /* Bring in front of color node */
+
+}
+.dj_phone .dmPrimaryNav li .dmPrimaryNavItemContent {
+  display: none;
+}
+.dmSubNav {
+  background-color: #373737;
+  border-bottom: 5px solid #2a2a2a;
+  line-height: 60px;
+  position: relative;
+  outline: none;
+}
+.dj_tablet .dmSubNav {
+  border: none;
+  line-height: 73px;
+}
+.dmSubNavTitle {
+  color: white;
+  display: block;
+  font-size: 20px;
+  left: 65px;
+  overflow: hidden;
+  position: absolute;
+  right: 50px;
+  text-overflow: ellipsis;
+  top: 0;
+  white-space: nowrap;
+}
+.dmSubNavTitle:focus {
+  outline: none;
+}
+.dj_phone .dmSubNavTitle {
+  height: 35px;
+  line-height: 35px;
+}
+.dj_tablet .dmSubNavTitle {
+  left: 76px;
+  right: 60px;
+}
+.dmSubNavBackButton {
+  left: 0px;
+  height: 50px;
+  outline: none;
+  position: absolute;
+  top: 50%;
+  margin-top: -25px;
+  width: 60px;
+}
+.dmSubNavBackButton div {
+  font-family: 'my-Clemson-Fonts';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+  font-size: 20px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 18px;
+  height: 30px;
+  line-height: 30px;
+  margin-left: 10px;
+  margin-top: 10px;
+  outline: none;
+  text-align: center;
+  text-decoration: none;
+  width: 40px;
+}
+.dmSubNavBackButton div:before {
+  content: "\e007";
+}
+.dj_tablet .dmSubNavBackButton {
+  left: 10px;
+}
+.dmFullscreenButton {
+  background: #87826a;
+  border: none;
+  border-radius: 6px;
+  color: #c1beb0;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 30px;
+  padding: 0 7px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  width: auto;
+  min-width: 80px;
+  font-family: 'my-Clemson-Fonts';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+  color: white;
+  font-size: 20px;
+  height: 30px;
+  margin-top: -15px;
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  width: 34px;
+  min-width: 15px !important;
+}
+.dmFullscreenButton:before {
+  content: "\e021";
+}
+.dj_phone .dmModuleContent {
+  top: 70px;
+}
+/* Subnav color for modules in meta nav */
+.dmActiveModule_feedback .dmSubNav {
+  background-color: #74808c;
+}
+.dmActiveModule_feedback .dmSubNav .dmSubNavBackButton div,
+.dmActiveModule_feedback .dmSubNav .dmFullscreenButton {
+  background-color: #515a62;
+}
+.no_touch .dmActiveModule_feedback .dmSubNavBackButton div:hover,
+.no_touch .dmActiveModule_feedback .dmFullscreenButton:hover {
+  background-color: #2f3338;
+}
+.dmActiveModule_feedback .dmSubNavBackButton:active div,
+.dmActiveModule_feedback .dmFullscreenButton:active {
+  background-color: #2f3338;
+}
+.dmTitle,
+.dmMetaNav {
+  background-color: #373737;
+  border-bottom: 0;
+  height: 40px;
+  line-height: 1px;
+}
+.dmTitleHeading {
+  color: #b1b1b1;
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: -1px;
+  outline: none;
+  text-decoration: none;
+}
+.no_touch .dmTitleHeading:hover {
+  color: #e7e7de;
+  text-decoration: none;
+}
+.dmTitleHeading:active {
+  color: #e7e7de;
+  text-decoration: none;
+}
+.dmMenuBar {
+  background: transparent;
+  height: 60px;
+  line-height: 65px;
+  margin-right: 0;
+  outline: none;
+  margin-top: -12px;
+}
+.dmMenuBar .dmMenuBarItem {
+  color: #b1b1b1;
+  cursor: pointer;
+  text-transform: uppercase;
+  text-decoration: none;
+  line-height: 1;
+  margin-left: 0;
+  margin-right: 10px;
+  margin-top: 0;
+  outline: none;
+}
+.dmMenuBar .dmMenuBarPopupItem {
+  font-family: 'my-Clemson-Fonts';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+  font-size: 24px;
+  padding: 10px;
+  margin-right: 10px;
+  margin-top: 5px;
+  position: relative;
+  top: 3px;
+  outline: none;
+}
+.dmMenuBar .dmMenuBarPopupItem:before {
+  content: "\e011";
+}
+.dmMenuBar .dmPopupMenu {
+  background-color: #373737;
+  background-color: rgba(55, 55, 55, 0.95);
+  border-color: #eeefe6;
+  border-color: rgba(238, 239, 230, 0.95);
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 3px;
+  margin-right: 5px;
+}
+.dmMenuBar .dmPopupMenu .dmMenuBarItem {
+  color: #eeefe6;
+  margin: 0;
+  padding: 17px 20px;
+}
+.dmMenuBar .dmPopupMenu .dmMenuBarItem:last-child {
+  border-bottom: none;
+}
+.dmMenuBar .dmPopupMenu:before {
+  background: transparent;
+  border-bottom: 10px solid rgba(238, 239, 230, 0.95);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  content: '';
+  height: 0;
+  position: absolute;
+  right: 16px;
+  top: -10px;
+  width: 0;
+}
+.dmMenuBar .dmPopupMenu:after {
+  background: transparent;
+  border-bottom: 9px solid #373737;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  content: '';
+  height: 0;
+  position: absolute;
+  right: 17px;
+  top: -9px;
+  width: 0;
+}
+.no_touch .dmMenuBar .dmMenuBarItem:hover {
+  color: #e7e7de;
+  text-decoration: none;
+}
+.dmMenuBar .dmMenuBarItem:active {
+  color: #e7e7de;
+  text-decoration: none;
+}
+.dj_tablet .dmMenuBarPopupItem {
+  top: 5px;
+}
+.dmSubNav .dmMenuBarItem {
+  color: white;
+}
+.dj_phone .dmMenuBarPopupItem {
+  margin-right: 5px;
+}
+.dj_phone .dmPopupMenu:before {
+  right: 11px;
+}
+.dj_phone .dmPopupMenu:after {
+  right: 12px;
+}
+.dj_tablet .dmMenuBarPopupItem.dmMenuBarPopupItemHiddenTablet {
+  visibility: hidden;
+  margin-right: 15px;
+  padding: 0;
+  width: 0;
+}
+.mblEdgeToEdgeList {
+  margin: 0 10px;
+  background: transparent;
+}
+.dj_tablet .mblEdgeToEdgeList {
+  margin: 10px 15px;
+}
+.dmListItem {
+  border-bottom: 1px solid #e7e7de;
+  color: #373737;
+  font-weight: normal;
+  margin-bottom: 0;
+  overflow: hidden;
+  position: relative;
+  padding: 15px 12px 15px 0;
+}
+.dmListItem.dmLinkListItem {
+  padding: 0;
+}
+.dmListItem.dmLinkListItem a {
+  overflow: hidden;
+  padding: 15px 20px 15px 0;
+}
+.dmListItem.dmLinkListItem a .dmRightIcon {
+  margin-top: -9px;
+  right: 0;
+  top: 50%;
+}
+.dmListItem.dmLinkListItem a,
+.dmListItem.dmLinkListItem a:visited,
+.dmListItem.dmLinkListItem a:hover,
+.dmListItem.dmLinkListItem a:active {
+  color: inherit;
+  text-decoration: inherit;
+}
+.dmListItem:focus {
+  outline: none;
+}
+.dmListItem:last-child {
+  border-bottom: none;
+}
+.dmListItem .dmListItemText {
+  color: #000000 !important;
+  overflow: hidden;
+}
+.dmListItem .dmListItemIcon {
+  margin: 0;
+}
+.dmListItem .dmListItemRightText {
+  font-weight: normal;
+  text-align: right;
+}
+.searchBar {
+  height: 45px;
+  position: absolute;
+  right: 60px;
+  top: -59px;
+  width: 50%;
+}
+.searchBar .textBoxWrapper {
+  left: 0;
+  position: absolute;
+  right: 110px;
+  top: 5px;
+}
+.searchBar .mblTextBox {
+  border: none;
+  border-radius: 12px;
+  color: #4d4d4d;
+  font-size: 17px;
+  height: 20px;
+  margin-top: 3px;
+  padding: 5px 10px;
+  width: 100%;
+}
+.searchBar .mblTextBox:focus {
+  outline: none;
+}
+.searchBar .searchButton {
+  background: #87826a;
+  border: none;
+  border-radius: 6px;
+  color: #c1beb0;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: bold;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 7px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  width: auto;
+  min-width: 80px;
+  margin-top: 8px;
+  position: absolute;
+  right: 0;
+}
+.dj_phone .searchBar {
+  background: #c1beb0;
+  height: 50px;
+  right: 0;
+  top: 0px;
+  width: 100%;
+}
+.dj_phone .searchBar .textBoxWrapper {
+  left: 10px;
+  right: 120px;
+}
+.dj_phone .searchBar .mblTextBox {
+  margin-top: 5px;
+}
+.dj_phone .searchBar .searchButton {
+  margin-top: 10px;
+  right: 10px;
+}
+.dialog {
+  background: #373737;
+  background: rgba(55, 55, 55, 0.95);
+  border: 1px solid #373737;
+  border-radius: 6px;
+  height: 150px;
+  left: 50%;
+  margin-left: -140px;
+  margin-top: -75px;
+  position: absolute;
+  top: 50%;
+  width: 280px;
+  z-index: 100;
+}
+.dialog .dialogTitle {
+  border-bottom: 1px solid white;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 49px;
+  height: 49px;
+  margin: 0 10px;
+  text-align: center;
+}
+.dialog .dialogMessage {
+  color: white;
+  font-size: 16px;
+  height: 35px;
+  padding: 10px;
+  text-align: center;
+}
+.dialog .dialogButtons {
+  height: 45px;
+  text-align: center;
+}
+.dialog .dialogButtons .button {
+  background: transparent;
+  border: 1px solid white;
+  color: white;
+  margin-right: 10px;
+}
+.dialog .dialogButtons .button:last-child {
+  margin-right: 0;
+}
+.dialog .dialogButtons .button:active {
+  background: #1e1e1e;
+}
+.dialogOverlay {
+  background: #8c8c8c;
+  background: rgba(140, 140, 140, 0.65);
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 99;
+}
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #000000;
+  background-color: rgba(0, 0, 0, 0.78);
+  z-index: 10000;
+}
+.lightbox .lightboxDummy {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+@media (orientation: portrait) {
+  .lightbox .lightboxDummy {
+    margin-bottom: 70px;
+  }
+}
+@media (orientation: landscape) {
+  .lightbox .lightboxDummy {
+    margin: 70px;
+  }
+}
+.lightbox .lightboxDummy .lightboxContent {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  top: 50%;
+  left: 50%;
+}
+.lightbox .lightboxArrow {
+  cursor: pointer;
+  position: absolute;
+  font-size: 50px;
+  color: #FFFFFF;
+}
+@media (orientation: landscape) {
+  .lightbox .lightboxArrow {
+    top: 50%;
+  }
+}
+@media (orientation: portrait) {
+  .lightbox .lightboxArrow {
+    bottom: 10px;
+  }
+}
+.lightbox .lightboxNextArrow {
+  font-family: 'my-Clemson-Fonts';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+  position: absolute;
+  right: 10px;
+}
+.lightbox .lightboxNextArrow:before {
+  content: "\e00f";
+}
+@media (orientation: portrait) {
+  .lightbox .lightboxNextArrow {
+    right: 25%;
+  }
+}
+.lightbox .lightboxPrevArrow {
+  font-family: 'my-Clemson-Fonts';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+  position: absolute;
+  left: 10px;
+}
+.lightbox .lightboxPrevArrow:before {
+  content: "\e00e";
+}
+@media (orientation: portrait) {
+  .lightbox .lightboxPrevArrow {
+    left: 25%;
+  }
+}
+.toasterContainer {
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+}
+.toasterContainer .toasterMessage {
+  position: relative;
+  background: rgba(55, 55, 55, 0.95);
+  border-radius: 3px;
+  z-index: 10;
+  margin: 10px 15px;
+  padding: 7px 15px;
+  color: white;
+}
+.toasterContainer .toasterMessage.toasterError {
+  background-color: rgba(255, 48, 16, 0.9);
+}
+.toasterContainer .toasterMessage.toasterSuccess {
+  background-color: rgba(0, 255, 112, 0.9);
+}
+.toasterContainer .toasterMessage.toasterWarning {
+  background-color: rgba(255, 176, 0, 0.9);
+}
+.toasterContainer .toasterMessage.toasterInformation {
+  background-color: rgba(112, 112, 255, 0.9);
+}
+/*
+.toasterMessage {
+	background: rgba(55,55,55,0.95);
+	border-radius: 3px;
+	color: rgb(238,239,230);
+	height: auto;
+	left: 50%;
+	margin-left: -130px;
+	padding: 20px;
+	position: absolute;
+	top: 15px;
+	width: 220px;
+
+	-webkit-animation-duration: 0.75s;
+	-moz-animation-duration: 0.75s;
+	-o-animation-duration: 0.75s;
+	animation-duration: 0.75s;
+	-webkit-animation-fill-mode: both;
+	-moz-animation-fill-mode: both;
+	-o-animation-fill-mode: both;
+	animation-fill-mode: both;
+	-webkit-animation-name: fadeInDown;
+	-moz-animation-name: fadeInDown;
+	-o-animation-name: fadeInDown;
+	animation-name: fadeInDown;
+}
+
+@-webkit-keyframes fadeInDown {
+	0% {
+		opacity: 0;
+		-webkit-transform: translateY(-20px);
+	}
+
+	100% {
+		opacity: 1;
+		-webkit-transform: translateY(0);
+	}
+}
+
+@-moz-keyframes fadeInDown {
+	0% {
+		opacity: 0;
+		-moz-transform: translateY(-20px);
+	}
+
+	100% {
+		opacity: 1;
+		-moz-transform: translateY(0);
+	}
+}
+
+@-o-keyframes fadeInDown {
+	0% {
+		opacity: 0;
+		-o-transform: translateY(-20px);
+	}
+
+	100% {
+		opacity: 1;
+		-o-transform: translateY(0);
+	}
+}
+
+@keyframes fadeInDown {
+	0% {
+		opacity: 0;
+		transform: translateY(-20px);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.dj_tablet .toasterMessage {
+	margin-left: -220px;
+	top: 40px;
+	width: 400px;
+}
+
+*/
+.toasterClose {
+  cursor: pointer;
+  font-size: 24px;
+  font-weight: bold;
+  position: absolute;
+  text-align: center;
+  width: 34px;
+  right: 0;
+  top: 1px;
+  /*
+	margin-top: -16px;
+	right: 10px;
+	top: 50%;
+	height: 34px;
+	line-height: 34px;
+	*/
+
+}
+/* dojox.mobile.Slider */
+.mblSlider {
+  background: #e7e7de;
+  border: 1px solid #c1beb0;
+  border-radius: 10px;
+  padding-left: 19px;
+  margin: 15px;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+.mblSliderH {
+  height: 8px;
+  width: 200px;
+}
+.mblSliderH .mblSliderProgressBar {
+  height: 100%;
+}
+.mblSliderH .mblSliderHandle {
+  top: 50%;
+}
+.mblSliderV {
+  height: 200px;
+  width: 8px;
+}
+.mblSliderV .mblSliderProgressBar {
+  width: 100%;
+}
+.mblSliderV .mblSliderHandle {
+  left: 50%;
+}
+.mblSliderProgressBar {
+  background: #c1beb0;
+  border-radius: 9px;
+  margin-left: -19px;
+  padding-left: 19px;
+}
+.mblSliderHandle {
+  background: #e7e7de;
+  border: 1px solid #c1beb0;
+  border-radius: 9px;
+  height: 18px;
+  margin: -10px 0 0 -19px;
+  width: 18px;
+}
+.mblSliderTransition {
+  -webkit-transition-duration: 400ms;
+  transition-duration: 400ms;
+}
+.mblSliderTouchBox {
+  background-color: transparent;
+  border: none;
+  height: 100%;
+  left: -12pt;
+  margin: 0;
+  margin-left: -19px;
+  padding: 16px;
+  padding-left: 35px;
+  top: -12pt;
+  width: 100%;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+}
+.linkContainer {
+  background: white;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  z-index: 99;
+}
+.linkContainer .header {
+  background: #373737;
+  border-top: 5px solid #f66733;
+  height: 45px;
+  position: absolute;
+  width: 100%;
+}
+.linkContainer .header .backButton,
+.linkContainer .header .openButton {
+  height: 50px;
+  margin-top: -25px;
+  position: absolute;
+  text-decoration: none;
+  top: 50%;
+  width: 60px;
+}
+.linkContainer .header .backButton div,
+.linkContainer .header .openButton div {
+  background: #111111;
+  font-size: 20px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 18px;
+  height: 30px;
+  line-height: 30px;
+  margin-left: 10px;
+  margin-top: 10px;
+  outline: none;
+  text-align: center;
+  text-decoration: none;
+  width: 40px;
+}
+.linkContainer .header .backButton:active div,
+.linkContainer .header .openButton:active div {
+  background: #000000;
+}
+.linkContainer .header .backButton {
+  left: 10px;
+}
+.linkContainer .header .openButton {
+  right: 10px;
+}
+.linkContainer .header .title {
+  color: white;
+  font-size: 20px;
+  height: 45px;
+  line-height: 45px;
+  left: 70px;
+  overflow: hidden;
+  position: absolute;
+  right: 70px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.linkContainer .frameWrapper {
+  bottom: 0;
+  position: absolute;
+  top: 50px;
+  width: 100%;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+.linkContainer iframe {
+  border: 0;
+  height: 100%;
+  outline: 0;
+  width: 100%;
+}
+.dj_tablet .linkContainer .header {
+  height: 65px;
+}
+.dj_tablet .linkContainer .header .title {
+  height: 65px;
+  line-height: 65px;
+}
+.dj_tablet .linkContainer .frameWrapper {
+  top: 70px;
+}
+.no_touch .linkContainer .header .backButton div:hover,
+.no_touch .linkContainer .header .shareButton div:hover {
+  background: #000000;
+}
+.dijitCalendar {
+  border: solid 1px #b5bcc7;
+  border-collapse: separate;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  background-color: #cfe5fa;
+  background-image: url("../../../dijit/themes/claro/images/calendar.png");
+  background-repeat: repeat-x;
+  background-image: -moz-linear-gradient(#ffffff 0px, rgba(255, 255, 255, 0.4) 2px, rgba(255, 255, 255, 0) 100%);
+  background-image: -webkit-linear-gradient(#ffffff 0px, rgba(255, 255, 255, 0.4) 2px, rgba(255, 255, 255, 0) 100%);
+  background-image: -o-linear-gradient(#ffffff 0px, rgba(255, 255, 255, 0.4) 2px, rgba(255, 255, 255, 0) 100%);
+  background-image: linear-gradient(#ffffff 0px, rgba(255, 255, 255, 0.4) 2px, rgba(255, 255, 255, 0) 100%);
+  text-align: center;
+  padding: 6px 5px 3px 5px;
+}
+.dijitCalendarIncrementControl {
+  /* next/prev month buttons */
+
+  width: 15px;
+  height: 15px;
+  background-image: url("../../../dijit/themes/tundra/images/spriteRoundedIconsSmall.png");
+  background-repeat: no-repeat;
+}
+.dijitCalendarIncrementControl {
+  font-size: .1em;
+  background-image: url("../../../dijit/themes/tundra/images/spriteRoundedIconsSmall.gif");
+}
+.dijitA11ySideArrow {
+  display: none;
+}
+.dijitCalendarDecrease {
+  background-position: top left;
+}
+.dijitCalendarIncrease {
+  background-position: -30px top;
+}
+.dijitCalendarContainer {
+  font-size: 100%;
+  border-spacing: 0;
+  border-collapse: separate;
+  border: 1px solid #ccc;
+  margin: 0;
+  width: auto;
+  background: #cfe5fa;
+  background-color: #cfe5fa;
+  margin-bottom: 7px;
+}
+.dijitButtonText {
+  padding: 1px 0 3px;
+  margin-right: -4px;
+}
+.dijitCalendarMonthContainer th {
+  /* month header cell */
+
+  background: #d3d3d3 url("../../../dijit/themes/tundra/images/titleBar.png") repeat-x top;
+  padding-top: .3em;
+  padding-bottom: .2em;
+  text-align: center;
+}
+.dijitCalendarMonthContainer th {
+  padding-top: .2em;
+  padding-bottom: .1em;
+}
+.dijitCalendarDayLabelTemplate {
+  /* day of week labels */
+
+  /*background:orange url("../../../dijit/themes/tundra/images/calendarDayLabel.png") repeat-x bottom;*/
+
+  background: #cfe5fa;
+  font-weight: bold;
+  padding-top: .15em;
+  padding-bottom: 0;
+  border-top: 1px solid #eeeeee;
+  color: #293a4b;
+  text-align: center;
+}
+.dijitCalendarBodyContainer {
+  border-bottom: 1px solid #eeeeee;
+}
+/* This is the formatting for the month names */
+.dijitCalendarMonthLabel {
+  color: #000000;
+  font-size: 1.091em;
+  padding: 0 4px;
+  text-align: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.dijitCalendarDateTemplate {
+  /* style for each day cell */
+
+  font-size: 0.9em;
+  font-weight: bold;
+  text-align: center;
+  padding: 0.3em 0.3em 0.05em 0.3em;
+  letter-spacing: 1px;
+}
+.dijitCalendarDateTemplate {
+  padding: 0.1em .33em 0.02em .33em;
+}
+.dijitCalendarPreviousMonth,
+.dijitCalendarNextMonth {
+  /* days that are part of the previous or next month */
+
+  color: #999999;
+  background-color: #f8f8f8;
+}
+.dijitCalendarCurrentMonth {
+  /* days that are part of this month */
+
+  background-color: white;
+}
+.dijitCalendarCurrentDate {
+  /* cell for today's date */
+
+  text-decoration: underline;
+  font-weight: bold;
+}
+.dijitCalendarHoveredDate {
+  background-color: #e2ebf2;
+}
+.dijitCalendarDisabledDate {
+  text-decoration: line-through;
+  background-color: white;
+  /* override hover effects above, hover and click on disabled date should have no effect */
+
+}
+.dijitCalendarSelectedDate {
+  /* cell for the selected date */
+
+  background-color: #bbc4d0 !important;
+  color: black !important;
+}
+.dijitCalendarYearContainer {
+  /* footer of the table that contains the year display/selector */
+
+  background: #ffffff url("../../../dijit/themes/tundra/images/calendarYearLabel.png") repeat-x bottom;
+  border-top: 1px solid #ccc;
+}
+.dijitCalendarYearLabel {
+  /* container for all of 3 year labels */
+
+  margin: 0;
+  padding: 0.4em 0 0.25em 0;
+  text-align: center;
+  font-size: 1.17em;
+  color: #cfe5fa;
+  background-color: #cfe5fa;
+}
+.dijitCalendarSelectedYear {
+  /* label for selected year */
+
+  font-weight: bolder;
+  color: black;
+  padding: 0.2em;
+  padding-bottom: 0.1em;
+  background-color: #bbc4d0 !important;
+}
+.dijitCalendarNextYear,
+.dijitCalendarPreviousYear {
+  /* label for next/prev years */
+
+  color: black !important;
+  font-weight: normal;
+}
+/* Styling for month DropDownButton */
+.dijitCalendar .dijitDropDownButton {
+  margin: 0;
+}
+.dijitCalendar .dijitButtonText {
+  padding: 0;
+}
+.dijitCalendar .dijitDropDownButton .dijitButtonNode {
+  background-color: transparent;
+  background-image: none;
+  padding: 0;
+}
+/* Styling for month drop down list */
+.dijitCalendarMonthMenu .dijitCalendarMonthLabelHover {
+  background-color: #3559ac;
+  color: #fff;
+}
+.dijitCalendarMonthMenu {
+  border-color: #759dc0;
+  border: 1px solid;
+  background-color: #ffffff;
+  text-align: center;
+  background-image: none;
+}
+/* dijit helper stuff */
+.dijitSpacer {
+  position: relative;
+  height: 1px;
+  overflow: hidden;
+  visibility: hidden;
+  text-align: center;
+}
+.dijitReset {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  line-height: normal;
+  color: inherit;
+}
+.dijitInline {
+  display: inline-block;
+  border: 0;
+  padding: 0;
+  vertical-align: middle;
+}
+.dijitButtonText {
+  padding: 0 0.3em;
+  text-align: center;
+}
+.dijitArrowButtonInner {
+  width: 15px;
+  height: 15px;
+  margin: 0 auto;
+  background-image: url("form/images/buttonArrows.png");
+  background-repeat: no-repeat;
+  background-position: -51px 53%;
+}
+.dijitPopup {
+  text-align: center;
+  visibility: visible;
+  top: 110.015625px;
+  left: 63.5px;
+  right: auto;
+  z-index: 1000;
+  position: fixed;
+  background-color: white;
+  margin: 0;
+  border: 1px solid #759dc0;
+  padding: 0;
+  /*height: 10%;*/
+
+  -webkit-overflow-scrolling: touch;
+}
+.dijitBackgroundIframe {
+  background-color: white;
+  text-align: center;
+  visibility: visible;
+  top: 110.015625px;
+  left: 63.5px;
+  right: auto;
+  z-index: 1000;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  border: 1px solid #759dc0;
+  padding: 0;
+  margin: 0;
+}
+.dijitOffScreen {
+  position: absolute !important;
+  left: -10000px !important;
+  top: -10000px !important;
+}
+/* Dialog and Tooltip/TooltipDialog */
+.dijitDialog {
+  background: #fff;
+  border: 1px solid #7eabcd;
+  padding: 0;
+  -webkit-box-shadow: 0 5px 10px #adadad;
+  overflow: auto;
+  max-height: 90%;
+  max-width: 90%;
+  z-index: 1002 !important;
+}
+.dijitDialogPaneContent {
+  background: #fff;
+  padding: 10px;
+  position: relative;
+  overflow: visible !important;
+}
+.dijitDialogTitleBar {
+  /* outer container for the titlebar of the dialog */
+
+  background: transparent;
+  padding: 5px 6px 3px 6px;
+  width: 100%;
+  z-index: 12000 !important;
+  outline: 0;
+  /* remove this line if keyboard focus on dialog startup is an issue. tab still takes you to first focusable element */
+
+}
+.dijitDialogTitle {
+  /* typography and styling of the dialog title */
+
+  font-weight: bold;
+  padding: 0 4px;
+}
+.optionsDropDownClass .dijitDialogCloseIcon {
+  background: url("../../../app/resources/img/closeIcon.png") no-repeat;
+  z-index: 12001 !important;
+  vertical-align: middle;
+  height: 30px !important;
+  width: 30px !important;
+}
+.optionsDropDownClass .dijitDialogCloseIcon:hover {
+  background: url("../../../app/resources/img/closeIcon.png") no-repeat;
+  z-index: 12001 !important;
+  vertical-align: middle;
+  height: 30px !important;
+  width: 30px !important;
+}
+.calendarDialog .dijitDialogCloseIcon {
+  margin-left: -2px;
+  margin-top: -1px;
+  color: transparent;
+  background: url("../../../app/resources/img/closeIcon.png") no-repeat;
+  background-size: contain;
+  float: left;
+  height: 20px !important;
+  width: 20px !important;
+}
+.calendarDialog dijitDialogCloseIconHover {
+  margin-left: -2px;
+  margin-top: -1px;
+  color: transparent;
+  background: url("../../../app/resources/img/closeIconHover.png") no-repeat;
+  background-size: contain;
+  float: left;
+  height: 20px !important;
+  width: 20px !important;
+}
+.blackBackDijitDialog .dijitDialogCloseIcon {
+  background: url("../../../app/resources/img/closeIcon.png") no-repeat;
+  background-size: contain;
+  position: fixed;
+  z-index: 12001 !important;
+  vertical-align: middle;
+  left: 5%;
+  top: 5%;
+  height: 30px !important;
+  width: 30px !important;
+}
+.blackBackDijitDialog .dijitDialogCloseIconHover {
+  background: url("../../../app/resources/img/closeIconHover.png") no-repeat;
+  background-size: contain;
+  position: fixed;
+  z-index: 12001 !important;
+  vertical-align: middle;
+  left: 5%;
+  top: 5%;
+  height: 30px !important;
+  width: 30px !important;
+}
+.helpDijitDialog .dijitDialogCloseIcon {
+  margin-left: -2px;
+  margin-top: -1px;
+  color: transparent;
+  background: url("../../../app/resources/img/closeIcon.png") no-repeat;
+  background-size: contain;
+  float: left;
+  height: 20px !important;
+  width: 20px !important;
+}
+.helpDijitDialog dijitDialogCloseIconHover {
+  margin-left: -2px;
+  margin-top: -1px;
+  color: transparent;
+  background: url("../../../app/resources/img/closeIconHover.png") no-repeat;
+  background-size: contain;
+  float: left;
+  height: 20px !important;
+  width: 20px !important;
+}
+/* Tooltip and TooltipDialog */
+.dijitTooltip,
+.dijitTooltipDialog {
+  /* the outermost dom node, holding the connector and container */
+
+  background: transparent;
+  /* make the area on the sides of the arrow transparent */
+
+}
+.dijitTooltipBelow {
+  /* leave room for arrow above content */
+
+  padding-top: 13px;
+}
+.dijitTooltipAbove {
+  /* leave room for arrow below content */
+
+  padding-bottom: 13px;
+}
+.dijitTooltipContainer {
+  /*
+		The part with the text.
+	*/
+
+  background: #ffffff url("../../../dijit/themes/tundra/images/popupMenuBg.gif") repeat-x bottom left;
+  border: 1px solid #7eabcd;
+  padding: 0.45em;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+}
+.dijitTooltipConnector {
+  /* the arrow piece */
+
+  border: 0;
+  z-index: 2;
+}
+.dijitTooltipABRight .dijitTooltipConnector {
+  /* above or below tooltip, but the arrow appears on the right,
+		and the right edges of target and tooltip are aligned rather than the left */
+
+  left: auto !important;
+  right: 3px;
+}
+.dijitTooltipBelow .dijitTooltipConnector {
+  /* the arrow piece for tooltips below an element */
+
+  top: 0;
+  left: 3px;
+  background: url("../../../dijit/themes/tundra/images/tooltipConnectorUp.png") no-repeat top left;
+  width: 16px;
+  height: 14px;
+}
+.dijitTooltipBelow .dijitTooltipConnector {
+  /* use gif for IE7 too, due to png rendering problems on fade-in (see http://trac.dojotoolkit.org/ticket/6555) */
+
+  background-image: url("../../../dijit/themes/tundra/images/tooltipConnectorUp.gif");
+}
+.dijitTooltipAbove .dijitTooltipConnector {
+  /* the arrow piece for tooltips above an element */
+
+  bottom: 0;
+  left: 3px;
+  background: url("../../../dijit/themes/tundra/images/tooltipConnectorDown.png") no-repeat top left;
+  width: 16px;
+  height: 14px;
+}
+.dijitTooltipAbove .dijitTooltipConnector {
+  background-image: url("../../../dijit/themes/tundra/images/tooltipConnectorDown.gif");
+}
+.dijitTooltipAbove .dijitTooltipConnector {
+  bottom: -3px;
+}
+.dijitTooltipLeft {
+  padding-right: 14px;
+}
+.dijitTooltipLeft .dijitTooltipConnector {
+  /* the arrow piece for tooltips to the left of an element, bottom borders aligned */
+
+  right: 0;
+  background: url("../../../dijit/themes/tundra/images/tooltipConnectorRight.png") no-repeat top left;
+  width: 16px;
+  height: 14px;
+}
+.dijitTooltipLeft .dijitTooltipConnector {
+  background-image: url("../../../dijit/themes/tundra/images/tooltipConnectorRight.gif");
+}
+.dijitTooltipRight {
+  padding-left: 14px;
+}
+.dijitTooltipRight .dijitTooltipConnector {
+  /* the arrow piece for tooltips to the right of an element, bottom borders aligned */
+
+  left: 0;
+  background: url("../../../dijit/themes/tundra/images/tooltipConnectorLeft.png") no-repeat top left;
+  width: 16px;
+  height: 14px;
+}
+.dijitTooltipRight .dijitTooltipConnector {
+  background-image: url("../../../dijit/themes/tundra/images/tooltipConnectorLeft.gif");
+}
+.dijitTooltipContainer {
+  -webkit-box-shadow: 0 5px 10px #adadad;
+}
+.blackoutDiv {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  top: 0;
+  left: 0;
+  z-index: 1001;
+  opacity: .9;
+}
+.whiteoutDiv {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #eeeeee;
+  top: 0;
+  left: 0;
+  z-index: 1001;
+  opacity: .9;
+}
+.dojoxUploaderFileList {
+  border: 1px solid #ccc;
+  min-height: 50px;
+}
+.dojoxUploaderFileListTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 5px;
+}
+.dojoxUploaderFileListHeader th {
+  background-color: #eee;
+  padding: 3px;
+}
+.dojoxUploaderIndex {
+  width: 20px;
+}
+.dojoxUploaderIcon {
+  width: 50px;
+}
+.dojoxUploaderFileName {
+  max-width: 50px;
+  overflow-wrap: break-word;
+}
+.dojoxUploaderSize {
+  width: 70px;
+}
+.dojoxUploaderFileListContent {
+  width: 100%;
+}
+.dojoxUploaderFileListProgress {
+  border: 1px solid #666;
+  height: 15px;
+  position: relative;
+  background: #fff;
+  overflow: hidden;
+}
+.dojoxUploaderFileListPercentText {
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  font-size: 10px;
+  text-align: right;
+}
+.dojoxUploaderFileListProgressBar {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 15px;
+  width: 0%;
+  background: #bfe1fd;
+}
+.dojoxUploaderNorm {
+  font-family: Myriad, Helvetica, Tahoma, Arial, clean, sans-serif;
+  font-size: 12px;
+  border: 1px solid #c0c0c0;
+  border-bottom: 1px solid #9b9b9b;
+  padding: 0.1em 0.2em 0.2em 0.2em;
+  background: #ffffff url("../../../dijit/themes/tundra/images/buttonEnabled.png") repeat-x bottom left;
+  vertical-align: middle;
+  margin: 0;
+  line-height: normal;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.uploaderInsideNode {
+  visibility: hidden;
+}
+.dojoxUploaderHover {
+  border-color: #a5beda;
+  border-bottom-color: #5c7590;
+  color: #243C5F;
+  background: #fcfdff url("../../../dijit/themes/tundra/images/buttonHover.png") repeat-x bottom;
+}
+.dojoxUploaderActive {
+  border-color: #366dba;
+  background: #ededed url("../../../dijit/themes/tundra/images/buttonActive.png") bottom repeat-x;
+}
+.dojoxUploaderDisabled {
+  color: #7F7F7F;
+  border-color: #d5d5d5 #d5d5d5 #bdbdbd #d5d5d5;
+  background: #e4e4e4 url("../../../dijit/themes/tundra/images/buttonDisabled.png") top repeat-x;
+}
+.fileToUpload,
+.fileToUploadClose,
+.fileToUploadName,
+.fileToUploadSize {
+  height: 18px;
+  line-height: 18px;
+}
+.fileToUpload {
+  font-size: 12px;
+  font-family: sans-serif;
+  padding: 2px;
+  margin: 0px;
+  width: 100%;
+}
+.fileToUploadName {
+  text-align: left;
+  width: auto !important;
+}
+.fileToUploadSize {
+  width: 30px !important;
+  text-align: right;
+}
+.dj_ie .fileToUploadSize {
+  padding-right: 20px;
+}
+.fileToUploadClose {
+  background: url(../../../dijit/themes/tundra/images/tabClose.png) no-repeat 2px center;
+  width: 18px !important;
+  cursor: pointer;
+}
+.fileToUploadClose:hover {
+  background: url(../../../dijit/themes/tundra/images/tabCloseHover.png) no-repeat 2px center;
+}
+.thumb {
+  height: 50px;
+  padding: 3px;
+  border: 1px solid #ccc;
+  margin-bottom: 3px;
+}
+.thumbPic {
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  line-height: 50px;
+  background-color: #000;
+  float: left;
+}
+.thumbPic img {
+  line-height: 50px;
+  margin: auto auto;
+  display: block;
+}
+.thumbText {
+  float: left;
+  margin-left: 5px;
+  font-size: 10px;
+}
+.dj_ie object {
+  /* When clicking on the object inspector in Firebug Lite, IE
+	sets display:none on (flash) objects. Amazing!! */
+
+  display: block !important;
+}
+.font-mixin {
+  font-family: Helvetica, Arial, sans-serif;
+}
+html.mobile,
+.mobile body {
+  font-family: Helvetica, Arial, sans-serif;
+  background: #eeeeee;
+  color: #373737;
+  /* Do not show gray boxes when long pressing on an element in iOS */
+
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+a,
+a:active {
+  color: #F66733;
+  text-decoration: none;
+}
+.no_touch a:hover {
+  text-decoration: underline;
+}
+input,
+textarea,
+button,
+select {
+  font-family: Helvetica, Arial, sans-serif;
+}
+::-webkit-input-placeholder {
+  font-family: Helvetica, Arial, sans-serif;
+  color: #828282;
+}
+:-moz-placeholder {
+  font-family: Helvetica, Arial, sans-serif;
+  color: #828282;
+}
+::-moz-placeholder {
+  font-family: Helvetica, Arial, sans-serif;
+  color: #828282;
+}
+::-ms-placeholder {
+  font-family: Helvetica, Arial, sans-serif;
+  color: #828282;
+}
+.dmLayout {
+  width: 100%;
+  height: 100%;
+}
+.dmModuleContent {
+  outline: none;
+}
+.dj_tablet .dmLayout {
+  bottom: 0;
+  height: auto;
+  position: absolute;
+  max-width: 1100px;
+  top: 0;
+  width: 100%;
+}
+@media (min-width: 1100px) {
+  .dj_tablet .dmLayout {
+    bottom: 0;
+    left: 50%;
+    margin-left: -550px;
+    top: 0;
+  }
+}
+@media (min-width: 1100px) and (max-width: 1220px) {
+  .dj_tablet .dmLayout {
+    bottom: 5px;
+    top: 5px;
+  }
+}
+@media (min-width: 1220px) {
+  .dj_tablet .dmLayout {
+    bottom: 10px;
+    top: 10px;
+  }
+}
+@media (min-width: 1600px) {
+  .dj_tablet .dmLayout {
+    bottom: 25px;
+    top: 25px;
+  }
+}
+.dmRightPane {
+  background-color: white;
+}
+.fullscreen_mode .dmLayout {
+  bottom: 0 !important;
+  left: 0 !important;
+  margin-left: 0 !important;
+  max-width: none !important;
+  top: 0 !important;
+}
+.fullscreen_mode .dmFullscreenButton {
+  font-family: 'my-Clemson-Fonts';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+}
+.fullscreen_mode .dmFullscreenButton:before {
+  content: "\e022";
+}
+/*previous app themes */
+.barGraph .bar {
+  fill: steelblue;
+}
+.barGraph .bar:hover {
+  fill: brown;
+}
+.barGraph .axis {
+  font: 10px sans-serif;
+}
+.barGraph .axis path,
+.barGraph .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+.barGraph .x.axis path {
+  display: none;
+}
+.lineGraph .axis path,
+.lineGraph .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+.lineGraph .x.axis path {
+  display: none;
+}
+.lineGraph .line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+.blackBackDijitDialog {
+  color: transparent;
+  left: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  margin: auto;
+}
+.helpDijitDialog {
+  color: black;
+  width: 375px !important;
+  height: 275px !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  margin: auto !important;
+  position: absolute !important;
+  overflow: hidden;
+}
+.calendarDialog {
+  color: black;
+}
+.helpTitle {
+  text-decoration: underline;
+}
+.optionsDropDownClass {
+  color: black;
+}
+.pieChart .arc path {
+  stroke: #fff;
+}
+.twitterOrangeDiv {
+  float: left;
+  color: #F66733;
+}
+.twitterOrangeDiv:hover {
+  float: left;
+  color: #F66733;
+  text-decoration: underline;
+}
+.twitterBlueDiv {
+  float: left;
+  color: #265AC9;
+}
+.twitterBlueDiv:hover {
+  float: left;
+  color: #265AC9;
+  text-decoration: underline;
+}
+.tooltipDiv {
+  position: absolute;
+  text-align: center;
+  display: inline-block;
+  padding: 2px;
+  font: 12px sans-serif;
+  color: black;
+  background: yellow;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+}
+.accountManItemClassGood {
+  background: #ffffff;
+  border: none;
+  border-bottom: 1px solid #e7e7de;
+  line-height: 60px;
+  font-weight: normal;
+}
+.accountManItemClassBad {
+  background: #b8b8b1;
+  border: 1px solid;
+  line-height: 60px;
+  font-weight: normal;
+}
+.feedAccordionItemClass {
+  background: #FFFFFF;
+  border-bottom: 1px solid;
+  border-color: #e7e7de;
+}
+.mblAccordionTitle {
+  position: absolute;
+  height: 0px;
+  width: 100%;
+  font-family: Helvetica;
+  font-size: 17px;
+  line-height: 30px;
+  vertical-align: middle;
+  white-space: nowrap;
+  border-top: none;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#fcfcfc), to(#e1e5e8), color-stop(0.2, #f0f2f3));
+  background-image: linear-gradient(to bottom, #fcfcfc 0%, #f0f2f3 20%, #e1e5e8 100%);
+}
+.radioCheckBox {
+  -webkit-transform: scale(2.2);
+  -moz-transform: scale(2.2);
+  -ms-transform: scale(2.2);
+  -o-transform: scale(2.2);
+  margin-left: 11px;
+  margin-right: 8px;
+  margin-top: 6px;
+}
+.dj_iphone .radioCheckBox {
+  -webkit-transform: scale(1.7);
+  -moz-transform: scale(1.7);
+  -ms-transform: scale(1.7);
+  -o-transform: scale(1.7);
+  margin-left: 11px;
+  margin-right: 8px;
+  margin-top: 6px;
+}
+.verticalIconClass {
+  position: absolute;
+}
+.divHoldClass {
+  margin-top: 6px;
+}
+.feedAccordionClass > .mblAccordionTitle {
+  position: relative;
+  height: 30px;
+  width: 100%;
+  font-family: Helvetica;
+  font-size: 17px;
+  line-height: 30px;
+  vertical-align: middle;
+  white-space: nowrap;
+  border-top: none;
+  background: inherit;
+}
+.feedCommentPaneLabelClass > .mblRoundRectList {
+  background: #FFFFFF;
+  border: none;
+}
+.feedScrollerRoundRectClass.mblEdgeToEdgeList {
+  background: #FFFFFF;
+  margin-top: 40px;
+}
+.feedScrollerRoundRectClassNoMarg.mblEdgeToEdgeList {
+  background: #FFFFFF;
+}
+.itemAccordionClass {
+  background: inherit;
+}
+.feedItemListItemClass.mblListItem.mblVariableHeight {
+  background: inherit;
+  padding: 0px 0px 0px 0px;
+  border-bottom: 1px solid;
+  border-color: #e7e7de;
+}
+.paneLeftClass {
+  background: #FFFFFF !important;
+  max-width: 20%;
+  float: left;
+}
+.paneRightClass {
+  background: inherit;
+  max-width: 80%;
+  display: inline-block;
+}
+.roundRectLeftClass.mblRoundRectList {
+  background: #FFFFFF !important;
+  margin: 3px 3px 16px 3px;
+  border: none;
+}
+.roundRectRightClass.mblRoundRectList {
+  background: inherit;
+  margin: 3px 3px 16px 3px;
+  border: none;
+}
+.refreshItemClass {
+  background: inherit;
+}
+.feedSearchErrorClass {
+  background: inherit;
+  border-bottom: 3px solid #000000;
+  border-top: 3px solid #000000;
+}
+.picItemClass.mblListItem {
+  -webkit-user-select: text;
+  padding: 5px 5px 0px 4px;
+  border: none;
+  background: inherit !important;
+}
+.starItemClass.mblListItem {
+  -webkit-user-select: text;
+  padding: 5px 5px 0px 4px;
+  border: none;
+  background: inherit !important;
+}
+.starButtonClass {
+  background: url(../img/starE.png) no-repeat 0 0;
+  margin-left: 8px;
+  height: 35px;
+  width: 35px;
+}
+.starButtonClassChecked {
+  background: url(../img/star.png) no-repeat 0 0;
+  margin-left: 8px;
+  height: 35px;
+  width: 35px;
+}
+.starClientButtonClass {
+  background: url(../img/profileE.png) no-repeat 0 0;
+  margin-left: 5px;
+  height: 35px;
+  width: 35px;
+}
+.optionsButtonClass {
+  background: url(../img/not-allowed-sign_small.png) no-repeat 0 0;
+  margin-left: 8px;
+  height: 35px;
+  width: 35px;
+}
+.unfriendButtonClass {
+  background: url(../img/not-allowed-sign_small.png) no-repeat 0 0;
+  margin-left: 8px;
+  height: 35px;
+  width: 35px;
+}
+.serviceLogo {
+  position: absolute;
+  right: 10px;
+  top: 6px;
+}
+.bodyCSS {
+  background: #ffffff;
+}
+.serviceButton {
+  background: #D0D7DB;
+  position: absolute;
+  left: 10px;
+  top: 6px;
+}
+.starClientButtonClassChecked {
+  background: url(../img/profile.png) no-repeat 0 0;
+  margin-left: 5px;
+  height: 35px;
+  width: 35px;
+}
+.feedNameServiceItemClass.mblListItem {
+  border: none;
+  background: inherit;
+  padding: 10px 0px 2px 0px;
+}
+.feedPicDateItemClass.mblListItem {
+  height: auto;
+  border: none;
+  background: inherit;
+  padding: 0px 0px 2px 0px;
+}
+.feedServiceDivItemClass {
+  margin-top: 5px;
+  margin-bottom: 1px;
+}
+.feedDateDivItemClass {
+  margin-top: 1px;
+}
+.feedPicContentItemClass.mblListItem {
+  font-weight: normal;
+  height: auto;
+  border: none;
+  background: inherit;
+  padding: 2px 0px 2px 0px;
+}
+.feedTextTitleItemClass.mblListItem {
+  font-weight: normal;
+  font-size: 17px;
+  border: none;
+  background: inherit;
+  padding: 2px 0px 2px 0px;
+}
+.feedTextContentItemClass.mblListItem {
+  font-weight: normal;
+  font-size: 16px;
+  border: none;
+  background: inherit;
+  padding: 2px 0px 2px 0px;
+}
+.feedCommentItemClass.mblListItem {
+  font-weight: normal;
+  border: none;
+  background: inherit;
+  padding: 2px 0px 0px 0px;
+}
+.feedCommentPaneLabelClass {
+  font-weight: normal;
+  font-family: 'Century Gothic';
+  font-size: 25px;
+}
+.filterItemClass {
+  line-height: 33px;
+  font-weight: normal;
+  height: 33px;
+  background: #7E93A8;
+}
+.borderlessListItemClass {
+  border: none;
+}
+.helpListItemClass {
+  border-bottom: 1px solid #c0c0c0 !important;
+}
+.postItemClass {
+  font-weight: normal;
+  background: inherit;
+}
+.searchKeyWordItemClass {
+  font-weight: normal;
+  background: #FFFFFF;
+}
+.searchUserItemClass {
+  font-weight: normal;
+  background: #FFFFFF;
+}
+.menuAccordionListItemClass {
+  font-weight: normal;
+  background: inherit;
+}
+.helpItemClass {
+  font-weight: normal;
+  background: #FFFFFF;
+  border: none;
+}
+.userMentionItemClass {
+  font-weight: normal;
+  background: inherit;
+}
+.googleMapsItemClass {
+  font-weight: normal;
+  background: inherit;
+}
+.contactsManCategoryClass {
+  font-size: 22px;
+  background: #7D7B7A;
+  margin: 0px 0px 0px;
+  border: 1px solid;
+}
+.commentLikeAccordionItemClass {
+  font-weight: normal;
+  background: #eeeeee;
+  font-size: 17px;
+  margin-right: 9px;
+  margin-left: 9px;
+  border: none;
+  width: 95.6%;
+}
+.displayAccClass {
+  font-weight: normal;
+  background: inherit;
+}
+.feedsManItemClass {
+  font-weight: normal;
+  background: #FFFFFF;
+}
+.feedsAccordionItemClass {
+  font-weight: normal;
+  background: inherit;
+}
+.contactsManItemClass {
+  font-weight: normal;
+  background: #FFFFFF;
+}
+.FilterFeedGoButtonRoundRect {
+  margin-top: 10px;
+}
+.noMarginsNoPaddingClass {
+  margin: 0px 9px 0px;
+}
+.titleBar {
+  height: 45px;
+  position: absolute;
+  right: 70px;
+  top: -52px;
+}
+.roundTextBoxClass {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  border: 2px inset;
+  border-color: #e7e7e7;
+}
+.disabledTextBoxClass {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  border: 2px inset;
+  border-color: #e7e7e7;
+  background-color: #C3C5C9;
+}
+.buttonIconDiv {
+  float: right;
+  margin-right: 5px;
+}
+.dj_phone .selectorBar {
+  margin-top: 0px;
+}
+.selectorBar {
+  left: 0;
+  top: 0;
+  padding: 5px 0px !important;
+  text-align: right;
+  vertical-align: middle;
+  width: 100%;
+  float: left;
+  position: relative;
+  margin-left: 0px;
+  margin-top: 0px;
+  height: 25px !important;
+  z-index: 0;
+}
+.selectorButton {
+  border: none;
+  color: white;
+  font-weight: normal;
+  height: 31px;
+  width: 31px;
+  margin-right: 3px;
+  padding-left: 3px;
+  padding-top: 3px;
+  border-radius: 6px;
+  -moz-border-radius: 6px;
+  margin-top: -3px;
+}
+.itemLightClass {
+  line-height: 33px;
+  font-weight: normal;
+  height: 33px;
+  border: 1px solid;
+}
+.itemDarkClass {
+  line-height: 33px;
+  font-weight: normal;
+  height: 33px;
+  border: none;
+  background: #BDC7D4;
+}
+.darkButton {
+  background: #6a7495;
+}
+.mblToolBarButton {
+  background: #9E9D90 !important;
+}
+.serviceSelector {
+  border: none;
+  padding: 0px;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.mblListItem {
+  outline: none;
+  font-weight: normal !important;
+}
+.mblAccordionTitleTextBox {
+  outline: none;
+}
+.serviceIcon1 {
+  position: absolute;
+  right: 30px;
+  top: 15px;
+}
+.serviceIcon2 {
+  position: absolute;
+  right: 0;
+  margin-top: -35px;
+  margin-right: 19px;
+}
+.divListItem {
+  font-weight: normal;
+  background: #FFFFFF;
+  height: 40px;
+  line-height: 40px;
+  border: 1px solid #cdcbc3;
+  height: auto;
+  padding-left: 10px;
+  padding-right: 30px;
+  color: #000000;
+}
+.divListItemExtraPadding {
+  font-weight: normal;
+  background: #FFFFFF;
+  height: 40px;
+  line-height: 40px;
+  border: 1px solid #cdcbc3;
+  height: auto;
+  padding-left: 30px;
+  padding-right: 30px;
+  color: #000000;
+}
+.commentPane {
+  border: none;
+  margin-top: -6px;
+}
+.blackFont {
+  color: #000000;
+}
+.loginLogo {
+  height: 80px;
+  width: 80px;
+}
+.accountLogo {
+  height: 40px;
+  width: 40px;
+}
+.accountButtonAuth {
+  position: absolute;
+  bottom: 5px;
+  left: 10px;
+}
+.accountButtonLogOut {
+  position: absolute;
+  bottom: 5px;
+  left: 75px;
+}
+.accountDiv {
+  position: absolute;
+  bottom: -15px;
+  left: 155px;
+}
+.floatLeftButton {
+  float: left;
+  margin-left: 3px !important;
+  margin-right: 0px;
+}
+.floatRightButton {
+  float: right;
+  margin-left: 0px;
+  margin-right: 3px !important;
+}
+.noBottomBorder {
+  border-bottom: none;
+}
+.checkIcon {
+  float: left;
+  margin-right: -25px;
+  margin-left: -25px;
+  margin-top: 6px;
+}
+.fullWidthTextBox {
+  width: 99%;
+}
+.dj_iphone .fullWidthTextBox {
+  width: 96%;
+}
+.postButton {
+  height: 21px;
+  line-height: 21px;
+  position: relative;
+  margin-top: 1px;
+  margin-left: -1px;
+}
+.dj_iphone .adPositionClass {
+  bottom: -4px;
+  position: absolute;
+}
+.adPositionClass {
+  bottom: -5px;
+  position: absolute;
+}
+.dj_iphone .adPositionClass {
+  bottom: -4px;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+}
+.dj_android .adPositionClass {
+  bottom: -5px;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+}
+.adDivClass {
+  display: inline-block;
+}

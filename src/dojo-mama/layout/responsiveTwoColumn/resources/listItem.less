@@ -1,0 +1,37 @@
+.dmListItem {
+	list-style: none;
+
+	.dmListItemIcon {
+		float: left;
+	}
+
+	.dmListItemText {
+	}
+
+	.dmListItemRightText {
+		float: right;
+	}
+
+	.dmRightIcon {
+		position: absolute;
+		right: 0;
+	}
+
+	&.dmLinkListItem {
+		a {
+			display: block;
+
+			.dmListItemRightText {
+
+			}
+
+			.dmRightIcon {
+
+				&:before {
+					height: 100%;
+				}
+
+			}
+		}
+	}
+}

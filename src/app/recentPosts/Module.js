@@ -1,0 +1,81 @@
+define(['dojo/_base/declare',
+		'dojo-mama/Module',
+		"dojo/_base/lang",
+		'dojo/_base/kernel',
+		
+		'app/util/xhrManager',
+		'app/recentPosts/MainView',
+		'app/recentPosts/RecentView'
+], function(
+	declare, 
+	Module, 
+	lang, 
+	kernel,
+	
+	xhrManager, 
+	MainView, 
+	RecentView
+) {
+	return declare([Module], {
+		
+		postCreate: function(){
+			this.inherited(arguments);
+			
+			//for all of the database feed counting items this var will keep track of
+			if(!kernel.global.feedCount){
+				kernel.global.feedCount = {};
+			}
+			
+			this.RecentView = new RecentView({
+				route: '/RecentView',
+				
+				searchUser: lang.hitch(this, this.searchUser),
+				getSpecificClients: lang.hitch(this, this.getSpecificClients),
+				setStarred: lang.hitch(this, this.setStarred),
+				setStarredClient: lang.hitch(this, this.setStarredClient),
+				manualRefresh: lang.hitch(this, this.manualRefresh)
+			})
+			
+			this.rootView = new MainView({
+				route: '/',
+				
+				RecentView: this.RecentView,
+				getRecentContacts: lang.hitch(this, this.getRecentContacts)
+			});
+			this.registerView(this.rootView);
+			this.registerView(this.RecentView);
+
+		},
+		
+		searchUser: function(user, from){
+			var params = {user: user, from: from};
+			return xhrManager.send('GET', 'rest/v1.0/Search/user', params);
+		},
+		
+		setStarredClient: function(status, id){
+			var params = {status: status, id: id};
+			return xhrManager.send('POST', 'rest/v1.0/FeedData/setStarredClient', params);
+		},
+		
+		setStarred: function(status, id){
+			var params = {status: status, id: id};
+			return xhrManager.send('POST', 'rest/v1.0/Favorites/setStarred', params);
+		},
+		
+		getRecentContacts: function(from){
+			var params = {from: from};
+			return xhrManager.send('GET', 'rest/v1.0/Contacts/getRecentContacts', params)
+		},
+		
+		getSpecificClients: function(ids){
+			params = {ids: ids};
+			return xhrManager.send('POST', 'rest/v1.0/Contacts/getSpecificClients', params);
+		},
+		
+		manualRefresh: function(serviceObj){
+			var params = {serviceObj: serviceObj};
+			return xhrManager.send('POST', 'rest/v1.0/FeedData/manualRefresh', params);
+		}
+	})
+});
+	

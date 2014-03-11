@@ -1,0 +1,550 @@
+
+/* Colors for primary nav items and subnav */
+
+@mainFeedColor: #39C463;
+@feedsColor: #F66733;
+@peopleColor: #E32252;
+@favoritesColor: #41CCCC;
+@searchColor: #8F5929;
+@analyticsColor: #8868E8;
+@postColor: #0066FF;
+@settingsColor: #FFCC00;
+@helpColor: #B33DA5;
+
+#genPrimaryNavColor(@name, @color) {
+
+	.dmNavBackgroundColor_@{name} {
+		background-color: @color;
+		background-image: none;
+		border: none;
+		color: white;
+		font-weight: bold;
+	}
+
+	.dmActiveModule_@{name} .dmModuleContent {
+		border-left: 2px solid @color;
+	}
+
+	.dmSelectedPrimaryNavItem_@{name} .dmModuleContent {
+		border-left: 2px solid @color;
+	}
+
+    .dmActiveModule_@{name} .selectorBar {
+    	background-color: darken(@color, 15%);
+    }
+
+    .dmSelectedPrimaryNavItem_@{name} .selectorBar {
+    	background-color: darken(@color, 15%);
+    }
+
+    .dmActiveModule_@{name} .selectorButton {
+    	background: @color;
+    }
+
+    .dmSelectedPrimaryNavItem_@{name} .selectorButton {
+    	background: @color;
+    }
+
+	.dmPrimaryNavItem_@{name} {
+		.dmPrimaryNavItemColor {
+			background-color: @color;
+		}
+
+		.dmPrimaryNavItemContent {
+			background-color: darken(@color, 15%);
+		}
+
+		a {
+			text-decoration: none;
+		}
+	}
+
+	.dmSelectedPrimaryNavItem_@{name} .dmSubNav {
+		background-color: @color;
+
+		.dmSubNavBackButton div, .dmFullscreenButton {
+			background-color: darken(@color, 15%);
+		}
+	}
+
+	.no_touch .dmSelectedPrimaryNavItem_@{name} {
+		.dmSubNavBackButton div:hover, .dmFullscreenButton:hover {
+			background-color: darken(@color, 30%);
+		}
+	}
+
+	.dmSelectedPrimaryNavItem_@{name} {
+		.dmSubNavBackButton:active div, .dmFullscreenButton:active {
+			background-color: darken(@color, 30%);
+		}
+	}
+
+	.dj_phone .dmSelectedPrimaryNavItem_@{name} .dmSubNav {
+		border-bottom: none;
+	}
+
+	.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_@{name} {
+		&.dmPrimaryNavItemSelected {
+			background-color: darken(@color, 15%);
+
+			.dmPrimaryNavItemIcon {
+				border-right: none;
+				color: white;
+			}
+
+			.dmPrimaryNavItemLabel {
+				color: white;
+			}
+		}
+	}
+
+	.dj_phone .dmPrimaryNav .dmPrimaryNavItem_@{name},
+	.dmRootView .dmPrimaryNav .dmPrimaryNavItem_@{name}, {
+		a {
+			background-color: darken(@color, 15%);
+		}
+	}
+
+	.dj_phone .dmPrimaryNav .dmPrimaryNavItem_@{name} {
+		a {
+			-moz-border-radius: 3px;
+			-webkit-border-radius: 3px;
+			border-radius: 3px;
+
+			.dmPrimaryNavItemColor {
+				bottom: 5px;
+			}
+
+			&:active {
+				outline: none;
+
+				position: relative;
+				top: 5px;
+
+				.dmPrimaryNavItemColor {
+					bottom: 0;
+				}
+			}
+		}
+
+	}
+
+	.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_@{name}, {
+
+		.dmPrimaryNavItemColor:hover {
+			background-color: lighten(@color, 8%);
+		}
+		.dmPrimaryNavItemColor:hover ~ .dmPrimaryNavItemIcon,
+		.dmPrimaryNavItemColor:hover ~ .dmPrimaryNavItemLabel {
+			color: darken(@color, 15%);
+		}
+
+	}
+
+	.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_@{name}, {
+
+		.dmPrimaryNavItemColor:active {
+			background-color: lighten(@color, 8%);
+		}
+		.dmPrimaryNavItemColor:active ~ .dmPrimaryNavItemIcon,
+		.dmPrimaryNavItemColor:active ~ .dmPrimaryNavItemLabel {
+			color: darken(@color, 15%);
+		}
+
+	}
+}
+
+#genPrimaryNavColor(mainFeed, @mainFeedColor);
+#genPrimaryNavColor(feeds, @feedsColor);
+#genPrimaryNavColor(people, @peopleColor);
+#genPrimaryNavColor(favorites, @favoritesColor);
+#genPrimaryNavColor(search, @searchColor);
+#genPrimaryNavColor(analytics, @analyticsColor);
+#genPrimaryNavColor(post, @postColor);
+#genPrimaryNavColor(settings, @settingsColor);
+#genPrimaryNavColor(help, @helpColor);
+
+/* Content in primary nav items in tablet root view */
+
+#genModuleContent(@name, @text) {
+	.dmPrimaryNavItem_@{name} {
+		.dmPrimaryNavItemContent:before {
+			content: @text;
+			margin-left: 10px;
+		}
+	}
+}
+
+#genModuleContent(mainFeed, 'See what\'s new');
+#genModuleContent(feeds, 'View saved feeds');
+#genModuleContent(people, 'View by contact');
+#genModuleContent(favorites, 'Your favorite posts');
+#genModuleContent(search, 'Search through your feeds');
+#genModuleContent(analytics, 'Analyze your friends');
+#genModuleContent(post, 'Post, Tweet, Blog');
+#genModuleContent(settings, 'Edit the app settings');
+#genModuleContent(help, 'Information about the app');
+
+/* Primary nav icons */
+
+.dmPrimaryNavItem_mainFeed {
+	.dmPrimaryNavItemIcon { .icon-book; }
+}
+.dmPrimaryNavItem_feeds {
+	.dmPrimaryNavItemIcon { .icon-chat; }
+}
+.dmPrimaryNavItem_people {
+	.dmPrimaryNavItemIcon { .icon-graduation; }
+}
+.dmPrimaryNavItem_favorites {
+	.dmPrimaryNavItemIcon { .icon-suitcase; }
+}
+.dmPrimaryNavItem_search {
+	.dmPrimaryNavItemIcon { .icon-sound; }
+}
+.dmPrimaryNavItem_analytics {
+	.dmPrimaryNavItemIcon { .icon-map; }
+}
+.dmPrimaryNavItem_post {
+	.dmPrimaryNavItemIcon { .icon-publish; }
+}
+.dmPrimaryNavItem_settings {
+	.dmPrimaryNavItemIcon { .icon-vcard; }
+}
+.dmPrimaryNavItem_help {
+	.dmPrimaryNavItemIcon { .icon-link; }
+}
+
+.dmPrimaryNav {
+	background-color: #ffffff;
+
+	ul {
+		padding: 0;
+		margin: 0;
+		list-style-type: none;
+	}
+
+	li {
+		background-color: #eeeeee;
+		color: white;
+		list-style-type: none;
+		overflow: hidden;
+		cursor: pointer;
+	}
+
+	.dmPrimaryNavItemLabel {
+		float: left;
+	}
+
+	.dmPrimaryNavItemIcon {
+		float: left;
+	}
+}
+
+.dj_tablet {
+
+	.dmPrimaryNav li {
+		font-size: 15px;
+		font-weight: bold;
+		height: 55px;
+		padding: 0;
+		position: relative;
+		transition: background-color 0.3s;
+		-moz-transition: background-color 0.3s;
+		-o-transition: background-color 0.3s;
+		-webkit-transition: background-color 0.3s;
+		width: 100%;
+
+		&:focus {
+			background-color: white;
+		}
+
+		&:nth-child(even) {
+			background-color: #ffffff;
+		}
+	}
+
+	.dmPrimaryNavItemColor {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		top: 0;
+		width: 5px;
+		transition: width 0.3s;
+		-moz-transition: width 0.3s;
+		-o-transition: width 0.3s;
+		-webkit-transition: width 0.3s;
+		z-index: 1;
+	}
+
+	.dmPrimaryNavItemIcon {
+		color: rgb(130,130,130);
+		font-size: 24px;
+		line-height: 55px;
+		margin-left: 5px;
+		position: relative;
+		text-align: center;
+		transition: color 0.3s;
+		-moz-transition: color 0.3s;
+		-o-transition: color 0.3s;
+		-webkit-transition: color 0.3s;
+		width: 55px;
+		z-index: 2;
+	}
+
+	.dmPrimaryNavItemLabel {
+		color: rgb(130,130,130);
+		left: 72px;
+		line-height: 55px;
+		position: absolute;
+		text-transform: uppercase;
+		transition: color 0.3s;
+		-moz-transition: color 0.3s;
+		-o-transition: color 0.3s;
+		-webkit-transition: color 0.3s;
+		z-index: 2;
+	}
+
+	.dmPrimaryNavItemContent {
+		display: none;
+	}
+
+	.dmPrimaryNavItemSelected {
+		background-color: white;
+
+		.dmPrimaryNavItemColor {
+			width: 60px;
+		}
+
+		.dmPrimaryNavItemIcon {
+			color: white;
+		}
+	}
+
+	.dmRootView {
+		.dmPrimaryNav {
+
+			ul {
+				margin-top: 21px;
+			}
+
+			li {
+				border-bottom: none;
+				display: inline-block;
+				height: 105px;
+				margin-bottom: 16px;
+
+				margin-left: 4.347%;
+				width: 43.478%;
+
+				@media(min-width: 650px) {
+					margin-left: 2.941%;
+					width: 29.411%;
+				}
+
+				@media(min-width: 900px) {
+					margin-left: 2.222%;
+					width: 22.222%;
+				}
+			}
+
+			.dmPrimaryNavItemColor {
+				bottom: 40px;
+				transition: background-color 0.3s;
+				-moz-transition: background-color 0.3s;
+				-o-transition: background-color 0.3s;
+				-webkit-transition: background-color 0.3s;
+				width: 100%;
+			}
+
+			.dmPrimaryNavItemIcon {
+				border-right: none;
+				color: white;
+				font-size: 30px;
+				line-height: 65px;
+				margin-left: 0;
+				pointer-events: none;
+				width: 65px;
+			}
+
+			.dmPrimaryNavItemLabel {
+				color: white;
+				font-size: 22px;
+				font-weight: normal;
+				left: 65px;
+				line-height: 65px;
+				pointer-events: none;
+				text-transform: none;
+				transition: color 0.3s;
+				-moz-transition: color 0.3s;
+				-o-transition: color 0.3s;
+				-webkit-transition: color 0.3s;
+			}
+
+			.dmPrimaryNavItemContent {
+				color: rgb(255,255,255);
+				color: rgba(255,255,255,0.7);
+				display: block;
+				clear: left;
+				font-weight: normal;
+				float: left;
+				height: 40px;
+				line-height: 40px;
+				position: relative;
+				width: 100%;
+				z-index: 2;
+			}
+		}
+	}
+}
+
+.no_touch.dj_tablet {
+
+	.dmPrimaryNav li {
+		a:hover {
+			.dmPrimaryNavItemIcon,
+			.dmPrimaryNavItemLabel {
+				color: rgb(55,55,55);
+			}
+		}
+	}
+
+	.dmPrimaryNav li.dmPrimaryNavItemSelected {
+		a:hover {
+			.dmPrimaryNavItemIcon,
+			.dmPrimaryNavItemLabel {
+				color: white;
+			}
+		}
+	}
+
+	.dmRootView {
+		.dmPrimaryNav {
+
+			li {
+				a:hover {
+					.dmPrimaryNavItemIcon,
+					.dmPrimaryNavItemLabel {
+						color: white;
+					}
+				}
+			}
+
+			/*.dmPrimaryNavItemContent {
+				&:hover {
+					color: white;
+				}
+			}*/
+		}
+	}
+}
+
+.dj_tablet {
+	.dmPrimaryNav li {
+		a:active {
+			.dmPrimaryNavItemIcon,
+			.dmPrimaryNavItemLabel {
+				color: rgb(55,55,55);
+			}
+		}
+	}
+
+	.dmPrimaryNav li.dmPrimaryNavItemSelected {
+		a:active {
+			.dmPrimaryNavItemIcon,
+			.dmPrimaryNavItemLabel {
+				color: white;
+			}
+		}
+	}
+
+	.dmRootView {
+		.dmPrimaryNav {
+
+			li {
+				a:active {
+					.dmPrimaryNavItemIcon,
+					.dmPrimaryNavItemLabel {
+						color: white;
+					}
+				}
+			}
+
+			/*.dmPrimaryNavItemContent {
+				&:active {
+					color: white;
+				}
+			}*/
+		}
+	}
+}
+
+.dj_phone {
+	.dmPrimaryNav {
+		border-right: none;
+	}
+
+	.dmPrimaryNav ul {
+		margin: 10px 0 0;
+	}
+
+	.dmPrimaryNav li {
+		-moz-border-radius: 3px;
+		-webkit-border-radius: 3px;
+		-o-border-radius: 3px;
+		border-radius: 3px;
+		display: inline-block;
+		font-size: 16px;
+		height: 48px;
+		line-height: 48px;
+		margin: 0 0 7px 4.0625%;
+		position: relative;
+		width: 43.90625%;
+
+		a {
+			-webkit-border-radius: 3px;
+			-moz-border-radius: 3px;
+			-o-border-radius: 3px;
+			padding: 0 10px;
+		}
+
+		.dmPrimaryNavItemColor {
+			-webkit-border-top-left-radius: 3px;
+			-webkit-border-top-right-radius: 3px;
+			-moz-border-radius-topleft: 3px;
+			-moz-border-radius-topright: 3px;
+			border-top-left-radius: 3px;
+			border-top-right-radius: 3px;
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			top: 0;
+			z-index: 1;
+		}
+
+		.dmPrimaryNavItemIcon {
+			color: white;
+			font-size: 18px;
+			line-height: 48px;
+			position: relative; /* z-index only works on positioned elements */
+			top: -2px;
+			z-index: 2; /* Bring in front of color node */
+		}
+
+		.dmPrimaryNavItemLabel {
+			color: white;
+			font-size: 16px;
+			left: 37px;
+			line-height: 45px;
+			position: absolute;
+			text-overflow: ellipsis;
+			right: 10px;
+			z-index: 2; /* Bring in front of color node */
+		}
+
+		.dmPrimaryNavItemContent {
+			display: none;
+		}
+	}
+}
