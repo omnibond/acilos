@@ -1,0 +1,6 @@
+      # RewriteLog "/var/www/reWrite.log"
+      # RewriteLogLevel 9
+	
+	# deny from IP ADDRESS GOES HERE       
+        RewriteEngine On
+        RewriteRule ^(.*)$ index.php [QSA,L]
