@@ -55,11 +55,6 @@ if(isset($_GET['code'])){
 				//just to be safe return here
 				return;
 			}
-			if($credObj['login'] == "first"){
-				$credObj['login'] = "second";
-			}
-			file_put_contents("../serviceCreds.json", json_encode($credObj));
-		//else if the id is empty, this is the first time
 		}
 		
 		if($credObj['login'] == "first"){
@@ -78,29 +73,14 @@ if(isset($_GET['code'])){
 		$credObj['instagram'][$g] = $temp;
 		
 		file_put_contents("../serviceCreds.json", json_encode($credObj));
-
-		$filename = "../cron/poller/appCredentialStatus.txt";
-		$var = file_get_contents($filename);
-		$varObj = json_decode($var, true);
-		$varObj['Instagram']['status'] = "good";
-		file_put_contents($filename, json_encode($varObj));	
 		
 		header('Location: ../login.php?instagram=true');
 	}else{
 		//setting a cookie to an expired time will trigger removal by the browser
 		setcookie ("instagramCook", "", time() - 3600, $_SERVER['HTTP_HOST'], 'clemson.edu', false, false);
-			
-		//$log->logError("$logPrefix No refresh token was returned.");
-		echo "ERROR: No refresh token was returned" . $response; ?><br/><?php
-		$filename = "../cron/poller/appCredentialStatus.txt";
-		$var = file_get_contents($filename);
-		$varObj = json_decode($var, true);
-		$varObj['Instagram']['status'] = "bad";
-		file_put_contents($filename, json_encode($varObj));	
 		
 		header('Location: ../login.php?error=2&service=instagram');
 	}
-	//echo "<html><head></head><body><div>You have successfully authenticated with Instagram, please close this window</div><script type=\"text/javascript\">window.close()</script></body></html>";
 }
 	
 ?>

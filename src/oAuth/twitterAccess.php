@@ -92,10 +92,6 @@ if(isset($_REQUEST['oauth_verifier'])){
 				//just to be safe return here
 				return;
 			}
-			if($credObj['login'] == "first"){
-				$credObj['login'] = "second";
-			}
-			file_put_contents("../serviceCreds.json", json_encode($credObj));
 		//else if the id is empty, this is the first time
 		}
 		
@@ -116,22 +112,10 @@ if(isset($_REQUEST['oauth_verifier'])){
 		$credObj['twitter'][$g] = $temp;
 		
 		file_put_contents("../serviceCreds.json", json_encode($credObj));
-		
-		$filename = "../cron/poller/appCredentialStatus.txt";
-		$var = file_get_contents($filename);
-		$varObj = json_decode($var, true);
-		$varObj['Twitter']['status'] = "good";
-		file_put_contents($filename, json_encode($varObj));
-		
+
 		header('Location: ../login.php?twitter=true');
 	}else{
 		setcookie ("facebookCook", "", time() - 3600, $_SERVER['HTTP_HOST'], 'clemson.edu', false, false);
-	
-		$filename = "../cron/poller/appCredentialStatus.txt";
-		$var = file_get_contents($filename);
-		$varObj = json_decode($var, true);
-		$varObj['Twitter']['status'] = "bad";
-		file_put_contents($filename, json_encode($varObj));
 		
 		header('Location: ../login.php?error=2&service=twitter');
 	}	

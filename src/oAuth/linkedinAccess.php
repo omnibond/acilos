@@ -86,7 +86,7 @@ function getAccessToken() {
     $user = fetch('GET', '/v1/people/~:(id,first-name,last-name,picture-url)', $token->access_token);
 	
     if(isset($token->access_token)){
-	
+
 	$credObj = file_get_contents("../serviceCreds.json");
 	$credObj = json_decode($credObj, true);
 	
@@ -97,7 +97,7 @@ function getAccessToken() {
 			break;
 		}
 	}
-			
+	
 	//if the id is not empty then check it
 	if(isset($temp['user'])){
 		//if the ids do not match
@@ -107,11 +107,6 @@ function getAccessToken() {
 			//just to be safe return here
 			return;
 		}
-		if($credObj['login'] == "first"){
-			$credObj['login'] = "second";
-		}
-		file_put_contents("../serviceCreds.json", json_encode($credObj));
-	//else if the id is empty, this is the first time
 	}
 	
 	if($credObj['login'] == "first"){
@@ -125,32 +120,19 @@ function getAccessToken() {
 	$temp['expiresAt'] = `date +%s` + $token->expires_in;
 	$temp['user'] = $user->id;
 	$temp['image'] = $user->pictureUrl;
-	$temp['name'] = $user->firstName . " " . $user->lastNam;
+	$temp['name'] = $user->firstName . " " . $user->lastName;
 	
 	$credObj['linkedin'][$g] = $temp;
 	
 	file_put_contents("../serviceCreds.json", json_encode($credObj));
-       
-        $filename = "../cron/poller/appCredentialStatus.txt";
-        $var = file_get_contents($filename);
-        $varObj = json_decode($var, true);
-        $varObj['Linkedin']['status'] = "good";
-        file_put_contents($filename, json_encode($varObj));
 	
 	header('Location: ../login.php?linkedin=true');
     }else{
 	//setting a cookie to an expired time will trigger removal by the browser
 	setcookie ("linkedinCook", "", time() - 3600, $_SERVER['HTTP_HOST'], 'clemson.edu', false, false);
-			
-        $filename = "../cron/poller/appCredentialStatus.txt";
-        $var = file_get_contents($filename);
-        $varObj = json_decode($var, true);
-        $varObj['Linkedin']['status'] = "bad";
-        file_put_contents($filename, json_encode($varObj));
 	
 	header('Location: ../login.php?error=2&service=linkedin');
     }	
-	#echo "<html><head></head><body><div>You have successfully authenticated with LinkedIn, please close this window</div><script type=\"text/javascript\">window.close()</script></body></html>";
 }
  
 function fetch($method, $resource, $token, $body = '') {
