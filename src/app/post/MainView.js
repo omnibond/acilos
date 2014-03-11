@@ -73,32 +73,41 @@ define(['dojo/_base/declare',
 								leKey: key,
 								style:"width:20px;height:20px"
 							});
+							//var picUrl = this.authObj[key][d].image;
+							var serviceUrl = "app/resources/img/Twitter_logo_blue_small.png";
 						}else if(key == "facebook"){
 							var checkBox = new CheckBox({
 								leToken: this.authObj[key][d]['accessToken']+":"+this.authObj[key][d]['key']+":"+this.authObj[key][d]['user'],
 								leKey: key,
 								style:"width:20px;height:20px"
 							});
+							//var picUrl = "https://graph.facebook.com/"+this.authObj[key][d].image+"/picture";
+							serviceUrl = "app/resources/img/Facebook_logo.png";
 						}else{
 							var checkBox = new CheckBox({
 								leToken: this.authObj[key][d]['accessToken'],
 								leKey: key,
 								style:"width:20px;height:20px"
 							});
+							if(key == "linkedin"){
+								serviceUrl = "app/resources/img/LinkedIn_logo.png";
+							}
+							if(key == "instagram"){
+								serviceUrl = "app/resources/img/Instagram_logo.png";
+							}
 						}
+						
 						divHolder.appendChild(checkBox.domNode);
-						//var picDiv = domConstruct.create("div", {//pic here});
-						var div = domConstruct.create("span", {style:"float:left;border:2px solid "+this.authObj[key][d]['color'], innerHTML: this.authObj[key][d]['name']});
+						var picSpan = domConstruct.create("span", {innerHTML: '<img src='+serviceUrl+' height=20px width=20px/>', style: "margin-right: 3px; height: 20px; width: 20px"});
+						var div = domConstruct.create("span", {style:"float:left;border-left:5px solid "+this.authObj[key][d]['color'], innerHTML: this.authObj[key][d]['name']});
 						div.appendChild(divHolder);
-						//div.appendChild(picDiv);
+						div.appendChild(picSpan);
 						this.checkArray.push(checkBox);
 						this.mainList.domNode.appendChild(div);
 					}
 				}
 			}
 			
-
-
 			var textHolder = new ListItem({
 				variableHeight: true,
 				style: "border:none; margin-top: -12px; margin-bottom: -14px; margin-left: -1px"

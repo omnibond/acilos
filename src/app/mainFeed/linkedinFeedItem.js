@@ -113,11 +113,11 @@ define([
 
 				for(var g = 0; g < this.authObj['linkedin'].length; g++){
 					if(this.authObj['linkedin'][g]['user'] == obj.mainAccountID){
-						this.domNode.style.borderLeft = "2px solid " + this.authObj['linkedin'][g]['color'];
+						this.domNode.style.borderLeft = "5px solid " + this.authObj['linkedin'][g]['color'];
 						this.domNode.style.marginBottom = "10px";
 						break;
 					}else{
-						this.domNode.style.borderLeft = "2px solid " + obj.mainAccountColor;
+						this.domNode.style.borderLeft = "5px solid " + obj.mainAccountColor;
 						this.domNode.style.marginBottom = "10px";
 					}
 				}

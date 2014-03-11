@@ -115,11 +115,11 @@ define([
 
 				for(var g = 0; g < this.authObj['facebook'].length; g++){
 					if(this.authObj['facebook'][g]['user'] == obj.mainAccountID){
-						this.domNode.style.borderLeft = "2px solid " + this.authObj['facebook'][g]['color'];
+						this.domNode.style.borderLeft = "5px solid " + this.authObj['facebook'][g]['color'];
 						this.domNode.style.marginBottom = "10px";
 						break;
 					}else{
-						this.domNode.style.borderLeft = "2px solid " + obj.mainAccountColor;
+						this.domNode.style.borderLeft = "5x solid " + obj.mainAccountColor;
 						this.domNode.style.marginBottom = "10px";
 					}
 				}
