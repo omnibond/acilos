@@ -442,3 +442,7 @@ nbproject/
 serviceCreds.json
 twitterClientInfo.txt
 linkedinStep1.txt
+callClientManager.sh
+callCronManager.sh
+feedList.json
+
