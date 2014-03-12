@@ -164,8 +164,6 @@ define(['dojo/_base/declare',
 				name: "file",
 				multiple: false,
 				uploadOnSelect: true,
-				uploadType: "iframe",
-				force: "iframe",
 				url: "app/post/UploadFiles.php",
 				style: "background-image: linear-gradient(to bottom, #ffffff 0%, #e2e2e2 100%); border: 1px solid #c0c0c0; border-bottom-color: #9b9b9b; margin-bottom: 2px; font-size: 13px; font-weight: normal; height: 29px; line-height: 29px; margin-left: -8px",
 				onComplete: lang.hitch(this, function(){
@@ -453,7 +451,7 @@ define(['dojo/_base/declare',
 
 		deactivate: function(){
 			document.body.onkeyup = "";
-			
+
 			if(this.mainList){
 				this.mainList.destroyRecursive();
 				this.mainList = null;
