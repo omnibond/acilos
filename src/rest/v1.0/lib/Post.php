@@ -350,12 +350,28 @@ Class Post{
 		$fileName = $varObj['file'];
 		$fileType = $varObj['fileType'];
 
-		//print_r($tokenArr['facebook']);
+		//print_r($tokenArr);
+
+		$thing = getcwd();
+		$thingArr = explode("/", $thing);
+		$thing = '';
+		$count = 0;
+		for($f = 0; $f < count($thingArr); $f++){
+			if($thingArr[$f] == "src"){
+				$thing = $thing.$thingArr[$f]."/";
+				$count = -1;
+			}
+			if($count >= 0){
+				$thing = $thing.$thingArr[$f]."/";
+				$count = $f;
+			}
+		}
+
+		//print_r($thing);
 
 		foreach($tokenArr as $key => $value){
 			switch($key){
-				case "facebook": 
-				case "Facebook":
+				case "facebook":
 					for($x = 0; $x < count($tokenArr[$key]); $x++){
 						//print_r($tokenArr[$key][$x]);
 						$leStuff = explode(":", $tokenArr[$key][$x]);
@@ -372,8 +388,6 @@ Class Post{
 
 						$photoURL = 'https://graph.facebook.com/me/photos?access_token='.$access_token;
 
-						//print_r($photoURL);
-
 						$statusURL = 'https://graph.facebook.com/me/feed';
 
 						if($fileName == ""){
@@ -389,8 +403,7 @@ Class Post{
 						$params = array();
 
 						if(isset($fileName) && $fileName != ""){
-							$path = $_SERVER['HTTP_REFERER'] . "app/post/tmpUpload/" . $fileName;
-							print_r($path);
+							$path = $thing . "app/post/tmpUpload/" . $fileName;
 							$params = array(
 								"message" => $msg,
 								"source" => "@" . $path
@@ -408,7 +421,7 @@ Class Post{
 						$response = curl_exec($ch);
 						curl_close($ch);
 
-						print_r($response);
+						//print_r($response);
 										
 						$res = json_decode($response, true);
 
@@ -421,10 +434,8 @@ Class Post{
 
 					break;
 				case "twitter":
-				case "Twitter":
 					for($x = 0; $x < count($tokenArr[$key]); $x++){
 						$leStuff = explode(":", $tokenArr[$key][$x]);
-						//print_r($leStuff);
 						if(isset($leStuff[0])){
 							//accessToken
 							$access_token = $leStuff[0];
@@ -442,9 +453,7 @@ Class Post{
 							$appSecret = $leStuff[3];
 						}
 
-						$path = $_SERVER['HTTP_REFERER'] . "app/post/tmpUpload/" . $fileName;
-
-						print_r($path);
+						$path = $thing . "app/post/tmpUpload/" . $fileName;
 
 						$connection = new TwitterOAuth($appKey, $appSecret, $access_token, $access_secret);
 
@@ -458,7 +467,7 @@ Class Post{
 
 						$status = $connection->upload($url, $stuff);
 
-						print_r($status);
+						//print_r($status);
 
 						if(isset($status->errors[0]->message)){
 							global $returnArray;
@@ -471,12 +480,9 @@ Class Post{
 
 					break;
 				case "instagram":
-				case "Instagram":
 					//do stuff
 					break;
 				case "linkedin":
-				case "LinkedIn":
-				case "Linkedin":
 					for($x = 0; $x < count($tokenArr[$key]); $x++){
 						if(isset($tokenArr[$key][$x])){
 							$access_token = $tokenArr[$key][$x];
@@ -491,6 +497,8 @@ Class Post{
 						curl_close ($ch);
 
 						$result = json_decode($result, true);
+
+						print_r($result);
 
 						$profileLink = $result['siteStandardProfileRequest']['url'];
 

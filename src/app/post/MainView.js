@@ -49,6 +49,8 @@ define(['dojo/_base/declare',
 				style: "margin:none;border:none"
 			});
 
+			console.log("hello");
+
 			this.buildUploadBar();
 
 			this.addChild(this.mainList);
@@ -98,10 +100,10 @@ define(['dojo/_base/declare',
 						}
 						
 						divHolder.appendChild(checkBox.domNode);
-						var picSpan = domConstruct.create("span", {innerHTML: '<img src='+serviceUrl+' height=20px width=20px/>', style: "margin-right: 3px; height: 20px; width: 20px"});
-						var div = domConstruct.create("span", {style:"float:left;border-left:5px solid "+this.authObj[key][d]['color'], innerHTML: this.authObj[key][d]['name']});
-						div.appendChild(divHolder);
+						var picSpan = domConstruct.create("span", {innerHTML: '<img src='+serviceUrl+' height=20px width=20px/>', style: "margin-left: 5px; height: 20px; width: 20px"});
+						var div = domConstruct.create("span", {style:"margin-right: 5px; float:left;border-left:5px solid "+this.authObj[key][d]['color'], innerHTML: this.authObj[key][d]['name']});
 						div.appendChild(picSpan);
+						div.appendChild(divHolder);
 						this.checkArray.push(checkBox);
 						this.mainList.domNode.appendChild(div);
 					}
@@ -113,11 +115,19 @@ define(['dojo/_base/declare',
 				style: "border:none; margin-top: -12px; margin-bottom: -14px; margin-left: -1px"
 			});
 			this.mainList.addChild(textHolder);
+
+			this.textAreaCountDiv = domConstruct.create("div", {});
 			this.textArea = new TextArea({
 				trim: true,
+				onChange: lang.hitch(this, function(){
+					//console.log("this.checkArray is: ", this.checkArray);
+					console.log("this.textArea.get('value') is: ", this.textArea.get("value"));
+					this.textAreaCountDiv.innerHTML = this.textArea.get("value").length;
+				}),
 				style: "height:100px;width:99%"
 			});
 			textHolder.addChild(this.textArea);
+			textHolder.domNode.appendChild(this.textAreaCountDiv);
 
 			var fileHolder = new ListItem({
 				variableHeight: true,
