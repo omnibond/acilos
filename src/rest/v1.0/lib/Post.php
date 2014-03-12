@@ -498,7 +498,7 @@ Class Post{
 
 						$result = json_decode($result, true);
 
-						print_r($result);
+						//print_r($result);
 
 						$profileLink = $result['siteStandardProfileRequest']['url'];
 
