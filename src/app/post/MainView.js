@@ -77,7 +77,23 @@ define(['dojo/_base/declare',
 							});
 							//var picUrl = this.authObj[key][d].image;
 							var serviceUrl = "app/resources/img/Twitter_logo_blue_small.png";
-						}else if(key == "facebook"){
+
+							checkBox.onClick = lang.hitch(this, function(){
+								if(checkBox.get("checked") == true){
+									if(this.textArea.get('value').length > 140){
+										this.textAreaCountDiv.style.color = "red";
+									}else{
+										this.textAreaCountDiv.style.color = "black";
+									}
+
+									this.textAreaCountDiv.innerHTML = this.textArea.get("value").length + "/140 characters";
+								}else{
+									this.textAreaCountDiv.style.color = "black";
+									this.textAreaCountDiv.innerHTML = this.textArea.get("value").length + " characters";
+								}
+							});
+						}
+						if(key == "facebook"){
 							var checkBox = new CheckBox({
 								leToken: this.authObj[key][d]['accessToken']+":"+this.authObj[key][d]['key']+":"+this.authObj[key][d]['user'],
 								leKey: key,
@@ -85,7 +101,7 @@ define(['dojo/_base/declare',
 							});
 							//var picUrl = "https://graph.facebook.com/"+this.authObj[key][d].image+"/picture";
 							serviceUrl = "app/resources/img/Facebook_logo.png";
-						}else{
+						}if(key == "linkedin"){
 							var checkBox = new CheckBox({
 								leToken: this.authObj[key][d]['accessToken'],
 								leKey: key,
@@ -97,6 +113,9 @@ define(['dojo/_base/declare',
 							if(key == "instagram"){
 								serviceUrl = "app/resources/img/Instagram_logo.png";
 							}
+						}
+						if(key == "instagram"){
+							break;
 						}
 						
 						divHolder.appendChild(checkBox.domNode);
@@ -115,12 +134,14 @@ define(['dojo/_base/declare',
 				style: "border:none; margin-top: -12px; margin-bottom: -14px; margin-left: -1px"
 			});
 			this.mainList.addChild(textHolder);
-
-			this.textAreaCountDiv = domConstruct.create("div", {});
+			
 			this.textArea = new TextArea({
 				trim: true,
 				style: "height:100px;width:99%"
 			});
+
+			this.textAreaCountDiv = domConstruct.create("div", {innerHTML: this.textArea.get("value").length + " characters"});
+
 			textHolder.addChild(this.textArea);
 			textHolder.domNode.appendChild(this.textAreaCountDiv);
 
