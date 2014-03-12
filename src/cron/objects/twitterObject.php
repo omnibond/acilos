@@ -115,7 +115,7 @@ class twitterObjectBuilder extends activityObjectBuilder{
     public function buildStarred($obj){
 	    $this->activityObject->setStarred("false");
     }
-    public function buildPostLink($obj){
+    public function buildPostLink($obj, $account){
 	    $this->activityObject->setPostLink("https://twitter.com/" . $obj['user']['screen_name'] . "/status/" . $obj['id']);
     }
     public function buildIsLiked($obj){

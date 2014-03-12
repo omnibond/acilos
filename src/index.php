@@ -44,7 +44,7 @@
     <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
 
     	<script type="text/javascript" src="http://cf.cdn.inmobi.com/ad/inmobi.js"></script>
-    	<div id="adSlot">
+    	<div id="adSlot" style="display: none">
     	<script type="text/javascript">
         	//this is for setting up the slot and linking it to our account
 		    var inmobi_conf = {

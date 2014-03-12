@@ -43,7 +43,7 @@ define(['dojo/_base/declare',
 				style: "border:none;margin-bottom:0px"
 			})
 			var item = new ListItem({
-				label: "Log in to more services to get more content for the @pp! </br> Clicking on a service's icon will allow you to refresh or generate a token.",
+				label: "Log in to more services to get more content for Acilos! </br> Clicking on a service's icon will allow you to refresh or generate a token.",
 				variableHeight: true
 			})
 			infoList.addChild(item);
@@ -58,23 +58,17 @@ define(['dojo/_base/declare',
 				style: "margin-bottom: -10px; border: none"
 			})
 			this.mainList.addChild(item);
-			var logButton = new Button({
-				label: "Log Out of App",
+			var getData = new Button({
+				label: "Get New Data!!",
 				style: "margin-left: -6px",
-				onClick: lang.hitch(this, function(){
-					window.location = "login.php?logout=true";
-				})
-			});
-			item.addChild(logButton);
-			var accountReset = new Button({
-				label: "Reset Accounts",
-				onClick: lang.hitch(this, function(){
-					this.accountReset().then(function(){
-						window.location = "login.php?logout=true";
+				onClick: lang.hitch(this, function(item){
+					item.set("rightText", "One moment please");
+					this.manualCrons().then(function(){
+						window.location = "#/mainFeed";
 					})
-				})
+				}, item)
 			});
-			item.addChild(accountReset);
+			item.addChild(getData);
 
 			this.addChild(this.mainList);
 
@@ -92,20 +86,24 @@ define(['dojo/_base/declare',
 					style: "height: auto; border-bottom: 1px solid #e7e7de; border-left: 2px solid " + this.authCreds[param][d].color
 				})
 				if(d == 0){
-					var nub = "yes";
+					var nub = true;
 				}else{
-					var nub = "no";
+					var nub = false;
 				}
 				var radio = new RadioButton({
 					name: param,
 					checked: nub,
-					style: "position:absolute;margin-left:30%;width:20px;height:20px",
-					onChange: lang.hitch(this, function(param, d){
+					style: "top:18px;position:absolute;width:20px;height:20px",
+					onClick: lang.hitch(this, function(param, d){
+						console.log("clicked");
 						this.authCreds[param][d].param = param;
 						this.setMainLogin(this.authCreds[param][d]);
 					}, param, d)
 				});
-				var radioLabel = domConstruct.create("div", {style:"position:absolute;margin-left:34%; margin-top: 4px", innerHTML:"Main " + this.capitalizeFirstLetter(param) + " login"});
+				var radioLabel = domConstruct.create("div", {style:"top:6px;position:absolute;margin-left:30px; margin-top: 4px", innerHTML:"Main " + this.capitalizeFirstLetter(param) + " login"});
+				loginHolder = new ListItem({
+					style:"border:none"
+				})
 				if(this.authCreds[param][d]['status'] !== "null"){
 					item = new ListItem({
 						style: "border:none; height: 70px",
@@ -115,7 +113,7 @@ define(['dojo/_base/declare',
 						if(this.authCreds[param][d]['status'] === "unauthorized"){
 							statusItem = new ListItem({
 								label: "This account has not been authenticated yet",
-								style: "border: none;margin-left:5px;margin-bottom: 5px; overflow: visible; margin-top: 5px",
+								style: "border: none;margin-left:5px;overflow: visible",
 								variableHeight: true
 							})
 							var logDiv = domConstruct.create("div", {style: "float:left"});
@@ -141,8 +139,8 @@ define(['dojo/_base/declare',
 							list.addChild(item);
 							list.addChild(statusItem);
 						}else{
-							item.addChild(radio);
-							item.domNode.appendChild(radioLabel);
+							loginHolder.addChild(radio);
+							loginHolder.domNode.appendChild(radioLabel);
 							if(this.authCreds[param][d]['status'] === "good"){
 								var date = new Date(this.authCreds[param][d]['expiresAt'] * 1000);
 								var str = "Token Expires: " + date;
@@ -151,7 +149,7 @@ define(['dojo/_base/declare',
 							}
 							statusItem = new ListItem({
 								label: str,
-								style: "border: none;margin-left:5px;margin-bottom: 5px; overflow: visible; margin-top: 5px",
+								style: "border: none;margin-left:5px;overflow: visible",
 								variableHeight: true
 							})
 
@@ -185,6 +183,7 @@ define(['dojo/_base/declare',
 							item.domNode.appendChild(userDiv);
 
 							list.addChild(item);
+							list.addChild(loginHolder);
 							list.addChild(statusItem);	
 						}
 					}
@@ -192,7 +191,7 @@ define(['dojo/_base/declare',
 						if(this.authCreds[param][d]['status'] === "unauthorized"){
 							statusItem = new ListItem({
 								label: "This account has not been authenticated yet",
-								style: "border: none;margin-left:5px;margin-bottom: 5px; overflow: visible; margin-top: 5px",
+								style: "border: none;margin-left:5px;overflow: visible",
 								variableHeight: true
 							})
 							var refresh = new Button({
@@ -219,8 +218,8 @@ define(['dojo/_base/declare',
 							list.addChild(item);
 							list.addChild(statusItem);
 						}else{
-							item.addChild(radio);
-							item.domNode.appendChild(radioLabel);
+							loginHolder.addChild(radio);
+							loginHolder.domNode.appendChild(radioLabel);
 							if(this.authCreds[param][d]['status'] === "good"){
 								var str = " and expires when revoked";
 							}else{
@@ -228,7 +227,7 @@ define(['dojo/_base/declare',
 							}
 							statusItem = new ListItem({
 								label: "Token is: " + this.authCreds[param][d]['status'] + str,
-								style: "border: none;margin-left:5px;margin-bottom: 5px; margin-top: 5px",
+								style: "border: none;margin-left:5px",
 								variableHeight: true
 							})
 
@@ -262,6 +261,7 @@ define(['dojo/_base/declare',
 							item.domNode.appendChild(userDiv);
 
 							list.addChild(item);
+							list.addChild(loginHolder);
 							list.addChild(statusItem);
 						}
 					}
@@ -269,7 +269,7 @@ define(['dojo/_base/declare',
 						if(this.authCreds[param][d]['status'] === "unauthorized"){
 							statusItem = new ListItem({
 								label: "This account has not been authenticated yet",
-								style: "border: none;margin-left:5px;margin-bottom: 5px; overflow: visible; margin-top: 5px",
+								style: "border: none;margin-left:5px;overflow: visible",
 								variableHeight: true
 							})
 							var logDiv = domConstruct.create("div", {style: "float:left"});
@@ -295,8 +295,8 @@ define(['dojo/_base/declare',
 							list.addChild(item);
 							list.addChild(statusItem);
 						}else{
-							item.addChild(radio);
-							item.domNode.appendChild(radioLabel);
+							loginHolder.addChild(radio);
+							loginHolder.domNode.appendChild(radioLabel);
 							if(this.authCreds[param][d]['status'] === "good"){
 								var str = " and expires when revoked";
 							}else{
@@ -304,7 +304,7 @@ define(['dojo/_base/declare',
 							}
 							statusItem = new ListItem({
 								label: "Token is: " + this.authCreds[param][d]['status'] + str,
-								style: "border: none;margin-left:5px;margin-bottom: 5px; margin-top: 5px",
+								style: "border: none;margin-left:5px;",
 								variableHeight: true
 							})
 
@@ -337,6 +337,7 @@ define(['dojo/_base/declare',
 							item.domNode.appendChild(userDiv);
 
 							list.addChild(item);
+							list.addChild(loginHolder);
 							list.addChild(statusItem);
 						}
 					}
@@ -344,7 +345,7 @@ define(['dojo/_base/declare',
 						if(this.authCreds[param][d]['status'] === "unauthorized"){
 							statusItem = new ListItem({
 								label: "This account has not been authenticated yet",
-								style: "border: none;margin-left:5px;margin-bottom: 5px; overflow: visible; margin-top: 5px",
+								style: "border: none;margin-left:5px;overflow: visible",
 								variableHeight: true
 							})
 							var logDiv = domConstruct.create("div", {style: "float:left"});
@@ -370,8 +371,8 @@ define(['dojo/_base/declare',
 							list.addChild(item);
 							list.addChild(statusItem);
 						}else{
-							item.addChild(radio);
-							item.domNode.appendChild(radioLabel);
+							loginHolder.addChild(radio);
+							loginHolder.domNode.appendChild(radioLabel);
 							if(this.authCreds[param][d]['status'] === "bad"){
 								statusItem = new ListItem({
 									label: "Token is expired",
@@ -416,6 +417,7 @@ define(['dojo/_base/declare',
 							item.domNode.appendChild(userDiv);
 
 							list.addChild(item);
+							list.addChild(loginHolder);
 							list.addChild(statusItem);
 						}
 					}

@@ -211,12 +211,12 @@ class Credentials{
 						)
 					);
 
-                   try{
-                       $response = file_get_contents($url, false, $context);
-                       $user = json_decode($response, true);
-                   }catch(Exception $e){
-                   	$user = array();
-                   }
+					try{
+						$response = file_get_contents($url, false, $context);
+						$user = json_decode($response, true);
+					}catch(Exception $e){
+						$user = array();
+					}
 
 					$account;
 					if(isset($user['id'])){

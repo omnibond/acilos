@@ -82,7 +82,6 @@ class FeedData{
 	}
 
 	public function update(){
-		$fileName = "../../app/util/layout.json";
 		$var = file_get_contents("php://input");
 		$varObj = json_decode($var, true);
 		$feedName = $varObj['feedName'];
@@ -91,28 +90,6 @@ class FeedData{
 		if($feedName == "All Feed Data"){
 			$var = matchAllUpdate($size);
 			return json_encode($var);
-		}else{	
-			if(($fileContents = file_get_contents($fileName)) == false){
-			  echo json_encode(array("error" => "Cannot get the file"));
-		    }elseif(($layout = json_decode($fileContents, true)) == false){
-			    echo json_encode(array("error" => "Cannot decode the file"));
-		    }elseif(($feed = $layout['feedList'][$feedName]) == false){
-			    echo json_encode(array("error" => "Feed not found in database"));
-		    }else{
-				#make an array of all the friends usernames as they will be the query params for ES
-				$friendArr = array();
-				for($g=0;$g<count($feed); $g++){
-					if($layout['friendList'][$feed[$g]]){
-						for($h=0; $h<count($layout['friendList'][$feed[$g]]); $h++){
-							$strings = explode(":", $layout['friendList'][$feed[$g]][$h]);
-							array_push($friendArr, $strings[2]);
-						}
-					}
-				}
-
-				$var = matchSpecificUserUpdate($friendArr, $size);
-				return json_encode($var);
-			}
 		}
 	}
 
@@ -223,24 +200,6 @@ class FeedData{
 		$var = file_get_contents("php://input");
 		$param = json_decode($var, true);
 		$serviceObj = $param['serviceObj'];
-
-		/*$dir = getcwd();
-		$dirArr = explode("/", $dir);
-		$dir = '';
-		$count = 0;
-		for($d = 0; $d < count($dirArr); $d++){
-			if($dirArr[$d] == "src"){
-				$dir = $dir.$dirArr[$d]."/";
-				$count = 0;
-			}
-			if($count > 0){
-				$dir = $dir.$dirArr[$d]."/";
-			}
-			if($dirArr[$d] == "socialreader"){
-				$dir = $dir.$dirArr[$d]."/";
-				$count = $d;
-			}
-		}*/
 
 		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php?ServiceObj=".json_encode($serviceObj));
 

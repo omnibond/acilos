@@ -348,23 +348,29 @@ class facebookNewsFeedObjectBuilder extends activityObjectBuilder{
     public function buildStarred($obj){
 	$this->activityObject->setStarred("false");
     }
-    public function buildPostLink($obj){
-	$filename = "../../oAuth/facebookToken.json";
+    public function buildPostLink($obj, $account){
+	$filename = "../../serviceCreds.json";
 	$file = file_get_contents($filename) or die("Cannot open the file: " . $filename);
 	$tok = json_decode($file, true);
+
+	for($x = 0; $x < count($tok['facebook']); $x++){
+		if($tok['facebook'][$x]['user'] == $account['user']){
+			$temp = $tok['facebook'][$x];
+		}
+	}
 
 	$link = '';
 
 	$url = 'https://graph.facebook.com/'
 	. 'fql?q=SELECT+permalink+FROM+stream+WHERE+post_id="'.$obj['id'].'"'
-	. '&access_token=' . $tok['access_token'];
+	. '&access_token=' . $temp['accessToken'];
 	$response = file_get_contents($url);
 	$var = json_decode($response, true);
 
 	if($var['data'][0]['permalink'] == null){
 		$url = 'https://graph.facebook.com/'
 		. 'fql?q=SELECT+attachment+FROM+stream+WHERE+post_id="'.$obj['id'].'"'
-		. '&access_token=' . $tok['access_token'];
+		. '&access_token=' . $tok['accessToken'];
 		$response = file_get_contents($url);
 		$var = json_decode($response, true);
 

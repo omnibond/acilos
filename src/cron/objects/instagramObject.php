@@ -241,7 +241,7 @@ class instagramObjectBuilder extends activityObjectBuilder{
     public function buildStarred($obj){
 	$this->activityObject->setStarred("false");
     }
-    public function buildPostLink($obj){
+    public function buildPostLink($obj, $account){
 	$this->activityObject->setPostLink($obj['link']);
     }
     public function buildIsLiked($obj){

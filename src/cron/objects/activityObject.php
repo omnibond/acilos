@@ -270,7 +270,7 @@ abstract class activityObjectBuilder {
     public abstract function buildService($service);
     public abstract function buildDateAdded($dateAdded);
     public abstract function buildStarred($starred);
-    public abstract function buildPostLink($postLink);
+    public abstract function buildPostLink($postLink, $account);
     public abstract function buildIsLiked($isLiked);
     public abstract function buildIsCommented($isCommented);
     public abstract function buildIsFavorited($isFavorited);
@@ -301,7 +301,7 @@ class Manager {
         $this->activityObjectBuilder->buildService($obj);
         $this->activityObjectBuilder->buildDateAdded($obj);
         $this->activityObjectBuilder->buildStarred($obj);
-        $this->activityObjectBuilder->buildPostLink($obj);
+        $this->activityObjectBuilder->buildPostLink($obj, $account);
         $this->activityObjectBuilder->buildIsLiked($obj);
         $this->activityObjectBuilder->buildIsCommented($obj);
         $this->activityObjectBuilder->buildIsFavorited($obj);

@@ -51,6 +51,7 @@ define(['dojo/_base/declare',
 				route: '/AuthAccounts',
 				title: "Authenticate Accounts",
 
+				manualCrons: lang.hitch(this, this.manualCrons),
 				getServiceCreds: lang.hitch(this, this.getServiceCreds),
 				getAuthCreds: lang.hitch(this, this.getAuthCreds),
 				setMainLogin: lang.hitch(this, this.setMainLogin)
@@ -62,9 +63,8 @@ define(['dojo/_base/declare',
 			this.registerView(this.AuthAccounts);
 		},
 
-		accountReset: function(){
-			params = {};
-			return xhrManager.send('GET', 'rest/v1.0/Credentials/accountReset');
+		manualCrons: function(){
+			return xhrManager.send('GET', 'rest/v1.0/Database/manualCrons',{});
 		},
 
 		getAuthCreds: function(){

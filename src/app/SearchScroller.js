@@ -49,6 +49,11 @@ define([
 				this.ListEnded = false;
 			},
 
+			getServiceCreds: function(){
+				var params = {};
+				return xhrManager.send('GET', 'rest/v1.0/Credentials/getServiceCreds');
+			},
+
 			searchStarred: function(star){
 				var params = {star : star};
 				return xhrManager.send('GET', 'rest/v1.0/Search/starred', params);
@@ -75,6 +80,9 @@ define([
 				})));
 				this.arrayList.push(this.getFeedData(this.feedName, this.fromVar).then(lang.hitch(this, function(obj){
 					this.feedDataObj = obj;
+				})));
+				this.arrayList.push(this.getServiceCreds().then(lang.hitch(this, function(obj){
+					this.authObj = obj;
 				})));
 
 				var defList = new DeferredList(this.arrayList);
@@ -118,6 +126,7 @@ define([
 								var item = new twitterFeedItem({
 									data: data,
 									counter: j,
+									authObj: this.authObj,
 									starClientObj: this.starClientObj,
 									getDate: this.getDate,
 									parseSpecialChars: this.parseSpecialChars,
@@ -133,6 +142,7 @@ define([
 								var item = new instagramFeedItem({
 									data: data,
 									counter: j,
+									authObj: this.authObj,
 									starClientObj: this.starClientObj,
 									getDate: this.getDate,
 									parseSpecialChars: this.parseSpecialChars,
@@ -149,6 +159,7 @@ define([
 								var item = new facebookFeedItem({
 									data: data,
 									counter: j,
+									authObj: this.authObj,
 									starClientObj: this.starClientObj,
 									getDate: this.getDate,
 									parseSpecialChars: this.parseSpecialChars,
@@ -164,6 +175,7 @@ define([
 								var item = new linkedinFeedItem({
 									data: data,
 									counter: j,
+									authObj: this.authObj,
 									starClientObj: this.starClientObj,
 									getDate: this.getDate,
 									parseSpecialChars: this.parseSpecialChars,

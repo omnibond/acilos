@@ -136,7 +136,7 @@ function getFriendsList($service){
 				$facebookTokens =$tokenObject['facebook'];
 
 				foreach($facebookTokens as $obj){
-					$url = 'https://graph.facebook.com/me/friends?fields=id,name,location,hometown&access_token=' . $obj['access_token'];
+					$url = 'https://graph.facebook.com/me/friends?fields=id,name,location,hometown&access_token=' . $obj['accessToken'];
 					$ch = curl_init($url);
 					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 					$response = curl_exec($ch);
@@ -237,7 +237,7 @@ function getFriendsList($service){
 				$instagramTokens = $tokenObject['instagram'];
 
 				foreach($instagramTokens as $obj){
-					$url = "https://api.instagram.com/v1/users/".$obj['user_id']."/follows?access_token=".$obj['access_token'];
+					$url = "https://api.instagram.com/v1/users/".$obj['user_id']."/follows?access_token=".$obj['accessToken'];
 
 					$ch = curl_init($url);
 
@@ -284,7 +284,7 @@ function getFriendsList($service){
 				$linkedinTokens = $tokenObject['linkedin'];
 
 				foreach($linkedinTokens as $obj){
-					$user = linkedInFetch('GET', '/v1/people/~/connections', $obj['access_token'], true);
+					$user = linkedInFetch('GET', '/v1/people/~/connections', $obj['accessToken'], true);
 
 					$user = objectToArray($user);
 
@@ -363,7 +363,7 @@ function saveFriendsList($friendArr){
 }
 
 //43200 = 12 hours
-if(!file_exists("../../lockFiles/clientManager.lock") || (time() > filemtime("../../lockFiles/polly.lock") + 43200)){
+if(!file_exists("../../lockFiles/clientManager.lock") || (time() > filemtime("../../lockFiles/clientManager.lock") + 43200)){
 	touch("../../lockFiles/clientManager.lock");
 
 	$var = getFriendsList("Facebook");

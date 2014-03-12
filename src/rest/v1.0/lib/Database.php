@@ -201,6 +201,11 @@ class Database{
 		return json_encode($fileArr);	
 	}
 
+	function manualCrons(){
+		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php");
+		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php");
+	}
+
 	function restoreBackUpData(){
 		$var = file_get_contents("php://input");
 		$obj = json_decode($var, true);
@@ -388,15 +393,16 @@ class Database{
 			for($x = 0; $x < count($credObj[$loginObj['param']]); $x++){
 				if(isset($credObj[$loginObj['param']][$x]['user'])){
 					if($credObj[$loginObj['param']][$x]['user'] == $loginObj['user']){
+						$temp = $credObj[$loginObj['param']][$x];
 						array_splice($credObj[$loginObj['param']], $x, 1);
-						array_push($credObj[$loginObj['param']], $loginObj);
+						array_unshift($credObj[$loginObj['param']], $temp);
 						break;
 					}
 				}
 			}			
 		}
 
-
+		file_put_contents("../../serviceCreds.json", json_encode($credObj));	
 	}
 
 	public function saveServiceCredsFirstTime(){

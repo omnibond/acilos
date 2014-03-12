@@ -143,7 +143,7 @@ function writeClient($obj){
 function updateRecentPost($clientObject, $post){
 
 	//Dont count CONN objects as posts
-	if($post['title']) != "CONN"){
+	if($post['title'] != "CONN"){
 		//if that poster is a client then update most recent
 		if(isset($clientObject[$post['actor']->id])){
 			$tempClientObj = $clientObject[$post['actor']->id];
@@ -202,7 +202,7 @@ function getUserFeed(){
 	$instagramTokens = $tokenObject['instagram'];
 
 	foreach($instagramTokens as $obj){	
-		$url = "https://api.instagram.com/v1/users/self/feed?access_token=".$obj['access_token'];
+		$url = "https://api.instagram.com/v1/users/self/feed?access_token=".$obj['accessToken'];
 
 		$ch = curl_init($url);
 
@@ -277,7 +277,7 @@ function getUserNewsFeed(){
 	$facebookTokens = $tokenObject['facebook'];
 
 	foreach($facebookTokens as $obj){
-		$url = 'https://graph.facebook.com/me/home?&access_token=' . $obj['access_token'];
+		$url = 'https://graph.facebook.com/me/home?&access_token=' . $obj['accessToken'];
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$response = curl_exec($ch);
@@ -323,7 +323,7 @@ function getUserTimeline(){
 	$twitterTokens = $tokenObject['twitter'];
 
 	foreach($twitterTokens as $obj){
-		$connection = new TwitterOAuth($obj['key'], $obj['secret'], $obj['access_token'], $obj['access_secret']);
+		$connection = new TwitterOAuth($obj['key'], $obj['secret'], $obj['accessToken'], $obj['accessSecret']);
 		$connection->host = "https://api.twitter.com/1.1";
 
 		$method = "/statuses/home_timeline";
@@ -457,7 +457,7 @@ function getPersonalFeed(){
 	$linkedinTokens = $tokenObject['linkedin'];
 
 	foreach($linkedinTokens as $obj){
-		$feed = linkedInFetchWithParams('GET', '/v1/people/~/network/updates', $obj['access_token'], 0, 100);
+		$feed = linkedInFetchWithParams('GET', '/v1/people/~/network/updates', $obj['accessToken'], 0, 100);
 
 		$feed = objectToArray($feed);
 
@@ -476,7 +476,7 @@ function getDiscussionObjects(){
 	$tokenObject = json_decode($file, true);
 
 	foreach($tokenObject as $obj){	
-		$user = linkedInFetch('GET', '/v1/people/~/group-memberships', $obj['access_token']);
+		$user = linkedInFetch('GET', '/v1/people/~/group-memberships', $obj['accessToken']);
 		#print_r($token);
 		$user = objectToArray($user);
 
@@ -539,7 +539,7 @@ function getDiscussionObjects(){
 }
 
 //300 = 5 mins
-if(!file_exists("../../lockFiles/cronManager.lock") || (time() > filemtime("../../lockFiles/polly.lock") + 300)){
+if(!file_exists("../../lockFiles/cronManager.lock") || (time() > filemtime("../../lockFiles/cronManager.lock") + 300)){
 	touch("../../lockFiles/cronManager.lock");
 
 	if(isset($_GET['ServiceObj'])){
@@ -585,7 +585,7 @@ if(!file_exists("../../lockFiles/cronManager.lock") || (time() > filemtime("../.
 		//fclose($fp);
 
 		//this will call the notification module
-		require_once('../../oAuth/notifications/facebookNotifications.php');
+		//require_once('../../oAuth/notifications/facebookNotifications.php');
 
 	}else{
 

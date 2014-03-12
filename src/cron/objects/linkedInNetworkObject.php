@@ -2398,7 +2398,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 	public function buildStarred($obj){
 		$this->activityObject->setStarred("false");
 	}
-	public function buildPostLink($obj){
+	public function buildPostLink($obj, $account){
 		if(isset($obj['networkObjectType'])){
 			if($obj['networkObjectType'] == "DISCUSS"){
 				if(isset($obj['group'])){
