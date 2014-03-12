@@ -3984,6 +3984,13 @@ select {
 .loginLogo {
   height: 80px;
   width: 80px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+.loginLogoButton {
+  background: white;
 }
 .accountLogo {
   height: 40px;

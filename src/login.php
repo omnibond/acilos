@@ -222,7 +222,8 @@
 			loginButtonsNitems = function(param, div, serviceCreds, mainDiv){
 				if(param == "facebook"){
 					var button = new Button({
-						style: "width:100px;height:100px;margin:5px",
+						"class": "loginLogoButton",
+						style: "width:160px;height:160px;margin:5px",
 						onClick: lang.hitch(null, function(){
 							window.location = serviceCreds[param][0]["auth"];
 						},serviceCreds, param)
@@ -233,7 +234,8 @@
 				}
 				if(param == "twitter"){
 					var button = new Button({
-						style: "width:100px;height:100px;margin:5px",
+						"class": "loginLogoButton",
+						style: "width:160px;height:160px;margin:5px",
 						onClick: lang.hitch(null, function(){
 							window.location = serviceCreds[param][0]["auth"];
 						},serviceCreds, param)
@@ -244,7 +246,8 @@
 				}
 				if(param == "instagram"){
 					var button = new Button({
-						style: "width:100px;height:100px;margin:5px",
+						"class": "loginLogoButton",
+						style: "width:160px;height:160px;margin:5px",
 						onClick: lang.hitch(null, function(){
 							window.location = serviceCreds[param][0]["auth"];
 						},serviceCreds, param)
@@ -255,7 +258,8 @@
 				}
 				if(param == "linkedin"){
 					var button = new Button({
-						style: "width:100px;height:100px;margin:5px",
+						"class": "loginLogoButton",
+						style: "width:160px;height:160px;margin:5px",
 						onClick: lang.hitch(null, function(){
 							window.location = serviceCreds[param][0]["auth"];
 						},serviceCreds, param)
