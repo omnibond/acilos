@@ -445,4 +445,5 @@ linkedinStep1.txt
 callClientManager.sh
 callCronManager.sh
 feedList.json
-
+tmpUploads/*
+app.css
