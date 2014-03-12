@@ -488,7 +488,7 @@ Class Post{
 							$access_token = $tokenArr[$key][$x];
 						}
 
-						$url = 'https://api.linkedin.com/v1/people/~:(id,first-name,last-name,site-standard-profile-request)?format=json&oauth2_access_token=' . $access_token;
+						/*$url = 'https://api.linkedin.com/v1/people/~:(id,first-name,last-name,site-standard-profile-request)?format=json&oauth2_access_token=' . $access_token;
 						$ch = curl_init($url);
 						curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 						curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
@@ -498,9 +498,9 @@ Class Post{
 
 						$result = json_decode($result, true);
 
-						//print_r($result);
+						print_r($result);
 
-						$profileLink = $result['siteStandardProfileRequest']['url'];
+						$profileLink = $result['siteStandardProfileRequest']['url'];*/
 
 						$headerOptions = array(
 							"Content-Type: text/xml;charset=utf-8"
@@ -565,176 +565,6 @@ Class Post{
 			}
 		}
 	}
-	
-	function whichService(){
-		$var = file_get_contents("php://input");
-		$varObj = json_decode($var, true);
-		$msg = $varObj['msg'];
-		$service = $varObj['service'];
-		
-		$returnArray = array(
-		
-		);
-
-		if(isset($varObj['service']['facebook'])){
-			if($varObj['service']['facebook'] == "true"){
-				
-				$filename = "../../oAuth/facebookToken.txt";
-				$file = file_get_contents($filename) or die("Cannot open the file: " . $filename);
-				$obj = json_decode($file, true);
-
-				//$url = 'https://graph.facebook.com/me/home?&access_token=' . $obj['access_token'];
-				$token = $obj['access_token'];
-
-					
-				$attachment =  array(
-					'access_token' => $obj['access_token'],
-					'message' => $msg
-				);
-
-				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_URL,'https://graph.facebook.com/me/feed');
-				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-				curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-				curl_setopt($ch, CURLOPT_POST, true);
-				curl_setopt($ch, CURLOPT_POSTFIELDS, $attachment);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  //to suppress the curl output 
-				$result = curl_exec($ch);
-				curl_close ($ch);
-
-				$var = json_decode($result, true);
-
-				//print_r($result);
-
-				if(isset($var['id'])){
-					global $returnArray;
-					$returnArray['facebookSuccess'] =  "Your Facebook message was posted successfully";
-				}else{
-					global $returnArray;
-					$returnArray['facebookFailure'] =  "Your message could not be posted. Facebook said: " . $var['error']['message'];
-				}	
-			}
-
-			if(isset($varObj['service']['twitter'])){
-				if($varObj['service']['twitter']== "true"){
-
-					$filename = "../../oAuth/twitterClientInfo.txt";
-					$file = file_get_contents($filename) or die("Cannot open the file: " . $filename);
-					$obj = json_decode($file, true);
-					$oauth_Token = $obj['accessToken'];
-					$oauth_TokenSecret = $obj['oauthSecret'];
-					$consumer_key = $obj['appKey'];
-					$consumer_secret = $obj['appSecret'];
-					$access_token = $obj['accessToken'];
-					$access_secret = $obj['accessSecret'];
-
-					
-				
-					$connection = new TwitterOAuth($consumer_key, $consumer_secret, $oauth_Token, $access_secret);
-				
-					$status = $connection->post('statuses/update', array('status' => $msg));
-
-					//print_r($status);
-
-					
-					if(isset($status->errors[0]->message)){
-						global $returnArray;
-						$returnArray['twitterFailure'] =  "Your message could not be posted. Twitter said: " . $status->errors[0]->message;
-					}else{
-						global $returnArray;
-						$returnArray['twitterSuccess'] =  "Your Twitter message was posted successfully";
-					}
-					
-					/*if(isset($status->errors[0]->message)){
-						return json_encode(array('failure' => "Your message could not be posted. Twitter said: " . $status->errors[0]->message));
-					}else{
-						return json_encode(array('success'=>'Your message was posted successfully'));
-					}*/
-
-				}
-			}
-			if(isset($varObj['service']['linkedin'])){
-				if($varObj['service']['linkedin'] == "true"){
-					$filename = "../../oAuth/linkedinUserCreds.txt";
-					$file = file_get_contents($filename) or die("Cannot open the file " . $filename);
-					$obj = json_decode($file, true);
-					$access_token = $obj['access_token'];
-					$api_Key = $obj['apiKey'];
-					$api_Secret = $obj['apiSecret'];
-					$user_Id = $obj['userId'];
-
-					//You can now use this access_token to make API calls on behalf of this user 
-					//by appending "oauth2_access_token=access_token" at the end of the API call that you wish to make.
-
-					//http://api.linkedin.com/v1/people/~:(id,first-name,last-name,site-standard-profile-request)
-
-					$url = 'https://api.linkedin.com/v1/people/~:(id,first-name,last-name,site-standard-profile-request)?format=json&oauth2_access_token=' . $access_token;
-					$ch = curl_init($url);
-					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-					curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  //to suppress the curl output 
-					$result = curl_exec($ch);
-					curl_close ($ch);
-
-					$result = json_decode($result, true);
-					
-					$profileLink = $result['siteStandardProfileRequest']['url'];
-
-					$headerOptions = array(
-						//"x-li-format :  json",
-						"Content-Type: text/xml;charset=utf-8",
-						//"Content-Type" => "text/xml"
-					);
-
-					$shareXML = "<share>
-					      <comment>Test Comment Linkedin</comment>
-					      <content>
-					         <title>Title</title>
-					         <submitted-url>".urlencode($profileLink)."</submitted-url>
-					         <submitted-image-url></submitted-image-url>
-					         <description>Test Post Linkedin</description>
-					      </content>
-					      <visibility>
-					      	<code>connections-only</code>
-					      	</visibility>
-					      </share>";
-
-					$shareUrl = 'https://api.linkedin.com/v1/people/~/shares?oauth2_access_token='.$access_token;
-
-					$wallXML = "<activity>
-					    	<content-type>linkedin-html</content-type>
-					    	<body>
-					    		".$msg."
-					    	</body>
-							</activity>";
-
-					$wallUrl = 'https://api.linkedin.com/v1/people/~/person-activities?oauth2_access_token='. $access_token;
-					
-					$ch2 = curl_init($wallUrl);
-					curl_setopt($ch2, CURLOPT_POST, 1);
-					curl_setopt($ch2, CURLOPT_POSTFIELDS, $wallXML);
-					curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
-					curl_setopt($ch2, CURLOPT_HTTPHEADER, $headerOptions);
-					$response = curl_exec($ch2);
-					$code = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
-					curl_close($ch2);
-					
-					if(isset($code)){
-						if($code == "201"){
-							global $returnArray;
-							$returnArray['linkedinSuccess'] = "Your LinkedIn message was posted successfully";
-						}else{
-							global $returnArray;
-							$returnArray['linkedinFailure'] = "Your LinkedIn message could not be posted";
-						}
-					}
-				}
-			}
-		}
-		
-		return json_encode($returnArray);
-		
-	}
 }
 
 function postFilesHandler($obj){
@@ -790,5 +620,6 @@ function postFilesHandler($obj){
 
 	return json_encode(array("success" => "true"));
 }
+
 
 

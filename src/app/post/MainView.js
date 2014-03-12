@@ -119,15 +119,34 @@ define(['dojo/_base/declare',
 			this.textAreaCountDiv = domConstruct.create("div", {});
 			this.textArea = new TextArea({
 				trim: true,
-				onChange: lang.hitch(this, function(){
-					//console.log("this.checkArray is: ", this.checkArray);
-					console.log("this.textArea.get('value') is: ", this.textArea.get("value"));
-					this.textAreaCountDiv.innerHTML = this.textArea.get("value").length;
-				}),
 				style: "height:100px;width:99%"
 			});
 			textHolder.addChild(this.textArea);
 			textHolder.domNode.appendChild(this.textAreaCountDiv);
+
+			console.log("this.checkArray is: ", this.checkArray);
+
+			document.body.onkeyup = lang.hitch(this, function(event){
+				var flag = 0;
+				for(var x = 0; x < this.checkArray.length; x++){
+					if((this.checkArray[x].params.leKey == "twitter") && (this.checkArray[x].checked == true)){
+						console.log("it's 1");
+						flag = 1;
+					}
+				}
+
+				if(flag == 1){
+					this.textAreaCountDiv.innerHTML = this.textArea.get("value").length + "/140 characters";
+				}else{
+					this.textAreaCountDiv.innerHTML = this.textArea.get("value").length + " characters";
+				}
+
+				if((this.textArea.get('value').length > 140) && (flag == 1)){
+					this.textAreaCountDiv.style.color = "red";
+				}else{
+					this.textAreaCountDiv.style.color = "black";
+				}
+			});
 
 			var fileHolder = new ListItem({
 				variableHeight: true,
@@ -208,6 +227,7 @@ define(['dojo/_base/declare',
 						label: "Post",
 						style: "margin-left: 0px",
 						onClick: lang.hitch(this, function(fUploader){
+							document.body.onkeyup = ""; 
 							var msg = this.textArea.get("value");
 							var file = '';
 							if(fUploader.get("value").length > 0){
@@ -432,6 +452,8 @@ define(['dojo/_base/declare',
 		},
 
 		deactivate: function(){
+			document.body.onkeyup = "";
+			
 			if(this.mainList){
 				this.mainList.destroyRecursive();
 				this.mainList = null;
