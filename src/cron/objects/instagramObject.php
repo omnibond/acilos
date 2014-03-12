@@ -62,7 +62,7 @@ class InstaLike {
 	public $profileImg = '';
 	public $id = '';
 	public $name = '';
-	
+
 	public function setUserName($userName){
 		$this->username = $userName;
 	}
@@ -85,7 +85,7 @@ class InstaComment {
 	public $commentId = '';
 	public $name = '';
 	public $commentUserId = '';
-	
+
 	public function setCreatedTime($time){
 		$this->createdTime = $time;
 	}
@@ -111,7 +111,7 @@ class InstaComment {
 
 class InstaTag {
 	public $tagList = array();
-	
+
 	public function setTagList($tag){
 		array_push($this->tagList, $tag);
 	}
@@ -121,7 +121,7 @@ class InstaImage {
 	public $lowRes = '';
 	public $highRes = '';
 	public $thumb = '';
-	
+
 	public function setLowRes($lowRes){
 		$this->lowRes = $lowRes;
 	}
@@ -137,7 +137,7 @@ class InstaImage {
 class instagramObjectBuilder extends activityObjectBuilder{
    public function buildActor($obj){
         $actor = new Actor();
-	
+
         $actor->setName($obj['user']['full_name']);
         $actor->setId($obj['user']['id']);
 		$actor->setSearchable($obj['user']['username']);
@@ -146,30 +146,30 @@ class instagramObjectBuilder extends activityObjectBuilder{
         $actor->setURL($obj['user']['website']);
         $actor->setLocation($obj['location']['latitude'] . "#" . $obj['location']['longitude']);
         $actor->setDescription($obj['user']['bio']);
-	
+
        
         $this->activityObject->setActor($actor);
     }
     public function buildContent($obj){
 	$queryString = '';
-	
+
 	$likeArray = array();
 	for($d = 0; $d < count($obj['likes']['data']); $d++){
 		$thing = $obj['likes']['data'][$d];
-		
+
 		$like = new InstaLike();
 		$like->setUserName($thing['username']);
 		$like->setProfileImg($thing['profile_picture']);
 		$like->setId($thing['id']);
 		$like->setName($thing['full_name']);
-		
+
 		array_push($likeArray, $like);
 	}
-	
+
 	$commentArray = array();
 	for($j = 0; $j < count($obj['comments']['data']); $j++){
 		$thang = $obj['comments']['data'][$j];
-		
+
 		$comment = new InstaComment();
 		$comment->setCreatedTime($thang['created_time']);
 			$text =  new textBlockWithURLS();
@@ -181,24 +181,24 @@ class instagramObjectBuilder extends activityObjectBuilder{
 		$comment->setCommentId($thang['id']);
 		$comment->setCommentUserId($thang['from']['id']);
 		$comment->setName($thang['from']['full_name']);
-		
+
 		array_push($commentArray, $comment);
 	}
-	
+
 	$tag = new InstaTag();
 	for($h=0; $h < count($obj['tags']); $h++){
 		$thung = $obj['tags'][$h];
-				
+
 		$tag->setTagList($thung);
 	}
-	
+
 	$image = new InstaImage();
 	$image->setHighRes($obj['images']['standard_resolution']['url']);
 	$image->setLowRes($obj['images']['low_resolution']['url']);
 	$image->setThumb($obj['images']['thumbnail']['url']);
-	
+
         $content = new InstagramContent();
-	
+
 	$content->setId($obj['id']);
         $content->setObjectType($obj['type']);
 		$text =  new textBlockWithURLS();
@@ -213,7 +213,7 @@ class instagramObjectBuilder extends activityObjectBuilder{
 	$content->setComments($commentArray);
 	$content->setTags($tag);
 	$content->setImage($image);
-	
+
 	$content->setQueryString($queryString);
         $this->activityObject->setContent($content);
     }

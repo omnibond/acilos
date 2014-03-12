@@ -94,7 +94,7 @@ function getClients(){
 	$index = "client";
 	$host = "localhost";
 	$port = "9200";
-	
+
 	$es = Client::connection("http://$host:$port/$index/");
 	$res = $es->search(array(
 		'size' => 1000,
@@ -102,7 +102,7 @@ function getClients(){
 			'match_all' => array()
 		)
 	));
-	
+
 	return $res;
 }
 
@@ -114,7 +114,7 @@ function getClient($id){
 	$index = "client";
 	$host = "localhost";
 	$port = "9200";
-	
+
 	$es = Client::connection("http://$host:$port/$index/");
 	$res = $es->get($id);
 	return $res;
@@ -134,16 +134,16 @@ function getFriendsList($service){
 			}else{
 				$tokenObject = json_decode($file, true);
 				$facebookTokens =$tokenObject['facebook'];
-				
+
 				foreach($facebookTokens as $obj){
 					$url = 'https://graph.facebook.com/me/friends?fields=id,name,location,hometown&access_token=' . $obj['access_token'];
 					$ch = curl_init($url);
 					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 					$response = curl_exec($ch);
 					curl_close($ch);
-					
+
 					$var = json_decode($response, true);	
-					
+
 					if($var['error']){
 						$returnArr = array("false" => $var['error']['message']);
 					}else{
@@ -181,7 +181,7 @@ function getFriendsList($service){
 			}else{
 				$tokenObject = json_decode($file, true);
 				$twitterTokens = $tokenObject['twitter'];
-				
+
 				foreach($twitterTokens as $obj){
 					/* Create TwitteroAuth object with app key/secret and token key/secret from default phase */
 					$connection = new TwitterOAuth($obj['appKey'], $obj['appSecret'], $obj['accessToken'], $obj['accessSecret']);
@@ -192,7 +192,7 @@ function getFriendsList($service){
 						$connection->host = "https://api.twitter.com/1.1";
 						$param = array('cursor' => $cursor);
 						$var = $connection->get($method, $param);
-						
+
 						if(isset($var->errors)){
 							$returnArr = array("false" => $var->errors[0]->message);
 						}else{				
@@ -235,16 +235,16 @@ function getFriendsList($service){
 			}else{
 				$tokenObject = json_decode($file, true);
 				$instagramTokens = $tokenObject['instagram'];
-				
+
 				foreach($instagramTokens as $obj){
 					$url = "https://api.instagram.com/v1/users/".$obj['user_id']."/follows?access_token=".$obj['access_token'];
-					
+
 					$ch = curl_init($url);
-					
+
 					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 					$res = curl_exec($ch);
 					curl_close($ch);
-					
+
 					$var = json_decode($res, true);
 					if($var['meta']['code'] != 200){
 						$returnArr = array("false" => array());
@@ -282,12 +282,12 @@ function getFriendsList($service){
 			}else{
 				$tokenObject = json_decode($file, true);
 				$linkedinTokens = $tokenObject['linkedin'];
-				
+
 				foreach($linkedinTokens as $obj){
 					$user = linkedInFetch('GET', '/v1/people/~/connections', $obj['access_token'], true);
-					
+
 					$user = objectToArray($user);
-					
+
 					if(isset($user['error'])){
 						$returnArr = array("false" => array());
 					}else{
@@ -326,10 +326,10 @@ function saveFriendsList($friendArr){
 	//global //$log;
 	//global //$logPrefix;
 	$arr = json_decode($friendArr, true);
-	
+
 	for($x = 0; $x < count($arr); $x++){
 		$client = new clientObject();
-		
+
 		$client->setCredential($arr[$x]['service'], 
 			array("id" => $arr[$x]['id'], "displayName" =>  $arr[$x]['displayName'], "givenName" =>  $arr[$x]['givenName'])
 		);

@@ -53,7 +53,7 @@ class twitterObjectBuilder extends activityObjectBuilder{
     
     public function buildActor($obj){
         $actor = new Actor();
-	
+
         $actor->setName($obj['user']['name']);
         $actor->setId($obj['user']['id_str']);
 	    $actor->setSearchable($obj['user']['screen_name']);
@@ -63,14 +63,14 @@ class twitterObjectBuilder extends activityObjectBuilder{
         $actor->setLocation($obj['user']['location']);
         $actor->setGeoLocation($obj['user']['location']);
         $actor->setDescription($obj['user']['description']);
-	
+
        
         $this->activityObject->setActor($actor);
     }
     public function buildContent($obj){
         $content = new TwitterContent();
         $queryString = '';
-	
+
 	$content->setId($obj['id_str']);
         $content->setObjectType('tweet');
 		$text = new textBlockWithURLS();

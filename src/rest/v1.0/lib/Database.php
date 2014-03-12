@@ -9,17 +9,17 @@ require_once('EC2Functions.php');
 use \ElasticSearch\Client;
 
 class Database{
-	
+
 	public function writeObject($obj){
 		$index = "app";
 		$host = "localhost";
 		$port = "9200";
-		
+
 		$es = Client::connection("http://$host:$port/$index/$index/");
-		
+
 		$grr = $es->index($obj, $obj['id']);
 	}
-	
+
     public function restart(){
         $count = `ps -ef | grep -c elasticsearch`;
         if($count == 3){
@@ -31,20 +31,20 @@ class Database{
             return json_encode(array("error" => "Not going to matter what is here"));
         }
     }
-	
+
 	public function rebootAmazonInstance(){
 		#file get contents must originate from an amazon instance. 
 		$id = file_get_contents('http://169.254.169.254/latest/meta-data/instance-id');
-		
+
 		$res = rebootEC2Instance($id);
 		return json_encode($res);
 	}
-	
+
 	public function getAmazonInstances(){
 		$var = getInstances();
 		return json_encode($var);
 	}
-	
+
     public function checkForNewItems(){
         $feedName = $_GET['feed'];
         $fileName = "../../app/util/layout.json";
@@ -77,51 +77,51 @@ class Database{
             }
         }
     }
-	
+
 	function deleteItem(){
 		$var = file_get_contents("php://input");
 		$obj = json_decode($var, true);
-		
+
 		$index = "app";
 		$host = "localhost";
 		$port = "9200";
 
 		$es = Client::connection("http://$host:$port/$index/$index");
 		$res = $es->delete($obj['id']);
-		
+
 		if(isset($res['ok'])){
 			return "success";
 		}else{
 			return "error";
 		}
 	}
-	
+
 	function deleteAll(){
 		$var = file_get_contents("php://input");
 		$obj = json_decode($var, true);
-		
+
 		$index = "app";
 		$host = "localhost";
 		$port = "9200";
 
 		$es = Client::connection("http://$host:$port/$index/$index");
-		
+
 		foreach ($obj['obj'] as $key => $value){
 			$res = $es->delete($key);
 		}
 
 		$es->refresh();
-		
+
 		return json_encode(array("success"));
-		
+
 	}
-	
+
 	function getBackUpCounts(){		
 		$oneWeek = (60 * 60 * 24) * 7;
 		$twoWeeks = (60 * 60 * 24) * 14;
 		$threeWeeks = (60 * 60 * 24) * 21;
 		$oneMonth = (60 * 60 * 24) * 30;
-		
+
 		$uno = getCountByDate($oneWeek);
 		$uno = json_decode($uno, true);
 		$dos = getCountByDate($twoWeeks);
@@ -132,26 +132,26 @@ class Database{
 		$cuatro = json_decode($cuatro, true);
 		$all = countAll();		
 		$all = json_decode($all, true);	
-		
+
 		$response = array();
 		$response["one"] = $uno['count'];
 		$response["two"] = $dos['count'];
 		$response["three"] = $tres['count'];
 		$response["four"] = $cuatro['count'];
 		$response["all"] = $all['count'];
-		
+
 		return json_encode($response);
 	}
-	
+
 	function backUpDB(){
 		$var = file_get_contents("php://input");
 		$obj = json_decode($var, true);
-		
+
 		$res = "";
-		
+
 		$time = $obj['time'];
 		$size = $obj['size'];
-		
+
 		switch($time){
 			case 1:
 				$oneWeek = (60 * 60 * 24) * 7;
@@ -173,7 +173,7 @@ class Database{
 				$res = backUp("everything", $size);
 			break;
 		}
-		
+
 		//make one array of ids to delete with and one array of the data to save
 		$writeArr = array();
 		$idArr = array();
@@ -185,32 +185,32 @@ class Database{
 		$path = '../../app/manDatabase/backups/';
 		//save the data to file with writeArr
 		file_put_contents($path.$fileName, json_encode($writeArr));
-		
+
 		//delete saved data from app with uidArr
 		deleteAllBackedUp($idArr);
-		
+
 		uploadS3File($path, $fileName);
-		
+
 		unlink(realpath($path.$fileName));
-		
+
 		return json_encode(array("file" => $fileName));
 	}
-	
+
 	function getBackUpList(){
 		$fileArr = getAllS3Files();
 		return json_encode($fileArr);	
 	}
-	
+
 	function restoreBackUpData(){
 		$var = file_get_contents("php://input");
 		$obj = json_decode($var, true);
-		
+
 		$fileName = $obj['file'];
-		
+
 		$dataStr = restoreS3File($fileName);
-		
+
 		$object = json_decode($dataStr, true);
-		
+
 		if($object['version'] == "1.0"){
 			for($y = 0; $y < count($object['data']); $y++){
 				$this->writeObject($object['data'][$y]);
@@ -220,12 +220,12 @@ class Database{
 			return json_encode(array("error" => "This file version is not up to date"));
 		}
 	}
-	
+
 	public function saveServiceCredsObj(){
 		$var = file_get_contents("php://input");
 		$obj = json_decode($var, true);
 		$credObj;		
-		
+
 		try{
 			$credObj = file_get_contents("../../serviceCreds.json");
 			$credObj = json_decode($credObj, true);
@@ -239,9 +239,9 @@ class Database{
 			);
 			file_put_contents("../../serviceCreds.json", json_encode($credObj));
 		}
-		
+
 		$exists = false;
-		
+
 		if(isset($credObj[$obj['param']])){
 			if(count($credObj[$obj['param']]) > 0){
 				for($x = 0; $x < count($credObj[$obj['param']]); $x++){
@@ -254,8 +254,8 @@ class Database{
 		}else{
 			$credObj[$obj['param']] = array();
 		}
-		
-		
+
+
 		$authLink = '';
 		if($obj['param'] == "linkedin"){
 			$scope = "rw_groups r_fullprofile r_contactinfo r_network r_basicprofile rw_nus w_messages";
@@ -272,7 +272,7 @@ class Database{
 			$scope = "relationships likes comments";
 			$authLink = "https://api.instagram.com/oauth/authorize/?client_id=".$obj['key']."&redirect_uri=".$obj['redir']."&response_type=code&scope=".$scope."&state=".$obj['key'];
 		}
-		
+
 		if($exists == false){
 			$temp = array(
 				"key" => $obj['key'],
@@ -285,18 +285,18 @@ class Database{
 		}else{
 			return json_encode(array("error" => "You have already saved this app Id/Secret"));
 		}
-		
+
 		file_put_contents("../../serviceCreds.json", json_encode($credObj));
-		
+
 		return json_encode(array("success" => "App Saved"));
 	}
-	
+
 	public function deleteServiceCred(){
 		$var = file_get_contents("php://input");
 		$obj = json_decode($var, true);
 		$obj = $obj['obj'];
 		$credObj;		
-		
+
 		try{
 			$credObj = file_get_contents("../../serviceCreds.json");
 			$credObj = json_decode($credObj, true);
@@ -310,7 +310,7 @@ class Database{
 			);
 			file_put_contents("../../serviceCreds.json", json_encode($credObj));
 		}
-		
+
 		$exists = false;
 		if(count($credObj[$obj['param']]) > 0){
 			for($x = 0; $x < count($credObj[$obj['param']]); $x++){
@@ -320,22 +320,22 @@ class Database{
 				}
 			}			
 		}
-	
+
 		file_put_contents("../../serviceCreds.json", json_encode($credObj));
-		
+
 		return json_encode(array("success" => "Account Deleted"));
 	}
-	
+
 	public function getDomain(){
 		$redirect = $_SERVER['HTTP_HOST'];
 		return json_encode(array("domain" => $redirect));
 	}
-	
+
 	public function editServiceCreds(){
 		$var = file_get_contents("php://input");
 		$obj = json_decode($var, true);
 		$credObj;		
-		
+
 		try{
 			$credObj = file_get_contents("../../serviceCreds.json");
 			$credObj = json_decode($credObj, true);
@@ -349,7 +349,7 @@ class Database{
 			);
 			file_put_contents("../../serviceCreds.json", json_encode($credObj));
 		}
-		
+
 		if(count($credObj[$obj['param']]) > 0){
 			for($x = 0; $x < count($credObj[$obj['param']]); $x++){
 				if($credObj[$obj['param']][$x]['key'] == $obj['key']){
@@ -358,17 +358,17 @@ class Database{
 				}
 			}			
 		}
-		
+
 		file_put_contents("../../serviceCreds.json", json_encode($credObj));
-		
+
 		return json_encode(array("success" => "Account Edited"));
 	}
-	
+
 	public function setMainLogin(){
 		$var = file_get_contents("php://input");
 		$obj = json_decode($var, true);
 		$loginObj = $obj['obj'];
-		
+
 		try{
 			$credObj = file_get_contents("../../serviceCreds.json");
 			$credObj = json_decode($credObj, true);
@@ -382,7 +382,7 @@ class Database{
 			);
 			file_put_contents("../../serviceCreds.json", json_encode($credObj));
 		}
-		
+
 		$exists = false;
 		if(count($credObj[$loginObj['param']]) > 0){
 			for($x = 0; $x < count($credObj[$loginObj['param']]); $x++){
@@ -395,24 +395,24 @@ class Database{
 				}
 			}			
 		}
-		
-		
+
+
 	}
-	
+
 	public function saveServiceCredsFirstTime(){
 		$var = file_get_contents("php://input");
 		$obj1 = json_decode($var, true);
-		
+
 		$obj = $obj1['obj'];
 		$credObj = $obj1['obj'];
 		$finalObj;
-		
+
 		foreach ($credObj as $key => $value) {
 			if($key == "linkedin"){
 				$scope = "rw_groups r_fullprofile r_contactinfo r_network r_basicprofile rw_nus w_messages";
 				$authLink = $obj[$key]['redir']."?apiKey=".$obj[$key]['key']."&secretKey=".$obj[$key]['secret']."&lredirect_uri=".$obj[$key]['redir']."&scope=".$scope."&color=".$obj[$key]['color'];
 				$credObj[$key]['auth'] = $authLink;
-				
+
 				$finalObj[$key] = array();
 				$temp = array(
 					"key" => $obj[$key]['key'],
@@ -426,7 +426,7 @@ class Database{
 			if($key == "twitter"){
 				$authLink = $obj[$key]['redir']."?appKey=".$obj[$key]['key']."&appSecret=".$obj[$key]['secret']."&twitterRedirect=".$obj[$key]['redir']."&color=".$obj[$key]['color'];
 				$credObj[$key]['auth'] = $authLink;
-				
+
 				$finalObj[$key] = array();
 				$temp = array(
 					"key" => $obj[$key]['key'],
@@ -441,7 +441,7 @@ class Database{
 				$scope = "friends_location,friends_hometown,user_hometown,user_location,publish_stream,read_stream,read_friendlists,friends_birthday,friends_religion_politics,email,user_likes,friends_likes,manage_notifications";
 				$authLink = "https://www.facebook.com/dialog/oauth?client_id=".$obj[$key]['key']."&redirect_uri=".$obj[$key]['redir']."&scope=".$scope."&state=".$obj[$key]['key'];
 				$credObj[$key]['auth'] = $authLink;
-				
+
 				$finalObj[$key] = array();
 				$temp = array(
 					"key" => $obj[$key]['key'],
@@ -456,7 +456,7 @@ class Database{
 				$scope = "relationships likes comments";
 				$authLink = "https://api.instagram.com/oauth/authorize/?client_id=".$obj[$key]['key']."&redirect_uri=".$obj[$key]['redir']."&response_type=code&scope=".$scope."&state=".$obj[$key]['key'];
 				$credObj[$key]['auth'] = $authLink;
-				
+
 				$finalObj[$key] = array();
 				$temp = array(
 					"key" => $obj[$key]['key'],
@@ -468,11 +468,11 @@ class Database{
 				array_push($finalObj[$key], $temp);
 			}
 		}
-		
+
 		$finalObj['login'] = "first";
-		
+
 		file_put_contents("../../serviceCreds.json", json_encode($finalObj));
-		
+
 		return json_encode(array("success" => "App Saved"));
 	}
 }

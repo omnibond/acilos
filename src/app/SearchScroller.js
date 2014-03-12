@@ -8,7 +8,7 @@ define([
 		"dojo/dom-attr",
 		"dojo/_base/lang",
 		"dojo/DeferredList",
-		
+
 		"app/mainFeed/facebookFeedItem",
 		"app/mainFeed/twitterFeedItem",
 		"app/mainFeed/linkedinFeedItem",
@@ -17,7 +17,7 @@ define([
 
 		"dojox/mobile/EdgeToEdgeList",
 		"dojox/mobile/ListItem",
-		
+
 		"dojo/ready"
 
 	], function(
@@ -36,29 +36,29 @@ define([
 		linkedinFeedItem,
 		instagramFeedItem,
 		xhrManager,
-		
+
 		EdgeToEdgeList,
 		ListItem,
-		
+
 		ready
 	){
 		return declare("SearchScroller",[EdgeToEdgeList], {
 			"class": "feedScrollerRoundRectClass",
-			
+
 			constructor: function(){
 				this.ListEnded = false;
 			},
-			
+
 			searchStarred: function(star){
 				var params = {star : star};
 				return xhrManager.send('GET', 'rest/v1.0/Search/starred', params);
 			},
-			
+
 			searchStarredClients: function(){
 				var params = [];
 				return xhrManager.send('GET', 'rest/v1.0/Search/starredClients', params);
 			},
-			
+
 			postCreate: function(){
 				this.arrayList = [];
 				this.arrayList.push(this.searchStarredClients().then(lang.hitch(this, function(obj){
@@ -76,11 +76,11 @@ define([
 				this.arrayList.push(this.getFeedData(this.feedName, this.fromVar).then(lang.hitch(this, function(obj){
 					this.feedDataObj = obj;
 				})));
-				
+
 				var defList = new DeferredList(this.arrayList);
 				defList.then(lang.hitch(this, this.buildView));		
 			},
-			
+
 			buildView: function(data){
 				var data = this.feedDataObj;
 				if(data.error){
@@ -180,11 +180,11 @@ define([
 							break;
 						}
 					}
-					
+
 					this.resize();
 				}
 			},
-			
+
 			postAddToList: function(from){	
 				if(from < 0){
 					from = 0;
@@ -204,14 +204,14 @@ define([
 				this.arrayList.push(this.getFeedData(this.feedName, from).then(lang.hitch(this, function(obj){
 					this.feedDataObj = obj;
 				})));
-				
+
 				var defList = new DeferredList(this.arrayList);
 				defList.then(lang.hitch(this, this.buildView));
 			},
-			
+
 			getDate: function(epoch){
 				var date = new Date(parseFloat(epoch*1000));
-				
+
 				var str = '';
 				var month = date.getMonth();
 				var day = date.getDate();
@@ -233,34 +233,34 @@ define([
 					hours = (date.getHours() - 12);
 					pm = "true";
 				}
-				
+
 				if(hours == 0){
 					hours = 12;
 				}
-				
+
 				month = month + 1;
-				
+
 				str = month + "/" + day + "/" + year + " @ " + hours + ":" + minutes;
-				
+
 				if(am == "true"){
 					str += "am";
 				}else if(pm == "true"){
 					str += "pm";
 				}
-				
+
 				return str;
 			},
-			
+
 			parseSpecialChars: function(str) {
 				//var stringArr = str.split(" ");
 				var regex = /([ \n])/;
 				var stringArr = str.split(regex);
 				var finalStr = '';
-				
+
 				var patternURL = new RegExp(/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/);
 				var patternHashTag = new RegExp(/\B#\w*[a-zA-Z]+\w*/);
 				var patternAt = new RegExp(/\B@\w*[a-zA-Z]+\w*/);
-				
+
 				for(var u = 0; u < stringArr.length; u++){
 					if(patternURL.test(stringArr[u])) {
 						if(str.indexOf('...') === -1 && str.indexOf('..') === -1){
@@ -309,7 +309,7 @@ define([
 								break;
 							}
 						}
-						
+
 						finalStr += pre + '<a style="color:#048bf4">'+word+'</a>' + post + " ";
 					}else if(patternAt.test(stringArr[u])){						
 						//@PEOPLE
@@ -362,14 +362,14 @@ define([
 						finalStr += stringArr[u] + " ";
 					}
 				}
-				
+
 				return finalStr;
 			},
 
 			removeEmoji: function(text) {
 				return text.replace(/([\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF])/g, '');
 			},
-			
+
 			isURL: function(str) {
 				var pattern = new RegExp(/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/);
 
@@ -384,7 +384,7 @@ define([
 					}
 				}
 			}
-			
+
 		});
 	}
 );

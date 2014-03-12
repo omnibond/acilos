@@ -27,9 +27,9 @@ class Actor{
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$response = curl_exec($ch);
 		curl_close($ch);
-		
+
 		$var = json_decode($response, true);
-		
+
 		$latLong = "";
 		if($var['status'] == "ZERO_RESULTS"){
 			$latLong = "";
@@ -72,7 +72,7 @@ class Actor{
 class textBlockWithURLS{
 	public $text = '';
 	public $links = '';
-	
+
 	public function setText($textBlock){
 		$this->text = $textBlock;
 	}
@@ -82,7 +82,7 @@ class textBlockWithURLS{
 		for ( $i = 0; $i < $numLines; $i++ ) {
 			$line = $http_response_header[$i];
 			$lineArr = explode(" ", $line);
-			
+
 			for($g = 0; $g < count($lineArr); $g++){
 				if((string)$lineArr[$g] == "301"){			
 					break;
@@ -104,11 +104,11 @@ class textBlockWithURLS{
 			}
 		}
 	}
-	
+
 	public function setLinks($sentence){
 		preg_match_all('/\b(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)[-A-Z0-9+&@#\/%=~_|$?!:,.]*[A-Z0-9+&@#\/%=~_|$]/i', $sentence, $result, PREG_PATTERN_ORDER);
 		$res = $result[0];
-		
+
 		$urlArr = array();
 		for($k = 0; $k < count($res); $k++){
 			$response = $this->getHeaders($res[$k]);
@@ -119,31 +119,31 @@ class textBlockWithURLS{
 						break;
 				}
 			}
-			
+
 			/* Get the MIME type and character set */
 			preg_match( '@Content-Type:\s+([\w/+]+)(;\s+charset=(\S+))?@i', $content_type, $matches );
 			if ( isset( $matches[1] ) )
 				$mime = $matches[1];
-			
+
 			$youtube = "www.youtube.com";
 			$website = "text\/";
 			$video = "video\/";
 			$image = "image\/";
 
 			$obj = array();
-			
+
 			if( preg_match("/\b$youtube\b/i", $response["website"]) ){
 				$search = '#(.*?)(?:href="https?://)?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch?.*?v=))([\w\-]{10,12}).*#x';
 				$replace = "http://www.youtube.com/embed/$2";
 				$text = preg_replace($search, $replace, $res[$k]);
-				
+
 				//$urlArr[$res[$k]]["type"] = "youtube";
 				//$urlArr[$res[$k]]["youtube"] = $text;
-			       
+
 				$obj['type'] = "youtube";
 				$obj['url'] = $res[$k];
 				$obj['youtube'] = $text;
-				
+
 			}elseif( preg_match("/\b$website\b/i", $mime) ){
 				$search = '#(.*?)(?:href="https?://)?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch?.*?v=))([\w\-]{10,12}).*#x';
 				$replace = "http://www.youtube.com/embed/$2";
@@ -160,7 +160,7 @@ class textBlockWithURLS{
 			}elseif( preg_match("/\b$video\b/i", $mime) ){
 				$obj["type"] = "video";
 				$obj["video"] = $response["website"];
-				
+
 				$obj['url'] = $res[$k];
 			}elseif( preg_match("/\b$image\b/i", $mime) ){
 				$obj["type"] = "image";

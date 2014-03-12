@@ -62,7 +62,7 @@ class FacebookContent{
 class FacebookTo{
 	public $name = '';
 	public $id = '';
-	
+
 	public function setName($name){
 		$this->name = $name;
 	}
@@ -75,7 +75,7 @@ class FacebookStoryTags {
 	public $name = '';
 	public $id = '';
 	public $type = '';
-	
+
 	public function setName($name){
 		$this->name = $name;
 	}
@@ -91,7 +91,7 @@ class FacebookLike {
 	public $name = '';
 	public $id = '';
 	public $likeURL = '';
-	
+
 	public function setName($name){
 		$this->name = $name;
 	}
@@ -107,7 +107,7 @@ class FacebookComment{
 	public $published = '';
 	public $userId = '';
 	public $commentURL = '';
-	
+
 	public function setCommentId($commentId){
 		$this->commentId = $commentId;
 	}
@@ -134,10 +134,10 @@ class facebookNewsFeedObjectBuilder extends activityObjectBuilder{
 			return strtotime($date);
 		}
 	}
-	
+
    public function buildActor($obj){
         $actor = new Actor();
-	
+
         $actor->setName($obj['from']['name']);
         $actor->setId($obj['from']['id']);
 		$actor->setSearchable($obj['from']['id']);
@@ -147,39 +147,39 @@ class facebookNewsFeedObjectBuilder extends activityObjectBuilder{
         $actor->setLocation("");
         $actor->setGeoLocation("");
         $actor->setDescription("");
-	
+
        
         $this->activityObject->setActor($actor);
     }
 
     public function buildContent($obj){
 		$queryString = '';
-		
+
 		$likeArray = array();
 		if(isset($obj['likes'])){
 			if(isset($obj['likes']['data'])){
 				$objLD = $obj['likes']['data'];
-			
+
 				for($p = 0; $p < count($objLD); $p++){
 					$thing = $objLD[$p];
-					
+
 					$like = new FacebookLike();
 					$like->setName($thing['name']);
 					$like->setid($thing['id']);
-					
+
 					array_push($likeArray, $like);
 				}
 			}
 		}
-		
+
 		$commentArray = array();
 		if(isset($obj['comments'])){
 			if(isset($obj['comments']['data'])){
 				$objCD = $obj['comments']['data'];
-			
+
 				for($d = 0; $d < count($objCD); $d++){
 					$thang = $objCD[$d];
-					
+
 					$comment = new FacebookComment();
 					$comment->setCommentId($thang['id']);
 					$comment->setName($thang['from']['name']);
@@ -189,10 +189,10 @@ class facebookNewsFeedObjectBuilder extends activityObjectBuilder{
 					$comment->setText($text);
 					$comment->setPublished($thang['created_time']);
 					$comment->setUserId($thang['from']['id']);
-					
+
 					array_push($commentArray, $comment);
 				}
-		
+
 			}
 		}
 
@@ -202,12 +202,12 @@ class facebookNewsFeedObjectBuilder extends activityObjectBuilder{
 			for($d = 0; $d < count($objS); $d++){
 				for($f = 0; $f < count($objS[$d]); $f++){
 					$thung = $objS[$d][$f];
-					
+
 					$storyTag = new FacebookStoryTags();
 					$storyTag->setId($thung['id']);
 					$storyTag->setName($thung['name']);
 					$storyTag->setType($thung['type']);
-					
+
 					array_push($storyTagArray, $storyTag);
 				}
 			}
@@ -219,11 +219,11 @@ class facebookNewsFeedObjectBuilder extends activityObjectBuilder{
 				$objTD = $obj['to']['data'];
 				for($d = 0; $d < count($objTD); $d++){
 					$thong = $objTD[$d];
-					
+
 					$to = new FacebookTo();
 					$to->setName($thong['name']);
 					$to->setId($thing['id']);
-					
+
 					array_push($toArray, $to);
 				}
 			}
@@ -242,7 +242,7 @@ class facebookNewsFeedObjectBuilder extends activityObjectBuilder{
 		}
 
 		$text = new textBlockWithURLS();
-		
+
 		if(isset($obj['message'])){
 			$text->setText($obj['message']);
 			$text->setLinks($obj['message']);
@@ -250,7 +250,7 @@ class facebookNewsFeedObjectBuilder extends activityObjectBuilder{
 		}
 
 	    $content->setText($text);
-	    
+
 	    if(isset($obj['actions'])){
         	if(isset($obj['actions'][0])){
         		if(isset($obj['actions'][0]['link'])){
@@ -259,7 +259,7 @@ class facebookNewsFeedObjectBuilder extends activityObjectBuilder{
         		}
         	}
         }
-	    
+
        if(isset($obj['type'])){									//ADDED BLOCK HERE TO GET BIG PICTURES
            if($obj['type'] == "photo"){
                 $url = 'https://graph.facebook.com/' . $obj['object_id'];
@@ -308,7 +308,7 @@ class facebookNewsFeedObjectBuilder extends activityObjectBuilder{
 			$text->setLinks($obj['story']);
 			$queryString = $queryString . " " . $obj['story'];
 		}
-			
+
 		$content->setStory($text);
 		$content->setStoryTags($storyTagArray);
 		$content->setLikes($likeArray);
@@ -352,9 +352,9 @@ class facebookNewsFeedObjectBuilder extends activityObjectBuilder{
 	$filename = "../../oAuth/facebookToken.json";
 	$file = file_get_contents($filename) or die("Cannot open the file: " . $filename);
 	$tok = json_decode($file, true);
-	
+
 	$link = '';
-	
+
 	$url = 'https://graph.facebook.com/'
 	. 'fql?q=SELECT+permalink+FROM+stream+WHERE+post_id="'.$obj['id'].'"'
 	. '&access_token=' . $tok['access_token'];
@@ -378,7 +378,7 @@ class facebookNewsFeedObjectBuilder extends activityObjectBuilder{
 	}else{
 		$link = $var['data'][0]['permalink'];
 	}
-	
+
 	$this->activityObject->setPostLink($link);
     }
 	public function buildIsLiked($obj){

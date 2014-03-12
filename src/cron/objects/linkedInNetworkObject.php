@@ -8,7 +8,7 @@ class LinkedInLikes{
 	public $lastName = '';
 	public $headline = '';
 	public $pictureURL = '';
-	
+
 	public function setUserID($id){
 		$this->id = $id;
 	}
@@ -34,7 +34,7 @@ class LinkedInComments{
 	public $pictureURL = '';
 	public $text = '';
 	public $commentId = '';
-	
+
 	public function setUserID($commentUserId){
 		$this->commentUserId = $commentUserId;
 	}
@@ -84,7 +84,7 @@ class LinkedInReccomendations{
 	public $reccommenderHeadline = '';
 	public $reccommenderURL = '';
 	public $pictureURL = '';
-	
+
     public function setRecID($recID){
         $this->recID = $recID;
     }
@@ -147,7 +147,7 @@ class LinkedInPosition{
 	public $name = '';
 	public $companyID = '';
 	public $companyName = '';
-	
+
 	public function setID($ID){
 		$this->ID = $ID;
 	}
@@ -167,7 +167,7 @@ class LinkedInEducations{
 	public $title = '';
 	public $companyID = '';
 	public $companyName = '';
-	
+
 	public function setID($ID){
 		$this->ID = $ID;
 	}
@@ -184,7 +184,7 @@ class LinkedInEducations{
 
 class LinkedInSkills{
 	public $name = '';
-	
+
 	public function setSkills($skill){
 		$this->name = $skill;
 	}
@@ -192,7 +192,7 @@ class LinkedInSkills{
 
 class LinkedInUpdatedFields{
 	public $updatedField = '';
-	
+
 	public function setUpdatedField($updatedField){
 		$this->updatedField = $updatedField;
 	}
@@ -201,7 +201,7 @@ class LinkedInUpdatedFields{
 class LinkedInPatents{
 	public $ID = '';
 	public $name = '';
-	
+
 	public function setPatentID($patentID){
 		$this->ID = $patentID;
 	}
@@ -213,7 +213,7 @@ class LinkedInPatents{
 class LinkedInPublications{
 	public $ID = '';
 	public $name = '';
-	
+
 	public function setPubID($publicationID){
 		$this->ID = $publicationID;
 	}
@@ -224,7 +224,7 @@ class LinkedInPublications{
 
 class LinkedInLanguages{
 	public $name = '';
-	
+
 	public function setLanguages($language){
 		$this->name = $language;
 	}
@@ -236,7 +236,7 @@ class LinkedInAttachments{
 	public $imageUrl = '';
 	public $summary = '';
 	public $title = '';
-	
+
 	public function setContentDomain($contentDomain){
 		$this->contentDomain = $contentDomain;
 	}
@@ -290,8 +290,8 @@ class LinkedInContentDISCUSS{
 	public $commentURL = '';
 	public $likeURL = '';
 	public $queryString = '';
-	
-	
+
+
 	public function setNetworkObjectType($networkObjectType){
 		$this->networkObjectType = $networkObjectType;
 	}
@@ -506,7 +506,7 @@ class LinkedInContentPREC{
 	public $likes = '';
 	public $comments = '';
 	public $queryString = '';
-	
+
 	public function setNetworkObjectType($networkObjectType){
 		$this->networkObjectType = $networkObjectType;
 	}
@@ -540,7 +540,7 @@ class LinkedInContentJOBP{
 	public $likes = '';
 	public $comments = '';
 	public $queryString = '';
-	
+
 	public function setNetworkObjectType($networkObjectType){
 		$this->networkObjectType = $networkObjectType;
 	}
@@ -589,7 +589,7 @@ class LinkedInContentCMPY{
 	public $likes = '';
 	public $comments = '';
 	public $queryString = '';
-	
+
 	public function setNetworkObjectType($networkObjectType){
 		$this->networkObjectType = $networkObjectType;
 	}
@@ -639,7 +639,7 @@ class LinkedInContentMSFC{
 	public $comments = '';
 	public $likes = '';
 	public $queryString = '';
-	
+
 	public function setNetworkObjectType($networkObjectType){
 		$this->networkObjectType = $networkObjectType;
 	}
@@ -691,7 +691,7 @@ class LinkedInContentPICU{
 	public $likes = '';
 	public $skills = '';
 	public $queryString = '';
-	
+
 	public function setNetworkObjectType($networkObjectType){
 		$this->networkObjectType = $networkObjectType;
 	}
@@ -757,12 +757,12 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 			return strtotime($date);
 		}
 	}
-	
+
 	public function buildActor($obj){
 		if(isset($obj['updateType'])){
 			if($obj['updateType'] == "JOBP"){
 				$actor = new Actor();
-				
+
 				if(isset($obj['updateContent'])){
 					if(isset($obj['updateContent']['job'])){
 						if(isset($obj['updateContent']['job']['id'])){
@@ -809,7 +809,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 				$this->activityObject->setActor($actor);
 			}if($obj['updateType'] == "MSFC"){
 				$actor = new Actor();
-				
+
 				if(isset($obj['updateContent'])){
 					if(isset($obj['updateContent']['companyPersonUpdate'])){
 						if(isset($obj['updateContent']['companyPersonUpdate']['person'])){
@@ -869,7 +869,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 		}elseif(isset($obj['networkObjectType'])){
 			if($obj['networkObjectType'] == "DISCUSS"){
 				$actor = new Actor();
-				
+
 				if(isset($obj['creator'])){
 					if(isset($obj['creator']['id'])){
 						$objCI = $obj['creator']['id'];
@@ -906,13 +906,13 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 			}
 		}
 	}
-	
+
 	public function buildContent($obj){	
 		$queryString = '';
 		if(isset($obj['updateType'])){
 			if($obj['updateType'] == "CONN"){
 				$content = new LinkedInContentCONN();
-				
+
 				$person = new LinkedInPerson();
 
 				if(isset($obj['updateContent'])){
@@ -956,9 +956,9 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 						}
 					}
 				}
-			
+
 				$connArray = array();
-				
+
 				if(isset($obj['updateContent'])){
 					if(isset($obj['updateContent']['person'])){
 						if(isset($obj['updateContent']['person']['connections'])){
@@ -974,7 +974,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 										if(isset($obj['updateContent']['person']['connections']['values'][$k]['firstName'])){
 											$connection->setFirstName($obj['updateContent']['person']['connections']['values'][$k]['firstName']);
 										}
-										
+
 										if(isset($obj['updateContent']['person']['connections']['values'][$k]['lastName'])){
 											$connection->setLastName($obj['updateContent']['person']['connections']['values'][$k]['lastName']);
 										}
@@ -986,13 +986,13 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 										if(isset($obj['updateContent']['person']['connections']['values'][$k]['pictureUrl'])){
 											$connection->setPicture($obj['updateContent']['person']['connections']['values'][$k]['pictureUrl']);
 										}
-										
+
 										if(isset($obj['updateContent']['person']['connections']['values'][$k]['siteStandardProfileRequest'])){
 											if(isset($obj['updateContent']['person']['connections']['values'][$k]['siteStandardProfileRequest']['url'])){
 												$connection->setURL($obj['updateContent']['person']['connections']['values'][$k]['siteStandardProfileRequest']['url']);
 											}
 										}
-								
+
 										array_push($connArray, $connection);
 									}
 								}
@@ -1000,7 +1000,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 						}
 					}
 				}
-				
+
 				$content->setNetworkObjectType($obj['updateType']);
 				$content->setActionString("is now connected to");
 				$content->setPerson($person);
@@ -1011,9 +1011,9 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 				$this->activityObject->setContent($content);
 			}elseif($obj['updateType'] == "NCON"){
 				$content = new LinkedInContentCONN();
-				
+
 				$connection = new LinkedInPerson();
-				
+
 				if(isset($obj['updateContent'])){
 					if(isset($obj['updateContent']['person'])){
 						if(isset($obj['updateContent']['person']['id'])){
@@ -1043,7 +1043,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 						}
 					}
 				}
-				
+
 				$content->setNetworkObjectType($obj['updateType']);
 				$content->setActionString("is now a connection");
 				$content->setConnection($connection);
@@ -1053,7 +1053,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 				$this->activityObject->setContent($content);
 			}elseif($obj['updateType'] == "CCEM"){
 				$content = new LinkedInContentCONN();
-				
+
 				$person = new LinkedInPerson();
 
 				if(isset($obj['updateContent'])){
@@ -1085,19 +1085,19 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 						}
 					}
 				}
-				
+
 				$content->setNetworkObjectType($obj['updateType']);
 				$content->setActionString("has joined Linkedin");
 				$content->setPerson($person);
 				$content->setComments(array());
 				$content->setLikes(array());
-				
+
 				$this->activityObject->setContent($content);
 			}elseif($obj['updateType'] == "SHAR"){
 				$content = new LinkedInContentSHAR();
-				
+
 				$content->setNetworkObjectType($obj['updateType']);
-				
+
 				$text =  new textBlockWithURLS();
 
 				if(isset($obj['updateContent'])){
@@ -1154,7 +1154,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 						}
 					}
 				}
-				
+
 				$content->setStatus($text);
 				$this->activityObject->setContent($content);
 			}elseif($obj['updateType'] == "STAT"){
@@ -1187,14 +1187,14 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 									if(isset($obj['likes']['values'][$k]['person']['pictureUrl'])){
 										$like->setPictureURL($obj['likes']['values'][$k]['person']['pictureUrl']);
 									}
-									
+
 									array_push($likeArr, $like);
 								}
 							}
 						}
 					}
 				}
-				
+
 				$commentArray = array();
 				if(isset($obj['updateComments'])){
 					if(isset($obj['updateComments']['values'])){
@@ -1238,14 +1238,14 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 									}
 								}
 							}
-								
+
 							$comment->setText($text);
-							
+
 							array_push($commentArray, $comment);
 						}
 					}
 				}
-				
+
 				$person = new LinkedInPerson();
 				if(isset($obj['updateContent'])){
 					if(isset($obj['updateContent']['person'])){
@@ -1276,7 +1276,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 						}
 					}
 				}
-				
+
 				$content->setNetworkObjectType($obj['updateType']);
 
 				$stat =  new textBlockWithURLS();
@@ -1290,7 +1290,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 						}
 					}
 				}
-				
+
 				$content->setStatus($stat);
 				$content->setPerson($person);
 				$content->setLikes($likeArr);
@@ -1326,14 +1326,14 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 									if(isset($obj['likes']['values'][$k]['person']['pictureUrl'])){
 										$like->setPictureURL($obj['likes']['values'][$k]['person']['pictureUrl']);
 									}
-									
+
 									array_push($likeArr, $like);
 								}
 							}
 						}
 					}
 				}
-				
+
 				$commentArray = array();
 				if(isset($obj['likes'])){
 					if(isset($obj['likes']['values'])){
@@ -1368,21 +1368,21 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 									$text->setText($obj['updateComments']['values'][$g]['comment']);
 									$text->setLinks($obj['updateComments']['values'][$g]['comment']);
 								}
-								
+
 								if(isset($obj['updateComments']['values'][$g]['id'])){
 									$comment->setCommentID($obj['updateComments']['values'][$g]['id']);
 								}
-								
+
 								$comment->setText($text);
-								
+
 								array_push($commentArray, $comment);
 							}
 						}
 					}
 				}
-				
+
 				$content = new LinkedInContentVIRL();
-							
+
 				$content->setNetworkObjectType($obj['updateType']);
 
 				if(isset($obj['updateAction'])){
@@ -1396,10 +1396,10 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 						}
 					}
 				}
-				
+
 				$content->setLikes($likeArray);
 				$content->setComments($commentArray);
-				
+
 				$this->activityObject->setContent($content);
 			}elseif($obj['updateType'] == "JGRP"){
 				$groupArray = array();
@@ -1435,8 +1435,8 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 						}
 					}
 				}
-				
-				
+
+
 				$person = new LinkedInPerson();
 
 				if(isset($obj['updateContent'])){
@@ -1468,9 +1468,9 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 						}
 					}
 				}
-				
+
 				$content = new LinkedInContentJGRP();
-				
+
 				$content->setNetworkObjectType($obj['updateType']);
 				$content->setGroups($groupArray);
 				$content->setPerson($person);
@@ -1508,13 +1508,13 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 										$like->setPictureURL($obj['likes']['values'][$k]['person']['pictureUrl']);
 									}
 								}
-							
+
 								array_push($likeArr, $like);
 							}
 						}
 					}
 				}
-								
+
 				$commentArray = array();
 				if(isset($obj['updateComments'])){
 					if(isset($obj['updateComments']['values'])){
@@ -1543,7 +1543,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 										$comment->setPictureURL($obj['updateComments']['values'][$g]['person']['pictureUrl']);
 									}
 								}
-								
+
 								if(isset($obj['updateComments']['values'][$g]['comment'])){
 									$objUVGC = $obj['updateComments']['values'][$g]['comment'];
 
@@ -1551,19 +1551,19 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 									$text->setText($objUVGC);
 									$text->setLinks($objUVGC);
 								}
-								
+
 								if(isset($obj['updateComments']['values'][$g]['id'])){
 									$comment->setCommentID($obj['updateComments']['values'][$g]['id']);
 								}
-									
+
 								$comment->setText($text);
-								
+
 								array_push($commentArray, $comment);
 							}
 						}
 					}
 				}
-				
+
 				$person = new LinkedInPerson();
 
 				if(isset($obj['updateContent'])){
@@ -1595,7 +1595,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 						}
 					}
 				}
-				
+
 				$recArray = array();
 				if(isset($obj['updateContent'])){
 					if(isset($obj['updateContent']['person'])){
@@ -1618,7 +1618,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 												$rec->setRecType($obj['updateContent']['person']['recommendationsGiven']['values'][$d]['recommendationType']['code']);
 											}
 										}
-										
+
 										if(isset($obj['updateContent']['person']['recommendationsGiven']['values'][$d]['recommendee'])){
 											if(isset($obj['updateContent']['person']['recommendationsGiven']['values'][$d]['recommendee']['id'])){
 												$rec->setReccommenderID($obj['updateContent']['person']['recommendationsGiven']['values'][$d]['recommendee']['id']);
@@ -1646,7 +1646,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 												}
 											}
 										}
-										
+
 										array_push($recArray, $rec);
 									}
 								}
@@ -1654,9 +1654,9 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 						}
 					}
 				}
-							
+
 				$reccomend = new LinkedInContentPREC();
-				
+
 				$reccomend->setNetworkObjectType($obj['updateType']);
 				$reccomend->setRecommendations($recArray);
 				$reccomend->setPerson($person);
@@ -1698,7 +1698,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 						}
 					}
 				}
-				
+
 				$jobPosting = new LinkedInContentJOBP();
 
 				$jobPosting->setNetworkObjectType($obj['updateType']);
@@ -1726,13 +1726,13 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 						}
 					}
 				}
-				
+
 				$jobPosting->setJobPoster($person);
 
 				$this->activityObject->setContent($jobPosting);
 			}elseif($obj['updateType'] == "CMPY"){							//we will test this block later
 				$company = new LinkedInContentCMPY();
-				
+
 				if(isset($obj['updateType']['companyProfileUpdate'])){
 					$dude = new LinkedInPerson();
 					$dude->setID($obj['updateContent']['companyProfileUpdate']['editor']['id']);
@@ -1740,7 +1740,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 					$dude->setLastName($obj['updateContent']['companyProfileUpdate']['editor']['lastName']);
 					$dude->setHeadline($obj['updateContent']['companyProfileUpdate']['editor']['headline']);
 					$dude->setURL($obj['updateContent']['companyProfileUpdate']['editor']['siteStandardProfileRequest']['url']);
-				
+
 					$company->setNetworkObjectType($obj['updateType']);
 					$company->setCompanyID($obj['updateContent']['company']['id']);
 					$company->setCompanyName($obj['updateContent']['company']['name']);
@@ -1751,14 +1751,14 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 					$company->setUpdatedField($obj['updateContent']['companyProfileUpdate']['profileField']['code']);
 				}elseif(isset($obj['updateType']['companyJobUpdate'])){
 					$job = LinkedInContentJOBP();
-					
+
 					$job->setJobID($obj['updateContent']['companyJobUpdate']['job']['id']);
 					$job->setJobPosition($obj['updateContent']['companyJobUpdate']['job']['position']['title']);
 					$job->setJobCompany($obj['updateContent']['companyJobUpdate']['job']['company']['name']);
 					$job->setJobURL($obj['updateContent']['companyJobUpdate']['job']['siteJobRequest']['url']);
 					$job->setJobLocation($obj['updateContent']['companyJobUpdate']['job']['location']);
 					$job->setJobDescription($obj['updateContent']['companyJobUpdate']['job']['description']);
-				
+
 					$company->setNetworkObjectType($obj['updateType']);
 					$company->setCompanyID($obj['updateContent']['company']['id']);
 					$company->setCompanyName($obj['updateContent']['company']['name']);
@@ -1781,7 +1781,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 					$dude->setLastName($obj['updateContent']['companyPersonUpdate']['person']['lastName']);
 					$dude->setHeadline($obj['updateContent']['companyPersonUpdate']['person']['headline']);
 					$dude->setURL($obj['updateContent']['companyPersonUpdate']['person']['siteStandardProfileRequest']['url']);
-					
+
 					$company->setNetworkObjectType($obj['updateType']);
 					$company->setCompanyID($obj['updateContent']['company']['id']);
 					$company->setCompanyName($obj['updateContent']['company']['name']);
@@ -1791,11 +1791,11 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 					$company->setPerson($dude);
 					$company->setJob($obj['updateContent']['companyPersonUpdate']['newPosition']['title']);
 				}
-				
+
 				$this->activityObject->setContent($company);
 			}elseif($obj['updateType'] == "MSFC"){
 				$companyFollow = new LinkedInContentMSFC();
-				
+
 				$dude = new LinkedInPerson();
 
 				if(isset($obj['updateContent'])){
@@ -1845,9 +1845,9 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 						}
 					}
 				}
-				
+
 				$companyFollow->setNetworkObjectType($obj['updateType']);
-				
+
 				$companyFollow->setPersonType('person');
 				$companyFollow->setPerson($dude);
 				$companyFollow->setComments(array());
@@ -1886,14 +1886,14 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 											}
 										}
 									}
-									
+
 									array_push($positionArr, $position);
 								}
 							}
 						}
 					}
 				}
-				
+
 				$educationArr = array();
 
 				if(isset($obj['updateContent'])){
@@ -1924,7 +1924,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 											}
 										}
 									}
-									
+
 									array_push($educationArr, $educations);
 								}
 							}
@@ -1944,12 +1944,12 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 									$updatedField->setUpdatedField($obj['updatedFields']['values'][$e]['name']);
 								}
 							}
-							
+
 							array_push($updatedFieldArr, $updatedField);
 						}
 					}
 				}
-				
+
 				$skillsArr = array();
 
 				if(isset($obj['updateContent'])){
@@ -1966,7 +1966,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 											}
 										}
 									}
-									
+
 									array_push($skillsArr, $skill);
 								}
 							}	
@@ -1992,14 +1992,14 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 											$patent->setPatentTitle($obj['updateContent']['person']['patents']['values'][$f]['title']);
 										}
 									}
-									
+
 									array_push($patentArr, $patent);
 								}
 							}
 						}
 					}
 				}
-				
+
 				$publicationArr = array();
 
 				if(isset($obj['updateContent'])){
@@ -2025,7 +2025,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 						}
 					}
 				}
-				
+
 				$languageArr = array();
 
 				if(isset($obj['updateContent'])){
@@ -2042,14 +2042,14 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 											}
 										}
 									}
-									
+
 									array_push($languageArr, $language);
 								}
 							}
 						}
 					}
 				}
-				
+
 				$likeArr = array();
 
 				if(isset($obj['likes'])){
@@ -2082,12 +2082,12 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 									}
 								}
 							}
-							
+
 							array_push($likeArr, $like);
 						}
 					}
 				}
-				
+
 				$commentArray = array();
 
 				if(isset($obj['updateComments'])){
@@ -2128,14 +2128,14 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 									}
 								}
 							}
-								
+
 							$comment->setText($text);
-							
+
 							array_push($commentArray, $comment);
 						}
 					}
 				}
-				
+
 				if(isset($obj['updateContent'])){
 					if(isset($obj['updateContent']['person'])){
 						if(isset($obj['updateContent']['person']['id'])){
@@ -2166,7 +2166,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 					}
 				}
 				$profile->setNetworkObjectType($obj['updateType']);
-				
+
 				$profile->setPublications($publicationArr);
 				$profile->setPatents($patentArr);
 				$profile->setLanguages($languageArr);
@@ -2177,13 +2177,13 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 				$profile->setSkills($skillsArr);
 				$profile->setComments($commentArray);
 				$profile->setLikes($likeArr);
-				
+
 				$this->activityObject->setContent($profile);
 			}
 		}elseif(isset($obj['networkObjectType'])){
 			if($obj['networkObjectType'] == "DISCUSS"){
 				$content = new LinkedInContentDISCUSS();
-				
+
 				$likeArr = array();
 
 				if(isset($obj['likes'])){
@@ -2215,11 +2215,11 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 								}
 							}
 						}
-						
+
 						array_push($likeArr, $like);
 					}
 				}
-				
+
 				$commentArray = array();
 
 				if(isset($obj['comments'])){
@@ -2261,13 +2261,13 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 								$comment->setCommentID($obj['comments'][$g]['id']);
 							}
 						}
-							
+
 						$comment->setText($text);
-						
+
 						array_push($commentArray, $comment);
 					}
 				}
-				
+
 				$attachmentArr = array();
 
 				if(isset($obj['attachment'])){
@@ -2297,13 +2297,13 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 								$attachment->setTitle($obj['attachment'][$g]['title']);
 							}
 						}
-						
+
 						array_push($attachmentArr, $attachment);
 					}
 				}
-				
+
 				$discussion = new LinkedInDiscussion();
-					
+
 				$title =  new textBlockWithURLS();
 
 				if(isset($obj['title'])){
@@ -2311,7 +2311,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 					$queryString = $queryString . " " . $obj['title'];
 					$title->setLinks($obj['title']);
 				}
-				
+
 				$discussion->setTitle($title);
 
 				$summary =  new textBlockWithURLS();
@@ -2321,7 +2321,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 					$queryString = $queryString . " " . $obj['summary'];
 					$summary->setLinks($obj['summary']);
 				}
-				
+
 				$discussion->setSummary($summary);
 
 				if(isset($obj['group'])){
@@ -2337,7 +2337,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 						$discussion->setGroupStatus($obj['group']['status']);
 					}
 				}
-				
+
 				$content->setNetworkObjectType($obj['networkObjectType']);
 
 				if(isset($obj['id'])){
@@ -2345,12 +2345,12 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 					$content->setCommentURL("http://api.linkedin.com/v1/posts/".$obj['id']."/comments");
 					$content->setLikeURL("http://api.linkedin.com/v1/posts/".$obj['id']."/relation-to-viewer/is-liked");
 				}
-				
+
 				$content->setDiscussion($discussion);
 				$content->setAttachment($attachmentArr);
 				$content->setComments($commentArray);
 				$content->setLikes($likeArr);
-				
+
 				$content->setQueryString($queryString);
 				$this->activityObject->setContent($content);
 			}

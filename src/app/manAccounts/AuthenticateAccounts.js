@@ -5,13 +5,13 @@ define(['dojo/_base/declare',
 		'dojo/_base/kernel',
 		"dojo/_base/lang",
 		"dojo/DeferredList",
-		
+
 		"dojox/mobile/RoundRectList",
 		"dojox/mobile/EdgeToEdgeList",
 		"dojox/mobile/ListItem",
 		"dojox/mobile/Button",
 		"dojox/mobile/RadioButton",
-		
+
 		'app/util/xhrManager'
 ], function(
 		declare, 
@@ -21,24 +21,24 @@ define(['dojo/_base/declare',
 		kernel, 
 		lang, 
 		DeferredList, 
-		
+
 		RoundRectList, 
 		EdgeToEdgeList,
 		ListItem, 
 		Button, 
 		RadioButton, 
-		
+
 		xhrManager
 ) {
 	return declare([ModuleScrollableView], {						
-		
+
 		buildView: function(){								
 			this.obj = kernel.global.notifications.credObj;
-			
+
 			this.mainList = new RoundRectList({
 				style: "border:none; height: auto"
 			})
-			
+
 			var infoList = new RoundRectList({
 				style: "border:none;margin-bottom:0px"
 			})
@@ -48,12 +48,12 @@ define(['dojo/_base/declare',
 			})
 			infoList.addChild(item);
 			this.mainList.addChild(infoList);
-			
+
 			console.log(this.authCreds);	
 			for(var key in this.authCreds){
 				this.buttonsNitems(key);
 			}
-			
+
 			var item = new ListItem({
 				style: "margin-bottom: -10px; border: none"
 			})
@@ -75,18 +75,18 @@ define(['dojo/_base/declare',
 				})
 			});
 			item.addChild(accountReset);
-				
+
 			this.addChild(this.mainList);
-				
+
 			this.resize();
 		},
 
 		capitalizeFirstLetter: function(string){
 			return string.charAt(0).toUpperCase() + string.slice(1);
 		},
-		
+
 		buttonsNitems: function(param){	
-					
+
 			for(var d = 0; d < this.authCreds[param].length; d++){
 				var list = new EdgeToEdgeList({
 					style: "height: auto; border-bottom: 1px solid #e7e7de; border-left: 2px solid " + this.authCreds[param][d].color
@@ -154,7 +154,7 @@ define(['dojo/_base/declare',
 								style: "border: none;margin-left:5px;margin-bottom: 5px; overflow: visible; margin-top: 5px",
 								variableHeight: true
 							})
-						
+
 							var logDiv = domConstruct.create("div", {style: "float:left"});
 							var refresh = new Button({
 								style: "width:60px;height:50px;margin-right:10px; display: block",
@@ -180,10 +180,10 @@ define(['dojo/_base/declare',
 							var nameDiv = domConstruct.create("div", {style: "margin-top:20px", innerHTML: this.authCreds[param][d].name});
 							userDiv.appendChild(pictureDiv);
 							userDiv.appendChild(nameDiv);
-							
+
 							item.domNode.appendChild(logDiv);
 							item.domNode.appendChild(userDiv);
-							
+
 							list.addChild(item);
 							list.addChild(statusItem);	
 						}
@@ -202,7 +202,7 @@ define(['dojo/_base/declare',
 								}, param, d)
 							});
 							var twitDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/twitterLoginHalfSize.png>"});
-							
+
 							var logDiv = domConstruct.create("div", {style: "float:left"});
 							refresh.domNode.appendChild(twitDiv);
 							var logout = new Button({
@@ -231,7 +231,7 @@ define(['dojo/_base/declare',
 								style: "border: none;margin-left:5px;margin-bottom: 5px; margin-top: 5px",
 								variableHeight: true
 							})
-							
+
 							var refresh = new Button({
 								style: "width:60px;height:50px;margin-right:10px; display: block",
 								onClick: lang.hitch(this, function(param, d){
@@ -239,7 +239,7 @@ define(['dojo/_base/declare',
 								}, param, d)
 							});
 							var twitDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/twitterLoginHalfSize.png>"});
-							
+
 							var logDiv = domConstruct.create("div", {style: "float:left"});
 							refresh.domNode.appendChild(twitDiv);
 							var logout = new Button({
@@ -257,10 +257,10 @@ define(['dojo/_base/declare',
 							var nameDiv = domConstruct.create("div", {style: "margin-top:20px", innerHTML: this.authCreds[param][d].name});
 							userDiv.appendChild(pictureDiv);
 							userDiv.appendChild(nameDiv);
-							
+
 							item.domNode.appendChild(logDiv);
 							item.domNode.appendChild(userDiv);
-							
+
 							list.addChild(item);
 							list.addChild(statusItem);
 						}
@@ -307,7 +307,7 @@ define(['dojo/_base/declare',
 								style: "border: none;margin-left:5px;margin-bottom: 5px; margin-top: 5px",
 								variableHeight: true
 							})
-							
+
 							var logDiv = domConstruct.create("div", {style: "float:left"});
 							var refresh = new Button({
 								style: "width:60px;height:50px;margin-right:10px",
@@ -332,10 +332,10 @@ define(['dojo/_base/declare',
 							var nameDiv = domConstruct.create("div", {style: "margin-top:20px", innerHTML: this.authCreds[param][d].name});
 							userDiv.appendChild(pictureDiv);
 							userDiv.appendChild(nameDiv);
-							
+
 							item.domNode.appendChild(logDiv);
 							item.domNode.appendChild(userDiv);
-							
+
 							list.addChild(item);
 							list.addChild(statusItem);
 						}
@@ -386,7 +386,7 @@ define(['dojo/_base/declare',
 									variableHeight: true
 								})
 							}
-							
+
 							var logDiv = domConstruct.create("div", {style: "float:left"});
 							var refresh = new Button({
 								style: "width:60px;height:50px;margin-right:10px; display: block",
@@ -411,10 +411,10 @@ define(['dojo/_base/declare',
 							var nameDiv = domConstruct.create("div", {style: "margin-top:20px", innerHTML: this.authCreds[param][d].name});
 							userDiv.appendChild(pictureDiv);
 							userDiv.appendChild(nameDiv);
-							
+
 							item.domNode.appendChild(logDiv);
 							item.domNode.appendChild(userDiv);
-							
+
 							list.addChild(item);
 							list.addChild(statusItem);
 						}
@@ -426,12 +426,12 @@ define(['dojo/_base/declare',
 
 		activate: function(e){
 			topic.publish("/dojo-mama/updateSubNav", {back: '/manAccounts', title: "Manage your accounts"} );
-			
+
 			if(this.mainList){
 				this.mainList.destroy();
 				this.mainList = null;
 			}
-			
+
 			this.arrayList = [];
 			this.arrayList.push(this.getAuthCreds().then(lang.hitch(this, function(obj){
 				this.authCreds = obj;
