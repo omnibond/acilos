@@ -1,1 +1,0 @@
-{"appKey":"vlNZBq6LOLypiC9zDyCdwQ","appSecret":"WAjZ5m1pnj7Me9ZaTXNBU5SEh8JSfbo3qtvbHMhLjSY","redirectURL":"http:\/\/richardgpc.clemson.edu\/oAuth\/twitterAccess.php","oauthToken":"EfA1HABW92LNTL5XtBi9CCDGBfvUgYP3KU8HHPpWk","oauthSecret":"hYUmcBFX4GmZLVvVHxyPD3HIbFXI9fDGP2pc7VqAI","color":""}
