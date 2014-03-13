@@ -223,7 +223,7 @@ define(['dojo/_base/declare',
 			this.services = new ServiceSelector({
 				checkBoxes: def,
 				//vertical: "true",
-				style: "margin-top: -6px; margin-left: -11px; margin-bottom: 6px"
+				style: "margin-top:-2px;margin-left: -11px; margin-bottom: 10px"
 				
 				//checkBoxes: {"Instagram": false, "Facebook" : false, "Linkedin": false, "Twitter" : false}
 				//radioButtons: {"Instagram": false, "Facebook" : false, "Linkedin": false, "Twitter" : false}

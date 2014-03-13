@@ -207,7 +207,7 @@ define(['dojo/_base/declare',
 			this.services = new ServiceSelector({
 				checkBoxes: {"Instagram": true, "Facebook" : true, "Twitter" : true, "Linkedin": true},
 				//vertical: "true",
-				style: "margin-top: -7px; margin-bottom: -5px; margin-left: -11px"
+				style: "margin-top: -2px; margin-bottom: -1px; margin-left: -11px"
 			})
 			
 			listItem.addChild(this.services);
