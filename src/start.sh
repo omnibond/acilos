@@ -132,7 +132,7 @@ php composer.phar install
 
 echo "setting $running and 775 on all files"
 
-chown -R $running:$running *
-chmod -R 775 *
+chown -R $USER:$running *
+chmod -R 777 *
 	
 echo "Finshed, The app is ready to go"

@@ -45,7 +45,7 @@ function getFilterObject($filterObj, $from){
 		$strArr = explode("+", $filterObj['services']);
 		for($x = 0; $x < count($strArr); $x++){
 			if($strArr[$x] != ""){
-				$temp = array("term" => array("service" => $strArr[$x]));
+				$temp = array("term" => array("service" => strtolower($strArr[$x])));
 				array_push($searchArr['filter']['bool']['should'], $temp);
 			}
 		}
@@ -55,17 +55,7 @@ function getFilterObject($filterObj, $from){
 		$strArr = explode("+", $filterObj['keys']);
 		for($x = 0; $x < count($strArr); $x++){
 			if($strArr[$x] != ""){
-				$temp = array("term" => array("content.story.text" => strtolower($strArr[$x])));
-				array_push($searchArr['filter']['bool']['should'], $temp);
-				$temp = array("term" => array("content.text.text" => strtolower($strArr[$x])));
-				array_push($searchArr['filter']['bool']['should'], $temp);
-				$temp = array("term" => array("content.discussion.summary.text" => strtolower($strArr[$x])));
-				array_push($searchArr['filter']['bool']['should'], $temp);
-				$temp = array("term" => array("content.discussion.title.text" => strtolower($strArr[$x])));
-				array_push($searchArr['filter']['bool']['should'], $temp);
-				$temp = array("term" => array("content.title" => strtolower($strArr[$x])));
-				array_push($searchArr['filter']['bool']['should'], $temp);
-				$temp = array("term" => array("content.status.text" => strtolower($strArr[$x])));
+				$temp = array("term" => array("content.queryString" =>  strtolower($strArr[$x])));
 				array_push($searchArr['filter']['bool']['should'], $temp);
 			}
 		}

@@ -47,6 +47,8 @@ define(['dojo/_base/declare',
 			
 				saveFeedList: lang.hitch(this, this.saveFeedList),
 				checkSpecificFeedList: lang.hitch(this, this.checkSpecificFeedList),
+				setStarred: lang.hitch(this, this.setStarred),
+				setStarredClient: lang.hitch(this, this.setStarredClient),
 				checkFeedName: lang.hitch(this, this.checkFeedName)
 			});
 			this.EditFeedView = new EditFeedView({
@@ -56,6 +58,8 @@ define(['dojo/_base/declare',
 				getSpecificFeedList: lang.hitch(this, this.getSpecificFeedList),
 				checkSpecificFeedList: lang.hitch(this, this.checkSpecificFeedList),
 				checkFeedName: lang.hitch(this, this.checkFeedName),
+				setStarred: lang.hitch(this, this.setStarred),
+				setStarredClient: lang.hitch(this, this.setStarredClient),
 				overwriteFeedList: lang.hitch(this, this.overwriteFeedList)
 				//checkFeedName: lang.hitch(this, this.checkFeedName)		replace this with my new overwriteFeedName function
 			});
@@ -118,6 +122,19 @@ define(['dojo/_base/declare',
 		overwriteFeedList: function(feedObj, feedName){
 			params = {feedObj: feedObj, feedName: feedName};
 			return xhrManager.send('POST', 'rest/v1.0/FeedData/overwriteFeedList', params);
+		},
+		
+		setStarred: function(status, id){
+			var params = {status: status, id: id};
+			console.log("setStarred: ", params);
+			return xhrManager.send('POST', 'rest/v1.0/Favorites/setStarred', params);
+		},
+		
+		setStarredClient: function(status, id){
+			var params = {status: status, id: id};
+			console.log('Module.js: ', params);
+			//debugger;
+			return xhrManager.send('POST', 'rest/v1.0/FeedData/setStarredClient', params);
 		}
 	})
 });

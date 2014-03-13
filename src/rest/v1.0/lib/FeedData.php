@@ -47,9 +47,13 @@ class FeedData{
 
 	public function getFeedList(){
 		$fileName = "../../app/util/feedList.json";
-
-		$feedList = file_get_contents($fileName);
-
+		
+		try{
+			$feedList = file_get_contents($fileName);
+		}catch (Exception $e){
+			$feedList = json_encode(array());
+			file_put_contents($fileName, $feedList);
+		}
 		return $feedList;
 	}
 
