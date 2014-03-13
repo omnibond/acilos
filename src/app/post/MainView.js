@@ -68,7 +68,7 @@ define(['dojo/_base/declare',
 			for(var key in this.authObj){
 				if(key !== "login"){
 					for(var d = 0; d < this.authObj[key].length; d++){					
-						var divHolder = domConstruct.create("span", {});
+						var divHolder = domConstruct.create("span", {style: "float: left"});
 						if(key == "twitter"){
 							var checkBox = new CheckBox({
 								leToken: this.authObj[key][d]['accessToken']+":"+this.authObj[key][d]['accessSecret']+":"+this.authObj[key][d]['key']+":"+this.authObj[key][d]['secret'],
@@ -119,7 +119,9 @@ define(['dojo/_base/declare',
 						}
 						
 						divHolder.appendChild(checkBox.domNode);
-						var picSpan = domConstruct.create("span", {innerHTML: '<img src='+serviceUrl+' height=20px width=20px/>', style: "margin-left: 5px; height: 20px; width: 20px"});
+						//For profile picture
+						/*var picSpan = domConstruct.create("span", {innerHTML: '<img src='+serviceUrl+' height=20px width=20px/>', style: "margin-left: 10px; margin-right: 5px; height: 20px; width: 20px"});*/
+						var picSpan = domConstruct.create("span", {innerHTML: '<img src='+serviceUrl+'>', style: "margin-left: 10px; margin-right: 5px; height: 20px; width: 24px"});
 						var div = domConstruct.create("span", {style:"margin-right: 5px; float:left;border-left:5px solid "+this.authObj[key][d]['color'], innerHTML: this.authObj[key][d]['name']});
 						div.appendChild(picSpan);
 						div.appendChild(divHolder);

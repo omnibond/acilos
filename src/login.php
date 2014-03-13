@@ -117,6 +117,7 @@
 			"dojo/_base/window",
 			'dojo/dom-construct',
 			'dojo/topic',
+			'dojo/has',
 			'dojo/_base/kernel',
 			"dojo/_base/lang",
 			"dojo/DeferredList",
@@ -136,6 +137,7 @@
 			domWindow,
 			domConstruct, 
 			topic, 
+			has,
 			kernel, 
 			lang, 
 			DeferredList, 
@@ -172,18 +174,36 @@
 						}
 					}).then(lang.hitch(this, function(serviceCreds){
 						var leftPane = new Container({
+							style: "text-align: center"
 						});
 						domWindow.body().appendChild(leftPane.domNode);
+
+						//console.log("android is: ", has('android'));
+						//console.log("iphone is: ", has('iphone'));
+
+						//domWindow.body().style.overflow = "scroll";
+
+						if(has('iphone') != undefined){
+							domWindow.body().style.overflow = "scroll";
+						}
+
+						if(has('android' < 4)){
+							domWindow.body().style.overflow = "scroll";
+						}
 						
 						var item = new ListItem({
-							label: "Welcome to FeedRider",
+							label: "Welcome to",
 							style: "border:none;height:35px;font-size;font-family:arial;font-size:20px"
-						})
+						});
 						leftPane.addChild(item);
+
+						var acilosLoginDiv = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/acilosLoginLogo.png>"});
+						leftPane.domNode.appendChild(acilosLoginDiv);
+
 						var item = new ListItem({
 							label: "Please Log In To Continue",
 							style: "border:none;height:35px;font-size;font-family:arial;font-size:20px"
-						})
+						});
 						leftPane.addChild(item);
 						
 						if('<?php echo $errorCode; ?>' != ""){
@@ -193,7 +213,7 @@
 									variableHeight: true,
 									label: "Failed to authenticate user",
 									style: "border:none;height:30px;padding-left:4px"
-								})
+								});
 								var button = new Button({
 									label: "Change accounts",
 									style: "margin-left:5px;margin-bottom:10px",
@@ -201,7 +221,7 @@
 										var newWin = window.open();
 										newWin.location = "https://"+'<?php echo $errorService; ?>'+".com";
 									}
-								})
+								});
 								leftPane.addChild(item);
 								leftPane.addChild(button);
 							}
@@ -209,7 +229,7 @@
 								var item = new ListItem({
 									label: "Error logging in to " + '<?php echo $errorService; ?>',
 									style: "background: #e7e7de"
-								})
+								});
 								leftPane.addChild(item);
 							}						
 						}
@@ -223,11 +243,10 @@
 				if(param == "facebook"){
 					var button = new Button({
 						"class": "loginLogoButton",
-						style: "width:160px;height:160px;margin:5px",
 						onClick: lang.hitch(null, function(){
 							window.location = serviceCreds[param][0]["auth"];
 						},serviceCreds, param)
-					})
+					});
 					var faceDiv = domConstruct.create("div", {"class":"loginLogo", innerHTML: "<img src=app/resources/img/facebookLogin.png>"});
 					button.domNode.appendChild(faceDiv);
 					div.appendChild(button.domNode);
@@ -235,11 +254,10 @@
 				if(param == "twitter"){
 					var button = new Button({
 						"class": "loginLogoButton",
-						style: "width:160px;height:160px;margin:5px",
 						onClick: lang.hitch(null, function(){
 							window.location = serviceCreds[param][0]["auth"];
 						},serviceCreds, param)
-					})
+					});
 					var twitDiv = domConstruct.create("div", {"class":"loginLogo", innerHTML: "<img src=app/resources/img/twitterLogin.png>"});
 					button.domNode.appendChild(twitDiv);
 					div.appendChild(button.domNode);	
@@ -247,11 +265,10 @@
 				if(param == "instagram"){
 					var button = new Button({
 						"class": "loginLogoButton",
-						style: "width:160px;height:160px;margin:5px",
 						onClick: lang.hitch(null, function(){
 							window.location = serviceCreds[param][0]["auth"];
 						},serviceCreds, param)
-					})
+					});
 					var instaDiv = domConstruct.create("div", {"class":"loginLogo", innerHTML: "<img src=app/resources/img/instagramLogin.png>"});
 					button.domNode.appendChild(instaDiv);
 					div.appendChild(button.domNode);
@@ -259,11 +276,10 @@
 				if(param == "linkedin"){
 					var button = new Button({
 						"class": "loginLogoButton",
-						style: "width:160px;height:160px;margin:5px",
 						onClick: lang.hitch(null, function(){
 							window.location = serviceCreds[param][0]["auth"];
 						},serviceCreds, param)
-					})
+					});
 					var linkDiv = domConstruct.create("div", {"class":"loginLogo", innerHTML: "<img src=app/resources/img/linkedinLogin.png>"});
 					button.domNode.appendChild(linkDiv);
 					div.appendChild(button.domNode);						
@@ -272,7 +288,7 @@
 			},
 			
 			loginPart = function(leftPane, serviceCreds){
-				var mainDiv = domConstruct.create("div", {});
+				var mainDiv = domConstruct.create("div", {style: "width: 304px; margin-top: auto; margin-left: auto; margin-right: auto; margin-bottom: auto"});
 				
 				if(	'<?php echo $fCook; ?>' != "true" &&
 					'<?php echo $tCook; ?>' != "true" &&
@@ -282,23 +298,23 @@
 					var item = new ListItem({
 						label: "You have not authorized any apps yet",
 						style: "border:none"
-					})
+					});
 					leftPane.addChild(item);
 				}else{
 					if('<?php echo $fCook; ?>' == "true"){
-						var div1 = domConstruct.create("div", {});
-						loginButtonsNitems("facebook", div1, serviceCreds, mainDiv);
+						var div1 = domConstruct.create("span", {});
+						loginButtonsNitems("twitter", div1, serviceCreds, mainDiv);
 					}
 					if('<?php echo $tCook; ?>' == "true"){
-						var div2 = domConstruct.create("div", {});
-						loginButtonsNitems("twitter", div2, serviceCreds, mainDiv);
+						var div2 = domConstruct.create("span", {});
+						loginButtonsNitems("facebook", div2, serviceCreds, mainDiv);
 					}
 					if('<?php echo $lCook; ?>' == "true"){
-						var div3 = domConstruct.create("div", {});
+						var div3 = domConstruct.create("span", {});
 						loginButtonsNitems("linkedin", div3, serviceCreds, mainDiv);
 					}
 					if('<?php echo $iCook; ?>' == "true"){
-						var div4 = domConstruct.create("div", {});
+						var div4 = domConstruct.create("span", {});
 						loginButtonsNitems("instagram", div4, serviceCreds, mainDiv);
 					}
 				}

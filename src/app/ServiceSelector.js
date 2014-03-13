@@ -194,16 +194,16 @@ define([
 						})
 
 						if(key == "Facebook"){
-							var myIcon = domConstruct.create("div", {style:"float:left", innerHTML: "<img src=app/resources/img/Facebook_logo.png>"});
+							var myIcon = domConstruct.create("div", {"class": "serviceSelectorIconDivClass", innerHTML: "<img src=app/resources/img/Facebook_logo.png>"});
 						}
 						if(key == "Twitter"){
-							var myIcon = domConstruct.create("div", {style:"float:left", innerHTML: "<img src=app/resources/img/Twitter_logo_blue_small.png>"});
+							var myIcon = domConstruct.create("div", {"class": "serviceSelectorIconDivClass", innerHTML: "<img src=app/resources/img/Twitter_logo_blue_small.png>"});
 						}
 						if(key == "Instagram"){
-							var myIcon = domConstruct.create("div", {style:"float:left", innerHTML: "<img src=app/resources/img/Instagram_logo.png>"});
+							var myIcon = domConstruct.create("div", {"class": "serviceSelectorIconDivClass", innerHTML: "<img src=app/resources/img/Instagram_logo.png>"});
 						}
 						if(key == "Linkedin"){
-							var myIcon = domConstruct.create("div", {style:"float:left", innerHTML: "<img src=app/resources/img/LinkedIn_logo.png>"});
+							var myIcon = domConstruct.create("div", {"class": "serviceSelectorIconDivClass", innerHTML: "<img src=app/resources/img/LinkedIn_logo.png>"});
 						}
 						
 						var div = domConstruct.create("span", {style: "float:left"});
