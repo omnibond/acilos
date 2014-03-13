@@ -3982,8 +3982,8 @@ select {
   color: #000000;
 }
 .loginLogo {
-  height: 80px;
-  width: 80px;
+  height: 70px;
+  width: 70px;
   margin-right: auto;
   margin-left: auto;
   margin-top: auto;
@@ -3991,6 +3991,13 @@ select {
 }
 .loginLogoButton {
   background: white;
+  width: 140px;
+  height: 140px;
+  margin: 5px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  border: 1px solid #e7e7de;
 }
 .accountLogo {
   height: 40px;
@@ -4065,4 +4072,12 @@ select {
 }
 .adDivClass {
   display: inline-block;
+}
+.serviceSelectorIconDivClass {
+  float: left;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+.loginScrollClass {
+  overflow: scroll;
 }
