@@ -153,7 +153,7 @@ define({
 			selectedPrimaryNavItem: "settings"
 		},
 		manContacts: {
-			title: 'Manage your contacts',
+			title: 'Merge your contacts',
 			moduleId: 'app/manContacts/Module',
 			selectedPrimaryNavItem: "settings"
 		},

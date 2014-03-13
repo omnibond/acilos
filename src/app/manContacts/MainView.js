@@ -199,7 +199,7 @@ define(['dojo/_base/declare',
 		},
 		
 		activate: function(e){
-			topic.publish("/dojo-mama/updateSubNav", {back: '/settings', title: "Select a contact to manage"} );
+			topic.publish("/dojo-mama/updateSubNav", {back: '/settings', title: "Select a contact to merge"} );
 			
 			//if(this.built == false){
 			//	this.built = true;
