@@ -56,11 +56,6 @@ define(['dojo/_base/declare',
 			console.log("ownedUsers", ownedUsers);
 			var listGroup = [];
 		
-			var noTabList = new RoundRectList({
-				style: "margin: 0px 0px 0px 0px"
-			});
-			
-			var serviceStr = '';
 			var services = {};
 			var serviceObj = {};
 				
@@ -79,62 +74,30 @@ define(['dojo/_base/declare',
 				serviceObj[k[f]] = "";
 			}
 			
-			//get rid of spaces at begining and end of string
-			serviceStr = serviceStr.replace(/^\s\s*/, "").replace(/\s\s*$/, '');
+			var item = domConstruct.create("div", {innerHTML: mainUser.data.displayName, "class": "divListItem"});
+
+			this.mainList.domNode.appendChild(item);
+
+			var iconDiv = domConstruct.create("div", {style: "float:right", "class": "serviceIcon2"});
 			
-			if(this.getSize(services) == 0){
-				serviceStr = "None";
-			}
-
-			var displayName = new ListItem({
-				variableHeight: true,
-				label: mainUser.data.displayName,
-				style: "border-bottom:none;padding: 0px 5px"
-			})
-			noTabList.addChild(displayName);
-
 			if('Facebook' in serviceObj){
 				var divFacebook = domConstruct.create("div", {style:"float:right", innerHTML: "<img src=app/resources/img/Facebook_logo.png>"});
-				displayName.domNode.appendChild(divFacebook);
+				iconDiv.appendChild(divFacebook);
 			}
 			if('Twitter' in serviceObj){
 				var divTwitter = domConstruct.create("div", {style:"float:right", innerHTML: "<img src=app/resources/img/Twitter_logo_blue_small.png>"});
-				displayName.domNode.appendChild(divTwitter);
+				iconDiv.appendChild(divTwitter);
 			}
 			if('Instagram' in serviceObj){
 				var divInstagram = domConstruct.create("div", {style:"float:right", innerHTML: "<img src=app/resources/img/Instagram_logo.png>"});
-				displayName.domNode.appendChild(divInstagram);
+				iconDiv.appendChild(divInstagram);
 			}
 			if('Linkedin' in serviceObj){
 				var divLinkedIn = domConstruct.create("div", {style:"float:right", innerHTML: "<img src=app/resources/img/LinkedIn_logo.png>"});
-				displayName.domNode.appendChild(divLinkedIn);
+				iconDiv.appendChild(divLinkedIn);
 			}
 
-			if(mainUser.data.about.description != ""){
-				var description = new ListItem({
-					variableHeight: true,
-					label: "Bio: " + mainUser.data.about.description,
-					style: "border-bottom:none;padding: 0px 5px"				
-				})
-				noTabList.addChild(description);
-			}
-			if(mainUser.data.about.location != ""){
-				var location = new ListItem({
-					variableHeight: true,
-					label: "Location: " + mainUser.data.about.location,
-					style: "border-bottom:none;padding: 0px 5px"
-				})
-				noTabList.addChild(location);
-			}
-			var link = new ListItem({
-				variableHeight: true,
-				label: "Link: " + '<a href="' + mainUser.data.about.link +'" target="_blank">Website</a>',
-				style: "border:none;padding: 0px 5px"
-			})
-			noTabList.addChild(link);
-			
-			
-			this.mainList.addChild(noTabList);
+			item.appendChild(iconDiv);
 
 			//OWNED PEOPLE NOW
 			
@@ -142,8 +105,7 @@ define(['dojo/_base/declare',
 				var oneTabList = new RoundRectList({
 					style: "margin: 0px 0px 0px 20px"
 				});
-				
-				var serviceStr = '';
+
 				var serviceObj = {};
 				var services = {};
 					
@@ -162,69 +124,31 @@ define(['dojo/_base/declare',
 					serviceObj[k[f]] = "";
 				}
 				
-				//get rid of spaces at begining and end of string
-				serviceStr = serviceStr.replace(/^\s\s*/, "").replace(/\s\s*$/, '');
+				var item = domConstruct.create("div", {innerHTML: ownedUsers[y].data.displayName, "class": "divListItem"});
+
+				oneTabList.domNode.appendChild(item);
+
+				var iconDiv = domConstruct.create("div", {style: "float:right", "class": "serviceIcon2"});
 				
-				if(this.getSize(services) == 0){
-					serviceStr = "None";
-				}
-
-				/*if(serviceStr == ''){
-					serviceStr = "None";
-				}*/
-
-				var displayName = new ListItem({
-					variableHeight: true,
-					label: ownedUsers[y].data.displayName,
-					/*rightText: serviceStr,*/
-					style: "border-bottom:none;padding: 0px 5px"
-				})
-				oneTabList.addChild(displayName);
-
-				if(ownedUsers[y].data.service == "Facebook"){
+				if('Facebook' in serviceObj){
 					var divFacebook = domConstruct.create("div", {style:"float:right", innerHTML: "<img src=app/resources/img/Facebook_logo.png>"});
-					displayName.domNode.appendChild(divFacebook);
+					iconDiv.appendChild(divFacebook);
 				}
-				if(ownedUsers[y].data.service == "Twitter"){
+				if('Twitter' in serviceObj){
 					var divTwitter = domConstruct.create("div", {style:"float:right", innerHTML: "<img src=app/resources/img/Twitter_logo_blue_small.png>"});
-					displayName.domNode.appendChild(divTwitter);
+					iconDiv.appendChild(divTwitter);
 				}
-				if(ownedUsers[y].data.service == "Instagram"){
+				if('Instagram' in serviceObj){
 					var divInstagram = domConstruct.create("div", {style:"float:right", innerHTML: "<img src=app/resources/img/Instagram_logo.png>"});
-					displayName.domNode.appendChild(divInstagram);
+					iconDiv.appendChild(divInstagram);
 				}
-				if(ownedUsers[y].data.service == "LinkedIn"){
+				if('Linkedin' in serviceObj){
 					var divLinkedIn = domConstruct.create("div", {style:"float:right", innerHTML: "<img src=app/resources/img/LinkedIn_logo.png>"});
-					displayName.domNode.appendChild(divLinkedIn);
+					iconDiv.appendChild(divLinkedIn);
 				}
 
-				if(ownedUsers[y].data.about.description != ""){
-					var description = new ListItem({
-						variableHeight: true,
-						label: "Bio: " + ownedUsers[y].data.about.description,
-						style: "border-bottom:none;padding: 0px 5px"				
-					})
-					oneTabList.addChild(description);
-				}
-				if(ownedUsers[y].data.about.location != ""){
-					var location = new ListItem({
-						variableHeight: true,
-						label: "Location: " + ownedUsers[y].data.about.location,
-						style: "border-bottom:none;padding: 0px 5px"
-					})
-					oneTabList.addChild(location);
-				}
-				var link = new ListItem({
-					variableHeight: true,
-					label: "Link: " + '<a href="' + ownedUsers[y].data.about.link +'" target="_blank">Website</a>',
-					style: "padding: 0px 5px;border-bottom:none"
-				})
-				oneTabList.addChild(link);
+				item.appendChild(iconDiv);
 				
-				var unMergeItem = new ListItem({
-					variableHeight: true,
-					style: "border:none;padding: 0px 0px"
-				})
 				var div = domConstruct.create("div", {style:"layout:left"});
 				var unMergeButton = new ToolBarButton({
 					label: "UnMerge",
@@ -233,9 +157,7 @@ define(['dojo/_base/declare',
 						this.unMergeFriends([mainUser.data.id, ownedUsers[y].data.id]).then(lang.hitch(this, this.activate));
 					}, ownedUsers, y)
 				});
-				div.appendChild(unMergeButton.domNode);
-				unMergeItem.domNode.appendChild(div);
-				oneTabList.addChild(unMergeItem);
+				item.appendChild(unMergeButton.domNode);
 				
 				this.mainList.addChild(oneTabList);
 			}
@@ -248,7 +170,7 @@ define(['dojo/_base/declare',
 			var item = new ListItem({
 				variableHeight: true,
 				clickable: true,
-				label: "Merge with contacts",
+				label: "Merge with other contacts",
 				style: "border: 1px solid",
 				onClick: lang.hitch(this, function(){
 					this.router.go("/MergeView/" + this.users[0]);
@@ -258,7 +180,7 @@ define(['dojo/_base/declare',
 		},
 		
 		activate: function(e){
-			topic.publish("/dojo-mama/updateSubNav", {back: '/manContacts', title: "View contact data"} );
+			topic.publish("/dojo-mama/updateSubNav", {back: '/manContacts', title: "View contact"} );
 			
 			if(this.mainList){
 				this.mainList.destroyRecursive();
