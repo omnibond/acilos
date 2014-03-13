@@ -156,7 +156,8 @@ define(['dojo/_base/declare',
 			
 			this.startDate = new TextBox({
 				placeHolder: "mm/dd/yyyy",
-				style: "width:80px; margin-right: 10px"
+				style: "width:80px; margin-right: 10px",
+				"class": "roundTextBoxClass"
 			})
 
 			this.startDate.on("click", lang.hitch(this, function(){
@@ -214,7 +215,9 @@ define(['dojo/_base/declare',
 
 			this.endDate = new TextBox({
 				placeHolder: "mm/dd/yyyy",
-				style: "width:80px"
+				style: "width:80px",
+				"class": "roundTextBoxClass"
+				
 			})
 
 			this.endDate.on("click", lang.hitch(this, function(){
@@ -256,15 +259,18 @@ define(['dojo/_base/declare',
 			}));
 			
 			this.nameBox = new TextBox({
-				placeHolder: "Feed Name"
+				placeHolder: "Feed Name",
+				"class": "roundTextBoxClass"
 			});
 			
 			this.userBox = new TextBox({
-				placeHolder: "Users"
+				placeHolder: "Users",
+				"class": "roundTextBoxClass"
 			});
 			
 			this.keyBox = new TextBox({
-				placeHolder: "Keywords"
+				placeHolder: "Keywords",
+				"class": "roundTextBoxClass"
 			});
 			
 			this.holderName.addChild(this.nameBox);

@@ -1,6 +1,6 @@
 define(['dojo/_base/declare',
 		'dojo-mama/Module',
-		'app/logout/MainView'		
+		'app/about/MainView'		
 ], function(
 	declare, 
 	Module, 
@@ -10,7 +10,7 @@ define(['dojo/_base/declare',
 		
 		activate: function(){
 			
-			window.location = "login.php?logout=true";
+			window.location = "#/appHelp/AboutView";
 		}
 	})
 });

@@ -12,6 +12,8 @@ define(['dojo/_base/declare',
 	'app/appHelp/ManAccountsHelpView',
 	'app/appHelp/AddAccountsHelpView',
 	'app/appHelp/EditAccountsHelpView',
+	'app/appHelp/AboutView',
+	
 	'app/util/error-utils',
 	'app/util/xhrManager'
 ], function(
@@ -29,6 +31,8 @@ define(['dojo/_base/declare',
 	ManAccountsHelpView,
 	AddAccountsHelpView,
 	EditAccountsHelpView,
+	AboutView,
+	
 	errorUtils, 
 	xhrManager
 ) {
@@ -67,11 +71,17 @@ define(['dojo/_base/declare',
 				editServiceCreds: lang.hitch(this, this.editServiceCreds)
 				
 			});
+			
+			this.AboutView = new AboutView({
+				route: '/AboutView',
+				title: "About Acilos"				
+			});
 
 			this.registerView(this.rootView);
 			this.registerView(this.ManAccountsHelpView);
 			this.registerView(this.AddAccountsHelpView);
 			this.registerView(this.EditAccountsHelpView);
+			this.registerView(this.AboutView);
 		},
 		
 		saveServiceCreds: function(key, secret, redir, color, param){

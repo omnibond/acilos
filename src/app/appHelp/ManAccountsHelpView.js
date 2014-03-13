@@ -323,7 +323,7 @@ define(['dojo/_base/declare',
 		},
 
 		activate: function(e){
-			topic.publish("/dojo-mama/updateSubNav", {back: '/manAccounts', title: "Manage your accounts"} );
+			topic.publish("/dojo-mama/updateSubNav", {back: '/appHelp', title: "Manage your accounts"} );
 			
 			if(this.mainList){
 				this.mainList.destroy();

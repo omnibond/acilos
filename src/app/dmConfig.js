@@ -18,7 +18,8 @@ define({
 		/* secondary links show up in the meta nav secondary: */
 		secondary: [
 			//menu will pop up when there is something here to go into it
-			'notificationManager',
+			//'notificationManager',
+			'aboutManager',
 			'logoutManager'
 		]
 	},
@@ -69,7 +70,7 @@ define({
 		help: {
 			title: 'Help',
 			moduleId: 'dojo-mama/util/ModuleGroup',
-			modules: ['restartDB', 'factoryReset', 'appHelp']
+			modules: ['restartDB', 'appHelp']
 		},
 
 		/* analytics modules */
@@ -178,11 +179,13 @@ define({
 			moduleId: 'app/restartDB/Module',
 			selectedPrimaryNavItem: "help"
 		},
+		/*
 		factoryReset: {
 			title: 'Reset the app to factory defaults',
 			moduleId: 'app/factoryReset/Module',
 			selectedPrimaryNavItem: "help"
 		},
+		*/
 		appHelp: {
 			title: 'Get help with the app',
 			moduleId: 'app/appHelp/Module',
@@ -215,6 +218,11 @@ define({
 		logoutManager: {
 			title: 'Logout',
 			moduleId: 'app/logout/Module',
+			linkText: true
+		},
+		aboutManager: {
+			title: "About",
+			moduleId: 'app/about/Module',
 			linkText: true
 		}
 		

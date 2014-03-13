@@ -163,7 +163,8 @@ define(['dojo/_base/declare',
 				"class": "roundTextBoxClass",
 				placeHolder: "mm/dd/yyyy",
 				value: date,
-				style: "width:80px; margin-right: 10px"
+				style: "width:80px; margin-right: 10px",
+				"class": "roundTextBoxClass"
 			})
 
 			this.startDate.on("click", lang.hitch(this, function(){
@@ -241,7 +242,8 @@ define(['dojo/_base/declare',
 				"class": "roundTextBoxClass",
 				placeHolder: "mm/dd/yyyy",
 				value: date,
-				style: "width:80px"
+				style: "width:80px",
+				"class": "roundTextBoxClass"
 			})
 
 			this.endDate.on("click", lang.hitch(this, function(){
@@ -286,19 +288,22 @@ define(['dojo/_base/declare',
 				"class": "disabledTextBoxClass",
 				placeHolder: "Feed Name",
 				value: obj['name'],
-				disabled: true
+				disabled: true,
+				"class": "roundTextBoxClass"
 			})
 			
 			this.userBox = new TextBox({
 				"class": "roundTextBoxClass",
 				placeHolder: "Users",
-				value: obj['users'].replace(/\+/gi," ")
+				value: obj['users'].replace(/\+/gi," "),
+				"class": "roundTextBoxClass"
 			})
 			
 			this.keyBox = new TextBox({
 				"class": "roundTextBoxClass",
 				placeHolder: "Keywords",
-				value: obj['keys'].replace(/\+/gi,' ')
+				value: obj['keys'].replace(/\+/gi,' '),
+				"class": "roundTextBoxClass"
 			})
 			
 			this.holderName.addChild(this.nameBox);
