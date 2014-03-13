@@ -76,7 +76,7 @@ define([
 	){
 		return declare("DataObjFeedListView",[ModuleScrollableView], {			
 			activate: function() {				
-				topic.publish("/dojo-mama/updateSubNav", {back: '/help', title: "Adding Accounts Help"} );
+				topic.publish("/dojo-mama/updateSubNav", {back: '/appHelp', title: "Adding Accounts Help"} );
 
 				if(this.mainList){
 					this.mainList.destroyRecursive();
