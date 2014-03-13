@@ -428,6 +428,7 @@ nbproject/
 #svn
 .svn
 
+nodes/
 serviceCreds.json
 twitterClientInfo.txt
 linkedinStep1.txt
