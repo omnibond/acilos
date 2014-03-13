@@ -99,10 +99,21 @@ define([
 						this.router.go("/EditAccountsHelpView");
 					})
 				});
+				
+				this.aboutListItem = new ListItem({
+					label: "About Acilos",
+					"class": "helpListItemClass",
+					clickable: true,
+					noArrow: true,
+					onClick: lang.hitch(this, function(){
+						this.router.go("/AboutView");
+					})
+				});
 
 				this.mainList.addChild(this.manageAccountsListItem);
 				this.mainList.addChild(this.addAccountsListItem);
 				this.mainList.addChild(this.editAccountsListItem);
+				this.mainList.addChild(this.aboutListItem);
 				this.addChild(this.mainList);
 			},
 			
