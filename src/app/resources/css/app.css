@@ -4078,6 +4078,16 @@ select {
   margin-right: 5px;
   margin-left: 5px;
 }
-.loginScrollClass {
-  overflow: scroll;
+.credentialListItem {
+  width: 304px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  border-left: none;
+  border-right: none;
+  height: auto;
+}
+.credentialTextBox {
+  width: 150px;
 }
