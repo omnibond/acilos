@@ -594,12 +594,36 @@ Class Post{
 }
 
 function postFilesHandler($obj){
-	$date = $obj['date'];
-	$time = $obj['time'];
-	$file = $obj['file'];
-	$fileType = $obj['fileType'];
-	$tokenArr = $obj['tokenArr'];
-	$msg = $obj['msg'];
+	if(isset($obj['date'])){
+		$date = $obj['date'];
+	}else{
+		$date = "?";
+	}
+	if(isset($obj['time'])){
+		$time = $obj['time'];
+	}else{
+		$time = "?";
+	}
+	if(isset($obj['file'])){
+		$file = $obj['file'];
+	}else{
+		$file = "?";
+	}
+	if(isset($obj['fileType'])){
+		$fileType = $obj['fileType'];
+	}else{
+		$fileType = "?";
+	}
+	if(isset($obj['tokenArr'])){
+		$tokenArr = $obj['tokenArr'];
+	}else{
+		$tokenArr = "?";
+	}
+	if(isset($obj['msg'])){
+		$msg = $obj['msg'];
+	}else{
+		$msg = "?";
+	}
 
 	$msg = str_replace(" ", "+", $msg);
 
@@ -632,7 +656,98 @@ function postFilesHandler($obj){
 
 	$server = $_SERVER['HTTP_REFERER'];
 
-	$command = "php" . " $path" .  " $file" .  " $fileType" .  " $tokenArr" . " $msg" . " $server";
+	foreach($tokenArr as $key => $value){
+		switch($key){
+			case "facebook": 
+				for($x = 0; $x < count($tokenArr[$key]); $x++){
+					$leStuff = explode(":", $tokenArr[$key][$x]);
+
+					if(isset($leStuff[0])){
+						$access_token = $leStuff[0];
+					}
+					if(isset($leStuff[1])){
+						$app_id = $leStuff[1];
+					}
+					if(isset($leStuff[2])){
+						$user_id = $leStuff[2];
+					}
+
+					$service = "facebook";
+
+					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $access_token" . " $app_id" . " $user_id";
+
+					$atCommand = "echo" . " \"$command\"" . " |" . " at" . " $time" . " $date";
+
+					$atCommand = "$atCommand";
+
+					print_r($atCommand); ?><br/><?php
+
+					exec($atCommand);
+				}
+			break;
+
+			case "twitter": 
+				for($x = 0; $x < count($tokenArr[$key]); $x++){
+					$leStuff = explode(":", $tokenArr[$key][$x]);
+
+					if(isset($leStuff[0])){
+						//accessToken
+						$access_token = $leStuff[0];
+					}
+					if(isset($leStuff[1])){
+						//accessSecret
+						$access_secret = $leStuff[1];
+					}
+					if(isset($leStuff[2])){
+						//key
+						$appKey = $leStuff[2];
+					}
+					if(isset($leStuff[3])){
+						//secret
+						$appSecret = $leStuff[3];
+					}
+
+					$service = "twitter";
+
+					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $access_token" . " $access_secret" . " $appKey" . " $appSecret";
+
+					$atCommand = "echo" . " \"$command\"" . " |" . " at" . " $time" . " $date";
+
+					$atCommand = "$atCommand";
+
+					print_r($atCommand); ?><br/><?php
+
+					exec($atCommand);
+				}
+			break;
+
+			case "linkedin": 
+				for($x = 0; $x < count($tokenArr[$key]); $x++){
+					if(isset($tokenArr[$key][$x])){
+						$access_token = $tokenArr[$key][$x];
+					}
+
+					$service = "linkedin";
+
+					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $access_token";
+
+					$atCommand = "echo" . " \"$command\"" . " |" . " at" . " $time" . " $date";
+
+					$atCommand = "$atCommand";
+
+					print_r($atCommand); ?><br/><?php
+
+					exec($atCommand);
+				}
+			break;
+
+			case "instagram": 
+				//Can't post to instagram without permission
+			break;
+		}
+	}
+
+	/*$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server";
 
 	$atCommand = "echo" . " \"$command\"" . " |" . " at" . " $time" . " $date";
 
@@ -642,7 +757,9 @@ function postFilesHandler($obj){
 
 	print_r($atCommand);
 
-	exec($atCommand);
+	$result = exec($atCommand);
+
+	print_r($result);*/
 
 	return json_encode(array("success" => "true"));
 }
