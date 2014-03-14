@@ -40,7 +40,7 @@ define(['dojo/_base/declare',
 		},
 
 		runAtCommand: function(date, time, file, fileType, tokenArr, msg){
-			params = {date: date, time: time, file: file, fileType: fileType, service: tokenArr, msg: msg};
+			params = {date: date, time: time, file: file, fileType: fileType, tokenArr: tokenArr, msg: msg};
 			return xhrManager.send('POST', 'rest/v1.0/Post/runAtCommand', params);
 		},
 		
@@ -48,5 +48,5 @@ define(['dojo/_base/declare',
 			params = {};
 			return xhrManager.send('POST', 'rest/v1.0/Credentials/getServiceCreds', params);
 		}
-	})
+	});
 });

@@ -572,7 +572,7 @@ function postFilesHandler($obj){
 	$time = $obj['time'];
 	$file = $obj['file'];
 	$fileType = $obj['fileType'];
-	$service = $obj['service'];
+	$tokenArr = $obj['tokenArr'];
 	$msg = $obj['msg'];
 
 	$msg = str_replace(" ", "+", $msg);
@@ -606,7 +606,7 @@ function postFilesHandler($obj){
 
 	$server = $_SERVER['HTTP_REFERER'];
 
-	$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server";
+	$command = "php" . " $path" .  " $file" .  " $fileType" .  " $tokenArr" . " $msg" . " $server";
 
 	$atCommand = "echo" . " \"$command\"" . " |" . " at" . " $time" . " $date";
 

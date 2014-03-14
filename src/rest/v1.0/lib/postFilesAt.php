@@ -19,9 +19,9 @@ require_once('../../oAuth/twitteroauth/twitteroauth.php');
 		$fileType = "";
 	}
 	if(isset($argv[3])){
-		$service = $argv[3];
+		$tokenArr = $argv[3];
 	}else{
-		$service = "";
+		$tokenArr = "";
 	}
 	if(isset($argv[4])){
 		$msg = $argv[4];
@@ -34,8 +34,209 @@ require_once('../../oAuth/twitteroauth/twitteroauth.php');
 	}else{
 		$server = "";
 	}
+
+	foreach($tokenArr as $key => $value){
+		switch($key){
+			case "facebook":
+				for($x = 0; $x < count($tokenArr[$key]); $x++){
+					//print_r($tokenArr[$key][$x]);
+					$leStuff = explode(":", $tokenArr[$key][$x]);
+					//print_r($leStuff);
+					if(isset($leStuff[0])){
+						$access_token = $leStuff[0];
+					}
+					if(isset($leStuff[1])){
+						$app_id = $leStuff[1];
+					}
+					if(isset($leStuff[2])){
+						$user_id = $leStuff[2];
+					}
+
+					$photoURL = 'https://graph.facebook.com/me/photos?access_token='.$access_token;
+
+					$statusURL = 'https://graph.facebook.com/me/feed';
+
+					if($fileName == ""){
+						$url = $statusURL;
+					}else{
+						$url = $photoURL;
+					}
+
+					$ch = curl_init($url);
+
+					$returnArr = array();
+
+					$params = array();
+
+					if(isset($fileName) && $fileName != ""){
+						$path = $thing . "app/post/tmpUpload/" . $fileName;
+						$params = array(
+							"message" => $msg,
+							"source" => "@" . $path
+						);
+					}else{
+						$params = array(
+							"message" => $msg,
+							'access_token' => $access_token
+						);
+					}
+
+					curl_setopt($ch, CURLOPT_POST, 1);
+					curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+					$response = curl_exec($ch);
+					curl_close($ch);
+
+					//print_r($response);
+									
+					$res = json_decode($response, true);
+
+					if(isset($res['error'])){
+						$returnArr['Facebook'] = array("success" => 'false', "msg" => $res['error']['message']);
+					}else{
+						$returnArr['Facebook'] = array("success" => 'true', "msg" => $res['id']);
+					}
+				}
+
+				break;
+			case "twitter":
+				for($x = 0; $x < count($tokenArr[$key]); $x++){
+					$leStuff = explode(":", $tokenArr[$key][$x]);
+					if(isset($leStuff[0])){
+						//accessToken
+						$access_token = $leStuff[0];
+					}
+					if(isset($leStuff[1])){
+						//accessSecret
+						$access_secret = $leStuff[1];
+					}
+					if(isset($leStuff[2])){
+						//key
+						$appKey = $leStuff[2];
+					}
+					if(isset($leStuff[3])){
+						//secret
+						$appSecret = $leStuff[3];
+					}
+
+					$path = $thing . "app/post/tmpUpload/" . $fileName;
+
+					$connection = new TwitterOAuth($appKey, $appSecret, $access_token, $access_secret);
+
+					if($fileName != ""){
+						$url = 'statuses/update_with_media';
+						$stuff = array('status' => $msg, "media[]" => "@"."{$path}");
+					}else{
+						$url = 'statuses/update';
+						$stuff = array('status' => $msg);
+					}
+
+					$status = $connection->upload($url, $stuff);
+
+					//print_r($status);
+
+					if(isset($status->errors[0]->message)){
+						global $returnArray;
+						$returnArray['twitterFailure'] =  "Your message could not be posted. Twitter said: " . $status->errors[0]->message;
+					}else{
+						global $returnArray;
+						$returnArray['twitterSuccess'] =  "Your Twitter message was posted successfully";
+					}
+				}
+
+				break;
+			case "instagram":
+				//do stuff
+				break;
+			case "linkedin":
+				for($x = 0; $x < count($tokenArr[$key]); $x++){
+					if(isset($tokenArr[$key][$x])){
+						$access_token = $tokenArr[$key][$x];
+					}
+
+					/*$url = 'https://api.linkedin.com/v1/people/~:(id,first-name,last-name,site-standard-profile-request)?format=json&oauth2_access_token=' . $access_token;
+					$ch = curl_init($url);
+					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+					curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  //to suppress the curl output 
+					$result = curl_exec($ch);
+					curl_close ($ch);
+
+					$result = json_decode($result, true);
+
+					print_r($result);
+
+					$profileLink = $result['siteStandardProfileRequest']['url'];*/
+
+					$headerOptions = array(
+						"Content-Type: text/xml;charset=utf-8"
+					);
+
+					$imageURL = $server . 'app/post/tmpUpload/' . $fileName;
+					
+					$title = "Title";
+					$shareXML = "<share>
+						<comment>Test Comment Linkedin</comment>
+						<content>
+							<title>".$msg."</title>
+							<submitted-url>".$imageURL."</submitted-url>
+							<submitted-image-url>".$imageURL."</submitted-image-url>
+						</content>
+						<visibility>
+							<code>anyone</code>
+						</visibility>
+						</share>";
+
+					$shareUrl = 'https://api.linkedin.com/v1/people/~/shares?oauth2_access_token='.$access_token;
+
+					$wallXML = "<activity>
+						<content-type>linkedin-html</content-type>
+							<body>
+								".$msg."
+							</body>
+						</activity>";
+
+					$wallUrl = 'https://api.linkedin.com/v1/people/~/person-activities?oauth2_access_token='. $access_token;
+
+					if($fileName == ""){
+						$url = $wallUrl;
+						$xml = $wallXML;
+					}else{
+						$url = $shareUrl;
+						$xml = $shareXML;
+					}
+
+					$ch2 = curl_init($url);
+					curl_setopt($ch2, CURLOPT_POST, 1);
+					curl_setopt($ch2, CURLOPT_POSTFIELDS, $xml);
+					curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+					curl_setopt($ch2, CURLOPT_HTTPHEADER, $headerOptions);
+					$response = curl_exec($ch2);
+					$code = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
+
+					curl_close($ch2);
+					
+					if(isset($code)){
+						if($code == "201"){
+							$returnArray['linkedinSuccess'] = "Your LinkedIn message was posted successfully";
+						}else{
+							$returnArray['linkedinFailure'] = "Your LinkedIn message could not be posted";
+						}
+					}
+				}
+
+				break;
+			default:
+				//woops
+				break;
+		}
+	}
+
+
+
+
 	
-	$methodArr = explode(":", $service);
+	/*$methodArr = explode(":", $service);
 
 	$returnArr = array();
 	
@@ -244,7 +445,7 @@ require_once('../../oAuth/twitteroauth/twitteroauth.php');
 	//get rid of the file after we try and do something with it
 	if(isset($fileName) && $fileName != ""){
 		//unlink("../../app/post/tmpUpload/" . $fileName);
-	}
+	}*/
 //}
 
 //postFilesAt();

@@ -341,7 +341,7 @@ define(['dojo/_base/declare',
 									file = '';
 								}
 								
-								//this.runAtCommand(date, time, file, fileType, tokenArr, msg).then(lang.hitch(this, this.handleResponse));
+								this.runAtCommand(date, time, file, fileType, tokenArr, msg).then(lang.hitch(this, this.handleResponse));
 							}else{
 								console.log("You must select a date first");
 							}
