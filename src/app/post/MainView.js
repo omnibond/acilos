@@ -139,7 +139,9 @@ define(['dojo/_base/declare',
 								if(key == "instagram"){
 									serviceUrl = "app/resources/img/Instagram_logo.png";
 								}
-							}
+							}if(key == "instagram"){
+								break;
+							}	
 							
 							divHolder.appendChild(checkBox.domNode);
 							//For profile picture
