@@ -28,9 +28,8 @@ define(['dojo/_base/declare',
 		'dojo/_base/lang',
 
 		'app/manAccounts/MainView',
-		'app/manAccounts/AddAccounts',
-		'app/manAccounts/EditAccounts',
 		'app/manAccounts/AuthenticateAccounts',
+		'app/manAccounts/AddEditAccountsView',
 
 		'app/util/xhrManager'
 ], function(
@@ -39,9 +38,8 @@ define(['dojo/_base/declare',
 	lang,
 
 	MainView,
-	AddAccounts,
-	EditAccounts,
 	AuthAccounts,
+	AddEditAccountsView,
 
 	xhrManager
 ){
@@ -53,20 +51,13 @@ define(['dojo/_base/declare',
 			this.rootView = new MainView({
 				route: '/'	
 			});
+			
+			this.AddEditAccountsView = new AddEditAccountsView({
+				route: '/AddEditAccountsView',
+				title: "Add/Edit new Accounts",
 
-			this.AddAccounts = new AddAccounts({
-				route: '/AddAccounts',
-				title: "Add new Accounts",
-
-				getServiceCreds: lang.hitch(this, this.getServiceCreds),
 				saveServiceCreds: lang.hitch(this, this.saveServiceCreds),			
-				getDomain: lang.hitch(this, this.getDomain)			
-			});
-
-			this.EditAccounts = new EditAccounts({
-				route: '/EditAccounts',
-				title: "Edit new Accounts",
-
+				getDomain: lang.hitch(this, this.getDomain),
 				getServiceCreds: lang.hitch(this, this.getServiceCreds),
 				editServiceCreds: lang.hitch(this, this.editServiceCreds),
 				deleteServiceCred: lang.hitch(this, this.deleteServiceCred)				
@@ -83,8 +74,7 @@ define(['dojo/_base/declare',
 			});
 
 			this.registerView(this.rootView);
-			this.registerView(this.AddAccounts);
-			this.registerView(this.EditAccounts);
+			this.registerView(this.AddEditAccountsView);
 			this.registerView(this.AuthAccounts);
 		},
 
@@ -105,8 +95,8 @@ define(['dojo/_base/declare',
 			return xhrManager.send('POST', 'rest/v1.0/Database/saveServiceCredsObj', params);
 		},
 
-		editServiceCreds: function(key, secret, redir, color, param){
-			var params = {key: key, secret: secret, redir: redir, color: color, param: param};
+		editServiceCreds: function(key, color, param){
+			var params = {key: key, color: color, param: param};
 			return xhrManager.send('POST', 'rest/v1.0/Database/editServiceCreds', params);
 		},
 

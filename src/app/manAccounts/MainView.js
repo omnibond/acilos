@@ -105,29 +105,18 @@ define([
 					})
 				});
 				
-				this.addAccounts = new ListItem({
-					label: "Add Accounts",
+				this.addEditAccounts = new ListItem({
+					label: "Add/Edit Accounts",
 					"class": "helpListItemClass",
 					clickable: true,
 					noArrow: true,
 					onClick: lang.hitch(this, function(){
-						this.router.go("/AddAccounts");
-					})
-				});
-				
-				this.editAccounts = new ListItem({
-					label: "Edit Accounts",
-					"class": "helpListItemClass",
-					clickable: true,
-					noArrow: true,
-					onClick: lang.hitch(this, function(){
-						this.router.go("/EditAccounts");
+						this.router.go("/AddEditAccountsView");
 					})
 				});
 
 				this.mainList.addChild(this.authAccounts);
-				this.mainList.addChild(this.addAccounts);
-				this.mainList.addChild(this.editAccounts);
+				this.mainList.addChild(this.addEditAccounts);
 				this.addChild(this.mainList);
 			},
 			
