@@ -48,7 +48,14 @@ function getFilterObject($filterObj, $from){
 		"from" => $from,
 		"size" => $size,
 		"query" => array(
-			'match_all' => array()
+			'bool' => array(
+				"should" => array(
+					#array push each search term inside this array
+				),
+				"must" => array(
+					#array push each search term inside this array
+				)
+			)
 		),
 		"filter" => array(
 			"bool" => array(
@@ -72,7 +79,7 @@ function getFilterObject($filterObj, $from){
 		for($x = 0; $x < count($strArr); $x++){
 			if($strArr[$x] != ""){
 				$temp = array("term" => array("service" => strtolower($strArr[$x])));
-				array_push($searchArr['filter']['bool']['should'], $temp);
+				array_push($searchArr['query']['bool']['should'], $temp);
 			}
 		}
 	}
