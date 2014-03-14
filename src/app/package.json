@@ -1,32 +1,26 @@
 {
-	"name": "my.Clemson",
+	"name": "acilos",
 	"version": "0.0.3",
-	"description": "my.Clemson -- Everything Clemson. Everywhere.",
-	"homepage": "https://my.clemson.edu",
-	"bugs": "mailto:mobile-admin@lists.clemson.edu",
-	"keywords": ["JavaScript", "Dojo", "Mobile", "Responsive", "Mama"],
+	"description": "acilos -- Private Social Valet",
+	"homepage": "https://www.acilos.com",
+	"bugs": "mailto:rgillette@omnibond.com",
+	"keywords": ["JavaScript", "Dojo", "Mobile", "Feed", "Social", "Media", "Mama"],
 	"maintainers": [{
-		"name": "Matt Chambers",
-		"email": "chambe5@clemson.edu"
+		"name": "Richard Gillette",
+		"email": "rgillette@omnibond.com"
 	},{
-		"name": "Dave Lee",
-		"email": "drlee@clemson.edu"
-	},{
-		"name": "Dan Lewis",
-		"email": "jdanl@clemson.edu"
-	},{
-		"name": "Nick Watts",
-		"email": "watts4@clemson.edu"
+		"name": "Aaron Crawford",
+		"email": "aaron@omnibond.com"
 	}],
 	"contributors": [{
-		"name": "Doug Dawson",
-		"email": "dawson3@clemson.edu"
+		"name": "Richard Gillette",
+		"email": "rgillette@omnibond.com"
 	},{
-		"name": "Josh Groppe",
-		"email": "charle8@g.clemson.edu"
+		"name": "Aaron Crawford",
+		"email": "aaron@omnibond.com"
 	},{
-		"name": "David Kerr",
-		"email": "kerr8@clemson.edu"
+		"name": "Craig Baker",
+		"email": "cbaker@clemson.edu"
 	}],
 	"main": "main",
 	"dependencies": {
@@ -34,12 +28,13 @@
 		"dijit": "1.9.0",
 		"dojox": "1.9.0",
 		"util": "1.9.0",
+		"elasticsearch": "1.9",
 		"dojo-mama": "0.0.3"
 	},
 	"licenses": [
 		{
-			"type": "",
-			"url": ""
+			"type": "lgpl",
+			"url": "https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html"
 		}
 	],
 	"dojoBuild": "package.js"
