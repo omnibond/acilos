@@ -141,7 +141,7 @@ define([
 				}
 				for(w = 0; w < obj[param].length; w++){
 					var item = new ListItem({
-						style: "height:auto;border-left:none;right:none"
+						style: "height:auto;border-left:5px solid " +obj[param][w].color+ ";right:none"
 					});
 					
 					if(param == "instagram"){
@@ -166,10 +166,12 @@ define([
 						var auth = new Button({
 							label: "Authenticate",
 							onClick: lang.hitch(this, function(){
-								this.router.goToAbsoluteRoute('#/manAccounts/AuthAccounts');
+								window.location = obj[param][w]["auth"];
 							})
 						})
 						nameDiv.appendChild(auth.domNode);
+						var msgDiv = domConstruct.create("div", {style:"overflow:visible;", innerHTML: "Make sure the correct account is logged in on this browser before authenticating."});
+						nameDiv.appendChild(msgDiv);
 					}
 					
 					obj[param][w].param = param;
@@ -185,17 +187,16 @@ define([
 					var colorPicker = new ColorPicker({});
 					var y = "";
 					var color = new Button({
-						label: "Color",
-						style: "background:" + obj[param][w]['color']
+						label: "Color"
 					})
 					whiteoutDiv = domConstruct.create("div", {"class": "whiteoutDiv"});
-					color.onClick = function(){
+					color.onClick = lang.hitch(this, function(item){
 						var dialog = new Dialog({
 							title: "Choose a color",
 							draggable: false,
 							"class": "helpDijitDialog",
 							onHide: function(){
-								domStyle.set(color.domNode, "background", colorPicker.get('value'));
+								domStyle.set(item.domNode, "border-left", "5px solid" + colorPicker.get('value'));
 								if(whiteoutDiv){
 									document.body.removeChild(whiteoutDiv);
 									whiteoutDiv = null;
@@ -207,7 +208,7 @@ define([
 						dialog.show();					
 						document.body.appendChild(whiteoutDiv);
 						
-					}				
+					}, item)		
 					
 					var key = obj[param][w].key
 					var save = new Button({
@@ -302,14 +303,6 @@ define([
 				var holderDiv = domConstruct.create("div", {});
 				holderDiv.appendChild(key.domNode);
 				textBoxDiv.appendChild(holderDiv);
-				var auth = new Button({
-					label: "Authenticate",
-					style: "display:none",
-					onClick: lang.hitch(this, function(){
-						this.router.goToAbsoluteRoute('#/manAccounts/AuthAccounts');
-					})
-				})
-				holderDiv.appendChild(auth.domNode);
 					
 				holderDiv = domConstruct.create("div", {});
 				holderDiv.appendChild(secret.domNode);
@@ -320,13 +313,13 @@ define([
 					label: "Color"
 				})
 				whiteoutDiv = domConstruct.create("div", {"class": "whiteoutDiv"});
-				color.onClick = function(){
+				color.onClick = lang.hitch(this, function(item){
 					var dialog = new Dialog({
 						title: "Choose a color",
 						draggable: false,
 						"class": "helpDijitDialog",
 						onHide: function(){
-							domStyle.set(color.domNode, "background", colorPicker.get('value'));
+							domStyle.set(item.domNode, "border-left", "5px solid " +colorPicker.get('value'));
 							if(whiteoutDiv){
 								document.body.removeChild(whiteoutDiv);
 								this.whiteoutDiv = null;
@@ -338,7 +331,7 @@ define([
 					dialog.show();					
 					document.body.appendChild(whiteoutDiv);
 					
-				}				
+				}, item);	
 				holderDiv.appendChild(color.domNode);
 				colorDiv = domConstruct.create("span", {style: "height:20px;width:20px", id:"picker"});
 				holderDiv.appendChild(colorDiv);				
@@ -348,8 +341,7 @@ define([
 				textBoxDiv.appendChild(holderDiv);
 				var add = new Button({
 					label: "Add",
-					onClick: lang.hitch(this, function(key, secret, redirect, colorPicker, param, color, auth){
-						domStyle.set(auth.domNode, "display", "inline");
+					onClick: lang.hitch(this, function(key, secret, redirect, colorPicker, param, color){
 						
 						this.errorItem.set("label", "Saving...");
 						
@@ -381,7 +373,7 @@ define([
 							domStyle.set(color.domNode, "background-image", "linear-gradient(to bottom, #ffffff 0%, #e2e2e2 100%)");
 							this.activate();
 						}
-					},key, secret, redirect, colorPicker, param, color, auth)
+					},key, secret, redirect, colorPicker, param, color)
 				})
 				holderDiv.appendChild(add.domNode);
 				
