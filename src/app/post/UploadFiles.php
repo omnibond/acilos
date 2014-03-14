@@ -1,6 +1,13 @@
 <?php
 	 $target = "tmpUpload/";
-	 $target = $target . basename( $_FILES['file']['name']) ;
+	 
+	 if(if_dir($target)){
+		$target = $target . "/" . basename( $_FILES['file']['name']) ;
+	 }else{
+		mkdir($target);
+		$target = $target . "/" . basename( $_FILES['file']['name']) ;
+	 }
+	
 	 $ok=1;
 	
 	$uploaded_size = $_FILES['file']['size'];
