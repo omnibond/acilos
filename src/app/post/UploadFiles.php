@@ -1,7 +1,7 @@
 <?php
 	 $target = "tmpUpload/";
 	 
-	 if(if_dir($target)){
+	 if(is_dir($target)){
 		$target = $target . "/" . basename( $_FILES['file']['name']) ;
 	 }else{
 		mkdir($target);
