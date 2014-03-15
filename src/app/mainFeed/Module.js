@@ -35,9 +35,28 @@ define(['dojo/_base/declare',
 	
 	'app/mainFeed/FeedView',
 	"app/mainFeed/SearchView",
+	"app/mainFeed/BlastView",
+	
 	'app/util/error-utils',
 	'app/util/xhrManager'
-], function(declare, kernel, domConstruct, lang, topic, Module, EdgeToEdgeList, FeedView, SearchView, errorUtils, xhrManager) {
+], function(
+	declare, 
+	kernel, 
+	domConstruct, 
+	lang, 
+	topic, 
+	
+	Module, 
+	
+	EdgeToEdgeList, 
+	
+	FeedView, 
+	SearchView, 
+	BlastView,
+	
+	errorUtils, 
+	xhrManager
+) {
 	return declare([Module], {
 		
 		postCreate: function(){
@@ -51,6 +70,14 @@ define(['dojo/_base/declare',
 			if(!kernel.global.feedPosition){
 				kernel.global.feedPosition = {};
 			}
+			
+			this.blastView = new BlastView({
+				route: '/BlastView',
+
+				sendPostFile: lang.hitch(this, this.sendPostFile),
+				runAtCommand: lang.hitch(this, this.runAtCommand),
+				getServiceCreds: lang.hitch(this, this.getServiceCreds)
+			});
 			
 			this.searchView = new SearchView({
 				route: '/searchView',
@@ -71,6 +98,7 @@ define(['dojo/_base/declare',
 				feedName: "All Feed Data",
 
 				searchView: this.searchView,
+				blastView: this.blastView,
 				updateFeedData: lang.hitch(this, this.updateFeedData),
 				getFeedData: lang.hitch(this, this.getFeedData),
 				checkForNewItems: lang.hitch(this, this.checkForNewItems),
@@ -80,6 +108,7 @@ define(['dojo/_base/declare',
 				manualRefresh: lang.hitch(this, this.manualRefresh),
 				sendSearchString: lang.hitch(this, this.sendSearchString)
 			});
+			this.registerView(this.blastView);
 			this.registerView(this.searchView);
 			this.registerView(this.rootView);
 		},
@@ -133,6 +162,22 @@ define(['dojo/_base/declare',
 		sendSearchString: function(searchString){
 			var params = {searchString: searchString};
 			return xhrManager.send('GET', 'rest/v1.0/Search/sendSearchString', params);
+		},
+		
+		sendPostFile: function(file, fileType, tokenArr, msg){
+			params = {file: file, fileType: fileType, tokenArr: tokenArr, msg: msg};
+			console.log("Module.js: Params for sendPostFile are: ", params);
+			return xhrManager.send('POST', 'rest/v1.0/Post/postFiles', params);
+		},
+
+		runAtCommand: function(date, time, file, fileType, tokenArr, msg){
+			params = {date: date, time: time, file: file, fileType: fileType, tokenArr: tokenArr, msg: msg};
+			return xhrManager.send('POST', 'rest/v1.0/Post/runAtCommand', params);
+		},
+		
+		getServiceCreds: function(){
+			params = {};
+			return xhrManager.send('POST', 'rest/v1.0/Credentials/getServiceCreds', params);
 		}
 	});
 });

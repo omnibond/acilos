@@ -289,6 +289,7 @@ define([
 				//class still works
 				this.list = new SearchScroller({
 					feedName: searchString,
+					blastView: this.blastView,
 					getFeedData: lang.hitch(this, this.sendSearchString),
 					getNextGroup: lang.hitch(this, this.getNextGroup),
 					setStarred: lang.hitch(this, this.setStarred),
@@ -322,6 +323,7 @@ define([
 				this.list = new FeedScroller({
 					feedName: this.feedName,
 					postAddArray: this.postAddArray,
+					blastView: this.blastView,
 					getNextGroup: lang.hitch(this, this.getNextGroup),
 					getFeedData: lang.hitch(this, this.getFeedData),
 					setStarred: lang.hitch(this, this.setStarred),
@@ -383,6 +385,7 @@ define([
 									var item = new twitterFeedItem({
 										data: data,
 										counter: j,
+										blastView: this.blastView,
 										getDate: this.list.getDate,
 										parseSpecialChars: this.list.parseSpecialChars,
 										isURL: this.list.isURL,
@@ -394,6 +397,7 @@ define([
 									var item = new instagramFeedItem({
 										data: data,
 										counter: j,
+										blastView: this.blastView,
 										getDate: this.list.getDate,
 										parseSpecialChars: this.list.parseSpecialChars,
 										isURL: this.list.isURL,
@@ -405,6 +409,7 @@ define([
 									var item = new facebookFeedItem({
 										data: data,
 										counter: j,
+										blastView: this.blastView,
 										getDate: this.list.getDate,
 										parseSpecialChars: this.list.parseSpecialChars,
 										isURL: this.list.isURL,
@@ -416,6 +421,7 @@ define([
 									var item = new linkedinFeedItem({
 										data: data,
 										counter: j,
+										blastView: this.blastView,
 										getDate: this.list.getDate,
 										parseSpecialChars: this.list.parseSpecialChars,
 										isURL: this.list.isURL,

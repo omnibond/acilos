@@ -572,7 +572,9 @@ define([
 					}, likeDiv, source);
 					
 					blastDiv.onclick = lang.hitch(this, function(blastDiv, source){
-						console.log("source: ", source); //function
+						console.log("source: ", source);
+						this.blastView.blastObj = source;
+						window.location = "#/mainFeed/BlastView"
 					}, blastDiv, source);
 					
 					this.commentHolder.domNode.appendChild(commentDiv);

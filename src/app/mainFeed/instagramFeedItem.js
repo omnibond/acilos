@@ -369,13 +369,9 @@ define([
 				}, likeDiv, id);
 				
 				blastDiv.onclick = lang.hitch(this, function(blastDiv, source){
-					var photo = source.content.postLink;
-					var text = source.content.text.text;
-					var service = "instagram";
-					
-					//this.blast(text, photo, service).then(lang.hitch(this, function(){
-					//	window.location = "#/post"
-					//}));
+					console.log("source: ", source);
+					this.blastView.blastObj = source;
+					window.location = "#/mainFeed/BlastView"
 				}, blastDiv, source);
 				
 				this.commentHolder.domNode.appendChild(commentDiv);

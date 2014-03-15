@@ -126,7 +126,6 @@ define([
 			},
 			
 			buildView: function(){
-				
 				var data = this.feedDataObj;
 				
 				if(data.error){
@@ -167,6 +166,7 @@ define([
 										starClientObj: this.starClientObj,
 										getDate: this.getDate,
 										authObj: this.authObj,
+										blastView: this.blastView,
 										parseSpecialChars: this.parseSpecialChars,
 										isURL: this.isURL,
 										setStarred: this.setStarred,
@@ -183,6 +183,7 @@ define([
 										starClientObj: this.starClientObj,
 										getDate: this.getDate,
 										authObj: this.authObj,
+										blastView: this.blastView,
 										parseSpecialChars: this.parseSpecialChars,
 										removeEmoji: this.removeEmoji,
 										isURL: this.isURL,
@@ -200,6 +201,7 @@ define([
 										starClientObj: this.starClientObj,
 										getDate: this.getDate,
 										authObj: this.authObj,
+										blastView: this.blastView,
 										parseSpecialChars: this.parseSpecialChars,
 										isURL: this.isURL,
 										setStarred: this.setStarred,
@@ -216,6 +218,7 @@ define([
 										starClientObj: this.starClientObj,
 										getDate: this.getDate,
 										authObj: this.authObj,
+										blastView: this.blastView,
 										parseSpecialChars: this.parseSpecialChars,
 										isURL: this.isURL,
 										setStarred: this.setStarred,
