@@ -1,5 +1,6 @@
 .svn
 
+logs/
 nodes/
 serviceCreds.json
 twitterClientInfo.txt
