@@ -44,7 +44,7 @@
     <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
 
     	<script type="text/javascript" src="http://cf.cdn.inmobi.com/ad/inmobi.js"></script>
-    	<div id="adSlot" style="display: none">
+    	<div id="adSlot" style="display: none" innerHTML = '<div><img src="app/resources/img/AcilosStaticMob_1.png"></div>'>
     	<script type="text/javascript">
         	//this is for setting up the slot and linking it to our account
 		    var inmobi_conf = {
@@ -56,7 +56,7 @@
 				autoRefresh: 20,
 				onError : function(code) {
 					console.log("Arguments are: ", arguments);
-					if(code == "nfr") {
+					if(code == "nfr" || !arguments || arguments == null || arguments == undefined) {
 						document.getElementById('adSlot').innerHTML = '<div><img src="app/resources/img/AcilosStaticMob_1.png"></div>';
 						console.log("Received a no-fill response");
 					}

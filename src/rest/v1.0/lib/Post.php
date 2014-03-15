@@ -188,16 +188,12 @@ Class Post{
 		$varObj = json_decode($var, true);
 		$idFirstPart = $varObj['idFirstPart'];
 		$idSecondPart = $varObj['idSecondPart'];
-
-		$fileToken = "../../oAuth/facebookToken.txt";
-		$file = file_get_contents($fileToken);
-
-		$obj = json_decode($file, true);
+		$access_token = $varObj['accessToken'];
 
 		$likeURL = 'https://graph.facebook.com/' . $idSecondPart . '/likes?access_token';
 			
 		$params = array(
-			'access_token' => $obj['access_token']
+			'access_token' => $access_token
 		);
 			
 		$ch = curl_init($likeURL);
@@ -207,9 +203,15 @@ Class Post{
 
 		$response = curl_exec($ch);
 
+		print_r(json_decode($response), true);
+
 		curl_close($ch);
 
-		return json_encode(array("success" => "Your 'like' was successful."));
+		if($response['success']){
+			return json_encode(array("success" => "Your 'like' was successful."));
+		}else{
+			return json_encode(array("failure" => "An error has occurred"));
+		}	
 	}
 	
 	function sendFaceUnLike(){
@@ -217,20 +219,21 @@ Class Post{
 		$varObj = json_decode($var, true);
 		$idFirstPart = $varObj['idFirstPart'];
 		$idSecondPart = $varObj['idSecondPart'];
+		$access_token = $varObj['accessToken'];
 
-		$fileToken = "../../oAuth/facebookToken.txt";
-		$file = file_get_contents($fileToken);
-
-		$obj = json_decode($file, true);
-
-		$likeURL = 'https://graph.facebook.com/' . $idSecondPart . '/likes?access_token='.$obj['access_token'];
+		$likeURL = 'https://graph.facebook.com/' . $idSecondPart . '/likes?access_token='.$access_token;
 	
 		$ch = curl_init($likeURL);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
 		$response = curl_exec($ch);
+		print_r(json_decode($response), true);
 		curl_close($ch);
 
-		return json_encode(array("success" => "Your 'unlike' was successful."));
+		if($response['success']){
+			return json_encode(array("success" => "Your 'unlike' was successful."));
+		}else{
+			return json_encode(array("failure" => "An error occurred"));
+		}
 	}
 
 	function sendFaceComment(){

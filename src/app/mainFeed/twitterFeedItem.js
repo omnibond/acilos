@@ -153,7 +153,6 @@ define([
 
 				for(var g = 0; g < this.authObj['twitter'].length; g++){
 					if(this.authObj['twitter'][g]['user'] == obj.mainAccountID){
-						console.log(this.authObj['twitter'][g]['color']);
 						this.domNode.style.borderLeft = "5px solid " + this.authObj['twitter'][g]['color'];
 						this.domNode.style.marginBottom = "10px";
 						break;

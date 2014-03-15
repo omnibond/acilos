@@ -4071,7 +4071,7 @@ select {
   width: 100%;
 }
 .adDivClass {
-  display: inline-block;
+  display: inline-block !important;
 }
 .serviceSelectorIconDivClass {
   float: left;
