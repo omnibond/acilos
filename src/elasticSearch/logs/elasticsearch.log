@@ -1,0 +1,12 @@
+[2014-03-13 13:30:01,616][INFO ][node                     ] [Matt Murdock] {0.20.5}[6497]: initializing ...
+[2014-03-13 13:30:01,637][INFO ][plugins                  ] [Matt Murdock] loaded [], sites []
+[2014-03-13 13:30:04,804][INFO ][node                     ] [Matt Murdock] {0.20.5}[6497]: initialized
+[2014-03-13 13:30:04,804][INFO ][node                     ] [Matt Murdock] {0.20.5}[6497]: starting ...
+[2014-03-13 13:30:04,973][INFO ][transport                ] [Matt Murdock] bound_address {inet[/0:0:0:0:0:0:0:0:9300]}, publish_address {inet[/130.127.148.55:9300]}
+[2014-03-13 13:30:05,008][WARN ][discovery.zen.ping.multicast] [Matt Murdock] failed to send multicast ping request: IOException[Operation not permitted]
+[2014-03-13 13:30:06,509][WARN ][discovery.zen.ping.multicast] [Matt Murdock] failed to send multicast ping request: IOException[Operation not permitted]
+[2014-03-13 13:30:08,018][INFO ][cluster.service          ] [Matt Murdock] new_master [Matt Murdock][FtCcdz2OQ5mpkc5ZzX11Vg][inet[/130.127.148.55:9300]], reason: zen-disco-join (elected_as_master)
+[2014-03-13 13:30:08,074][INFO ][discovery                ] [Matt Murdock] elasticsearch/FtCcdz2OQ5mpkc5ZzX11Vg
+[2014-03-13 13:30:08,110][INFO ][http                     ] [Matt Murdock] bound_address {inet[/0:0:0:0:0:0:0:0:9200]}, publish_address {inet[/130.127.148.55:9200]}
+[2014-03-13 13:30:08,111][INFO ][node                     ] [Matt Murdock] {0.20.5}[6497]: started
+[2014-03-13 13:30:09,143][INFO ][gateway                  ] [Matt Murdock] recovered [3] indices into cluster_state
