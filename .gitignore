@@ -1,5 +1,6 @@
 .svn
 
+vendor/
 log/
 logs/
 nodes/
@@ -9,5 +10,5 @@ linkedinStep1.txt
 callClientManager.sh
 callCronManager.sh
 feedList.json
-tmpUploads/
+tmpUpload/
 app.css
