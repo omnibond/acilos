@@ -86,15 +86,20 @@ define([
 
 		baseClass: "mblContentPane",
 
-		sendFaceComment: function(id, comment){
-			var params = {id: id, comment: comment};
+		sendFaceComment: function(id, comment, accessToken){
+			var params = {id: id, comment: comment, accessToken: accessToken};
 			return xhrManager.send('POST', 'rest/v1.0/Post/sendFaceComment', params);
 		},
 
-		sendTwitReply: function(authorUsername, tweetID, message){
-			var params = {authorUsername: authorUsername, tweetID: tweetID, message: message};
+		sendTwitReply: function(authorUsername, tweetID, message, accessToken, accessSecret, appKey, appSecret){
+			var params = {authorUsername: authorUsername, tweetID: tweetID, message: message, accessToken: accessToken, accessSecret: accessSecret, appKey: appKey, appSecret: appSecret};
 			console.log("params are: ", params);
 			return xhrManager.send('POST', 'rest/v1.0/Post/sendTwitReply', params);
+		},
+
+		getServiceCreds: function(){
+			params = {};
+			return xhrManager.send('POST', 'rest/v1.0/Credentials/getServiceCreds', params);
 		},
 
 		buildRendering: function(){
@@ -127,19 +132,33 @@ define([
 						label: "Post!",
 						"class": "postButton",
 						onClick: lang.hitch(this, function(content){
-							console.log("content is", content);
+							this.getServiceCreds().then(lang.hitch(this, function(obj){
+								this.authObj = obj;
+							}));
 
-							/*id = content.id.split("_");
-							id = id[1];*/
+							for(var key in this.authObj){
+								for(var d = 0; d < this.authObj[key].length; d++){
+									if(this.authObj[key][d].accessToken != undefined){
+										if(source.mainAccountID == this.authObj[key][d].user){
+											var accessToken = this.authObj[key][d].accessToken;
 
-							id = content.id;
+											console.log("content is", content);
 
-							var comment = this.commentFacebookBox.get("value");
+											/*id = content.id.split("_");
+											id = id[1];*/
 
-							this.sendFaceComment(id, comment).then(lang.hitch(this, function(obj){
-								console.log("obj is: ", obj);
-							}));	
-							this.commentFacebookBox.set("value", "");
+											id = content.id;
+
+											var comment = this.commentFacebookBox.get("value");
+
+											this.sendFaceComment(id, comment, accessToken).then(lang.hitch(this, function(obj){
+												console.log("obj is: ", obj);
+											}));	
+											this.commentFacebookBox.set("value", "");
+										}
+									}
+								}
+							}
 						},content)
 					});
 					item.addChild(this.commentFacebookBox);
@@ -220,17 +239,35 @@ define([
 						label: "Post",
 						"class": "postButton",
 						onClick: lang.hitch(this, function(){
-							console.log("data is: ", data);
-							console.log("@" + actor.displayName + " message" + " ==in_reply_to_status_id");
+							this.getServiceCreds().then(lang.hitch(this, function(obj){
+								this.authObj = obj;
+							}));
 
-							var tweetID = data.hits.hits[counter]._id.split("-----");
-							tweetID = tweetID[1];
-							var message = this.commentTwitterBox.get("value");
+							for(var key in this.authObj){
+								for(var d = 0; d < this.authObj[key].length; d++){
+									if(this.authObj[key][d].accessToken != undefined){
+										if(source.mainAccountID == this.authObj[key][d].user){
 
-							this.sendTwitReply(actor.displayName, tweetID, message).then(lang.hitch(this, function(obj){
-								console.log("obj is: ", obj);
-							}));		
-							this.commentTwitterBox.set("value", "");
+											var accessToken = this.authObj[key][d].accessToken;
+											var accessSecret = this.authObj[key][d].accessSecret;
+											var appKey = this.authObj[key][d].key;
+											var appSecret = this.authObj[key][d].secret;
+
+											console.log("data is: ", data);
+											console.log("@" + actor.displayName + " message" + " ==in_reply_to_status_id");
+
+											var tweetID = data.hits.hits[counter]._id.split("-----");
+											tweetID = tweetID[1];
+											var message = this.commentTwitterBox.get("value");
+
+											this.sendTwitReply(actor.displayName, tweetID, message, accessToken, accessSecret, appKey, appSecret).then(lang.hitch(this, function(obj){
+												console.log("obj is: ", obj);
+											}));		
+											this.commentTwitterBox.set("value", "");
+										}
+									}
+								}
+							}
 						})
 					});
 					item.addChild(this.commentTwitterBox);

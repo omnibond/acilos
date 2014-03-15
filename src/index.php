@@ -64,6 +64,7 @@
 		    };
 		    //this is to give us a function to get new ads for existing slots
 		    _inmobi.getNewAd(document.getElementById('adSlot'), inmobi_conf);
+		    console.log("adSlot is (from index.php): ", adSlot);
 		</script>
     	</div>
         

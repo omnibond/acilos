@@ -87,13 +87,13 @@ define([
 			variableHeight: true,
 			"class": "feedItemListItemClass",
 			
-			sendLinkedLike: function(id){
-				var params = {id: id};
+			sendLinkedLike: function(id, accessToken){
+				var params = {id: id, accessToken: accessToken};
 				return xhrManager.send('POST', 'rest/v1.0/Post/sendLinkedLike', params);
 			},
 			
-			sendLinkedUnLike: function(id){
-				var params = {id: id};
+			sendLinkedUnLike: function(id, accessToken){
+				var params = {id: id, accessToken: accessToken};
 				return xhrManager.send('POST', 'rest/v1.0/Post/sendLinkedUnLike', params);
 			},
 			
@@ -104,6 +104,11 @@ define([
 			
 			postCreate: function(){
 				this.buildView();
+			},
+
+			getServiceCreds: function(){
+				params = {};
+				return xhrManager.send('POST', 'rest/v1.0/Credentials/getServiceCreds', params);
 			},
 			
 			/*getObjects: function(){
@@ -547,26 +552,41 @@ define([
 					});
 
 					likeDiv.onclick = lang.hitch(this, function(likeDiv, source){
-						if(domClass.contains(likeDiv, "twitterOrangeDiv")){
-							this.likeNum++;
-							domClass.remove(likeDiv, "twitterOrangeDiv");
-							domClass.add(likeDiv, "twitterBlueDiv");
-							likeDiv.innerHTML = "Liked(" + (this.likeNum) + ")";
-							this.setIsLiked(source.id, "true");
-							
-							this.sendLinkedLike(id).then(lang.hitch(this, function(obj){
-								console.log("obj is: ", obj);
-							}));
-						}else{
-							this.likeNum--;
-							domClass.remove(likeDiv, "twitterBlueDiv");
-							domClass.add(likeDiv, "twitterOrangeDiv");
-							likeDiv.innerHTML = "Like(" + (this.likeNum) + ")";
-							this.setIsLiked(source.id, "false");
-							
-							this.sendLinkedUnLike(id).then(lang.hitch(this, function(obj){
-								console.log("obj is: ", obj);
-							}));
+						this.getServiceCreds().then(lang.hitch(this, function(obj){
+							this.authObj = obj;
+						}));
+
+						for(var key in this.authObj){
+							for(var d = 0; d < this.authObj[key].length; d++){
+								if(this.authObj[key][d].accessToken != undefined){
+									if(source.mainAccountID == this.authObj[key][d].user){
+
+										var accessToken = this.authObj[key][d].accessToken;
+
+										if(domClass.contains(likeDiv, "twitterOrangeDiv")){
+											this.likeNum++;
+											domClass.remove(likeDiv, "twitterOrangeDiv");
+											domClass.add(likeDiv, "twitterBlueDiv");
+											likeDiv.innerHTML = "Liked(" + (this.likeNum) + ")";
+											this.setIsLiked(source.id, "true");
+											
+											this.sendLinkedLike(id, accessToken).then(lang.hitch(this, function(obj){
+												console.log("obj is: ", obj);
+											}));
+										}else{
+											this.likeNum--;
+											domClass.remove(likeDiv, "twitterBlueDiv");
+											domClass.add(likeDiv, "twitterOrangeDiv");
+											likeDiv.innerHTML = "Like(" + (this.likeNum) + ")";
+											this.setIsLiked(source.id, "false");
+											
+											this.sendLinkedUnLike(id, accessToken).then(lang.hitch(this, function(obj){
+												console.log("obj is: ", obj);
+											}));
+										}
+									}
+								}
+							}
 						}
 						this.likeCounter++;
 					}, likeDiv, source);

@@ -51,16 +51,12 @@ Class Post{
 		$var = file_get_contents("php://input");
 		$varObj = json_decode($var, true);
 		$id = $varObj['id'];
-
-		$fileToken = "../../oAuth/instaToken.txt";
-		$file = file_get_contents($fileToken);
-
-		$obj = json_decode($file, true);
+		$access_token = $varObj['accessToken'];
 
 		$likeURL =  'https://api.instagram.com/v1/media/'.$id.'/likes';
 			
 		$params = array(
-			'access_token' => $obj['access_token']
+			'access_token' => $access_token
 		);
 			
 		$ch = curl_init($likeURL);
@@ -79,13 +75,9 @@ Class Post{
 		$var = file_get_contents("php://input");
 		$varObj = json_decode($var, true);
 		$id = $varObj['id'];
+		$access_token = $varObj['accessToken'];
 
-		$fileToken = "../../oAuth/instaToken.txt";
-		$file = file_get_contents($fileToken);
-
-		$obj = json_decode($file, true);
-
-		$likeURL = $likeURL =  'https://api.instagram.com/v1/media/'.$id.'/likes?access_token='.$obj['access_token'];
+		$likeURL = $likeURL =  'https://api.instagram.com/v1/media/'.$id.'/likes?access_token='.$access_token;
 	
 		$ch = curl_init($likeURL);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
@@ -99,13 +91,9 @@ Class Post{
 		$var = file_get_contents("php://input");
 		$varObj = json_decode($var, true);
 		$id = $varObj['id'];
+		$access_token = $varObj['accessToken'];
 
-		$fileToken = "../../oAuth/linkedinUserCreds.txt";
-		$file = file_get_contents($fileToken);
-
-		$obj = json_decode($file, true);
-
-		$url = "https://api.linkedin.com/v1/posts/".$id."/relation-to-viewer/is-liked?oauth2_access_token=".$obj['access_token'];
+		$url = "https://api.linkedin.com/v1/posts/".$id."/relation-to-viewer/is-liked?oauth2_access_token=".$access_token;
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_POST, 1);
@@ -121,13 +109,9 @@ Class Post{
 		$var = file_get_contents("php://input");
 		$varObj = json_decode($var, true);
 		$id = $varObj['id'];
+		$access_token = $varObj['accessToken'];
 
-		$fileToken = "../../oAuth/linkedinUserCreds.txt";
-		$file = file_get_contents($fileToken);
-
-		$obj = json_decode($file, true);
-
-		$url = "https://api.linkedin.com/v1/posts/".$id."/relation-to-viewer/is-liked?oauth2_access_token=".$obj['access_token'];
+		$url = "https://api.linkedin.com/v1/posts/".$id."/relation-to-viewer/is-liked?oauth2_access_token=".$access_token;
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_POST, 1);
@@ -143,16 +127,10 @@ Class Post{
 		$var = file_get_contents("php://input");
 		$varObj = json_decode($var, true);
 		$id = $varObj['id'];
-
-		$filename = "../../oAuth/twitterClientInfo.txt";
-		$file = file_get_contents($filename) or die("Cannot open the file: " . $filename);
-		$obj = json_decode($file, true);
-		$oauth_Token = $obj['accessToken'];
-		$oauth_TokenSecret = $obj['oauthSecret'];
-		$consumer_key = $obj['appKey'];
-		$consumer_secret = $obj['appSecret'];
-		$access_token = $obj['accessToken'];
-		$access_secret = $obj['accessSecret'];
+		$oauth_Token = $varObj['accessToken'];
+		$consumer_key = $varObj['appKey'];
+		$consumer_secret = $varObj['appSecret'];
+		$access_secret = $varObj['accessSecret'];
 
 		$connection = new TwitterOAuth($consumer_key, $consumer_secret, $oauth_Token, $access_secret);
 	
@@ -165,16 +143,10 @@ Class Post{
 		$var = file_get_contents("php://input");
 		$varObj = json_decode($var, true);
 		$id = $varObj['id'];
-		
-		$filename = "../../oAuth/twitterClientInfo.txt";
-		$file = file_get_contents($filename) or die("Cannot open the file: " . $filename);
-		$obj = json_decode($file, true);
-		$oauth_Token = $obj['accessToken'];
-		$oauth_TokenSecret = $obj['oauthSecret'];
-		$consumer_key = $obj['appKey'];
-		$consumer_secret = $obj['appSecret'];
-		$access_token = $obj['accessToken'];
-		$access_secret = $obj['accessSecret'];
+		$oauth_Token = $varObj['accessToken'];
+		$consumer_key = $varObj['appKey'];
+		$consumer_secret = $varObj['appSecret'];
+		$access_secret = $varObj['accessSecret'];
 
 		$connection = new TwitterOAuth($consumer_key, $consumer_secret, $oauth_Token, $access_secret);
 	
@@ -242,16 +214,12 @@ Class Post{
 
 		$id = $varObj['id'];
 		$comment = $varObj['comment'];
-
-		$fileToken = "../../oAuth/facebookToken.txt";
-		$file = file_get_contents($fileToken);
-
-		$obj = json_decode($file, true);
+		$access_token = $varObj['accessToken'];
 
 		$commentURL = 'https://graph.facebook.com/' . $id . '/comments';
 
 		$params = array(
-			'access_token' => $obj['access_token'],
+			'access_token' => $access_token,
 			'message' => $comment
 		);
 
@@ -304,15 +272,10 @@ Class Post{
 
 		$message = "@" . $authorUsername . " " . $message;
 
-		$filename = "../../oAuth/twitterClientInfo.txt";
-		$file = file_get_contents($filename) or die("Cannot open the file: " . $filename);
-		$obj = json_decode($file, true);
-		$oauth_Token = $obj['accessToken'];
-		$oauth_TokenSecret = $obj['oauthSecret'];
-		$consumer_key = $obj['appKey'];
-		$consumer_secret = $obj['appSecret'];
-		$access_token = $obj['accessToken'];
-		$access_secret = $obj['accessSecret'];
+		$oauth_Token = $varObj['accessToken'];
+		$consumer_key = $varObj['appKey'];
+		$consumer_secret = $varObj['appSecret'];
+		$access_secret = $varObj['accessSecret'];
 
 		$path = $thing."app/post/tmpUpload/" . $fileName;
 	
@@ -350,15 +313,10 @@ Class Post{
 		$varObj = json_decode($var, true);
 		$tweetID = $varObj['tweetID'];
 
-		$filename = "../../oAuth/twitterClientInfo.txt";
-		$file = file_get_contents($filename) or die("Cannot open the file: " . $filename);
-		$obj = json_decode($file, true);
-		$oauth_Token = $obj['accessToken'];
-		$oauth_TokenSecret = $obj['oauthSecret'];
-		$consumer_key = $obj['appKey'];
-		$consumer_secret = $obj['appSecret'];
-		$access_token = $obj['accessToken'];
-		$access_secret = $obj['accessSecret'];
+		$oauth_Token = $varObj['accessToken'];
+		$consumer_key = $varObj['appKey'];
+		$consumer_secret = $varObj['appSecret'];
+		$access_secret = $varObj['accessSecret'];
 
 		$connection = new TwitterOAuth($consumer_key, $consumer_secret, $oauth_Token, $access_secret);
 

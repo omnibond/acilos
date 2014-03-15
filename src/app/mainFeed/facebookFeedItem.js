@@ -360,8 +360,18 @@ define([
 						});
 					}
 					*/
+
 					if(obj.content.to.length > 0){
-						this.servPub.innerHTML = '<span><a href="' + obj.actor.url +'" target="_blank">'+obj.actor.displayName+'</a></span>' + " " + "posted to " + '<span><a href="' + obj.content.to[0].name +'" target="_blank">' + "'s wall via " + '<span><a href="' + obj.postLink +'" target="_blank">'+obj.service+'</a></span>';
+						var toLinkURL = obj.id;
+						
+						toLinkURL = toLinkURL.split("-----");
+						toLinkURL = toLinkURL[1].split("_");
+						toLinkURL = toLinkURL[0];
+
+						toLinkURL = "https://www.facebook.com/" + toLinkURL;
+						console.log("toLinkURL is: ", toLinkURL);
+
+						this.servPub.innerHTML = '<span><a href="' + obj.actor.url +'" target="_blank">'+obj.actor.displayName+'</a></span>' + " " + "posted to " + '<span><a href="' + toLinkURL +'" target="_blank">'+obj.content.to[0].name+'</a></span>' + "'s wall " + " via " + '<span><a href="' + obj.postLink +'" target="_blank">'+obj.service+'</a></span>';
 
 						var string =  this.parseSpecialChars(obj.content.text.text);
 						this.textContent = new ListItem({
