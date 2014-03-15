@@ -35,7 +35,8 @@ define(['dojo/_base/declare',
 		'app/feeds/CreateFeedView',
 		'app/feeds/DeleteFeed',
 		'app/feeds/EditFeed',
-		'app/feeds/EditFeedView'
+		'app/feeds/EditFeedView',
+		'app/mainFeed/BlastView'
 ], function(
 	declare, 
 	Module, 
@@ -49,7 +50,8 @@ define(['dojo/_base/declare',
 	CreateFeedView, 
 	DeleteFeed, 
 	EditFeed, 
-	EditFeedView
+	EditFeedView,
+	BlastView
 ) {
 	return declare([Module], {
 		
@@ -61,15 +63,26 @@ define(['dojo/_base/declare',
 				kernel.global.feedCount = {};
 			}
 			
+			this.blastView = new BlastView({
+				route: '/BlastView',
+				mod: 'feeds',
+				
+				sendPostFile: lang.hitch(this, this.sendPostFile),
+				runAtCommand: lang.hitch(this, this.runAtCommand),
+				getServiceCreds: lang.hitch(this, this.getServiceCreds)
+			});
+			
 			this.FeedView = new FeedView({
 				route: "/FeedView/:feedName",
 				
+				blastView: this.blastView,
 				getSpecificFeedList: lang.hitch(this, this.getSpecificFeedList),
 				checkSpecificFeedList: lang.hitch(this, this.checkSpecificFeedList)
 			});
 			this.CreateFeedView = new CreateFeedView({
 				route: "/CreateFeedView",
-			
+				
+				blastView: this.blastView,
 				saveFeedList: lang.hitch(this, this.saveFeedList),
 				checkSpecificFeedList: lang.hitch(this, this.checkSpecificFeedList),
 				setStarred: lang.hitch(this, this.setStarred),
@@ -79,6 +92,7 @@ define(['dojo/_base/declare',
 			this.EditFeedView = new EditFeedView({
 				route: "/EditFeedView/:feedName",
 				
+				blastView: this.blastView,
 				saveFeedList: lang.hitch(this, this.saveFeedList),
 				getSpecificFeedList: lang.hitch(this, this.getSpecificFeedList),
 				checkSpecificFeedList: lang.hitch(this, this.checkSpecificFeedList),
@@ -111,6 +125,7 @@ define(['dojo/_base/declare',
 			this.registerView(this.DeleteFeed);
 			this.registerView(this.EditFeed);
 			this.registerView(this.EditFeedView);
+			this.registerView(this.blastView);
 
 		},
 		
@@ -160,6 +175,22 @@ define(['dojo/_base/declare',
 			console.log('Module.js: ', params);
 			//debugger;
 			return xhrManager.send('POST', 'rest/v1.0/FeedData/setStarredClient', params);
+		},
+		
+		sendPostFile: function(file, fileType, tokenArr, msg){
+			params = {file: file, fileType: fileType, tokenArr: tokenArr, msg: msg};
+			console.log("Module.js: Params for sendPostFile are: ", params);
+			return xhrManager.send('POST', 'rest/v1.0/Post/postFiles', params);
+		},
+
+		runAtCommand: function(date, time, file, fileType, tokenArr, msg){
+			params = {date: date, time: time, file: file, fileType: fileType, tokenArr: tokenArr, msg: msg};
+			return xhrManager.send('POST', 'rest/v1.0/Post/runAtCommand', params);
+		},
+		
+		getServiceCreds: function(){
+			params = {};
+			return xhrManager.send('POST', 'rest/v1.0/Credentials/getServiceCreds', params);
 		}
 	})
 });

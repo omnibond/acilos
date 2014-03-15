@@ -73,9 +73,9 @@ define(['dojo/_base/declare',
 			
 			this.blastView = new BlastView({
 				route: '/BlastView',
-
+				mod: 'mainFeed',
+				
 				sendPostFile: lang.hitch(this, this.sendPostFile),
-				runAtCommand: lang.hitch(this, this.runAtCommand),
 				getServiceCreds: lang.hitch(this, this.getServiceCreds)
 			});
 			
@@ -164,15 +164,10 @@ define(['dojo/_base/declare',
 			return xhrManager.send('GET', 'rest/v1.0/Search/sendSearchString', params);
 		},
 		
-		sendPostFile: function(file, fileType, tokenArr, msg){
-			params = {file: file, fileType: fileType, tokenArr: tokenArr, msg: msg};
+		sendPostFile: function(file, tokenArr, msg){
+			params = {file: file, tokenArr: tokenArr, msg: msg};
 			console.log("Module.js: Params for sendPostFile are: ", params);
-			return xhrManager.send('POST', 'rest/v1.0/Post/postFiles', params);
-		},
-
-		runAtCommand: function(date, time, file, fileType, tokenArr, msg){
-			params = {date: date, time: time, file: file, fileType: fileType, tokenArr: tokenArr, msg: msg};
-			return xhrManager.send('POST', 'rest/v1.0/Post/runAtCommand', params);
+			return xhrManager.send('POST', 'rest/v1.0/Blast/blastFiles', params);
 		},
 		
 		getServiceCreds: function(){

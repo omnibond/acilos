@@ -487,7 +487,7 @@ define(['dojo/_base/declare',
 		
 		activate: function(e){
 			topic.publish("/dojo-mama/updateSubNav", {back: "/", title: "Post, Tweet, Blog"} );
-			console.log("my params are: " + e.params);
+
 			if(this.mainList){
 				this.mainList.destroyRecursive();
 				this.mainList = null;

@@ -89,6 +89,7 @@ define(['dojo/_base/declare',
 			
 			this.list = new SearchScroller({
 				feedName: feedObj,
+				blastView: this.blastView,
 				getFeedData: lang.hitch(this, this.checkSpecificFeedList),
 				getNextGroup: lang.hitch(this, this.getNextGroup),
 				setStarred: lang.hitch(this, this.setStarred),

@@ -572,9 +572,13 @@ define([
 					}, likeDiv, source);
 					
 					blastDiv.onclick = lang.hitch(this, function(blastDiv, source){
-						console.log("source: ", source);
-						this.blastView.blastObj = source;
-						window.location = "#/mainFeed/BlastView"
+						this.blastView.blastObj = {};
+						this.blastView.blastObj.url = source.content.picture;
+						this.blastView.blastObj.postLink = source.postLink;
+						this.blastView.blastObj.service = source.service;
+						this.downloadImage(this.blastView.blastObj.url, this.blastView.blastObj.postLink).then(lang.hitch(this, function(){
+							window.location = "#/"+this.blastView.mod+this.blastView.route;
+						}))
 					}, blastDiv, source);
 					
 					this.commentHolder.domNode.appendChild(commentDiv);
@@ -582,6 +586,11 @@ define([
 					this.commentHolder.domNode.appendChild(blastDiv);
 					this.roundRight.addChild(this.commentHolder);
 				}
+			},
+			
+			downloadImage: function(url, postLink){
+				var params = {url: url, postLink: postLink};
+				return xhrManager.send('POST', 'rest/v1.0/Blast/downloadImage', params);
 			}
 			
 		});
