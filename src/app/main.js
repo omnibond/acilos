@@ -81,10 +81,16 @@ define(['require'], function (require) {
 
 				var wrapperDiv = domConstruct.create("div", {});
 				document.body.appendChild(wrapperDiv);
-				domConstruct.place(document.getElementById('adSlot'), wrapperDiv);
+				var adSlot = document.getElementById('adSlot');
+				wrapperDiv.appendChild(adSlot);
+				///domConstruct.place(document.getElementById('adSlot'), wrapperDiv);
 				domClass.add(wrapperDiv, "adPositionClass");
-				domClass.add(adSlot, "adDivClass");
+
 				console.log("adSlot is: ", adSlot);
+				
+				if(has('touch')){
+					domClass.add(adSlot, "adDivClass");
+				}
 				
 				kernel.global.notifications = {};
 				credentialUtil.makeItHappen();

@@ -89,13 +89,13 @@ define([
 			variableHeight: true,
 			"class": "feedItemListItemClass",
 			
-			sendFaceLike: function(idFirstPart, idSecondPart){
-				var params = {idFirstPart: idFirstPart, idSecondPart: idSecondPart};
+			sendFaceLike: function(idFirstPart, idSecondPart, accessToken){
+				var params = {idFirstPart: idFirstPart, idSecondPart: idSecondPart, accessToken: accessToken};
 				return xhrManager.send('POST', 'rest/v1.0/Post/sendFaceLike', params);
 			},
 			
-			sendFaceUnLike: function(idFirstPart, idSecondPart){
-				var params = {idFirstPart: idFirstPart, idSecondPart: idSecondPart};
+			sendFaceUnLike: function(idFirstPart, idSecondPart, accessToken){
+				var params = {idFirstPart: idFirstPart, idSecondPart: idSecondPart, accessToken: accessToken};
 				return xhrManager.send('POST', 'rest/v1.0/Post/sendFaceUnLike', params);
 			},
 			
@@ -116,6 +116,11 @@ define([
 			handleGetObjects: function(obj){
 				console.log("handleGetObjects",arguments);
 				this.objects = obj;
+			},
+
+			getServiceCreds: function(){
+				params = {};
+				return xhrManager.send('POST', 'rest/v1.0/Credentials/getServiceCreds', params);
 			},
 			
 			buildView: function(color){	
@@ -303,9 +308,6 @@ define([
 				}else{
 					if((obj.content.objectType == "photo") && (obj.content.picture == null) && (obj.content.url != null)){
 
-						console.log("yeahahskkahahshhha");
-						console.log("OBJ ISSSSSS: ", obj);
-
 						this.picContent = new ListItem({
 							variableHeight: true,
 							"class": "feedPicContentItemClass"
@@ -337,61 +339,35 @@ define([
 						this.picContent.domNode.appendChild(div);
 						this.roundRight.addChild(this.picContent);
 					}
-				}
-
-
-				/*else{
-					if(obj.content.picture != null){
-						this.picContent = new ListItem({
-							variableHeight: true,
-							"class": "feedPicContentItemClass"
-						});
-						var div = domConstruct.create("div", {innerHTML: '<img src="'+obj.content.picture+'" style="max-width:306px;max-height:306px;" />'});
-						this.picContent.domNode.appendChild(div);
-						this.roundRight.addChild(this.picContent);
-					}else if(obj.content.url != null){
-						this.picContent = new ListItem({
-							variableHeight: true,
-							"class": "feedPicContentItemClass"
-						});
-
-						if(obj.content.objectType == "photo"){
-							var div = domConstruct.create("div", {innerHTML: '<span><img src="'+obj.content.picture+'" style="max-width:90%;max-height:90%;" /></a></span>'});
-						}else{
-							var div = domConstruct.create("div", {innerHTML: '<span><a href="'+obj.content.url+'" target="_blank"><img src="'+obj.content.picture+'" style="max-width:90%;max-height:90%;" /></a></span>'});
-						}
-
-						div.onclick = lang.hitch(this, function(){
-							var dialog = new Dialog({
-								title: "Click to close ->",
-								"class": "blackBackDijitDialog"
-							});
-
-							console.log("obj.content.objectType is: ", obj.content.objectType);
-
-							if(obj.content.objectType == "photo"){
-								var dialogDiv = domConstruct.create("div", {innerHTML: '<span><img src="'+obj.content.picture+'" style="" /></a></span>'});
-
-								//div.appendChild(dialog.domNode);
-								dialog.set("content", dialogDiv);
-								dialog.show();
-							}
-						})
-
-						this.picContent.domNode.appendChild(div);
-						this.roundRight.addChild(this.picContent);
-					}
-				}*/
-				
+				}				
 				
 				//TEXT ITEM FOUR-------------------------
 				if(obj.content.text.text != null){
+					/*
 					if(obj.content.to.length > 0){
 						var string =  this.parseSpecialChars(obj.content.text.text);
 						this.textContent = new ListItem({
 							variableHeight: true,
 							"class": "feedTextContentItemClass",
 							label: string + " to " + obj.content.to[0].name
+						});
+					}else{
+						var string = this.parseSpecialChars(obj.content.text.text);
+						this.textContent = new ListItem({
+							variableHeight: true,
+							"class": "feedTextContentItemClass",
+							label: string
+						});
+					}
+					*/
+					if(obj.content.to.length > 0){
+						this.servPub.innerHTML = '<span><a href="' + obj.actor.url +'" target="_blank">'+obj.actor.displayName+'</a></span>' + " " + "posted to " + '<span><a href="' + obj.content.to[0].name +'" target="_blank">' + "'s wall via " + '<span><a href="' + obj.postLink +'" target="_blank">'+obj.service+'</a></span>';
+
+						var string =  this.parseSpecialChars(obj.content.text.text);
+						this.textContent = new ListItem({
+							variableHeight: true,
+							"class": "feedTextContentItemClass",
+							label: string
 						});
 					}else{
 						var string = this.parseSpecialChars(obj.content.text.text);
@@ -476,7 +452,52 @@ define([
 				});
 
 				likeDiv.onclick = lang.hitch(this, function(likeDiv, content, id){
-					if(domClass.contains(likeDiv, "twitterOrangeDiv")){
+					this.getServiceCreds().then(lang.hitch(this, function(obj){
+						this.authObj = obj;
+					}));
+
+					for(var key in this.authObj){
+						for(var d = 0; d < this.authObj[key].length; d++){
+							if(this.authObj[key][d].accessToken != undefined){
+								if(source.mainAccountID == this.authObj[key][d].user){
+
+									var accessToken = this.authObj[key][d].accessToken;
+
+									if(domClass.contains(likeDiv, "twitterOrangeDiv")){
+										this.likeNum++;
+										domClass.remove(likeDiv, "twitterOrangeDiv");
+										domClass.add(likeDiv, "twitterBlueDiv");
+										likeDiv.innerHTML = "Liked(" + (this.likeNum) + ")";
+										this.setIsLiked("facebook-----"+id, "true");		
+
+										var id = content.id.split("_");
+										idFirstPart = id[0];
+										idSecondPart = id[1];
+										
+										this.sendFaceLike(idFirstPart, idSecondPart, accessToken).then(lang.hitch(this, function(obj){
+											console.log("obj is: ", obj);
+										}));
+									}else{
+										this.likeNum--;
+										domClass.remove(likeDiv, "twitterBlueDiv");
+										domClass.add(likeDiv, "twitterOrangeDiv");
+										likeDiv.innerHTML = "Like(" + (this.likeNum) + ")";
+										this.setIsLiked("facebook-----"+id, "false");
+										
+										var id = content.id.split("_");
+										idFirstPart = id[0];
+										idSecondPart = id[1];
+										
+										this.sendFaceUnLike(idFirstPart, idSecondPart, accessToken).then(lang.hitch(this, function(obj){
+											console.log("obj is: ", obj);
+										}));
+									}
+								}
+							}
+						}
+					}
+
+					/*if(domClass.contains(likeDiv, "twitterOrangeDiv")){
 						this.likeNum++;
 						domClass.remove(likeDiv, "twitterOrangeDiv");
 						domClass.add(likeDiv, "twitterBlueDiv");
@@ -504,7 +525,8 @@ define([
 						this.sendFaceUnLike(idFirstPart, idSecondPart).then(lang.hitch(this, function(obj){
 							console.log("obj is: ", obj);
 						}));
-					}
+					}*/
+
 				},likeDiv, content, id);
 				console.log(this.blastView);
 				blastDiv.onclick = lang.hitch(this, function(blastDiv, source){

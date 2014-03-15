@@ -56,6 +56,8 @@ function setIsLiked($id, $liked){
 	$es = Client::connection("http://$host:$port/$index/$index");
 	$obj = $es->get($id);
 
+	print_r($obj);
+
 	if($liked == "true"){
 		$obj['isLiked'] = $liked;
 		
