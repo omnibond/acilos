@@ -573,10 +573,17 @@ define([
 					
 					blastDiv.onclick = lang.hitch(this, function(blastDiv, source){
 						this.blastView.blastObj = {};
-						this.blastView.blastObj.url = source.content.picture;
+						if(source.content.picture == undefined ||
+							source.content.picture == null){
+							this.blastView.blastObj.url = "";
+						}else{
+							this.blastView.blastObj.url = source.content.picture;
+						}
+						this.blastView.blastObj.imgName = source.content.id;
 						this.blastView.blastObj.postLink = source.postLink;
 						this.blastView.blastObj.service = source.service;
-						this.downloadImage(this.blastView.blastObj.url, this.blastView.blastObj.postLink).then(lang.hitch(this, function(){
+						this.blastView.blastObj.msg = source.content.text.text;
+						this.downloadImage(this.blastView.blastObj.url, this.blastView.blastObj.imgName).then(lang.hitch(this, function(){
 							window.location = "#/"+this.blastView.mod+this.blastView.route;
 						}))
 					}, blastDiv, source);
@@ -588,8 +595,8 @@ define([
 				}
 			},
 			
-			downloadImage: function(url, postLink){
-				var params = {url: url, postLink: postLink};
+			downloadImage: function(url, imgName){
+				var params = {url: url, imgName: imgName};
 				return xhrManager.send('POST', 'rest/v1.0/Blast/downloadImage', params);
 			}
 			

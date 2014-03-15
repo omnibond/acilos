@@ -164,7 +164,7 @@ define(['dojo/_base/declare',
 			this.textArea = new TextArea({
 				trim: true,
 				style: "height:100px;width:99%",
-				value: this.blastObj.content.text.text + " - Posted via Acilos"
+				value: this.blastObj.msg + " - Posted via Acilos - Original post - " + this.blastObj.postLink
 			});
 
 			this.textAreaCountDiv = domConstruct.create("div", {innerHTML: this.textArea.get("value").length + " characters"});
@@ -201,7 +201,7 @@ define(['dojo/_base/declare',
 					variableHeight: true,
 					"class": "feedPicContentItemClass"
 				});
-				var div = domConstruct.create("div", {innerHTML: '<img src="'+this.blastObj.url+'"style="max-width:90%;max-height:90%;"></img>'});
+				var div = domConstruct.create("div", {style: "margin: 10px 10px 10px 10px", innerHTML: '<img src="'+this.blastObj.url+'"style="max-width:90%;max-height:90%;"></img>'});
 				fileHolder.domNode.appendChild(div);
 				this.mainList.addChild(fileHolder);
 			}
@@ -209,7 +209,7 @@ define(['dojo/_base/declare',
 			this.submitButton = new Button({
 				label: "Post",
 				style: "margin-left: 0px",
-				onClick: lang.hitch(this, function(fUploader){
+				onClick: lang.hitch(this, function(){
 					document.body.onkeyup = ""; 
 					var msg = this.textArea.get("value");
 					
@@ -227,8 +227,8 @@ define(['dojo/_base/declare',
 						
 					console.log("tokenArr is: ", tokenArr);
 					
-					this.sendPostFile(this.blastObj.postLink, tokenArr, msg).then(lang.hitch(this, this.handleResponse));
-				}, fUploader)
+					this.sendPostFile(this.blastObj.imgName, tokenArr, msg).then(lang.hitch(this, this.handleResponse));
+				})
 			});
 			this.mainList.addChild(this.submitButton);
 		},
