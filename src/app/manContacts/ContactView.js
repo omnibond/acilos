@@ -213,24 +213,28 @@ define(['dojo/_base/declare',
 			}else{
 				this.buildMainList();
 			}
-			this.getSpecificClients(this.users).then(lang.hitch(this, function(obj){
-				for(y = 0; y < obj.length; y++){
-					//get each group of owned users
-					var ownsArray = [];
-					//set the main user from MainView
-					for(var x = 0; x < obj[y].data.owns.length; x++){
-						ownsArray.push(obj[y].data.owns[x]);
+			if(!this.users){
+				window.location = "#/manContacts";
+			}else{
+				this.getSpecificClients(this.users).then(lang.hitch(this, function(obj){
+					for(y = 0; y < obj.length; y++){
+						//get each group of owned users
+						var ownsArray = [];
+						//set the main user from MainView
+						for(var x = 0; x < obj[y].data.owns.length; x++){
+							ownsArray.push(obj[y].data.owns[x]);
+						}
+						var mainUser = obj[y];
+						this.getSpecificClients(ownsArray).then(lang.hitch(this, function(mainUser, obj){
+							var mainUser = mainUser;
+							//set the ownedUsers for each MainView user
+							var ownedUsers = obj;
+							//build and return a list for each user/ownedGroup
+							var list = this.buildList(mainUser, ownedUsers);
+						}, mainUser))
 					}
-					var mainUser = obj[y];
-					this.getSpecificClients(ownsArray).then(lang.hitch(this, function(mainUser, obj){
-						var mainUser = mainUser;
-						//set the ownedUsers for each MainView user
-						var ownedUsers = obj;
-						//build and return a list for each user/ownedGroup
-						var list = this.buildList(mainUser, ownedUsers);
-					}, mainUser))
-				}
-			}))
+				}))
+			}
 		}
 	})
 });

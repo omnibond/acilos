@@ -269,10 +269,8 @@ define(['dojo/_base/declare',
 				
 				console.log("made new list");
 				this.getContacts(this.fromVar).then(lang.hitch(this,this.buildView));
-			}
-			
-		}
-		
+			}			
+		}		
 	})
 });
 		

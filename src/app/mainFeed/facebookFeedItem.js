@@ -439,7 +439,8 @@ define([
 				}else{
 					var likeDiv = domConstruct.create("div", {innerHTML: "Like(" + this.likeNum + ")", "class": "twitterOrangeDiv"});
 				}
-
+				var blastDiv = domConstruct.create("div", {style: "margin-left:5px", innerHTML: "Blast", "class": "twitterBlueDiv"});
+				
 				this.commentCounter = 0;
 				this.likeCounter = 0;
 				
@@ -505,9 +506,14 @@ define([
 						}));
 					}
 				},likeDiv, content, id);
-
+				
+				blastDiv.onclick = lang.hitch(this, function(blastDiv, source){
+					console.log("source: ", source);//function
+				}, blastDiv, source);
+				
 				this.commentHolder.domNode.appendChild(commentDiv);
 				this.commentHolder.domNode.appendChild(likeDiv);
+				this.commentHolder.domNode.appendChild(blastDiv);
 				this.roundRight.addChild(this.commentHolder);
 				
 			//RightPane/RoundRect

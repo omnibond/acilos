@@ -361,6 +361,7 @@ define([
 					}else{
 						var favoriteDiv = domConstruct.create("div", {innerHTML: "Favorite(" + this.favorite + ")", "class": "twitterOrangeDiv", style: "margin-right: 5px"});
 					}
+					var blastDiv = domConstruct.create("div", {style: "margin-left:5px", innerHTML: "Blast", "class": "twitterBlueDiv"});
 
 					this.replyCounter = 0;
 					this.retweetCounter = 0;
@@ -442,9 +443,14 @@ define([
 						this.favoriteCounter++;
 					}, favoriteDiv, id);
 					
+					blastDiv.onclick = lang.hitch(this, function(blastDiv, source){
+						console.log("source: ", source);//function
+					}, blastDiv, source);
+					
 					this.commentHolder.domNode.appendChild(replyDiv);
 					this.commentHolder.domNode.appendChild(retweetDiv);
 					this.commentHolder.domNode.appendChild(favoriteDiv);
+					this.commentHolder.domNode.appendChild(blastDiv);
 					this.roundRight.addChild(this.commentHolder);
 					
 				}
