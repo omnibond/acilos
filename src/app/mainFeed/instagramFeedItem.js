@@ -318,10 +318,12 @@ define([
 				this.commentCounter = 0;
 				this.likeCounter = 0;
 				
+				
 				commentDiv.onclick = lang.hitch(this, function(){
 					if(!this.pane){
 						this.pane = new DataObjPane({
 							data: this.data,
+							authObj: this.authObj,
 							type: 'instaComments',
 							counter: this.counter,
 							parseSpecialChars: this.parseSpecialChars,
@@ -334,6 +336,7 @@ define([
 							this.pane = null;
 							this.pane = new DataObjPane({
 								data: this.data,
+								authObj: this.authObj,
 								type: 'instaComments',
 								counter: this.counter,
 								parseSpecialChars: this.parseSpecialChars,
@@ -348,6 +351,7 @@ define([
 					}
 					this.commentCounter++;
 				});
+				
 
 				likeDiv.onclick = lang.hitch(this, function(likeDiv, id){
 					for(var key in this.authObj){

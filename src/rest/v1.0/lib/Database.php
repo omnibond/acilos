@@ -296,7 +296,7 @@ class Database{
 			$authLink = $obj['redir']."?appKey=".$obj['key']."&appSecret=".$obj['secret']."&twitterRedirect=".$obj['redir']."&color=".$obj['color'];
 		}
 		if($obj['param'] == "facebook"){
-			$scope = "friends_location,friends_hometown,user_hometown,user_location,publish_stream,read_stream,read_friendlists,friends_birthday,friends_religion_politics,email,user_likes,friends_likes,manage_notifications";
+			$scope = "friends_location,friends_hometown,user_hometown,user_location,publish_actions,publish_stream,read_stream,read_friendlists,friends_birthday,friends_religion_politics,email,user_likes,friends_likes,manage_notifications";
 			$authLink = "https://www.facebook.com/dialog/oauth?client_id=".$obj['key']."&redirect_uri=".$obj['redir']."&scope=".$scope."&state=".$obj['key'];
 		}
 		if($obj['param'] == "instagram"){

@@ -96,6 +96,18 @@ define([
 			console.log("params are: ", params);
 			return xhrManager.send('POST', 'rest/v1.0/Post/sendTwitReply', params);
 		},
+		
+		sendLinkedinComments: function(id, msg, accessToken){
+			var params = {id: id, msg: msg, accessToken: accessToken};
+			console.log("params are: ", params);
+			return xhrManager.send('POST', 'rest/v1.0/Post/sendLinkedinComments', params);
+		},
+		
+		sendInstaComment: function(id, msg, accessToken){
+			var params = {id: id, accessToken: accessToken, msg: msg};
+			console.log("params are: ", params);
+			return xhrManager.send('POST', 'rest/v1.0/Post/sendInstaComment', params);
+		},
 
 		getServiceCreds: function(){
 			params = {};
@@ -117,6 +129,8 @@ define([
 					var content = data.hits.hits[counter]._source.content;
 					var x = data.hits.hits[counter]._source.content.comments;
 					var id = data.hits.hits[counter]._source.content.id;
+					var source = data.hits.hits[counter]._source;
+				
 					this.list = new RoundRectList({
 						"class": "commentPane"
 					});					
@@ -131,48 +145,32 @@ define([
 					var commentBut = new Button({
 						label: "Post!",
 						"class": "postButton",
-						onClick: lang.hitch(this, function(content){
-							this.getServiceCreds().then(lang.hitch(this, function(obj){
-								this.authObj = obj;
-							}));
-
+						onClick: lang.hitch(this, function(content, source){
 							for(var key in this.authObj){
 								for(var d = 0; d < this.authObj[key].length; d++){
-									if(this.authObj[key][d].accessToken != undefined){
-										if(source.mainAccountID == this.authObj[key][d].user){
-											var accessToken = this.authObj[key][d].accessToken;
+									if(source.mainAccountID == this.authObj[key][d].user){
+										var accessToken = this.authObj[key][d].accessToken;
 
-											console.log("content is", content);
+										id = content.id;
 
-											/*id = content.id.split("_");
-											id = id[1];*/
+										var comment = this.commentFacebookBox.get("value");
 
-											id = content.id;
-
-											var comment = this.commentFacebookBox.get("value");
-
-											this.sendFaceComment(id, comment, accessToken).then(lang.hitch(this, function(obj){
-												console.log("obj is: ", obj);
-											}));	
-											this.commentFacebookBox.set("value", "");
-										}
+										this.sendFaceComment(id, comment, accessToken).then(lang.hitch(this, function(obj){
+											console.log("obj is: ", obj);
+										}));	
+										this.commentFacebookBox.set("value", "");
 									}
 								}
 							}
-						},content)
+						},content, source)
 					});
 					item.addChild(this.commentFacebookBox);
 					item.addChild(commentBut);
 					this.list.addChild(item);
 					this.list.resize();
 					
-					//if(x.length > 10){
-					//	var comLength = 10;
-					//}else{
-						var comLength = x.length;
-					//}
-
-
+					var comLength = x.length;
+					
 					for(var m = 0; m < comLength; m++){
 						var string = this.parseSpecialChars(x[m].text.text);
 						var item = new ListItem({
@@ -184,46 +182,11 @@ define([
 					}
 					this.addChild(this.list);	
 				break;
-				case "faceLike":
-					var content = data.hits.hits[counter]._source.content;
-					var x = data.hits.hits[counter]._source.content.likes;
-					var id = data.hits.hits[counter]._source.content.id;
-					this.list = new RoundRectList({
-						"class": "commentPane"
-					});					
-					var item = new ListItem({
-						variableHeight: true,
-						"class": "commentLikeAccordionItemClass"
-					});
-					var commentBut = new Button({
-						label: "Click to like",
-						onClick: lang.hitch(this, function(content){
-							console.log(content.likeURL);				
-						},content)
-					});
-					item.addChild(commentBut);
-					this.list.addChild(item);
-					this.list.resize();
-					
-					//if(x.length > 10){
-					//	var comLength = 10;
-					//}else{
-						var comLength = x.length;
-					//}
-
-					for(var m = 0; m < comLength; m++){
-						var item = new ListItem({
-							variableHeight: true,
-							label: '<img src="https://graph.facebook.com/'+x[m].id+'/picture" width="60px" height="60px" />' + " " + x[m].name,
-							"class": "commentLikeAccordionItemClass"
-						});
-						this.list.addChild(item);
-					}
-					this.addChild(this.list);
-				break;
 				case "twitReply":
 					var x = data.hits.hits[counter]._source.content;
 					var actor = data.hits.hits[counter]._source.actor;
+					var source = data.hits.hits[counter]._source;
+					
 					this.list = new RoundRectList({
 						"class": "commentPane"
 					});					
@@ -238,37 +201,37 @@ define([
 					var replyBut = new Button({
 						label: "Post",
 						"class": "postButton",
-						onClick: lang.hitch(this, function(){
+						onClick: lang.hitch(this, function(source){
 							this.getServiceCreds().then(lang.hitch(this, function(obj){
 								this.authObj = obj;
-							}));
 
-							for(var key in this.authObj){
-								for(var d = 0; d < this.authObj[key].length; d++){
-									if(this.authObj[key][d].accessToken != undefined){
-										if(source.mainAccountID == this.authObj[key][d].user){
+								for(var key in this.authObj){
+									for(var d = 0; d < this.authObj[key].length; d++){
+										if(this.authObj[key][d].accessToken != undefined){
+											if(source.mainAccountID == this.authObj[key][d].user){
 
-											var accessToken = this.authObj[key][d].accessToken;
-											var accessSecret = this.authObj[key][d].accessSecret;
-											var appKey = this.authObj[key][d].key;
-											var appSecret = this.authObj[key][d].secret;
+												var accessToken = this.authObj[key][d].accessToken;
+												var accessSecret = this.authObj[key][d].accessSecret;
+												var appKey = this.authObj[key][d].key;
+												var appSecret = this.authObj[key][d].secret;
 
-											console.log("data is: ", data);
-											console.log("@" + actor.displayName + " message" + " ==in_reply_to_status_id");
+												console.log("data is: ", data);
+												console.log("@" + actor.displayName + " message" + " ==in_reply_to_status_id");
 
-											var tweetID = data.hits.hits[counter]._id.split("-----");
-											tweetID = tweetID[1];
-											var message = this.commentTwitterBox.get("value");
+												var tweetID = data.hits.hits[counter]._id.split("-----");
+												tweetID = tweetID[1];
+												var message = this.commentTwitterBox.get("value");
 
-											this.sendTwitReply(actor.displayName, tweetID, message, accessToken, accessSecret, appKey, appSecret).then(lang.hitch(this, function(obj){
-												console.log("obj is: ", obj);
-											}));		
-											this.commentTwitterBox.set("value", "");
+												this.sendTwitReply(actor.displayName, tweetID, message, accessToken, accessSecret, appKey, appSecret).then(lang.hitch(this, function(obj){
+													console.log("obj is: ", obj);
+												}));		
+												this.commentTwitterBox.set("value", "");
+											}
 										}
 									}
 								}
-							}
-						})
+							}));
+						}, source)
 					});
 					item.addChild(this.commentTwitterBox);
 					item.addChild(replyBut);
@@ -277,124 +240,11 @@ define([
 					
 					this.addChild(this.list);
 				break;
-				case "twitRetweet":
-					var x = data.hits.hits[counter]._source.content;
-					var retweet = "";
-					if(x.retweet == null){
-						retweet = 0;
-					}else{
-						retweet = x.retweet;
-					}
-					this.list = new RoundRectList({
-						"class": "commentPane"
-					});	
-					var item = new ListItem({
-						label: retweet + " have retweeted this tweet",
-						style: "border:none;margin: 0 0 0 0"
-					});	
-					this.list.addChild(item);	
-					var item = new ListItem({
-						variableHeight: true,
-						"class": "commentLikeAccordionItemClass"
-					});
-					var retweetBut = new Button({
-						label: "Click to retweet",
-						onClick: lang.hitch(this, function(){
-							console.log("https://api.twitter.com/1.1/statuses/retweet/241259202004267009.json");
-						})
-					});
-					item.addChild(retweetBut);
-					this.list.addChild(item);
-					this.list.resize();
-					
-					this.addChild(this.list);
-				break;
-				case "twitFavorite":
-					var x = data.hits.hits[counter]._source.content;
-					var favorite = "";
-					if(x.favorite == null){
-						favorite = 0;
-					}else{
-						favorite = x.favorite;
-					}
-					
-					this.list = new RoundRectList({
-						"class": "commentPane"
-					});	
-					var item = new ListItem({
-						label: favorite + " have favorited this tweet",
-						style: "border:none;margin: 0 0 0 0"
-					});	
-					this.list.addChild(item);					
-					var item = new ListItem({
-						variableHeight: true,
-						"class": "commentLikeAccordionItemClass"
-					});
-					var favoriteBut = new Button({
-						label: "Click to favorite",
-						onClick: lang.hitch(this, function(){
-							console.log("https://api.twitter.com/1.1/favorites/create.json" + " and post " + x.id);
-						})
-					});
-					item.addChild(favoriteBut);
-					this.list.addChild(item);
-					this.list.resize();
-					
-					this.addChild(this.list);
-				break;
-				case "instaLikes":
-					var x = data.hits.hits[counter]._source.content.likes;
-					var id = data.hits.hits[counter]._source.content.id;
-					this.list = new RoundRectList({
-						"class": "commentPane"
-					});
-					var likeBut = new Button({
-						label: "Click to like",
-						onClick: lang.hitch(this, function(id){
-							var params = ["Instagram", id]; 
-							app.send('publishLike', 'php/_scaffold.php', params);
-							var item = new ListItem({
-								variableHeight: true,
-								label: "- You liked this",
-								"class": "commentLikeAccordionItemClass"
-							});
-							item.placeAt(this.list, 1);
-							this.resize();
-							this.expand(this.pane, true);
-						}, id)
-					});
-					var item = new ListItem({
-						variableHeight: true,
-						"class": "commentLikeAccordionItemClass"
-					});
-					item.addChild(likeBut);
-					this.list.addChild(item);
-					this.list.resize();
-					if(x.length > 10){
-						var comLength = 10;
-					}else{
-						var comLength = x.length;
-					}
-
-					for(var m = 0; m < comLength; m++){
-						if(x[m].profileImg == null){
-							pic = "app/resources/img/blankPerson.jpg";
-						}else{
-							pic = x[m].profileImg;
-						}
-						var item = new ListItem({
-							variableHeight: true,
-							label: '<img src="'+pic+'" width="60px" height="60px" />' + " " + x[m].name,
-							"class": "commentLikeAccordionItemClass"
-						});
-						this.list.addChild(item);
-					}
-					
-					this.addChild(this.list);
-				break;
 				case "instaComments":
 					var x = data.hits.hits[counter]._source.content.comments;
 					var id = data.hits.hits[counter]._source.content.id;
+					var source = data.hits.hits[counter]._source;
+					
 					this.list = new RoundRectList({
 						"class": "commentPane"
 					});
@@ -410,27 +260,33 @@ define([
 					var commentBut = new Button({
 						label: "Post!",
 						"class": "postButton",
-						onClick: lang.hitch(this, function(id){
-							if(this.commentInstaBox.get("value") === ""){
-								console.log("Please type a comment in the box");
-							}else{
-								var params = ["Instagram", this.commentInstaBox.get("value"), id]; 
-								var string = this.parseSpecialChars(params[1]);
-								app.send('publishComment', 'php/_scaffold.php', params);
-								var item = new ListItem({
-									variableHeight: true,
-									label: string + " - Posted By - You",
-									"class": "commentLikeAccordionItemClass"
-								});
-								item.placeAt(this.list, 1);
-								this.resize();
-								this.expand(this.pane, true);
-								this.commentInstaBox.set("value", "");
-							}							
-						}, id)
+						onClick: lang.hitch(this, function(id, source){
+							for(var key in this.authObj){
+								for(var d = 0; d < this.authObj[key].length; d++){
+									if(source.mainAccountID == this.authObj[key][d].user){
+										
+										if(this.commentInstaBox.get("value") === ""){
+											console.log("Please type a comment in the box");
+										}else{
+											var string = this.commentInstaBox.get("value");
+											this.sendInstaComment(id, this.commentInstaBox.get("value"), this.authObj[key][d].accessToken);
+											var item = new ListItem({
+												variableHeight: true,
+												label: string + " - Posted By - You",
+												"class": "commentLikeAccordionItemClass"
+											});
+											item.placeAt(this.list, 1);
+											this.resize();
+											this.expand(this.pane, true);
+											this.commentInstaBox.set("value", "");
+										}
+									}
+								}
+							}
+						}, id, source)
 					});
-					item.addChild(this.commentInstaBox);
-					item.addChild(commentBut);
+					//item.addChild(this.commentInstaBox);
+					//item.addChild(commentBut);
 					this.list.addChild(item);
 					this.list.resize();
 					
@@ -459,59 +315,10 @@ define([
 					}
 					this.addChild(this.list);					
 				break;
-				case "linkedLikes":
-					var x = data.hits.hits[counter]._source.content.likes;
-					var id = data.hits.hits[counter]._source.content.id;
-					
-					this.list = new RoundRectList({
-						"class": "commentPane"
-					});
-					var likeBut = new Button({
-						label: "Click to like",
-						onClick: lang.hitch(this, function(id){
-							var params = ["LinkedIn", id]; 
-							app.send('publishLike', 'php/_scaffold.php', params);
-							var item = new ListItem({
-								label: "- You liked this",
-								"class": "commentLikeAccordionItemClass"
-							});
-							item.placeAt(this.list, 1);
-							this.resize();
-							this.expand(this.pane, true);							
-						}, id)
-					});
-					var item = new ListItem({
-						variableHeight: true,
-						"class": "commentLikeAccordionItemClass"
-					});
-					item.addChild(likeBut);
-					this.list.addChild(item);
-					this.list.resize();
-					
-					if(x.length > 10){
-						var comLength = 10;
-					}else{
-						var comLength = x.length;
-					}
-
-					for(var m = 0; m < comLength; m++){
-						if(x[m].pictureURL == null){
-							pic = "app/resources/img/blankPerson.jpg";
-						}else{
-							pic = x[m].pictureURL;
-						}
-						var item = new ListItem({
-							variableHeight: true,
-							innerHTML: '<img src="'+pic+'" width="60px" height="60px" />' + " " + x[m].firstName + " " + x[m].lastName + " likes this",
-							"class": "commentLikeAccordionItemClass"
-						});
-						this.list.addChild(item);
-					}
-					this.addChild(this.list);					
-				break;
 				case "linkedComments":
 					var x = data.hits.hits[counter]._source.content.comments;
-					var id = data.hits.hits[counter]._source.content.id;
+					var idArr = data.hits.hits[counter]._source.id.split("-----");
+					var id = idArr[1];
 					var obj = data.hits.hits[counter]._source;
 	
 					this.list = new RoundRectList({
@@ -525,21 +332,26 @@ define([
 						label: "Post!",
 						"class": "postButton",
 						onClick: lang.hitch(this, function(id){
-							if(this.commentLinkBox.get("value") === ""){
-								console.log("Please type a comment in the box");
-							}else{
-								var params = ["LinkedIn", this.commentLinkBox.get("value"), id]; 
-								var string = this.parseSpecialChars(params[1]);
-								app.send('publishComment', 'php/_scaffold.php', params);
-								var item = new ListItem({
-									label: string + " - Posted By - You",
-									"class": "commentLikeAccordionItemClass"
-								});
-								item.placeAt(this.list, 1);
-								this.resize();
-								this.expand(this.pane, true);
-								this.commentLinkBox.set("value", "");
-							}							
+							for(var key in this.authObj){
+								for(var d = 0; d < this.authObj[key].length; d++){
+									if(obj.mainAccountID == this.authObj[key][d].user){
+										if(this.commentLinkBox.get("value") === ""){
+											console.log("Please type a comment in the box");
+										}else{
+											var string = this.commentLinkBox.get("value");
+											this.sendLinkedinComments(id, this.commentLinkBox.get("value"), this.authObj[key][d].accessToken);
+											var item = new ListItem({
+												label: string + " - Posted By - You",
+												"class": "commentLikeAccordionItemClass"
+											});
+											item.placeAt(this.list, 1);
+											this.resize();
+											this.expand(this.pane, true);
+											this.commentLinkBox.set("value", "");
+										}	
+									}
+								}
+							}
 						}, id)
 					});
 					var item = new ListItem({

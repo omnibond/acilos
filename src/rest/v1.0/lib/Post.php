@@ -87,6 +87,31 @@ Class Post{
 		return json_encode(array("success" => "Your 'unlike' was successful."));
 	}
 	
+	function sendInstaComment(){
+		$var = file_get_contents("php://input");
+		$varObj = json_decode($var, true);
+		$postID = $varObj['id'];
+		$access_token = $varObj['accessToken'];
+		$message = $varObj['msg'];
+		
+		$params = array(
+			"text" => $message,
+			"access_token" => $access_token
+		);
+
+		$url = "https://api.instagram.com/v1/media/".$postID."/comments";
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+		$response = curl_exec($ch);
+		curl_close($ch);
+		
+		print_r($response);
+		
+		return json_encode(array("success" => "Your 'post' was successful."));
+	}
+	
 	function sendLinkedLike(){
 		$var = file_get_contents("php://input");
 		$varObj = json_decode($var, true);
@@ -121,6 +146,26 @@ Class Post{
 		curl_close($ch);
 
 		return json_encode(array("success" => "Your 'unlike' was successful."));
+	}
+	
+	function sendLinkedinComments(){
+		$var = file_get_contents("php://input");
+		$varObj = json_decode($var, true);
+		$postID = $varObj['id'];
+		$access_token = $varObj['accessToken'];
+		$message = $varObj['msg'];
+		
+		$url = "https://api.linkedin.com/v1/posts/".$postID."/comments?oauth2_access_token=".$access_token;
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:text/xml'));
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, "<comment><text>".$message."</text></comment>");
+		$response = curl_exec($ch);
+		curl_close($ch);
+
+		print_r($response);
+		return json_encode(array("success" => "Your 'post' was successful."));
 	}
 	
 	function sendTwitterFav(){
@@ -162,10 +207,11 @@ Class Post{
 		$idSecondPart = $varObj['idSecondPart'];
 		$access_token = $varObj['accessToken'];
 
-		$likeURL = 'https://graph.facebook.com/' . $idSecondPart . '/likes?access_token';
+		$likeURL = 'https://graph.facebook.com/' . $idSecondPart . '/likes';
 			
 		$params = array(
-			'access_token' => $access_token
+			'access_token' => $access_token,
+			"url" => 'https://graph.facebook.com/' . $idSecondPart . '/likes'
 		);
 			
 		$ch = curl_init($likeURL);
@@ -175,11 +221,11 @@ Class Post{
 
 		$response = curl_exec($ch);
 
-		print_r(json_decode($response), true);
-
+		print_r($response);
+		$response = json_decode($response, true);
 		curl_close($ch);
 
-		if($response['success']){
+		if(isset($response['success'])){
 			return json_encode(array("success" => "Your 'like' was successful."));
 		}else{
 			return json_encode(array("failure" => "An error has occurred"));
@@ -198,9 +244,10 @@ Class Post{
 		$ch = curl_init($likeURL);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
 		$response = curl_exec($ch);
-		print_r(json_decode($response), true);
+		print_r($response);
 		curl_close($ch);
-
+		
+		$response = json_decode($response, true);
 		if($response['success']){
 			return json_encode(array("success" => "Your 'unlike' was successful."));
 		}else{
@@ -222,6 +269,8 @@ Class Post{
 			'access_token' => $access_token,
 			'message' => $comment
 		);
+		
+		print_r($params);
 
 		$ch = curl_init($commentURL);
 		curl_setopt($ch, CURLOPT_POST, 1);

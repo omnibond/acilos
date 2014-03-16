@@ -375,6 +375,7 @@ define([
 						if(!this.pane){
 							this.pane = new DataObjPane({
 								data: this.data,
+								authObj: this.authObj,
 								type: 'twitReply',
 								counter: this.counter
 							})
@@ -385,6 +386,7 @@ define([
 								this.pane = null;
 								this.pane = new DataObjPane({
 									data: this.data,
+									authObj: this.authObj,
 									type: 'twitReply',
 									counter: this.counter
 								})

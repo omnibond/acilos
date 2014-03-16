@@ -159,8 +159,8 @@ define(['dojo/_base/declare',
 			return xhrManager.send('POST', 'rest/v1.0/FeedData/manualRefresh', params);
 		},
 
-		sendSearchString: function(searchString){
-			var params = {searchString: searchString};
+		sendSearchString: function(searchString, from){
+			var params = {searchString: searchString, from: from};
 			return xhrManager.send('GET', 'rest/v1.0/Search/sendSearchString', params);
 		},
 		

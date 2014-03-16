@@ -525,6 +525,7 @@ define([
 						if(!this.pane){
 							this.pane = new DataObjPane({
 								data: this.data,
+								authObj: this.authObj,
 								type: 'linkedComments',
 								counter: this.counter,
 								parseSpecialChars: this.parseSpecialChars,
@@ -537,6 +538,7 @@ define([
 								this.pane = null;
 								this.pane = new DataObjPane({
 									data: this.data,
+									authObj: this.authObj,
 									type: 'linkedComments',
 									counter: this.counter,
 									parseSpecialChars: this.parseSpecialChars,

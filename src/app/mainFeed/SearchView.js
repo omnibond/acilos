@@ -121,7 +121,6 @@ define([
 			style: "overflow:scroll",
 
 			constructor: function(args){
-				this.fromVar = 0;
 				this.postAddArray = [];				
 			},
 			
@@ -175,6 +174,7 @@ define([
 				this.searchButton = new Button({
 					"name": "searchButton",
 					onClick: lang.hitch(this, function(){
+						this.fromVar = 0;
 						var searchString = this.searchBox.get("value");						
 						if(searchString === ""){
 							console.log("You must enter a term to search");
