@@ -350,10 +350,6 @@ define([
 				});
 
 				likeDiv.onclick = lang.hitch(this, function(likeDiv, id){
-					this.getServiceCreds().then(lang.hitch(this, function(obj){
-						this.authObj = obj;
-					}));
-					
 					for(var key in this.authObj){
 						for(var d = 0; d < this.authObj[key].length; d++){
 							if(this.authObj[key][d].accessToken != undefined){

@@ -143,7 +143,7 @@ define(['dojo/_base/declare',
 							})
 							var logDiv = domConstruct.create("div", {style: "float:left"});
 							var refresh = new Button({
-								style: "width:60px;height:50px;margin-right:10px; display: block",
+								style: "width:68px;height:50px;margin-right:10px; display: block",
 								onClick: lang.hitch(this, function(param, d){
 									window.location = this.authCreds[param][d]["auth"];
 								}, param, d)
@@ -180,7 +180,7 @@ define(['dojo/_base/declare',
 
 							var logDiv = domConstruct.create("div", {style: "float:left"});
 							var refresh = new Button({
-								style: "width:60px;height:50px;margin-right:10px; display: block",
+								style: "width:68px;height:50px;margin-right:10px; display: block",
 								onClick: lang.hitch(this, function(param, d){
 									window.location = this.authCreds[param][d]["auth"];
 								}, param, d)
@@ -220,7 +220,7 @@ define(['dojo/_base/declare',
 								variableHeight: true
 							})
 							var refresh = new Button({
-								style: "width:60px;height:50px;margin-right:10px; display: block",
+								style: "width:68px;height:50px;margin-right:10px; display: block",
 								onClick: lang.hitch(this, function(param, d){
 									window.location = this.authCreds[param][d]["auth"];
 								}, param, d)
@@ -257,7 +257,7 @@ define(['dojo/_base/declare',
 							})
 
 							var refresh = new Button({
-								style: "width:60px;height:50px;margin-right:10px; display: block",
+								style: "width:68px;height:50px;margin-right:10px; display: block",
 								onClick: lang.hitch(this, function(param, d){
 									window.location = this.authCreds[param][d]["auth"];
 								}, param, d)
@@ -299,7 +299,7 @@ define(['dojo/_base/declare',
 							})
 							var logDiv = domConstruct.create("div", {style: "float:left"});
 							var refresh = new Button({
-								style: "width:60px;height:50px;margin-right:10px",
+								style: "width:68px;height:50px;margin-right:10px",
 								onClick: lang.hitch(this, function(param, d){
 									window.location = this.authCreds[param][d]["auth"];
 								}, param, d)
@@ -335,7 +335,7 @@ define(['dojo/_base/declare',
 
 							var logDiv = domConstruct.create("div", {style: "float:left"});
 							var refresh = new Button({
-								style: "width:60px;height:50px;margin-right:10px",
+								style: "width:68px;height:50px;margin-right:10px",
 								onClick: lang.hitch(this, function(param, d){
 									window.location = this.authCreds[param][d]["auth"];
 								}, param, d)
@@ -375,7 +375,7 @@ define(['dojo/_base/declare',
 							})
 							var logDiv = domConstruct.create("div", {style: "float:left"});
 							var refresh = new Button({
-								style: "width:60px;height:50px;margin-right:10px; display: block",
+								style: "width:68px;height:50px;margin-right:10px; display: block",
 								onClick: lang.hitch(this, function(param, d){
 									window.location = this.authCreds[param][d]["auth"];
 								}, param, d)
@@ -415,7 +415,7 @@ define(['dojo/_base/declare',
 
 							var logDiv = domConstruct.create("div", {style: "float:left"});
 							var refresh = new Button({
-								style: "width:60px;height:50px;margin-right:10px; display: block",
+								style: "width:68px;height:50px;margin-right:10px; display: block",
 								onClick: lang.hitch(this, function(param, d){
 									window.location = this.authCreds[param][d]["auth"];
 								}, param, d)

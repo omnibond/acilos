@@ -154,23 +154,23 @@ define([
 				this.addChild(this.paneLeft);
 				this.addChild(this.paneRight);
 
-				var obj = this.data.hits.hits[this.counter]._source;
+				var dataObj = this.data.hits.hits[this.counter]._source;
 
 				for(var g = 0; g < this.authObj['twitter'].length; g++){
-					if(this.authObj['twitter'][g]['user'] == obj.mainAccountID){
+					if(this.authObj['twitter'][g]['user'] == dataObj.mainAccountID){
 						this.domNode.style.borderLeft = "5px solid " + this.authObj['twitter'][g]['color'];
 						this.domNode.style.marginBottom = "10px";
 						break;
 					}else{
-						this.domNode.style.borderLeft = "5px solid " + obj.mainAccountColor;
+						this.domNode.style.borderLeft = "5px solid " + dataObj.mainAccountColor;
 						this.domNode.style.marginBottom = "10px";
 					}
 				}
 				
-				if(!obj.content){
+				if(!dataObj.content){
 					return;
 				}
-				var type = obj.content.objectType;
+				var type = dataObj.content.objectType;
 				var action = '';
 				switch(type){
 					case "link":
@@ -191,8 +191,8 @@ define([
 					variableHeight: true,
 					"class": "picItemClass"
 				});
-				if(obj.actor.searchable != null){
-					this.userPic = domConstruct.create("div", {innerHTML: '<img src="'+obj.actor.image+'" width="50px" height="50px" />', "class": "feedPicDivItemClass"});
+				if(dataObj.actor.searchable != null){
+					this.userPic = domConstruct.create("div", {innerHTML: '<img src="'+dataObj.actor.image+'" width="50px" height="50px" />', "class": "feedPicDivItemClass"});
 				}else{
 					this.userPic = domConstruct.create("div", {innerHTML: '<img src="app/resources/img/blankPerson.jpg" width="50px" height="50px" />', "class": "feedPicDivItemClass"});
 				}
@@ -210,7 +210,7 @@ define([
 					"class": "starClientButtonClass",
 					checked: false
 				})
-				if(obj.starred == "true"){
+				if(dataObj.starred == "true"){
 					this.star = new domConstruct.create("div", {
 						"class": "starButtonClassChecked",
 						checked: true
@@ -219,7 +219,7 @@ define([
 
 				if(this.starClientObj){
 					for(var x = 0; x < this.starClientObj.length; x++){
-						if(obj.actor.id == this.starClientObj[x]){
+						if(dataObj.actor.id == this.starClientObj[x]){
 							this.starClient = new domConstruct.create("div", {
 								"class": "starClientButtonClassChecked",
 								checked: true
@@ -229,36 +229,36 @@ define([
 					}
 				}
 				
-				this.star.onclick = lang.hitch(this, function(obj){
+				this.star.onclick = lang.hitch(this, function(dataObj){
 					if(this.star.checked == true){
-						var response = this.setStarred("false", obj.id);
+						var response = this.setStarred("false", dataObj.id);
 						this.star.checked = false;
 						domClass.remove(this.star, "starButtonClassChecked");
 						domClass.add(this.star, "starButtonClass");
 					}else if(this.star.checked == false){
-						var response = this.setStarred("true", obj.id);
+						var response = this.setStarred("true", dataObj.id);
 						this.star.checked = true;
 						domClass.remove(this.star, "starButtonClass");
 						domClass.add(this.star, "starButtonClassChecked");
 					}else{
 						console.log("we shouldn't have gotten here");
 					}
-				}, obj)
-				this.starClient.onclick = lang.hitch(this, function(obj){
+				}, dataObj)
+				this.starClient.onclick = lang.hitch(this, function(dataObj){
 					if(this.starClient.checked == true){
-						var response = this.setStarredClient("false", obj.service+"-----"+obj.actor.id);
+						var response = this.setStarredClient("false", dataObj.service+"-----"+dataObj.actor.id);
 						this.starClient.checked = false;
 						domClass.remove(this.starClient, "starClientButtonClassChecked");
 						domClass.add(this.starClient, "starClientButtonClass");
 					}else if(this.starClient.checked == false){
-						var response = this.setStarredClient("true", obj.service+"-----"+obj.actor.id);
+						var response = this.setStarredClient("true", dataObj.service+"-----"+dataObj.actor.id);
 						this.starClient.checked = true;
 						domClass.remove(this.starClient, "starClientButtonClass");
 						domClass.add(this.starClient, "starClientButtonClassChecked");
 					}else{
 						console.log("we shouldn't have gotten here");
 					}
-				}, obj)
+				}, dataObj)
 				
 				this.starItem.domNode.appendChild(this.star);
 				this.starItem.domNode.appendChild(this.starClient);
@@ -267,8 +267,8 @@ define([
 			//LeftPane/RoundRect
 			
 			//RightPane/RoundRect
-				this.servPub = domConstruct.create("div", {innerHTML: '<span><a href="https://twitter.com/' + obj.actor.displayName +'" target="_blank">'+obj.actor.displayName+'</a></span>' + " " + action + " via " + '<span><a href="' + obj.postLink +'" target="_blank">'+obj.service+'</a></span>', "class": "feedServiceDivItemClass"});
-				this.dataPub = domConstruct.create("div", {innerHTML: this.getDate((obj.published).toString()), "class": "feedDateDivItemClass"});
+				this.servPub = domConstruct.create("div", {innerHTML: '<span><a href="https://twitter.com/' + dataObj.actor.displayName +'" target="_blank">'+dataObj.actor.displayName+'</a></span>' + " " + action + " via " + '<span><a href="' + dataObj.postLink +'" target="_blank">'+dataObj.service+'</a></span>', "class": "feedServiceDivItemClass"});
+				this.dataPub = domConstruct.create("div", {innerHTML: this.getDate((dataObj.published).toString()), "class": "feedDateDivItemClass"});
 								
 				this.dateServItem = new ListItem({
 					variableHeight: true,
@@ -285,9 +285,9 @@ define([
 					variableHeight: true,
 					"class": "feedPicDateItemClass"
 				});
-				if(obj.content && (obj.content != null)){
-					if(obj.content.mediaUrl && (obj.content.mediaUrl != null) && (obj.content.mediaUrl != "")){		
-						var div = domConstruct.create("div", {innerHTML: '<img src="'+obj.content.mediaUrl+'"style="max-width:90%;max-height:90%;"></img>'});
+				if(dataObj.content && (dataObj.content != null)){
+					if(dataObj.content.mediaUrl && (dataObj.content.mediaUrl != null) && (dataObj.content.mediaUrl != "")){		
+						var div = domConstruct.create("div", {innerHTML: '<img src="'+dataObj.content.mediaUrl+'"style="max-width:90%;max-height:90%;"></img>'});
 
 						div.onclick = lang.hitch(this, function(){
 							var dialog = new Dialog({
@@ -300,7 +300,7 @@ define([
 								})
 							});	
 
-							var dialogDiv = domConstruct.create("div", {innerHTML: '<img src="'+obj.content.mediaUrl+'"style=""></img>'});
+							var dialogDiv = domConstruct.create("div", {innerHTML: '<img src="'+dataObj.content.mediaUrl+'"style=""></img>'});
 
 							var blackoutDiv = domConstruct.create("div", {"class": "blackoutDiv"});
 
@@ -316,8 +316,8 @@ define([
 				this.roundRight.addChild(this.twitterPic);
 
 				//TEXT ITEM FOUR-------------------------
-				if(obj.content.text.text != null){
-					var stringArr = obj.content.text.text.split(" ");
+				if(dataObj.content.text.text != null){
+					var stringArr = dataObj.content.text.text.split(" ");
 					/*
 					var urlArr = [];
 					
@@ -327,7 +327,7 @@ define([
 						}
 					}
 					*/
-					string = this.parseSpecialChars(obj.content.text.text);
+					string = this.parseSpecialChars(dataObj.content.text.text);
 					this.textContent = new ListItem({
 						variableHeight: true,
 						label: string,
@@ -400,10 +400,6 @@ define([
 					})
 					
 					retweetDiv.onclick = lang.hitch(this, function(retweetDiv, id){
-						this.getServiceCreds().then(lang.hitch(this, function(obj){
-							this.authObj = obj;
-						}));
-
 						for(var key in this.authObj){
 							for(var d = 0; d < this.authObj[key].length; d++){
 								if(this.authObj[key][d].accessToken != undefined){
@@ -421,7 +417,7 @@ define([
 											retweetDiv.innerHTML = "Retweeted(" + (this.retweet) + ")";
 											this.setIsCommented("twitter-----"+id, "true");
 											
-											var tweetID = obj.id.split("-----");
+											var tweetID = dataObj.id.split("-----");
 											tweetID = tweetID[1];
 
 											this.sendTwitRetweet(tweetID, accessToken, accessSecret, appKey, appSecret).then(lang.hitch(this, function(obj){
@@ -431,14 +427,10 @@ define([
 									}
 								}
 							}
-						}
+						}	
 					}, retweetDiv, id);
 					
 					favoriteDiv.onclick = lang.hitch(this, function(favoriteDiv, id){
-						this.getServiceCreds().then(lang.hitch(this, function(obj){
-							this.authObj = obj;
-						}));
-
 						for(var key in this.authObj){
 							for(var d = 0; d < this.authObj[key].length; d++){
 								if(this.authObj[key][d].accessToken != undefined){
@@ -456,7 +448,7 @@ define([
 											favoriteDiv.innerHTML = "Favorited(" + (this.favorite) + ")";
 											this.setIsLiked("twitter-----"+id, "true");
 											
-											var tweetID = obj.id.split("-----");
+											var tweetID = dataObj.id.split("-----");
 											tweetID = tweetID[1];
 
 											this.sendTwitterFav(tweetID, accessToken, accessSecret, appKey, appSecret).then(lang.hitch(this, function(obj){
@@ -469,7 +461,7 @@ define([
 											favoriteDiv.innerHTML = "Favorite(" + (this.favorite) + ")";
 											this.setIsLiked("twitter-----"+id, "false");
 											
-											var tweetID = obj.id.split("-----");
+											var tweetID = dataObj.id.split("-----");
 											tweetID = tweetID[1];
 
 											this.sendTwitterUnFav(tweetID, accessToken, accessSecret, appKey, appSecret).then(lang.hitch(this, function(obj){

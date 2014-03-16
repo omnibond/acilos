@@ -504,7 +504,8 @@ define([
 					});
 					
 					var x = this.data.hits.hits[this.counter]._source.content.likes;
-					var id = this.data.hits.hits[this.counter]._source.content.id;
+					var id = this.data.hits.hits[this.counter]._source.id.split("-----");
+					id = id[1];
 					var comments = this.data.hits.hits[this.counter]._source.content.comments;
 					var source = this.data.hits.hits[this.counter]._source;
 					this.likeNum = x.length;
@@ -552,10 +553,6 @@ define([
 					});
 
 					likeDiv.onclick = lang.hitch(this, function(likeDiv, source){
-						this.getServiceCreds().then(lang.hitch(this, function(obj){
-							this.authObj = obj;
-						}));
-
 						for(var key in this.authObj){
 							for(var d = 0; d < this.authObj[key].length; d++){
 								if(this.authObj[key][d].accessToken != undefined){
