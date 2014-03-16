@@ -353,6 +353,11 @@ function matchQueryString($action, $searchObj, $from){
 					#array push each search term inside this array
 				)
 			)
+		),
+		'sort' => array(
+			'published' => array(
+				"order" => "desc"
+			)
 		)
 	);
 

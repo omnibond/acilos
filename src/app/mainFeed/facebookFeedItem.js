@@ -369,7 +369,6 @@ define([
 						toLinkURL = toLinkURL[0];
 
 						toLinkURL = "https://www.facebook.com/" + toLinkURL;
-						console.log("toLinkURL is: ", toLinkURL);
 
 						this.servPub.innerHTML = '<span><a href="' + obj.actor.url +'" target="_blank">'+obj.actor.displayName+'</a></span>' + " " + "posted to " + '<span><a href="' + toLinkURL +'" target="_blank">'+obj.content.to[0].name+'</a></span>' + "'s wall " + " via " + '<span><a href="' + obj.postLink +'" target="_blank">'+obj.service+'</a></span>';
 
@@ -434,6 +433,7 @@ define([
 					if(!this.pane){
 						this.pane = new DataObjPane({
 							data: this.data,
+							authObj: this.authObj,
 							type: 'faceComment',
 							counter: this.counter,
 							parseSpecialChars: this.parseSpecialChars,
@@ -446,6 +446,7 @@ define([
 							this.pane = null;
 							this.pane = new DataObjPane({
 								data: this.data,
+								authObj: this.authObj,
 								type: 'faceComment',
 								counter: this.counter,
 								parseSpecialChars: this.parseSpecialChars,
@@ -462,10 +463,6 @@ define([
 				});
 
 				likeDiv.onclick = lang.hitch(this, function(likeDiv, content, id){
-					this.getServiceCreds().then(lang.hitch(this, function(obj){
-						this.authObj = obj;
-					}));
-
 					for(var key in this.authObj){
 						for(var d = 0; d < this.authObj[key].length; d++){
 							if(this.authObj[key][d].accessToken != undefined){
@@ -506,39 +503,8 @@ define([
 							}
 						}
 					}
-
-					/*if(domClass.contains(likeDiv, "twitterOrangeDiv")){
-						this.likeNum++;
-						domClass.remove(likeDiv, "twitterOrangeDiv");
-						domClass.add(likeDiv, "twitterBlueDiv");
-						likeDiv.innerHTML = "Liked(" + (this.likeNum) + ")";
-						this.setIsLiked("facebook-"+id, "true");		
-
-						var id = content.id.split("_");
-						idFirstPart = id[0];
-						idSecondPart = id[1];
-						
-						this.sendFaceLike(idFirstPart, idSecondPart).then(lang.hitch(this, function(obj){
-							console.log("obj is: ", obj);
-						}));
-					}else{
-						this.likeNum--;
-						domClass.remove(likeDiv, "twitterBlueDiv");
-						domClass.add(likeDiv, "twitterOrangeDiv");
-						likeDiv.innerHTML = "Like(" + (this.likeNum) + ")";
-						this.setIsLiked("facebook-"+id, "false");
-						
-						var id = content.id.split("_");
-						idFirstPart = id[0];
-						idSecondPart = id[1];
-						
-						this.sendFaceUnLike(idFirstPart, idSecondPart).then(lang.hitch(this, function(obj){
-							console.log("obj is: ", obj);
-						}));
-					}*/
-
 				},likeDiv, content, id);
-				console.log(this.blastView);
+				
 				blastDiv.onclick = lang.hitch(this, function(blastDiv, source){
 					this.blastView.blastObj = {};
 					if(source.content.picture == undefined ||
