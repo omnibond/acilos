@@ -107,9 +107,9 @@ define([
 				return xhrManager.send('POST', 'rest/v1.0/Post/sendTwitterUnFav', params);
 			},
 			
-			setIsLiked: function(id, liked){
-				var params = {id: id, liked: liked};
-				return xhrManager.send('POST', 'rest/v1.0/Favorites/setIsLiked', params);
+			setIsFavorited: function(id, favorited){
+				var params = {id: id, favorited: favorited};
+				return xhrManager.send('POST', 'rest/v1.0/Favorites/setIsFavorited', params);
 			},
 			
 			setIsCommented: function(id){
@@ -361,9 +361,11 @@ define([
 						this.favorite = x.favorite;
 					}
 					if(source.isLiked == "true"){
-						var favoriteDiv = domConstruct.create("div", {innerHTML: "Favorited(" + this.favorite + ")", "class": "twitterBlueDiv", style: "margin-right: 5px"});
+						//var favoriteDiv = domConstruct.create("div", {innerHTML: "Favorited(" + this.favorite + ")", "class": "twitterBlueDiv", style: "margin-right: 5px"});
+						var favoriteDiv = domConstruct.create("div", {innerHTML: "Favorited", "class": "twitterBlueDiv", style: "margin-right: 5px"});
 					}else{
-						var favoriteDiv = domConstruct.create("div", {innerHTML: "Favorite(" + this.favorite + ")", "class": "twitterOrangeDiv", style: "margin-right: 5px"});
+						//var favoriteDiv = domConstruct.create("div", {innerHTML: "Favorite(" + this.favorite + ")", "class": "twitterOrangeDiv", style: "margin-right: 5px"});
+						var favoriteDiv = domConstruct.create("div", {innerHTML: "Favorite", "class": "twitterOrangeDiv", style: "margin-right: 5px"});
 					}
 					var blastDiv = domConstruct.create("div", {style: "margin-left:5px", innerHTML: "Blast", "class": "twitterBlueDiv"});
 
@@ -448,7 +450,7 @@ define([
 											domClass.remove(favoriteDiv, "twitterOrangeDiv");
 											domClass.add(favoriteDiv, "twitterBlueDiv");
 											favoriteDiv.innerHTML = "Favorited(" + (this.favorite) + ")";
-											this.setIsLiked("twitter-----"+id, "true");
+											this.setIsFavorited("twitter-----"+id, "true");
 											
 											var tweetID = dataObj.id.split("-----");
 											tweetID = tweetID[1];
@@ -461,7 +463,7 @@ define([
 											domClass.remove(favoriteDiv, "twitterBlueDiv");
 											domClass.add(favoriteDiv, "twitterOrangeDiv");
 											favoriteDiv.innerHTML = "Favorite(" + (this.favorite) + ")";
-											this.setIsLiked("twitter-----"+id, "false");
+											this.setIsFavorited("twitter-----"+id, "false");
 											
 											var tweetID = dataObj.id.split("-----");
 											tweetID = tweetID[1];
