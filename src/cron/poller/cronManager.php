@@ -109,9 +109,8 @@ function writeObject($obj){
 
 	$grr = $es->index($obj, $obj['id']);
 	#print_r($grr);
-
-	global $clientObject;
-	updateRecentPost($clientObject, $obj);
+	
+	updateRecentPost($obj);
 }
 
 function getObject($id){
@@ -166,7 +165,7 @@ function writeClient($obj){
 }
 
 function updateRecentPost($clientObject, $post){
-
+	global $clientObject;
 	//Dont count CONN objects as posts
 	if($post['title'] != "CONN"){
 		//if that poster is a client then update most recent
@@ -186,6 +185,7 @@ function updateRecentPost($clientObject, $post){
 						$tempClientObj['data']['currentTown'] = $geo;
 					}
 				}
+				$tempClientObj['data']['friendDegree'] = "first";
 
 				//$log->logInfo($logPrefix.'updateRecentPost() calling writeClient to update recentPost');
 				writeClient($tempClientObj);

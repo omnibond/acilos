@@ -142,7 +142,7 @@ class Contacts{
                 $clients = getRecentClients($from);
                 $dataArr = array();
                 for($x = 0; $x < count($clients['hits']['hits']); $x++){
-                        if($clients['hits']['hits'][$x]['_source']['data']['post']['recentPostTime'] != "" && $clients['hits']['hits'][$x]['_source']['data']['friendDegree'] == "first" && $clients['hits']['hits'][$x]['_source']['data']['post']['totalPosts'] != 0){
+                        if($clients['hits']['hits'][$x]['_source']['data']['post']['recentPostTime'] != "" && $clients['hits']['hits'][$x]['_source']['data']['post']['totalPosts'] != 0){
                                 $dataArr[$clients['hits']['hits'][$x]['_source']['data']['displayName']] = $clients['hits']['hits'][$x]['_source'];
                         }
                 }
