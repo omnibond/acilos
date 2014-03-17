@@ -151,11 +151,14 @@
 					var acilosLoginDiv = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/acilosLoginLogo.png>", style: "width: 304px; margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto"});
 					leftPane.domNode.appendChild(acilosLoginDiv);
 
-					var item = domConstruct.create("div", {innerHTML: "Please enter social media app accounts", style: "border:none;height:35px;font-size;font-family:arial;font-size:20px; text-align: center; height: auto"});
-					leftPane.domNode.appendChild(item);
+					var item1 = domConstruct.create("div", {innerHTML: "You will need to create a private app key for each service you wish to use.", style: "border:none;height:35px;font-size;font-family:arial;font-size:20px; text-align: center; height: auto"});
+					var item2 = domConstruct.create("div", {innerHTML: "Please enter the app keys and secrets below", style: "border:none;height:35px;font-size;font-family:arial;font-size:20px; text-align: center; height: auto"});
+					var item3 = domConstruct.create("div", {innerHTML: '<span><a href="www.acilos.com/appregistration" target="_blank">App creation walkthrough</a></span>'});
+					leftPane.domNode.appendChild(item1);
+					leftPane.domNode.appendChild(item2);
+					leftPane.domNode.appendChild(item3);
 					var errorItem = new ListItem({
-						label: "",
-						style: "border:none;height:35px;font-size;font-family:arial;font-size:20px"
+						style: "border:none;height:auto;font-size;font-family:arial;font-size:20px"
 					});
 					leftPane.addChild(errorItem);
 					
@@ -167,30 +170,26 @@
 			
 			buildPage = function(leftPane, errorItem){
 				domWindow.body().style.overflow = "scroll";
-
-				var list = new RoundRectList({
-					style: "border:none"
-				});
 				
 				//--------------------------------------------------------------------------------
-				var item = new ListItem({
-					"class": "credentialListItem"
-				});
 				var twitterKey = new TextBox({
 					placeHolder: "App Id/Key",
-					"class": "credentialTextBox"
+					"class": "credentialTextBox, roundTextBoxClass",
+					style: "width:300px"
 				});
 				var twitterSecret = new TextBox({
 					placeHolder: "App Secret",
-					"class": "credentialTextBox"
+					"class": "credentialTextBox, roundTextBoxClass",
+					style: "width:300px"
 				});
-				var twitterRedirect = new TextBox({
-					value: "http://" + '<?php echo $redirect; ?>' + "twitterAccess.php",
-					disabled: true,
-					"class": "credentialTextBox"
-				});
-				var twitterLogoDiv = domConstruct.create("span", {style: "margin-top:25px;float:left;width:100px;height:100px", "class":"loginLogo", innerHTML: "<img src=app/resources/img/twitterLogin.png>"});
-				var textBoxDiv = domConstruct.create("span", {style:"float:left"});
+				//var twitterRedirect = new TextBox({
+				//	value: "http://" + '<?php echo $redirect; ?>' + "twitterAccess.php",
+				//	disabled: true,
+				//	"class": "credentialTextBox"
+				//});
+				var twitterRedirect = domConstruct.create("div", {style: "font-family:arial;text-align: center", innerHTML: "http://" + '<?php echo $redirect; ?>' + "twitterAccess.php"});
+				var twitterLogoDiv = domConstruct.create("div", {style: "margin-top:25px;width:100px;height:100px", "class":"loginLogo", innerHTML: "<img src=app/resources/img/twitterLogin.png>"});
+				var textBoxDiv = domConstruct.create("div", {});
 				var holderDiv = domConstruct.create("div", {});
 				holderDiv.appendChild(twitterKey.domNode);
 				textBoxDiv.appendChild(holderDiv);
@@ -199,38 +198,34 @@
 				holderDiv.appendChild(twitterSecret.domNode);
 				textBoxDiv.appendChild(holderDiv);
 				
-				holderDiv = domConstruct.create("div", {});
-				holderDiv.appendChild(twitterRedirect.domNode);
-				textBoxDiv.appendChild(holderDiv);
+				holderDiv.appendChild(twitterRedirect);
+				var siteLink = domConstruct.create("div", {innerHTML: '<span><a href="www.acilos.com/appregistration" target="_blank">Open Twitter</a></span>'});
+				var spacer = domConstruct.create("div", {style: "visibility:hidden", innerHTML: 'acilos'});
 				
-				item.domNode.appendChild(twitterLogoDiv);
-				item.domNode.appendChild(textBoxDiv);
-
-				var containerDiv = domConstruct.create("div", {});
-
-				containerDiv.appendChild(item.domNode);
+				leftPane.domNode.appendChild(twitterLogoDiv);
+				leftPane.domNode.appendChild(textBoxDiv);
+				leftPane.domNode.appendChild(siteLink);
+				leftPane.domNode.appendChild(spacer);
 				
-				list.domNode.appendChild(containerDiv);
-				
-				//--------------------------------------------------------------------------------
-				var item = new ListItem({
-					"class": "credentialListItem"
-				});				
+				//--------------------------------------------------------------------------------				
 				var faceKey = new TextBox({
 					placeHolder: "App Id/Key",
-					"class": "credentialTextBox"
+					"class": "credentialTextBox, roundTextBoxClass",
+					style: "width:300px"
 				});
 				var faceSecret = new TextBox({
 					placeHolder: "App Secret",
-					"class": "credentialTextBox"
+					"class": "credentialTextBox, roundTextBoxClass",
+					style: "width:300px"
 				});
-				var faceRedirect = new TextBox({
-					value: "http://" + '<?php echo $redirect; ?>' + "facebookAccess.php",
-					disabled: true,
-					"class": "credentialTextBox"
-				});
-				var faceLogoDiv = domConstruct.create("span", {style: "margin-top:25px;float:left;width:100px;height:100px", "class":"loginLogo", innerHTML: "<img src=app/resources/img/facebookLogin.png>"});
-				var textBoxDiv = domConstruct.create("span", {style:"float:left"});
+				//var faceRedirect = new TextBox({
+				//	value: "http://" + '<?php echo $redirect; ?>' + "facebookAccess.php",
+				//	disabled: true,
+				//	"class": "credentialTextBox"
+				//});
+				var faceRedirect = domConstruct.create("div", {style: "font-family:arial;text-align: center", innerHTML: "http://" + '<?php echo $redirect; ?>' + "facebookAccess.php"});
+				var faceLogoDiv = domConstruct.create("span", {style: "margin-top:25px;width:100px;height:100px", "class":"loginLogo", innerHTML: "<img src=app/resources/img/facebookLogin.png>"});
+				var textBoxDiv = domConstruct.create("span", {});
 				var holderDiv = domConstruct.create("div", {});
 				holderDiv.appendChild(faceKey.domNode);
 				textBoxDiv.appendChild(holderDiv);
@@ -239,38 +234,34 @@
 				holderDiv.appendChild(faceSecret.domNode);
 				textBoxDiv.appendChild(holderDiv);
 				
-				holderDiv = domConstruct.create("div", {});
-				holderDiv.appendChild(faceRedirect.domNode);
-				textBoxDiv.appendChild(holderDiv);
+				holderDiv.appendChild(faceRedirect);				
+				var siteLink = domConstruct.create("div", {innerHTML: '<span><a href="www.acilos.com/appregistration" target="_blank">Open Facebook</a></span>'});
+				var spacer = domConstruct.create("div", {style: "visibility:hidden", innerHTML: 'acilos'});
 				
-				item.domNode.appendChild(faceLogoDiv);
-				item.domNode.appendChild(textBoxDiv);
-				
-				var containerDiv = domConstruct.create("div", {});
-
-				containerDiv.appendChild(item.domNode);
-				
-				list.domNode.appendChild(containerDiv);
+				leftPane.domNode.appendChild(faceLogoDiv);
+				leftPane.domNode.appendChild(textBoxDiv);
+				leftPane.domNode.appendChild(siteLink);
+				leftPane.domNode.appendChild(spacer);
 				
 				//--------------------------------------------------------------------------------
-				var item = new ListItem({
-					"class": "credentialListItem"
-				});
 				var instaKey = new TextBox({
 					placeHolder: "App Id/Key",
-					"class": "credentialTextBox"
+					"class": "credentialTextBox, roundTextBoxClass",
+					style: "width:300px"
 				});
 				var instaSecret = new TextBox({
 					placeHolder: "App Secret",
-					"class": "credentialTextBox"
+					"class": "credentialTextBox, roundTextBoxClass",
+					style: "width:300px"
 				});
-				var instaRedirect = new TextBox({
-					value: "http://" + '<?php echo $redirect; ?>' + "instaAccess.php",
-					disabled: true,
-					"class": "credentialTextBox"
-				});
-				var instaLogoDiv = domConstruct.create("span", {style: "margin-top:25px;float:left;width:100px;height:100px", "class":"loginLogo", innerHTML: "<img src=app/resources/img/instagramLogin.png>"});
-				var textBoxDiv = domConstruct.create("span", {style:"float:left"});
+				//var instaRedirect = new TextBox({
+				//	value: "http://" + '<?php echo $redirect; ?>' + "instaAccess.php",
+				//	disabled: true,
+				//	"class": "credentialTextBox"
+				//});
+				var instaRedirect = domConstruct.create("div", {style: "font-family:arial;text-align: center", innerHTML: "http://" + '<?php echo $redirect; ?>' + "instaAccess.php"});
+				var instaLogoDiv = domConstruct.create("span", {style: "margin-top:25px;width:100px;height:100px", "class":"loginLogo", innerHTML: "<img src=app/resources/img/instagramLogin.png>"});
+				var textBoxDiv = domConstruct.create("span", {});
 				var holderDiv = domConstruct.create("div", {});
 				holderDiv.appendChild(instaKey.domNode);
 				textBoxDiv.appendChild(holderDiv);
@@ -279,38 +270,34 @@
 				holderDiv.appendChild(instaSecret.domNode);
 				textBoxDiv.appendChild(holderDiv);
 				
-				holderDiv = domConstruct.create("div", {});
-				holderDiv.appendChild(instaRedirect.domNode);
-				textBoxDiv.appendChild(holderDiv);
+				holderDiv.appendChild(instaRedirect);
+				var siteLink = domConstruct.create("div", {innerHTML: '<span><a href="www.acilos.com/appregistration" target="_blank">Open Instagram</a></span>'});
+				var spacer = domConstruct.create("div", {style: "visibility:hidden", innerHTML: 'acilos'});
 				
-				item.domNode.appendChild(instaLogoDiv);
-				item.domNode.appendChild(textBoxDiv);
-				
-				var containerDiv = domConstruct.create("div", {});
-
-				containerDiv.appendChild(item.domNode);
-				
-				list.domNode.appendChild(containerDiv);
+				leftPane.domNode.appendChild(instaLogoDiv);
+				leftPane.domNode.appendChild(textBoxDiv);
+				leftPane.domNode.appendChild(siteLink);
+				leftPane.domNode.appendChild(spacer);
 				
 				//--------------------------------------------------------------------------------
-				var item = new ListItem({
-					"class": "credentialListItem"
-				});
 				var linkedKey = new TextBox({
 					placeHolder: "App Id/Key",
-					"class": "credentialTextBox"
+					"class": "credentialTextBox, roundTextBoxClass",
+					style: "width:300px"
 				});
 				var linkedSecret = new TextBox({
 					placeHolder: "App Secret",
-					"class": "credentialTextBox"
+					"class": "credentialTextBox, roundTextBoxClass",
+					style: "width:300px"
 				});
-				var linkedRedirect = new TextBox({
-					value: "http://" + '<?php echo $redirect; ?>' + "linkedinAccess.php",
-					disabled: true,
-					"class": "credentialTextBox"
-				});
-				var linkedLogoDiv = domConstruct.create("span", {style: "margin-top:25px;float:left;width:100px;height:100px", "class":"loginLogo", innerHTML: "<img src=app/resources/img/linkedinLogin.png>"});
-				var textBoxDiv = domConstruct.create("span", {style:"float:left"});
+				//var linkedRedirect = new TextBox({
+				//	value: "http://" + '<?php echo $redirect; ?>' + "linkedinAccess.php",
+				//	disabled: true,
+				//	"class": "credentialTextBox"
+				//});
+				var linkedRedirect = domConstruct.create("div", {style: "font-family:arial;text-align: center", innerHTML: "http://" + '<?php echo $redirect; ?>' + "linkedinAccess.php"});
+				var linkedLogoDiv = domConstruct.create("span", {style: "margin-top:25px;width:100px;height:100px", "class":"loginLogo", innerHTML: "<img src=app/resources/img/linkedinLogin.png>"});
+				var textBoxDiv = domConstruct.create("span", {});
 				var holderDiv = domConstruct.create("div", {});
 				holderDiv.appendChild(linkedKey.domNode);
 				textBoxDiv.appendChild(holderDiv);
@@ -318,21 +305,15 @@
 				holderDiv = domConstruct.create("div", {});
 				holderDiv.appendChild(linkedSecret.domNode);
 				textBoxDiv.appendChild(holderDiv);
-				
-				holderDiv = domConstruct.create("div", {});
-				holderDiv.appendChild(linkedRedirect.domNode);
-				textBoxDiv.appendChild(holderDiv);
-				
-				item.domNode.appendChild(linkedLogoDiv);
-				item.domNode.appendChild(textBoxDiv);
-				
-				var containerDiv = domConstruct.create("div", {});
 
-				containerDiv.appendChild(item.domNode);
+				holderDiv.appendChild(linkedRedirect);
+				var siteLink = domConstruct.create("div", {innerHTML: '<span><a href="www.acilos.com/appregistration" target="_blank">Open Linkedin</a></span>'});
+				var spacer = domConstruct.create("div", {style: "visibility:hidden", innerHTML: 'acilos'});
 				
-				list.domNode.appendChild(containerDiv);
-
-				leftPane.addChild(list);
+				leftPane.domNode.appendChild(linkedLogoDiv);
+				leftPane.domNode.appendChild(textBoxDiv);
+				leftPane.domNode.appendChild(siteLink);
+				leftPane.domNode.appendChild(spacer);
 				
 				var save = new Button({
 					label: "Save",
@@ -373,7 +354,7 @@
 								obj['twitter'] = {};
 								obj['twitter']['key'] = twitterKey.get("value");
 								obj['twitter']['secret'] = twitterSecret.get("value");
-								obj['twitter']['redir'] = twitterRedirect.get("value");
+								obj['twitter']['redir'] = twitterRedirect.innerHTML;
 								obj['twitter']['color'] = "#E32252";	
 								obj['twitter']['login'] = "first";			
 							}
