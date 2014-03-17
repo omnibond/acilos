@@ -495,7 +495,7 @@ function getPersonalFeed(){
 function getDiscussionObjects(){
 	echo "get linkedin discussion objects"; ?><br/><?php
 
-	$filename = "../../oAuth/linkedinToken.json";
+	$filename = "../../serviceCreds.json";
 	$file = file_get_contents($filename);
 
 	$tokenObject = json_decode($file, true);
