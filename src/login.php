@@ -52,7 +52,7 @@
 	}
 	
 	#print_r($_COOKIE);
-	$var = getData(); 
+	$var = getData();
 	$fCount = (string)count($var['facebook']);
 	$lCount = (string)count($var['twitter']);
 	$iCount = (string)count($var['linkedin']);
