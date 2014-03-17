@@ -6,7 +6,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Social Media Reader</title>
+    <title>Acilos</title>
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta http-equiv="cache-control" content="no-cache">

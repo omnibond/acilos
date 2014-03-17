@@ -24,9 +24,9 @@
 */
 // dojo-mama configuration
 define({
-	title: '<span style="font-weight:normal">Social Media Reader</span>',
+	title: '<span style="font-weight:normal">Private Social Valet</span>',
 	//title: '<span><img src="app/resources/img/acilosTitleLogo.png"></span>',
-	titleLabel: 'Social Media Reader',
+	titleLabel: 'Private Social Valet',
 	nav: {
 		/* navigational elements point to groups */
 		primary: [
