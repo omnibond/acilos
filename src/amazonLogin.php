@@ -44,10 +44,10 @@
 	}
 	
 	if(isset($_GET['logout']) && $_GET['logout'] == "true"){
-		setcookie("facebookCook", $_COOKIE['PHPSESSID'], time()-3600, '/', 'clemson.edu', false, false);
-		setcookie("linkedinCook", $_COOKIE['PHPSESSID'], time()-3600, '/', 'clemson.edu', false, false);
-		setcookie("twitterCook", $_COOKIE['PHPSESSID'], time()-3600, '/', 'clemson.edu', false, false);
-		setcookie("instagramCook", $_COOKIE['PHPSESSID'], time()-3600, '/', 'clemson.edu', false, false);
+		setcookie("facebookCook", $_COOKIE['PHPSESSID'], time()-3600, '/', 'amazonaws.com', false, false);
+		setcookie("linkedinCook", $_COOKIE['PHPSESSID'], time()-3600, '/', 'amazonaws.com', false, false);
+		setcookie("twitterCook", $_COOKIE['PHPSESSID'], time()-3600, '/', 'amazonaws.com', false, false);
+		setcookie("instagramCook", $_COOKIE['PHPSESSID'], time()-3600, '/', 'amazonaws.com', false, false);
 		header('Location: /auth.php');
 	}
 	
@@ -59,7 +59,7 @@
 	$tCount = (string)count($var['instagram']);
 	
 	if(isset($_GET['facebook']) && $_GET['facebook'] == "true"){
-		setcookie("facebookCook", $_COOKIE['PHPSESSID'], time()+ (3600 * 24), '/', 'clemson.edu', false, false);
+		setcookie("facebookCook", $_COOKIE['PHPSESSID'], time()+ (3600 * 24), '/', 'amazonaws.com', false, false);
 		if(isset($_GET['login']) && $_GET['login'] !== "second"){
 			header('Location: /#/appHelp/ManAccountsHelpView');
 		}else{
@@ -70,7 +70,7 @@
 		}
 	}
 	if(isset($_GET['linkedin']) && $_GET['linkedin'] == "true"){
-		setcookie("linkedinCook", $_COOKIE['PHPSESSID'], time()+ (3600 * 24), '/', 'clemson.edu', false, false);
+		setcookie("linkedinCook", $_COOKIE['PHPSESSID'], time()+ (3600 * 24), '/', 'amazonaws.com', false, false);
 		if(isset($_GET['login']) && $_GET['login'] !== "second"){
 			header('Location: /#/appHelp/ManAccountsHelpView');
 		}else{
@@ -81,7 +81,7 @@
 		}
 	}
 	if(isset($_GET['twitter']) && $_GET['twitter'] == "true"){
-		setcookie("twitterCook", $_COOKIE['PHPSESSID'], time()+ (3600 * 24), '/', 'clemson.edu', false, false);
+		setcookie("twitterCook", $_COOKIE['PHPSESSID'], time()+ (3600 * 24), '/', 'amazonaws.com', false, false);
 		if(isset($_GET['login']) && $_GET['login'] !== "second"){
 			header('Location: /#/appHelp/ManAccountsHelpView');
 		}else{
@@ -92,7 +92,7 @@
 		}
 	}
 	if(isset($_GET['instagram']) && $_GET['instagram'] == "true"){
-		setcookie("instagramCook", $_COOKIE['PHPSESSID'], time()+ (3600 * 24), '/', 'clemson.edu', false, false);
+		setcookie("instagramCook", $_COOKIE['PHPSESSID'], time()+ (3600 * 24), '/', 'amazonaws.com', false, false);
 		if(isset($_GET['login']) && $_GET['login'] !== "second"){
 			header('Location: /#/appHelp/ManAccountsHelpView');
 		}else{
@@ -279,7 +279,7 @@
 			},
 			
 			loginButtonsNitems = function(param, div, serviceCreds, mainDiv){
-				if(param == "facebook"){
+				if(param == "facebook" && serviceCreds[param].length > 0){
 					var button = new Button({
 						"class": "loginLogoButton",
 						onClick: lang.hitch(null, function(){
@@ -290,7 +290,7 @@
 					button.domNode.appendChild(faceDiv);
 					div.appendChild(button.domNode);
 				}
-				if(param == "twitter"){
+				if(param == "twitter" && serviceCreds[param].length > 0){
 					var button = new Button({
 						"class": "loginLogoButton",
 						onClick: lang.hitch(null, function(){
@@ -301,7 +301,7 @@
 					button.domNode.appendChild(twitDiv);
 					div.appendChild(button.domNode);	
 				}
-				if(param == "instagram"){
+				if(param == "instagram" && serviceCreds[param].length > 0){
 					var button = new Button({
 						"class": "loginLogoButton",
 						onClick: lang.hitch(null, function(){
@@ -312,7 +312,7 @@
 					button.domNode.appendChild(instaDiv);
 					div.appendChild(button.domNode);
 				}
-				if(param == "linkedin"){
+				if(param == "linkedin" && serviceCreds[param].length > 0){
 					var button = new Button({
 						"class": "loginLogoButton",
 						onClick: lang.hitch(null, function(){
@@ -340,11 +340,11 @@
 					});
 					leftPane.addChild(item);
 				}else{
-					if('<?php echo $tCook; ?>' == "true"){
+					if('<?php echo $fCook; ?>' == "true"){
 						var div1 = domConstruct.create("span", {});
 						loginButtonsNitems("twitter", div1, serviceCreds, mainDiv);
 					}
-					if('<?php echo $fCook; ?>' == "true"){
+					if('<?php echo $tCook; ?>' == "true"){
 						var div2 = domConstruct.create("span", {});
 						loginButtonsNitems("facebook", div2, serviceCreds, mainDiv);
 					}

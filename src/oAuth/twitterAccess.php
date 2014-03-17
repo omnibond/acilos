@@ -122,13 +122,9 @@ if(isset($_REQUEST['oauth_verifier'])){
 		}
 		
 		if($credObj['login'] == "first"){
-			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php");
-			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php");
 			$credObj['login'] = "second";
 		}
 		if($credObj['login'] == ""){
-			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php");
-			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php");
 			$credObj['login'] = "first";
 		}
 					
@@ -142,7 +138,7 @@ if(isset($_REQUEST['oauth_verifier'])){
 		$credObj['twitter'][$g] = $temp;
 		
 		file_put_contents("../serviceCreds.json", json_encode($credObj));
-
+		
 		header('Location: ../login.php?twitter=true');
 	}else{
 		setcookie ("facebookCook", "", time() - 3600, $_SERVER['HTTP_HOST'], 'clemson.edu', false, false);

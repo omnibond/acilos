@@ -502,7 +502,20 @@ class Database{
 		}
 
 		$finalObj['login'] = "first";
-
+		
+		if(!isset($finalObj['twitter'])){
+			$finalObj['twitter'] = array();
+		}
+		if(!isset($finalObj['linkedin'])){
+			$finalObj['linkedin'] = array();
+		}
+		if(!isset($finalObj['facebook'])){
+			$finalObj['facebook'] = array();
+		}
+		if(!isset($finalObj['instagram'])){
+			$finalObj['instagram'] = array();
+		}
+		
 		file_put_contents("../../serviceCreds.json", json_encode($finalObj));
 
 		return json_encode(array("success" => "App Saved"));
