@@ -199,7 +199,7 @@
 				textBoxDiv.appendChild(holderDiv);
 				
 				holderDiv.appendChild(twitterRedirect);
-				var siteLink = domConstruct.create("div", {innerHTML: '<span><a href="www.acilos.com/appregistration" target="_blank">Open Twitter</a></span>'});
+				var siteLink = domConstruct.create("div", {innerHTML: '<span><a href="https://dev.twitter.com/" target="_blank">Open Twitter</a></span>'});
 				var spacer = domConstruct.create("div", {style: "visibility:hidden", innerHTML: 'acilos'});
 				
 				leftPane.domNode.appendChild(twitterLogoDiv);
@@ -235,7 +235,7 @@
 				textBoxDiv.appendChild(holderDiv);
 				
 				holderDiv.appendChild(faceRedirect);				
-				var siteLink = domConstruct.create("div", {innerHTML: '<span><a href="www.acilos.com/appregistration" target="_blank">Open Facebook</a></span>'});
+				var siteLink = domConstruct.create("div", {innerHTML: '<span><a href="https://developers.facebook.com/" target="_blank">Open Facebook</a></span>'});
 				var spacer = domConstruct.create("div", {style: "visibility:hidden", innerHTML: 'acilos'});
 				
 				leftPane.domNode.appendChild(faceLogoDiv);
@@ -271,7 +271,7 @@
 				textBoxDiv.appendChild(holderDiv);
 				
 				holderDiv.appendChild(instaRedirect);
-				var siteLink = domConstruct.create("div", {innerHTML: '<span><a href="www.acilos.com/appregistration" target="_blank">Open Instagram</a></span>'});
+				var siteLink = domConstruct.create("div", {innerHTML: '<span><a href="http://instagram.com/developer/" target="_blank">Open Instagram</a></span>'});
 				var spacer = domConstruct.create("div", {style: "visibility:hidden", innerHTML: 'acilos'});
 				
 				leftPane.domNode.appendChild(instaLogoDiv);
@@ -307,7 +307,7 @@
 				textBoxDiv.appendChild(holderDiv);
 
 				holderDiv.appendChild(linkedRedirect);
-				var siteLink = domConstruct.create("div", {innerHTML: '<span><a href="www.acilos.com/appregistration" target="_blank">Open Linkedin</a></span>'});
+				var siteLink = domConstruct.create("div", {innerHTML: '<span><a href="http://developer.linkedin.com/" target="_blank">Open Linkedin</a></span>'});
 				var spacer = domConstruct.create("div", {style: "visibility:hidden", innerHTML: 'acilos'});
 				
 				leftPane.domNode.appendChild(linkedLogoDiv);
