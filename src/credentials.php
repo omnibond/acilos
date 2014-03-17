@@ -336,7 +336,7 @@
 								obj['facebook'] = {};
 								obj['facebook']['key'] = faceKey.get("value");
 								obj['facebook']['secret'] = faceSecret.get("value");
-								obj['facebook']['redir'] = faceRedirect.get("value");
+								obj['facebook']['redir'] = faceRedirect.innerHTML;
 								obj['facebook']['color'] = "#0066FF";							
 								obj['facebook']['login'] = "first";							
 							}
@@ -345,7 +345,7 @@
 								obj['linkedin'] = {};
 								obj['linkedin']['key'] = linkedKey.get("value");
 								obj['linkedin']['secret'] = linkedSecret.get("value");
-								obj['linkedin']['redir'] = linkedRedirect.get("value");
+								obj['linkedin']['redir'] = linkedRedirect.innerHTML;
 								obj['linkedin']['color'] = "#B33DA5";	
 								obj['linkedin']['login'] = "first";			
 							}
@@ -363,7 +363,7 @@
 								obj['instagram'] = {};
 								obj['instagram']['key'] = instaKey.get("value");
 								obj['instagram']['secret'] = instaSecret.get("value");
-								obj['instagram']['redir'] = instaRedirect.get("value");
+								obj['instagram']['redir'] = instaRedirect.innerHTML;
 								obj['instagram']['color'] = "#F66733";	
 								obj['instagram']['login'] = "first";		
 							}
