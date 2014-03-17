@@ -50,7 +50,7 @@ define(['dojo/_base/declare',
 			if(this.toolTips.length > 0){
 				for(var x = 0; x < this.toolTips.length; x++){
 					if(this.toolTips[x]['name'] == "helpButton"){
-						var divHelpButton = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/question_mark_small.png>", title: "Help"});
+						var divHelpButton = domConstruct.create("div", {"class": "icon-help fontSize25 fontDiv30", title: "Help"});
 
 						this.toolTips[x].domNode.appendChild(divHelpButton);
 					}
@@ -79,43 +79,43 @@ define(['dojo/_base/declare',
 			if(this.buttons.length > 0){
 				for(var x = 0; x < this.buttons.length; x++){
 					if(this.buttons[x]['name'] == "scrollButton"){
-						var divScrollButton = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/uparrow_small.png>", title: "Scroll to the top"});
+						var divScrollButton = domConstruct.create("div", {"class": "icon-scroll-to-top fontSize25 fontDiv30", title: "Scroll to the top"});
 
 						this.buttons[x].domNode.appendChild(divScrollButton);
 					}
 
 					if(this.buttons[x]['name'] == "goButton"){
-						var divSelectButton = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/go-icon_small.png>", title: "Go to the next page"});
+						var divSelectButton = domConstruct.create("div", {"class": "icon-go fontSize25 fontDiv30", title: "Go to the next page"});
 
 						this.buttons[x].domNode.appendChild(divSelectButton);
 					}
 
 					if(this.buttons[x]['name'] == "alphaButton"){
-						var divAlphaButton = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/a_to_z_template_icon_small.png>", title: "Sort alphabetically"});
+						var divAlphaButton = domConstruct.create("div", {"class": "icon-alphabetical fontSize25 fontDiv30", title: "Sort alphabetically"});
 
 						this.buttons[x].domNode.appendChild(divAlphaButton);
 					}
 
 					if(this.buttons[x]['name'] == "chattyButton"){
-						var divChattyButton = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/chatty_small.png>", title: "Show the chattiest people"});
+						var divChattyButton = domConstruct.create("div", {"class": "icon-chattiest fontSize25 fontDiv30", title: "Show the chattiest people"});
 
 						this.buttons[x].domNode.appendChild(divChattyButton);
 					}
 
 					if(this.buttons[x]['name'] == "secondButton"){
-						var divSecondButton = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/Handshake_hands_deal_contractors_alliance_small.png>", title: "Show friends of friends"});
+						var divSecondButton = domConstruct.create("div", {"class": "icon-friends-of-friends fontSize25 fontDiv30", title: "Show friends of friends"});
 
 						this.buttons[x].domNode.appendChild(divSecondButton);
 					}
 
 					if(this.buttons[x]['name'] == "recentButton"){
-						var divRecentButton = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/clock_small.png>", title: "Show most recent posters"});
+						var divRecentButton = domConstruct.create("div", {"class": "icon-recent-posters fontSize25 fontDiv30", title: "Show most recent posters"});
 
 						this.buttons[x].domNode.appendChild(divRecentButton);
 					}
 
 					if(this.buttons[x]['name'] == "manualRefreshButton"){
-						var divManualRefreshBut = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/reload_small.png>", title: "Refresh the data"});
+						var divManualRefreshBut = domConstruct.create("div", {"class": "icon-refresh fontSize25 fontDiv30", title: "Refresh the data"});
 
 						this.buttons[x].domNode.appendChild(divManualRefreshBut);
 					}
@@ -128,31 +128,31 @@ define(['dojo/_base/declare',
 					}
 
 					if(this.buttons[x]['name'] == "saveButton"){
-						var divSaveButton = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/save-icon_small.png>", title: "Save this feed"});
+						var divSaveButton = domConstruct.create("div", {"class": "icon-save fontSize25 fontDiv30", title: "Save this feed"});
 
 						this.buttons[x].domNode.appendChild(divSaveButton);
 					}
 
 					if(this.buttons[x]['name'] == "searchButton"){
-						var divSearchButton = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/Search-icon_small.png>", title: "Start the search"});
+						var divSearchButton = domConstruct.create("div", {"class": "icon-search fontSize25 fontDiv30", title: "Start the search"});
 
 						this.buttons[x].domNode.appendChild(divSearchButton);
 					}
 
 					if(this.buttons[x]['name'] == "mergeButton"){
-						var divMergeButton = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/merge_small.png>", title: "Merge contacts"});
+						var divMergeButton = domConstruct.create("div", {"class": "icon-edit-accounts fontSize25 fontDiv30", title: "Merge contacts"});
 
 						this.buttons[x].domNode.appendChild(divMergeButton);
 					}
 
 					if(this.buttons[x]['name'] == "newFeedButton"){
-						var divNewFeedButton = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/plus_icon_small.png>", title: "Create a New Feed"});
+						var divNewFeedButton = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/edit_icon_small.png>", title: "Create a New Feed"});
 
 						this.buttons[x].domNode.appendChild(divNewFeedButton);
 					}
 
 					if(this.buttons[x]['name'] == "editFeedButton"){
-						var divEditFeedButton = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/edit_icon_small.png>", title: "Edit a Feed"});
+						var divEditFeedButton = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/plus_icon_small.png>", title: "Edit a Feed"});
 
 						this.buttons[x].domNode.appendChild(divEditFeedButton);
 					}
@@ -170,7 +170,7 @@ define(['dojo/_base/declare',
 					}
 
 					if(this.buttons[x]['name'] == "helpButton"){
-						var divHelpButton = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/question_mark_small.png>", title: "Help"});
+						var divHelpButton = domConstruct.create("div", {"class": "icon-help fontSize25 fontDiv30", title: "Help"});
 
 						this.buttons[x].domNode.appendChild(divHelpButton);	
 					}
