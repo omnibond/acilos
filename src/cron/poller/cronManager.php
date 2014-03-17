@@ -164,7 +164,7 @@ function writeClient($obj){
 	return $grr;
 }
 
-function updateRecentPost($clientObject, $post){
+function updateRecentPost($post){
 	global $clientObject;
 	//Dont count CONN objects as posts
 	if($post['title'] != "CONN"){

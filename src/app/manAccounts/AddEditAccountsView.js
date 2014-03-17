@@ -163,11 +163,12 @@ define([
 					if(obj[param][w].name != null || obj[param][w].name != undefined){
 						nameDiv.innerHTML = obj[param][w].name;
 					}else{
+						var authURL = obj[param][w].auth;
 						var auth = new Button({
 							label: "Authenticate",
-							onClick: lang.hitch(this, function(){
-								window.location = obj[param][w]["auth"];
-							})
+							onClick: lang.hitch(this, function(authURL){
+								window.location = authURL;
+							}, authURL)
 						})
 						nameDiv.appendChild(auth.domNode);
 						var msgDiv = domConstruct.create("div", {style:"overflow:visible;", innerHTML: "Make sure the correct account is logged in on this browser before authenticating."});
@@ -255,12 +256,13 @@ define([
 				add.onclick = lang.hitch(this, function(){
 					this.getDomain().then(lang.hitch(this, function(obj){
 						this.domain = obj['domain'];
-					}))
-					var list = new EdgeToEdgeList({style:"margin-top:30px;border:none"})			
 					
-					this.makeAccountPane(param, list);
+						var list = new EdgeToEdgeList({style:"margin-top:30px;border:none"})			
 						
-					addAccount.domNode.appendChild(list.domNode);					
+						this.makeAccountPane(param, list);
+							
+						addAccount.domNode.appendChild(list.domNode);	
+					}))
 				}, param, addAccount)
 				addAccount.domNode.appendChild(add);
 				

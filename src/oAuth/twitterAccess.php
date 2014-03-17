@@ -122,9 +122,13 @@ if(isset($_REQUEST['oauth_verifier'])){
 		}
 		
 		if($credObj['login'] == "first"){
+			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php");
+			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php");
 			$credObj['login'] = "second";
 		}
 		if($credObj['login'] == ""){
+			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php");
+			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php");
 			$credObj['login'] = "first";
 		}
 					

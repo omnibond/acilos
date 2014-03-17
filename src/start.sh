@@ -125,6 +125,9 @@ else
 	echo "Socialreader crons already running"
 fi
 
+echo "Priming database and clearing data"
+php startES.php
+
 running=$(ps axho user,comm|grep -E "httpd|apache"|uniq|grep -v "root"|awk 'END {if ($1) print $1}')
 
 echo "installing composer"

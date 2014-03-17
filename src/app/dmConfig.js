@@ -24,7 +24,7 @@
 */
 // dojo-mama configuration
 define({
-	title: '<span style="font-weight:normal">Private Social Valet</span>',
+	title: '<span style="position:absolute;top:10px;left:10px"><img src="../favicon.ico" height=25px width=25px></span><span style="position:absolute;left:40px;font-weight:normal">Private Social Valet</span>',
 	//title: '<span><img src="app/resources/img/acilosTitleLogo.png"></span>',
 	titleLabel: 'Private Social Valet',
 	nav: {

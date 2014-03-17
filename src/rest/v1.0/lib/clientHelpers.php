@@ -126,7 +126,7 @@ function getClients($from){
 			)
 		)
 	));
-	
+
 	return $res;
 }
 
@@ -160,7 +160,7 @@ function getAlphaClients($from){
 			)
 		)
 	));
-	
+
 	return $res;
 }
 
@@ -261,8 +261,6 @@ function getRecentClients($from){
 			)
 		)
 	));
-	
-	#print_r($res);
 	
 	return $res;
 }

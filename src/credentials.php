@@ -175,19 +175,19 @@
 				var twitterKey = new TextBox({
 					placeHolder: "App Id/Key",
 					"class": "credentialTextBox, roundTextBoxClass",
-					style: "width:300px"
+					style: "width:250px"
 				});
 				var twitterSecret = new TextBox({
 					placeHolder: "App Secret",
 					"class": "credentialTextBox, roundTextBoxClass",
-					style: "width:300px"
+					style: "width:250px"
 				});
-				//var twitterRedirect = new TextBox({
-				//	value: "http://" + '<?php echo $redirect; ?>' + "twitterAccess.php",
-				//	disabled: true,
-				//	"class": "credentialTextBox"
-				//});
-				var twitterRedirect = domConstruct.create("div", {style: "font-family:arial;text-align: center", innerHTML: "http://" + '<?php echo $redirect; ?>' + "twitterAccess.php"});
+				var twitterRedirect = new TextBox({
+					value: "http://" + '<?php echo $redirect; ?>' + "twitterAccess.php",
+					"class": "credentialTextBox, roundTextBoxClass",
+					style: "width:250px"
+				});
+				//var twitterRedirect = domConstruct.create("div", {style: "font-family:arial;text-align: center", innerHTML: "http://" + '<?php echo $redirect; ?>' + "twitterAccess.php"});
 				var twitterLogoDiv = domConstruct.create("div", {style: "margin-top:25px;width:100px;height:100px", "class":"loginLogo", innerHTML: "<img src=app/resources/img/twitterLogin.png>"});
 				var textBoxDiv = domConstruct.create("div", {});
 				var holderDiv = domConstruct.create("div", {});
@@ -198,7 +198,10 @@
 				holderDiv.appendChild(twitterSecret.domNode);
 				textBoxDiv.appendChild(holderDiv);
 				
-				holderDiv.appendChild(twitterRedirect);
+				holderDiv = domConstruct.create("div", {});
+				holderDiv.appendChild(twitterRedirect.domNode);
+				textBoxDiv.appendChild(holderDiv);
+				
 				var siteLink = domConstruct.create("div", {innerHTML: '<span><a href="https://dev.twitter.com/" target="_blank">Open Twitter</a></span>'});
 				var spacer = domConstruct.create("div", {style: "visibility:hidden", innerHTML: 'acilos'});
 				
@@ -211,19 +214,19 @@
 				var faceKey = new TextBox({
 					placeHolder: "App Id/Key",
 					"class": "credentialTextBox, roundTextBoxClass",
-					style: "width:300px"
+					style: "width:250px"
 				});
 				var faceSecret = new TextBox({
 					placeHolder: "App Secret",
 					"class": "credentialTextBox, roundTextBoxClass",
-					style: "width:300px"
+					style: "width:250px"
 				});
-				//var faceRedirect = new TextBox({
-				//	value: "http://" + '<?php echo $redirect; ?>' + "facebookAccess.php",
-				//	disabled: true,
-				//	"class": "credentialTextBox"
-				//});
-				var faceRedirect = domConstruct.create("div", {style: "font-family:arial;text-align: center", innerHTML: "http://" + '<?php echo $redirect; ?>' + "facebookAccess.php"});
+				var faceRedirect = new TextBox({
+					value: "http://" + '<?php echo $redirect; ?>' + "facebookAccess.php",
+					"class": "credentialTextBox, roundTextBoxClass",
+					style: "width:250px"
+				});
+				//var faceRedirect = domConstruct.create("div", {style: "font-family:arial;text-align: center", innerHTML: "http://" + '<?php echo $redirect; ?>' + "facebookAccess.php"});
 				var faceLogoDiv = domConstruct.create("span", {style: "margin-top:25px;width:100px;height:100px", "class":"loginLogo", innerHTML: "<img src=app/resources/img/facebookLogin.png>"});
 				var textBoxDiv = domConstruct.create("span", {});
 				var holderDiv = domConstruct.create("div", {});
@@ -233,8 +236,11 @@
 				holderDiv = domConstruct.create("div", {});
 				holderDiv.appendChild(faceSecret.domNode);
 				textBoxDiv.appendChild(holderDiv);
-				
-				holderDiv.appendChild(faceRedirect);				
+
+				holderDiv = domConstruct.create("div", {});
+				holderDiv.appendChild(faceRedirect.domNode);
+				textBoxDiv.appendChild(holderDiv);
+
 				var siteLink = domConstruct.create("div", {innerHTML: '<span><a href="https://developers.facebook.com/" target="_blank">Open Facebook</a></span>'});
 				var spacer = domConstruct.create("div", {style: "visibility:hidden", innerHTML: 'acilos'});
 				
@@ -247,19 +253,19 @@
 				var instaKey = new TextBox({
 					placeHolder: "App Id/Key",
 					"class": "credentialTextBox, roundTextBoxClass",
-					style: "width:300px"
+					style: "width:250px"
 				});
 				var instaSecret = new TextBox({
 					placeHolder: "App Secret",
 					"class": "credentialTextBox, roundTextBoxClass",
-					style: "width:300px"
+					style: "width:250px"
 				});
-				//var instaRedirect = new TextBox({
-				//	value: "http://" + '<?php echo $redirect; ?>' + "instaAccess.php",
-				//	disabled: true,
-				//	"class": "credentialTextBox"
-				//});
-				var instaRedirect = domConstruct.create("div", {style: "font-family:arial;text-align: center", innerHTML: "http://" + '<?php echo $redirect; ?>' + "instaAccess.php"});
+				var instaRedirect = new TextBox({
+					value: "http://" + '<?php echo $redirect; ?>' + "instaAccess.php",
+					"class": "credentialTextBox, roundTextBoxClass",
+					style: "width:250px"
+				});
+				//var instaRedirect = domConstruct.create("div", {style: "font-family:arial;text-align: center", innerHTML: "http://" + '<?php echo $redirect; ?>' + "instaAccess.php"});
 				var instaLogoDiv = domConstruct.create("span", {style: "margin-top:25px;width:100px;height:100px", "class":"loginLogo", innerHTML: "<img src=app/resources/img/instagramLogin.png>"});
 				var textBoxDiv = domConstruct.create("span", {});
 				var holderDiv = domConstruct.create("div", {});
@@ -269,8 +275,11 @@
 				holderDiv = domConstruct.create("div", {});
 				holderDiv.appendChild(instaSecret.domNode);
 				textBoxDiv.appendChild(holderDiv);
+			
+				holderDiv = domConstruct.create("div", {});
+				holderDiv.appendChild(instaRedirect.domNode);
+				textBoxDiv.appendChild(holderDiv);
 				
-				holderDiv.appendChild(instaRedirect);
 				var siteLink = domConstruct.create("div", {innerHTML: '<span><a href="http://instagram.com/developer/" target="_blank">Open Instagram</a></span>'});
 				var spacer = domConstruct.create("div", {style: "visibility:hidden", innerHTML: 'acilos'});
 				
@@ -283,19 +292,19 @@
 				var linkedKey = new TextBox({
 					placeHolder: "App Id/Key",
 					"class": "credentialTextBox, roundTextBoxClass",
-					style: "width:300px"
+					style: "width:250px"
 				});
 				var linkedSecret = new TextBox({
 					placeHolder: "App Secret",
 					"class": "credentialTextBox, roundTextBoxClass",
-					style: "width:300px"
+					style: "width:250px"
 				});
-				//var linkedRedirect = new TextBox({
-				//	value: "http://" + '<?php echo $redirect; ?>' + "linkedinAccess.php",
-				//	disabled: true,
-				//	"class": "credentialTextBox"
-				//});
-				var linkedRedirect = domConstruct.create("div", {style: "font-family:arial;text-align: center", innerHTML: "http://" + '<?php echo $redirect; ?>' + "linkedinAccess.php"});
+				var linkedRedirect = new TextBox({
+					value: "http://" + '<?php echo $redirect; ?>' + "linkedinAccess.php",
+					"class": "credentialTextBox, roundTextBoxClass",
+					style: "width:250px"
+				});
+				//var linkedRedirect = domConstruct.create("div", {style: "font-family:arial;text-align: center", innerHTML: "http://" + '<?php echo $redirect; ?>' + "linkedinAccess.php"});
 				var linkedLogoDiv = domConstruct.create("span", {style: "margin-top:25px;width:100px;height:100px", "class":"loginLogo", innerHTML: "<img src=app/resources/img/linkedinLogin.png>"});
 				var textBoxDiv = domConstruct.create("span", {});
 				var holderDiv = domConstruct.create("div", {});
@@ -305,8 +314,11 @@
 				holderDiv = domConstruct.create("div", {});
 				holderDiv.appendChild(linkedSecret.domNode);
 				textBoxDiv.appendChild(holderDiv);
-
-				holderDiv.appendChild(linkedRedirect);
+				
+				holderDiv = domConstruct.create("div", {});
+				holderDiv.appendChild(linkedRedirect.domNode);
+				textBoxDiv.appendChild(holderDiv);
+				
 				var siteLink = domConstruct.create("div", {innerHTML: '<span><a href="http://developer.linkedin.com/" target="_blank">Open Linkedin</a></span>'});
 				var spacer = domConstruct.create("div", {style: "visibility:hidden", innerHTML: 'acilos'});
 				
@@ -336,7 +348,7 @@
 								obj['facebook'] = {};
 								obj['facebook']['key'] = faceKey.get("value");
 								obj['facebook']['secret'] = faceSecret.get("value");
-								obj['facebook']['redir'] = faceRedirect.innerHTML;
+								obj['facebook']['redir'] = faceRedirect.get("value");
 								obj['facebook']['color'] = "#0066FF";							
 								obj['facebook']['login'] = "first";							
 							}
@@ -345,7 +357,7 @@
 								obj['linkedin'] = {};
 								obj['linkedin']['key'] = linkedKey.get("value");
 								obj['linkedin']['secret'] = linkedSecret.get("value");
-								obj['linkedin']['redir'] = linkedRedirect.innerHTML;
+								obj['linkedin']['redir'] = linkedRedirect.get("value");
 								obj['linkedin']['color'] = "#B33DA5";	
 								obj['linkedin']['login'] = "first";			
 							}
@@ -354,7 +366,7 @@
 								obj['twitter'] = {};
 								obj['twitter']['key'] = twitterKey.get("value");
 								obj['twitter']['secret'] = twitterSecret.get("value");
-								obj['twitter']['redir'] = twitterRedirect.innerHTML;
+								obj['twitter']['redir'] = twitterRedirect.get("value");
 								obj['twitter']['color'] = "#E32252";	
 								obj['twitter']['login'] = "first";			
 							}
@@ -363,7 +375,7 @@
 								obj['instagram'] = {};
 								obj['instagram']['key'] = instaKey.get("value");
 								obj['instagram']['secret'] = instaSecret.get("value");
-								obj['instagram']['redir'] = instaRedirect.innerHTML;
+								obj['instagram']['redir'] = instaRedirect.get("value");
 								obj['instagram']['color'] = "#F66733";	
 								obj['instagram']['login'] = "first";		
 							}
