@@ -236,48 +236,48 @@ define([
 					style: "border: none"
 				});
 				var chromeListItem = new ListItem({
-					variableHeight: true,
+					variableHeight: true, 
 					clickable: true,
 					noArrow: true,
 					label: "Google Chrome",
 					rightText: "(Windows, OS X, iOS, Android 4.0+)",
-					style: "font-weight: bold !important",
+					"class": "aboutListItem",
 					onClick: lang.hitch(this, function(){
 						window.open("https://www.google.com/intl/en/chrome/browser/");
 					})
 				});
 
 				var safariListItem = new ListItem({
-					variableHeight: true,
+					variableHeight: true, 
 					clickable: true,
 					noArrow: true,
 					label: "Apple Safari",
 					rightText: "(Windows, OS X, iOS 6+)",
-					style: "font-weight: bold !important",
+					"class": "aboutListItem",
 					onClick: lang.hitch(this, function(){
 						window.open("http://support.apple.com/downloads/#safari");
 					})
 				});
 
 				var firefoxListItem = new ListItem({
-					variableHeight: true,
+					variableHeight: true, 
 					clickable: true,
 					noArrow: true,
 					label: "Mozilla Firefox",
 					rightText: "(Windows, OS X)",
-					style: "font-weight: bold !important",
+					"class": "aboutListItem",
 					onClick: lang.hitch(this, function(){
 						window.open("http://www.mozilla.org/en-US/firefox/new/");
 					})
 				});
 
 				var internetExplorerListItem = new ListItem({
-					variableHeight: true,
+					variableHeight: true, 
 					clickable: true,
 					noArrow: true,
 					label: "Microsoft Internet Explorer 9+",
 					rightText: "(Windows, Windows Phone 7+)",
-					style: "font-weight: bold !important",
+					"class": "aboutListItem",
 					onClick: lang.hitch(this, function(){
 						window.open("http://www.microsoft.com/en-us/download/internet-explorer-10-details.aspx");
 					})

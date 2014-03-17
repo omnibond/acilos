@@ -121,11 +121,11 @@ define(['dojo/_base/declare',
 					}
 
 					// THIS BUTTON IS NOT CURRENTLY BEING USED, BUT THE CODE IS HERE IF WE NEED IT
-					if(this.buttons[x]['name'] == "manualReload"){
+					/*if(this.buttons[x]['name'] == "manualReload"){
 						var divManualReload = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/Button-Reload-icon_small.png>", title: "Reload the page"});
 
 						this.buttons[x].domNode.appendChild(divManualReload);
-					}
+					}*/
 
 					if(this.buttons[x]['name'] == "saveButton"){
 						var divSaveButton = domConstruct.create("div", {"class": "icon-save fontSize25 fontDiv30", title: "Save this feed"});
@@ -146,25 +146,25 @@ define(['dojo/_base/declare',
 					}
 
 					if(this.buttons[x]['name'] == "newFeedButton"){
-						var divNewFeedButton = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/edit_icon_small.png>", title: "Create a New Feed"});
+						var divNewFeedButton = domConstruct.create("div", {"class": "icon-add fontSize25 fontDiv30", title: "Create a New Feed"});
 
 						this.buttons[x].domNode.appendChild(divNewFeedButton);
 					}
 
 					if(this.buttons[x]['name'] == "editFeedButton"){
-						var divEditFeedButton = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/plus_icon_small.png>", title: "Edit a Feed"});
+						var divEditFeedButton = domConstruct.create("div", {"class": "icon-edit fontSize25 fontDiv30", title: "Edit a Feed"});
 
 						this.buttons[x].domNode.appendChild(divEditFeedButton);
 					}
 
 					if(this.buttons[x]['name'] == "deleteFeedButton"){
-						var divDeleteFeedButton = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/minus_icon_small.png>", title: "Delete a Feed"});
+						var divDeleteFeedButton = domConstruct.create("div", {"class": "icon-delete fontSize25 fontDiv30", title: "Delete a Feed"});
 
 						this.buttons[x].domNode.appendChild(divDeleteFeedButton);
 					}
 
 					if(this.buttons[x]['name'] == "topContactsButton"){
-						var divtopContactsButton = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/topContacts_small.png>", title: "Top Posters"});
+						var divtopContactsButton = domConstruct.create("div", {"class": "icon-top-poster fontSize25 fontDiv30", title: "Top Posters"});
 
 						this.buttons[x].domNode.appendChild(divtopContactsButton);
 					}

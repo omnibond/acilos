@@ -636,7 +636,11 @@ html.mobile,
 .icon-special,
 .icon-352-a,
 .icon-refresh,
-.icon-delete-account {
+.icon-delete-account,
+.icon-top-poster,
+.icon-delete,
+.icon-add,
+.icon-edit {
   font-family: 'acilos-Fonts';
   speak: none;
   font-style: normal;
@@ -656,136 +660,145 @@ html.mobile,
   content: "\e600";
 }
 .icon-main-feed:before {
-  content: "\e601";
+  content: "\e615";
 }
 .icon-save:before {
-  content: "\e602";
+  content: "\e628";
 }
 .icon-gen-line-graph:before {
-  content: "\e603";
+  content: "\e61a";
 }
 .icon-gen-feed:before {
-  content: "\e604";
-}
-.icon-post:before {
-  content: "\e605";
-}
-.icon-fav-post:before {
-  content: "\e606";
-}
-.icon-special-2:before {
   content: "\e607";
 }
+.icon-post:before {
+  content: "\e606";
+}
+.icon-fav-post:before {
+  content: "\e61b";
+}
+.icon-special-2:before {
+  content: "\e623";
+}
 .icon-alphabetical:before {
-  content: "\e608";
+  content: "\e602";
 }
 .icon-friends:before {
   content: "\e609";
 }
 .icon-fav-group:before {
-  content: "\e60a";
+  content: "\e60d";
 }
 .icon-cloud:before {
-  content: "\e60b";
+  content: "\e610";
 }
 .icon-favorite:before {
   content: "\e60c";
 }
 .icon-friends-of-friends:before {
-  content: "\e60d";
+  content: "\e60a";
 }
 .icon-fav-poster:before {
-  content: "\e60e";
+  content: "\e60b";
 }
 .icon-wc2:before {
-  content: "\e60f";
+  content: "\e601";
 }
 .icon-gen-bar-graph:before {
-  content: "\e610";
+  content: "\e608";
 }
 .icon-edit-accounts:before {
-  content: "\e611";
+  content: "\e60e";
 }
 .icon-scroll-to-bottom:before {
-  content: "\e612";
+  content: "\e604";
 }
 .icon-recent-posters:before {
-  content: "\e613";
+  content: "\e605";
 }
 .icon-search-posters:before {
-  content: "\e614";
+  content: "\e612";
 }
 .icon-wc:before {
   content: "\e615";
 }
 .icon-people:before {
-  content: "\e616";
+  content: "\e614";
 }
 .icon-add-people:before {
-  content: "\e617";
+  content: "\e621";
 }
 .icon-go:before {
   content: "\e618";
 }
 .icon-analyze:before {
-  content: "\e619";
-}
-.icon-gen-pie-graph:before {
-  content: "\e61a";
-}
-.icon-chattiest:before {
-  content: "\e61b";
-}
-.icon-help:before {
-  content: "\e61c";
-}
-.icon-put-photo:before {
-  content: "\e61d";
-}
-.icon-gen-a:before {
-  content: "\e61e";
-}
-.icon-search:before {
-  content: "\e61f";
-}
-.icon-search-obs:before {
   content: "\e620";
 }
-.icon-settings:before {
-  content: "\e621";
+.icon-gen-pie-graph:before {
+  content: "\e619";
 }
-.icon-account-pg:before {
-  content: "\e622";
+.icon-chattiest:before {
+  content: "\e61f";
 }
-.icon-custom-feed:before {
-  content: "\e623";
+.icon-help:before {
+  content: "\e62b";
 }
-.icon-scroll-to-top:before {
-  content: "\e624";
+.icon-put-photo:before {
+  content: "\e629";
 }
-.icon-keyword-search:before {
-  content: "\e625";
+.icon-gen-a:before {
+  content: "\e62c";
 }
-.icon-o-with-bits:before {
-  content: "\e626";
-}
-.icon-auth-accounts:before {
+.icon-search:before {
   content: "\e627";
 }
-.icon-waste:before {
-  content: "\e628";
+.icon-search-obs:before {
+  content: "\e626";
+}
+.icon-settings:before {
+  content: "\e625";
+}
+.icon-account-pg:before {
+  content: "\e600";
+}
+.icon-custom-feed:before {
+  content: "\e62d";
+}
+.icon-scroll-to-top:before {
+  content: "\e603";
+}
+.icon-keyword-search:before {
+  content: "\e616";
+}
+.icon-o-with-bits:before {
+  content: "\e62a";
+}
+.icon-auth-accounts:before {
+  content: "\e62e";
 }
 .icon-special:before {
-  content: "\e629";
+  content: "\e624";
 }
 .icon-352-a:before {
   content: "\e62a";
 }
 .icon-refresh:before {
-  content: "\e62b";
+  content: "\e613";
 }
 .icon-delete-account:before {
-  content: "\e62c";
+  content: "\e60f";
+}
+.icon-top-poster:before {
+  content: "\e611";
+}
+.icon-delete:before {
+  content: "\e61d";
+}
+.icon-add:before {
+  content: "\e622";
+}
+.icon-edit:before {
+  content: "\e61c";
 }
 .buttonMixin {
   background: #87826a;
@@ -1757,7 +1770,7 @@ html.mobile,
   -webkit-font-smoothing: antialiased;
 }
 .dmPrimaryNavItem_mainFeed .dmPrimaryNavItemIcon:before {
-  content: "\e601";
+  content: "\e615";
 }
 .dmPrimaryNavItem_feeds .dmPrimaryNavItemIcon {
   font-family: 'acilos-Fonts';
@@ -1769,7 +1782,7 @@ html.mobile,
   -webkit-font-smoothing: antialiased;
 }
 .dmPrimaryNavItem_feeds .dmPrimaryNavItemIcon:before {
-  content: "\e623";
+  content: "\e62d";
 }
 .dmPrimaryNavItem_people .dmPrimaryNavItemIcon {
   font-family: 'acilos-Fonts';
@@ -1781,7 +1794,7 @@ html.mobile,
   -webkit-font-smoothing: antialiased;
 }
 .dmPrimaryNavItem_people .dmPrimaryNavItemIcon:before {
-  content: "\e616";
+  content: "\e614";
 }
 .dmPrimaryNavItem_favorites .dmPrimaryNavItemIcon {
   font-family: 'acilos-Fonts';
@@ -1805,7 +1818,7 @@ html.mobile,
   -webkit-font-smoothing: antialiased;
 }
 .dmPrimaryNavItem_search .dmPrimaryNavItemIcon:before {
-  content: "\e61f";
+  content: "\e627";
 }
 .dmPrimaryNavItem_analytics .dmPrimaryNavItemIcon {
   font-family: 'acilos-Fonts';
@@ -1817,7 +1830,7 @@ html.mobile,
   -webkit-font-smoothing: antialiased;
 }
 .dmPrimaryNavItem_analytics .dmPrimaryNavItemIcon:before {
-  content: "\e619";
+  content: "\e620";
 }
 .dmPrimaryNavItem_post .dmPrimaryNavItemIcon {
   font-family: 'acilos-Fonts';
@@ -1829,7 +1842,7 @@ html.mobile,
   -webkit-font-smoothing: antialiased;
 }
 .dmPrimaryNavItem_post .dmPrimaryNavItemIcon:before {
-  content: "\e605";
+  content: "\e606";
 }
 .dmPrimaryNavItem_settings .dmPrimaryNavItemIcon {
   font-family: 'acilos-Fonts';
@@ -1841,7 +1854,7 @@ html.mobile,
   -webkit-font-smoothing: antialiased;
 }
 .dmPrimaryNavItem_settings .dmPrimaryNavItemIcon:before {
-  content: "\e621";
+  content: "\e625";
 }
 .dmPrimaryNavItem_help .dmPrimaryNavItemIcon {
   font-family: 'acilos-Fonts';
@@ -1853,7 +1866,7 @@ html.mobile,
   -webkit-font-smoothing: antialiased;
 }
 .dmPrimaryNavItem_help .dmPrimaryNavItemIcon:before {
-  content: "\e61c";
+  content: "\e62b";
 }
 .dmPrimaryNav {
   background-color: #ffffff;
@@ -4303,4 +4316,10 @@ select {
 .fontDiv30 {
   height: 30px;
   width: 25px;
+}
+.aboutListItem {
+  font-weight: bold !important;
+}
+.aboutListItem .mblListItemRightText {
+  font-weight: normal !important;
 }
