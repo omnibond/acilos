@@ -581,6 +581,212 @@ html.mobile,
 .icon-link:before {
   content: "\e028";
 }
+/* icons.css -- acilos icons and fonts */
+@font-face {
+  font-family: 'acilos-Fonts';
+  src: url('../fonts/acilos-Fonts.eot');
+  src: url('../fonts/acilos-Fonts.eot?#iefix') format('embedded-opentype'), /* url('../fonts/acilos-Fonts.woff') format('woff'), */
+   url('../fonts/acilos-Fonts.ttf') format('truetype'), url('../fonts/acilos-Fonts.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+.dmSubNavBackButton,
+.dmMenuBarPopupItem,
+.icon-barcode,
+.icon-main-feed,
+.icon-save,
+.icon-gen-line-graph,
+.icon-gen-feed,
+.icon-post,
+.icon-fav-post,
+.icon-special-2,
+.icon-alphabetical,
+.icon-friends,
+.icon-fav-group,
+.icon-cloud,
+.icon-favorite,
+.icon-friends-of-friends,
+.icon-fav-poster,
+.icon-wc2,
+.icon-gen-bar-graph,
+.icon-edit-accounts,
+.icon-scroll-to-bottom,
+.icon-recent-posters,
+.icon-search-posters,
+.icon-wc,
+.icon-people,
+.icon-add-people,
+.icon-go,
+.icon-analyze,
+.icon-gen-pie-graph,
+.icon-chattiest,
+.icon-help,
+.icon-put-photo,
+.icon-gen-a,
+.icon-search,
+.icon-search-obs,
+.icon-settings,
+.icon-account-pg,
+.icon-custom-feed,
+.icon-scroll-to-top,
+.icon-keyword-search,
+.icon-o-with-bits,
+.icon-auth-accounts,
+.icon-waste,
+.icon-special,
+.icon-352-a,
+.icon-refresh,
+.icon-delete-account {
+  font-family: 'acilos-Fonts';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+}
+/* ignore font face when using Cufon on windows phone */
+.cufon {
+  padding-bottom: 6px;
+}
+.cufon:before {
+  content: '' !important;
+}
+.icon-barcode:before {
+  content: "\e600";
+}
+.icon-main-feed:before {
+  content: "\e601";
+}
+.icon-save:before {
+  content: "\e602";
+}
+.icon-gen-line-graph:before {
+  content: "\e603";
+}
+.icon-gen-feed:before {
+  content: "\e604";
+}
+.icon-post:before {
+  content: "\e605";
+}
+.icon-fav-post:before {
+  content: "\e606";
+}
+.icon-special-2:before {
+  content: "\e607";
+}
+.icon-alphabetical:before {
+  content: "\e608";
+}
+.icon-friends:before {
+  content: "\e609";
+}
+.icon-fav-group:before {
+  content: "\e60a";
+}
+.icon-cloud:before {
+  content: "\e60b";
+}
+.icon-favorite:before {
+  content: "\e60c";
+}
+.icon-friends-of-friends:before {
+  content: "\e60d";
+}
+.icon-fav-poster:before {
+  content: "\e60e";
+}
+.icon-wc2:before {
+  content: "\e60f";
+}
+.icon-gen-bar-graph:before {
+  content: "\e610";
+}
+.icon-edit-accounts:before {
+  content: "\e611";
+}
+.icon-scroll-to-bottom:before {
+  content: "\e612";
+}
+.icon-recent-posters:before {
+  content: "\e613";
+}
+.icon-search-posters:before {
+  content: "\e614";
+}
+.icon-wc:before {
+  content: "\e615";
+}
+.icon-people:before {
+  content: "\e616";
+}
+.icon-add-people:before {
+  content: "\e617";
+}
+.icon-go:before {
+  content: "\e618";
+}
+.icon-analyze:before {
+  content: "\e619";
+}
+.icon-gen-pie-graph:before {
+  content: "\e61a";
+}
+.icon-chattiest:before {
+  content: "\e61b";
+}
+.icon-help:before {
+  content: "\e61c";
+}
+.icon-put-photo:before {
+  content: "\e61d";
+}
+.icon-gen-a:before {
+  content: "\e61e";
+}
+.icon-search:before {
+  content: "\e61f";
+}
+.icon-search-obs:before {
+  content: "\e620";
+}
+.icon-settings:before {
+  content: "\e621";
+}
+.icon-account-pg:before {
+  content: "\e622";
+}
+.icon-custom-feed:before {
+  content: "\e623";
+}
+.icon-scroll-to-top:before {
+  content: "\e624";
+}
+.icon-keyword-search:before {
+  content: "\e625";
+}
+.icon-o-with-bits:before {
+  content: "\e626";
+}
+.icon-auth-accounts:before {
+  content: "\e627";
+}
+.icon-waste:before {
+  content: "\e628";
+}
+.icon-special:before {
+  content: "\e629";
+}
+.icon-352-a:before {
+  content: "\e62a";
+}
+.icon-refresh:before {
+  content: "\e62b";
+}
+.icon-delete-account:before {
+  content: "\e62c";
+}
 .buttonMixin {
   background: #87826a;
   border: none;
@@ -1542,7 +1748,7 @@ html.mobile,
 }
 /* Primary nav icons */
 .dmPrimaryNavItem_mainFeed .dmPrimaryNavItemIcon {
-  font-family: 'my-Clemson-Fonts';
+  font-family: 'acilos-Fonts';
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -1551,10 +1757,10 @@ html.mobile,
   -webkit-font-smoothing: antialiased;
 }
 .dmPrimaryNavItem_mainFeed .dmPrimaryNavItemIcon:before {
-  content: "\e010";
+  content: "\e601";
 }
 .dmPrimaryNavItem_feeds .dmPrimaryNavItemIcon {
-  font-family: 'my-Clemson-Fonts';
+  font-family: 'acilos-Fonts';
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -1563,10 +1769,10 @@ html.mobile,
   -webkit-font-smoothing: antialiased;
 }
 .dmPrimaryNavItem_feeds .dmPrimaryNavItemIcon:before {
-  content: "\e006";
+  content: "\e623";
 }
 .dmPrimaryNavItem_people .dmPrimaryNavItemIcon {
-  font-family: 'my-Clemson-Fonts';
+  font-family: 'acilos-Fonts';
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -1575,10 +1781,10 @@ html.mobile,
   -webkit-font-smoothing: antialiased;
 }
 .dmPrimaryNavItem_people .dmPrimaryNavItemIcon:before {
-  content: "\e008";
+  content: "\e616";
 }
 .dmPrimaryNavItem_favorites .dmPrimaryNavItemIcon {
-  font-family: 'my-Clemson-Fonts';
+  font-family: 'acilos-Fonts';
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -1587,10 +1793,10 @@ html.mobile,
   -webkit-font-smoothing: antialiased;
 }
 .dmPrimaryNavItem_favorites .dmPrimaryNavItemIcon:before {
-  content: "\e00c";
+  content: "\e60c";
 }
 .dmPrimaryNavItem_search .dmPrimaryNavItemIcon {
-  font-family: 'my-Clemson-Fonts';
+  font-family: 'acilos-Fonts';
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -1599,10 +1805,10 @@ html.mobile,
   -webkit-font-smoothing: antialiased;
 }
 .dmPrimaryNavItem_search .dmPrimaryNavItemIcon:before {
-  content: "\e01d";
+  content: "\e61f";
 }
 .dmPrimaryNavItem_analytics .dmPrimaryNavItemIcon {
-  font-family: 'my-Clemson-Fonts';
+  font-family: 'acilos-Fonts';
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -1611,10 +1817,10 @@ html.mobile,
   -webkit-font-smoothing: antialiased;
 }
 .dmPrimaryNavItem_analytics .dmPrimaryNavItemIcon:before {
-  content: "\e004";
+  content: "\e619";
 }
 .dmPrimaryNavItem_post .dmPrimaryNavItemIcon {
-  font-family: 'my-Clemson-Fonts';
+  font-family: 'acilos-Fonts';
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -1623,10 +1829,10 @@ html.mobile,
   -webkit-font-smoothing: antialiased;
 }
 .dmPrimaryNavItem_post .dmPrimaryNavItemIcon:before {
-  content: "\e00b";
+  content: "\e605";
 }
 .dmPrimaryNavItem_settings .dmPrimaryNavItemIcon {
-  font-family: 'my-Clemson-Fonts';
+  font-family: 'acilos-Fonts';
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -1635,10 +1841,10 @@ html.mobile,
   -webkit-font-smoothing: antialiased;
 }
 .dmPrimaryNavItem_settings .dmPrimaryNavItemIcon:before {
-  content: "\e003";
+  content: "\e621";
 }
 .dmPrimaryNavItem_help .dmPrimaryNavItemIcon {
-  font-family: 'my-Clemson-Fonts';
+  font-family: 'acilos-Fonts';
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -1647,7 +1853,7 @@ html.mobile,
   -webkit-font-smoothing: antialiased;
 }
 .dmPrimaryNavItem_help .dmPrimaryNavItemIcon:before {
-  content: "\e028";
+  content: "\e61c";
 }
 .dmPrimaryNav {
   background-color: #ffffff;
