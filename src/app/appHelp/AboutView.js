@@ -241,7 +241,7 @@ define([
 					noArrow: true,
 					label: "Google Chrome",
 					rightText: "(Windows, OS X, iOS, Android 4.0+)",
-					"class": "aboutListItem",
+					"class": "chromeListItem",
 					onClick: lang.hitch(this, function(){
 						window.open("https://www.google.com/intl/en/chrome/browser/");
 					})
@@ -271,7 +271,7 @@ define([
 					})
 				});
 
-				var internetExplorerListItem = new ListItem({
+				/*var internetExplorerListItem = new ListItem({
 					variableHeight: true, 
 					clickable: true,
 					noArrow: true,
@@ -281,39 +281,62 @@ define([
 					onClick: lang.hitch(this, function(){
 						window.open("http://www.microsoft.com/en-us/download/internet-explorer-10-details.aspx");
 					})
-				});
+				});*/
+
 				supportList.addChild(support);
 				supportList.addChild(supportExtra);
 				supportList.addChild(chromeListItem);
 				supportList.addChild(safariListItem);
 				supportList.addChild(firefoxListItem);
-				supportList.addChild(internetExplorerListItem);
+				//supportList.addChild(internetExplorerListItem);
 				this.mainList.addChild(supportList);
 
 				chromeListItem.labelNode.style.marginTop = "1px";
 				safariListItem.labelNode.style.marginTop = "1px";
 				firefoxListItem.labelNode.style.marginTop = "1px";
-				internetExplorerListItem.labelNode.style.marginTop = "1px";
+				//internetExplorerListItem.labelNode.style.marginTop = "1px";
 
 				chromeListItem.rightTextNode.style.marginTop = "1px";
 				safariListItem.rightTextNode.style.marginTop = "1px";
 				firefoxListItem.rightTextNode.style.marginTop = "1px";
-				internetExplorerListItem.rightTextNode.style.marginTop = "1px";
+				//internetExplorerListItem.rightTextNode.style.marginTop = "1px";
 				
 				var feedbackList = new EdgeToEdgeList({
 					style: "border:none"
 				});
 				var feedback = new ListItem({
-					label: "Feedback",
+					label: "Links",
 					style: "font-weight:bold !important; border: none"
 				});
-				var feedbackExtra = new ListItem({
+				/*var feedbackExtra = new ListItem({
 					variableHeight: true, 
 					label: "Comments and suggestions are welcome and may be directed to the Acilos github page at " + this.parseSpecialChars("https://github.com/omnibond/acilos") + ". For more information about the app, please visit " + this.parseSpecialChars("www.acilos.com") + ".",
 					style: "border: none"
+				});*/
+	
+				var acilosListItem = new ListItem({
+					variableHeight: true,
+					label: "Acilos — " + this.parseSpecialChars("http://www.acilos.com"),
+					"class": "borderlessWrapListItem"
 				});
+
+				var omnibondListItem = new ListItem({
+					variableHeight: true,
+					label: "Omnibond — " + this.parseSpecialChars("http://www.omnibond.com"),
+					"class": "borderlessWrapListItem"
+				});
+
+				var githubListItem = new ListItem({
+					variableHeight: true,
+					label: "Github — " + this.parseSpecialChars("https://github.com/omnibond/acilos"),
+					"class": "borderlessWrapListItem"
+				});
+
 				feedbackList.addChild(feedback);
-				feedbackList.addChild(feedbackExtra);
+				feedbackList.addChild(acilosListItem);
+				feedbackList.addChild(omnibondListItem);
+				feedbackList.addChild(githubListItem);
+				//feedbackList.addChild(feedbackExtra);
 				this.mainList.addChild(feedbackList);
 				
 				var creditList = new EdgeToEdgeList({
@@ -321,45 +344,46 @@ define([
 				});
 				var credits = new ListItem({
 					label: "Credits",
+					"class": "borderlessWrapListItem",
 					style: "font-weight:bold !important; border: none"
 				});
 				var elasticExtra = new ListItem({
 					variableHeight: true, 
 					label: "elasticsearch — " + this.parseSpecialChars("http://www.elasticsearch.org/download/"),
-					style: "border: none"
+					"class": "borderlessWrapListItem"
 				});
 				var dojoExtra = new ListItem({
 					variableHeight: true, 
 					label: "dojo — " + this.parseSpecialChars("http://download.dojotoolkit.org/"),
-					style: "border: none"
+					"class": "borderlessWrapListItem"
 				});
 				var mamaExtra = new ListItem({
 					variableHeight: true, 
 					label: "dojo-mama — " + this.parseSpecialChars("https://github.com/OpenClemson/dojo-mama"),
-					style: "border: none"
+					"class": "borderlessWrapListItem"
 				});
 				var abrahamExtra = new ListItem({
 					variableHeight: true, 
 					label: "twitter abraham client — " + this.parseSpecialChars("https://github.com/abraham/twitteroauth"),
-					style: "border: none"
+					"class": "borderlessWrapListItem"
 				});
 				var nerveExtra = new ListItem({
 					variableHeight: true, 
 					label: "nerve-tattoo es client — " + this.parseSpecialChars("https://github.com/nervetattoo/elasticsearch"),
-					style: "border: none"
+					"class": "borderlessWrapListItem"
 				});
-				var omniExtra = new ListItem({
+				/*var omniExtra = new ListItem({
 					variableHeight: true, 
 					label: "omnibond — " + this.parseSpecialChars("http://www.omnibond.com"),
-					style: "border: none"
-				});
+					"class": "borderlessWrapListItem"
+				});*/
 				creditList.addChild(credits);
 				creditList.addChild(elasticExtra);
 				creditList.addChild(dojoExtra);
 				creditList.addChild(mamaExtra);
 				creditList.addChild(abrahamExtra);
 				creditList.addChild(nerveExtra);
-				creditList.addChild(omniExtra);
+				//creditList.addChild(omniExtra);
 				this.mainList.addChild(creditList);
 				
 				this.addChild(this.mainList);

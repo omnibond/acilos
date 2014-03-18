@@ -178,11 +178,11 @@ define(['dojo/_base/declare',
 						this.currentSelector = "recent",
 						this.getRecentContacts(this.fromVar).then(lang.hitch(this, this.buildList));
 					})
-				})
+				});
 
 				this.selectorItem = new SelectorBar({
-					buttons: [this.alphaButton, this.chattyButton, this.recentButton, this.secondButton, this.scrollButton, this.selectButton]
-				})
+					buttons: [this.chattyButton, this.alphaButton, this.recentButton, this.secondButton, this.scrollButton, this.selectButton]
+				});
 				this.selectorItem.placeAt(this.domNode.parentNode);
 			}
 			

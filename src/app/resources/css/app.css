@@ -177,6 +177,7 @@ body {
 }
 .dj_phone .dmModuleContent {
   top: 60px;
+  bottom: 48px;
   margin-top: -32px;
   margin-left: -2px;
 }
@@ -4317,9 +4318,27 @@ select {
   height: 30px;
   width: 25px;
 }
-.aboutListItem {
+.chromeListItem .mblListItemRightText {
+  font-weight: normal !important;
+  bottom: 12px;
+  position: absolute;
+  right: auto;
+}
+.chromeListItem .mblListItemLabel {
   font-weight: bold !important;
+  padding-bottom: 46px;
 }
 .aboutListItem .mblListItemRightText {
   font-weight: normal !important;
+  bottom: 12px;
+  position: absolute;
+  right: auto;
+}
+.aboutListItem .mblListItemLabel {
+  padding-bottom: 46px;
+  font-weight: bold !important;
+}
+.borderlessWrapListItem {
+  border: none;
+  word-wrap: break-word;
 }

@@ -195,7 +195,7 @@ define(['dojo/_base/declare',
 			});
 			
 			this.selectorBar = new SelectorBar({
-				buttons: [this.alphaButton, this.chattyButton, this.topContactsButton, this.scrollBut, this.goBut]
+				buttons: [this.chattyButton, this.alphaButton, this.topContactsButton, this.scrollBut, this.goBut]
 			})
 			this.selectorBar.placeAt(this.domNode.parentNode);
 				
@@ -310,13 +310,13 @@ define(['dojo/_base/declare',
 			});
 			
 			this.selectorBar = new SelectorBar({
-				buttons: [this.alphaButton, this.chattyButton, this.topContactsButton, this.scrollBut, this.goBut]
-			})
+				buttons: [this.chattyButton, this.alphaButton, this.topContactsButton, this.scrollBut, this.goBut]
+			});
 			this.selectorBar.placeAt(this.domNode.parentNode);
 				
 			this.list = new RoundRectList({
 				style: "margin-top:40px"
-			})
+			});
 			this.addChild(this.list);
 
 			var item = domConstruct.create("div", {innerHTML: "Top 200 Posters", "class": "divListItemExtraPadding"});

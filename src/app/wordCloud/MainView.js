@@ -229,8 +229,8 @@ define(['dojo/_base/declare',
 				})
 			});
 			this.selectorBar = new SelectorBar({
-				buttons: [this.alphaButton, this.chattyButton, this.scrollButton]
-			})
+				buttons: [this.chattyButton, this.alphaButton, this.scrollButton]
+			});
 			this.selectorBar.placeAt(this.domNode.parentNode);
 
 			if(this.list){

@@ -217,11 +217,6 @@
 						});
 						domWindow.body().appendChild(leftPane.domNode);
 
-						//console.log("android is: ", has('android'));
-						//console.log("iphone is: ", has('iphone'));
-
-						//domWindow.body().style.overflow = "scroll";
-
 						if(has('iphone') != undefined){
 							domWindow.body().style.overflow = "scroll";
 						}
