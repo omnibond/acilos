@@ -34,7 +34,11 @@ use \ElasticSearch\Client;
 #$port = $_GET['port'];
 #$mapping = $_GET['mapping'];
 $counter = 0;
+$host = "localhost";
+$port = "9200";
+$index1 = "app";
 
+$es = Client::connection("http://$host:$port/$index1/$index1");
 #WIPE OLD ES
 function wipe($counter, $es){
 	echo $counter;
@@ -45,8 +49,6 @@ function wipe($counter, $es){
 		if($counter < 20){
 			sleep(1);
 			wipe($counter, $es);
-		}else{
-			throw new Exception( "Database failed to launch", 0, $e );
 		}
 	}
 }

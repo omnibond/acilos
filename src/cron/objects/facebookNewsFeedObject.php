@@ -396,7 +396,7 @@ class facebookNewsFeedObjectBuilder extends activityObjectBuilder{
 	if($var['data'][0]['permalink'] == null){
 		$url = 'https://graph.facebook.com/'
 		. 'fql?q=SELECT+attachment+FROM+stream+WHERE+post_id="'.$obj['id'].'"'
-		. '&access_token=' . $tok['accessToken'];
+		. '&access_token=' . $temp['accessToken'];
 		$response = file_get_contents($url);
 		$var = json_decode($response, true);
 
