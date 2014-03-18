@@ -68,7 +68,7 @@ define(['dojo/_base/declare',
 				style: "border:none;margin-bottom:0px"
 			})
 			var item = new ListItem({
-				label: "Log in to more services to get more content for Acilos! </br> Clicking on a service's icon will allow you to refresh or generate a token.",
+				label: "Log in to more services to get more content for Acilos!",
 				variableHeight: true
 			})
 			infoList.addChild(item);
@@ -108,8 +108,14 @@ define(['dojo/_base/declare',
 
 			for(var d = 0; d < this.authCreds[param].length; d++){
 				var list = new EdgeToEdgeList({
-					style: "height: auto; border-bottom: 1px solid #e7e7de; border-left: 2px solid " + this.authCreds[param][d].color
+					style: "height: auto; border-bottom: 1px solid #e7e7de; border-left: 5px solid " + this.authCreds[param][d].color
 				})
+				var toDoLabel = new ListItem({
+					label: "Click the " + this.capitalizeFirstLetter(param) + " icon to refresh/generate a token",
+					style: "border:none"
+				})
+				list.addChild(toDoLabel);
+				
 				if(d == 0){
 					var nub = true;
 				}else{

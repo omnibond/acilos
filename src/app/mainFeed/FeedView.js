@@ -346,7 +346,9 @@ define([
 							this.number =0;
 						}
 						kernel.global.feedCount[this.id].count = parseInt(obj.count);
-						this.addNewItems(numero);
+						this.getServiceCreds().then(lang.hitch(this, function(obj, numero){
+							this.addNewItems(obj ,numero);
+						}, numero));
 					}
 				}else{
 					console.log("count is set to: " + this.tempCount);
@@ -354,11 +356,11 @@ define([
 				}
 			},
 			
-			addNewItems: function(size){				
+			addNewItems: function(size, numero){				
 				if(this.list){
 					if(size > 0){
 						console.log("adding new items: " + size);
-						this.addToList(size);
+						this.addToList(size, numero);
 					}
 				}else{
 					console.log("no list making one");
@@ -366,7 +368,8 @@ define([
 				}
 			},
 			
-			addToList: function(size){
+			addToList: function(size, authObj){
+				this.authObj = authObj;
 				var pos= domGeom.position(this.list.domNode,true);
 				var currentH = pos.h;
 				this.updateFeedData(this.feedName, size).then(lang.hitch(this, function(data){
@@ -385,6 +388,7 @@ define([
 									var item = new twitterFeedItem({
 										data: data,
 										counter: j,
+										authObj: this.authObj,
 										blastView: this.blastView,
 										getDate: this.list.getDate,
 										parseSpecialChars: this.list.parseSpecialChars,
@@ -397,6 +401,7 @@ define([
 									var item = new instagramFeedItem({
 										data: data,
 										counter: j,
+										authObj: this.authObj,
 										blastView: this.blastView,
 										getDate: this.list.getDate,
 										parseSpecialChars: this.list.parseSpecialChars,
@@ -409,6 +414,7 @@ define([
 									var item = new facebookFeedItem({
 										data: data,
 										counter: j,
+										authObj: this.authObj,
 										blastView: this.blastView,
 										getDate: this.list.getDate,
 										parseSpecialChars: this.list.parseSpecialChars,
@@ -421,6 +427,7 @@ define([
 									var item = new linkedinFeedItem({
 										data: data,
 										counter: j,
+										authObj: this.authObj,
 										blastView: this.blastView,
 										getDate: this.list.getDate,
 										parseSpecialChars: this.list.parseSpecialChars,

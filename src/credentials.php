@@ -151,12 +151,14 @@
 					var acilosLoginDiv = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/acilosLoginLogo.png>", style: "width: 304px; margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto"});
 					leftPane.domNode.appendChild(acilosLoginDiv);
 
-					var item1 = domConstruct.create("div", {innerHTML: "You will need to create a private app key for each service you wish to use.", style: "border:none;height:35px;font-size;font-family:arial;font-size:20px; text-align: center; height: auto"});
-					var item2 = domConstruct.create("div", {innerHTML: "Please enter the app keys and secrets below", style: "border:none;height:35px;font-size;font-family:arial;font-size:20px; text-align: center; height: auto"});
-					var item3 = domConstruct.create("div", {innerHTML: '<span><a href="www.acilos.com/appregistration" target="_blank">App creation walkthrough</a></span>'});
+					var item1 = domConstruct.create("div", {innerHTML: "To set up Acilos for the first time you will need to go to each social media website and set up an app as if you were a developer", style: "border:none;height:35px;font-size;font-family:arial;font-size:20px; text-align: center; height: auto"});
+					var item2 = domConstruct.create("div", {innerHTML: "Please enter the app keys and secrets obtained by following the walkthrough below", style: "border:none;height:35px;font-size;font-family:arial;font-size:20px; text-align: center; height: auto"});
+					var item3 = domConstruct.create("div", {innerHTML: 'You can fill out more accounts later from the settings tab in the app', style: "border:none;height:35px;font-size;font-family:arial;font-size:20px; text-align: center; height: auto"});
+					var item4 = domConstruct.create("div", {innerHTML: '<span><a href="www.acilos.com/appwalkthrough" target="_blank">App creation walkthrough</a></span>'});
 					leftPane.domNode.appendChild(item1);
-					leftPane.domNode.appendChild(item2);
 					leftPane.domNode.appendChild(item3);
+					leftPane.domNode.appendChild(item2);
+					leftPane.domNode.appendChild(item4);
 					var errorItem = new ListItem({
 						style: "border:none;height:auto;font-size;font-family:arial;font-size:20px"
 					});
@@ -202,7 +204,7 @@
 				holderDiv.appendChild(twitterRedirect.domNode);
 				textBoxDiv.appendChild(holderDiv);
 				
-				var siteLink = domConstruct.create("div", {innerHTML: '<span><a href="https://dev.twitter.com/" target="_blank">Open Twitter</a></span>'});
+				var siteLink = domConstruct.create("div", {innerHTML: '<span><a href="https://dev.twitter.com/" target="_blank">Open Twitter\'s developer site</a></span>'});
 				var spacer = domConstruct.create("div", {style: "visibility:hidden", innerHTML: 'acilos'});
 				
 				leftPane.domNode.appendChild(twitterLogoDiv);
@@ -241,7 +243,7 @@
 				holderDiv.appendChild(faceRedirect.domNode);
 				textBoxDiv.appendChild(holderDiv);
 
-				var siteLink = domConstruct.create("div", {innerHTML: '<span><a href="https://developers.facebook.com/" target="_blank">Open Facebook</a></span>'});
+				var siteLink = domConstruct.create("div", {innerHTML: '<span><a href="https://developers.facebook.com/" target="_blank">Open Facebook\'s developer site</a></span>'});
 				var spacer = domConstruct.create("div", {style: "visibility:hidden", innerHTML: 'acilos'});
 				
 				leftPane.domNode.appendChild(faceLogoDiv);
@@ -280,7 +282,7 @@
 				holderDiv.appendChild(instaRedirect.domNode);
 				textBoxDiv.appendChild(holderDiv);
 				
-				var siteLink = domConstruct.create("div", {innerHTML: '<span><a href="http://instagram.com/developer/" target="_blank">Open Instagram</a></span>'});
+				var siteLink = domConstruct.create("div", {innerHTML: '<span><a href="http://instagram.com/developer/" target="_blank">Open Instagram\'s developer site</a></span>'});
 				var spacer = domConstruct.create("div", {style: "visibility:hidden", innerHTML: 'acilos'});
 				
 				leftPane.domNode.appendChild(instaLogoDiv);
@@ -319,7 +321,7 @@
 				holderDiv.appendChild(linkedRedirect.domNode);
 				textBoxDiv.appendChild(holderDiv);
 				
-				var siteLink = domConstruct.create("div", {innerHTML: '<span><a href="http://developer.linkedin.com/" target="_blank">Open Linkedin</a></span>'});
+				var siteLink = domConstruct.create("div", {innerHTML: '<span><a href="http://developer.linkedin.com/" target="_blank">Open Linkedin\'s developer site</a></span>'});
 				var spacer = domConstruct.create("div", {style: "visibility:hidden", innerHTML: 'acilos'});
 				
 				leftPane.domNode.appendChild(linkedLogoDiv);
@@ -391,7 +393,12 @@
 						}
 					})
 				})
-				leftPane.addChild(save);				
+				leftPane.addChild(save);
+				var spaceItem = new ListItem({
+					label: "I make space at the bottom",
+					style: "visibility:hidden;border:none"
+				})
+				leftPane.addChild(spaceItem);
 			},
 			
 			saveServiceCreds = function(obj){

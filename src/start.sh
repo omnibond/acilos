@@ -33,10 +33,10 @@ fi
 
 WGET_AUTH="--http-user=$HTTPUSER --http-password=$HTTPPASSWORD"
 
-echo "Clearing old database and starting fresh..."
-PROGRAM="wget http://$HOST/startES.php?index=$INDEX&host=$HOST&port=$PORT&mapping=$MAPPING --output-document=/dev/null"
-$PROGRAM
-echo "Done"
+#echo "Clearing old database and starting fresh..."
+#PROGRAM="wget http://$HOST/startES.php?index=$INDEX&host=$HOST&port=$PORT&mapping=$MAPPING --output-document=/dev/null"
+#$PROGRAM
+#echo "Done"
 
 echo "Writing The Elasticsearch Heartbeat"
 cat > cron/esHeartbeat.sh << 'EOF'

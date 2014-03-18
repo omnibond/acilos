@@ -128,11 +128,6 @@ define([
 					}
 				}else if(data.hits.hits.length == 0){
 					if(this.ListEnded == false){
-						var item = new ListItem({
-							label: "There is no more data, make more friends",
-							"class": "feedSearchErrorClass"
-						})
-						this.addChild(item);
 						this.ListEnded = true;
 					}
 				}else{					

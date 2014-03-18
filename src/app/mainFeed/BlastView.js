@@ -164,7 +164,7 @@ define(['dojo/_base/declare',
 			this.textArea = new TextArea({
 				trim: true,
 				style: "height:100px;width:99%",
-				value: this.blastObj.msg + " - Posted via Acilos - Original post - " + this.blastObj.postLink
+				value: this.blastObj.msg
 			});
 
 			this.textAreaCountDiv = domConstruct.create("div", {innerHTML: this.textArea.get("value").length + " characters"});
