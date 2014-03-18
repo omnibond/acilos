@@ -340,11 +340,11 @@
 					});
 					leftPane.addChild(item);
 				}else{
-					if('<?php echo $fCook; ?>' == "true"){
+					if('<?php echo $tCook; ?>' == "true"){
 						var div1 = domConstruct.create("span", {});
 						loginButtonsNitems("twitter", div1, serviceCreds, mainDiv);
 					}
-					if('<?php echo $tCook; ?>' == "true"){
+					if('<?php echo $fCook; ?>' == "true"){
 						var div2 = domConstruct.create("span", {});
 						loginButtonsNitems("facebook", div2, serviceCreds, mainDiv);
 					}
