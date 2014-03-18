@@ -38,20 +38,53 @@ $host = "localhost";
 $port = "9200";
 $index1 = "app";
 
-$es = Client::connection("http://$host:$port/$index1/$index1");
+
+function waitForDB() {
+	
+}
+
+/*
+while(!$ready || $counter > 20) {
+	try{
+		$es = Client::connection("http://$host:$port/$index1/$index1");
+		$es->delete();
+		$ready = true;
+	}catch (Exception $e){
+		echo "DB not ready\n";
+		//if($es) { $es->delete(); $es = null; }
+		//if($counter < 20){
+			//sleep(1);
+			//wipe($counter);
+		//}
+	}
+	
+	$counter++;
+	sleep(1);
+}
+*/
 #WIPE OLD ES
-function wipe($counter, $es){
+function wipe($counter){
+	$host = "localhost";
+	$port = "9200";
+	$index1 = "app";
 	echo $counter;
 	$counter++;
+	//$es = null;
+	
 	try{
+		$es = Client::connection("http://$host:$port/$index1/$index1");
 		$es->delete();
 	}catch (Exception $e){
+		//if($es) { $es->delete(); $es = null; }
 		if($counter < 20){
 			sleep(1);
-			wipe($counter, $es);
+			wipe($counter);
 		}
 	}
+	
+	//if($es) { $es->delete(); }
 }
+wipe(0);
 
 #$index = $_GET['index'];
 #$host = $_GET['host'];
