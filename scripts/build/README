@@ -1,0 +1,12 @@
+To deploy the code, run;
+
+	./deploy
+
+A backup directory named myclemson_backup_<date> will be created.
+
+If an error occurs, roll back the release by running the following 3 commands
+
+	rm -rf /var/www/html/my/*
+	rm -f /var/www/html/my/.htaccess
+	rsync -r myclemson_backup_<date>/ /var/www/html/my
+
