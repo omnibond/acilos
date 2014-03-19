@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -e
+
+DOCROOT=/var/www/html/my
+BUILDDIR=app-build
+
+echo "Cleaning up $BUILDDIR"
+rm -rf $BUILDDIR
+echo "Expanding build.tar.gz"
+tar -xzf build.tar.gz
+
+if [ ! -d $BUILDDIR ]; then
+	echo "Build directory not found. Exiting"
+	exit 1
+fi
+
+# Backup current
+BACKUPDIR=myclemson_backup_`date "+%Y%m%d_%H%M%S"`
+echo "Backing up $DOCROOT to $BACKUPDIR"
+mkdir $BACKUPDIR
+rsync -r $DOCROOT/ $BACKUPDIR
+
+echo "Deleting contents of $DOCROOT"
+rm -rf $DOCROOT/*
+rm -f $DOCROOT/.htaccess
+
+echo "Copying contents of $BUILDDIR to $DOCROOT"
+rsync -r $BUILDDIR/ $DOCROOT
+
+echo "Deployment complete!"

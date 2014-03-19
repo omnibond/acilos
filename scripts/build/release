@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+set -e
+
+# Root directory either Trunk or Branches/<version>
+ROOTDIR=../..
+
+# Tier
+if [ "$1" = "development" ]; then
+    TIER=development
+else
+	TIER=production
+fi
+
+# Create dist folder if it does not exist
+DISTDIR=$ROOTDIR/dist
+if [ ! -d "$DISTDIR" ]; then
+	echo "Creating dist directory"
+	mkdir $DISTDIR
+fi
+
+# Check for app folder in dist
+APPDIR=$DISTDIR/app-$TIER
+if [ ! -d "$APPDIR" ]; then
+	echo "app directory does not exist. Building..."
+	./build app $TIER
+fi
+
+# Remove excess JS files
+if [ ! "$TIER" = development ]; then
+	find $APPDIR -name *.js.consoleStripped.js -exec rm -f {} \;
+	find $APPDIR -name *.js.map -exec rm -f {} \;
+	find $APPDIR -name *.js.uncompressed.js -exec rm -f {} \;
+fi
+
+# Tar contents of app directory
+echo "Creating build tarball"
+BUILDTAR=$DISTDIR/build.tar.gz
+cp -R $APPDIR $DISTDIR/app-build
+tar -cz -C $DISTDIR -f $BUILDTAR app-build
+rm -r $DISTDIR/app-build
+
+# Tar build.tar.gz with readme and deploy script
+echo "Creating release tarball..."
+RELEASETAR=$ROOTDIR/release.tar.gz
+cp README $DISTDIR/README
+cp deploy $DISTDIR/deploy
+tar -cz -C $DISTDIR -f $RELEASETAR build.tar.gz README deploy
+rm $DISTDIR/README
+rm $DISTDIR/deploy
+
+echo "Release tarball created at $RELEASETAR"
