@@ -499,8 +499,9 @@ function getDiscussionObjects(){
 	$file = file_get_contents($filename);
 
 	$tokenObject = json_decode($file, true);
+	$linkedinTokens = $tokenObject['linkedin'];
 
-	foreach($tokenObject as $obj){	
+	foreach($linkedinTokens as $obj){	
 		$user = linkedInFetch('GET', '/v1/people/~/group-memberships', $obj['accessToken']);
 		#print_r($token);
 		$user = objectToArray($user);

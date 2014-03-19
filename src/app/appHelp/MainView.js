@@ -134,9 +134,20 @@ define([
 					})
 				});
 
-				this.mainList.addChild(this.manageAccountsListItem);
-				this.mainList.addChild(this.addAccountsListItem);
-				this.mainList.addChild(this.editAccountsListItem);
+				this.helpAcilos = new ListItem({
+					label: "Help Page",
+					"class": "helpListItemClass",
+					clickable: true,
+					noArrow: true,
+					onClick: lang.hitch(this, function(){
+						window.open("http://www.acilos.com/appHelp");
+					})
+				});
+
+				//this.mainList.addChild(this.manageAccountsListItem);
+				//this.mainList.addChild(this.addAccountsListItem);
+				///this.mainList.addChild(this.editAccountsListItem);
+				this.mainList.addChild(this.helpAcilos);
 				this.mainList.addChild(this.aboutListItem);
 				this.addChild(this.mainList);
 			},

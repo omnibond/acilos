@@ -366,12 +366,12 @@ define([
 								}else{
 									this.errorItem.set("label", obj['success']);
 								}
+								this.activate();
 							}));
 							
-							key.set("value", "");
+							/*key.set("value", "");
 							secret.set("value", "");
-							domStyle.set(color.domNode, "background-image", "linear-gradient(to bottom, #ffffff 0%, #e2e2e2 100%)");
-							this.activate();
+							domStyle.set(color.domNode, "background-image", "linear-gradient(to bottom, #ffffff 0%, #e2e2e2 100%)");*/
 						}
 					},key, secret, redirect, colorPicker, param, color)
 				})
