@@ -61,10 +61,16 @@
 	if(isset($_GET['facebook']) && $_GET['facebook'] == "true"){
 		setcookie("facebookCook", $_COOKIE['PHPSESSID'], time()+ (3600 * 24), '/', 'amazonaws.com', false, false);
 		if(isset($_GET['login']) && $_GET['login'] !== "second"){
-			header('Location: /#/appHelp/ManAccountsHelpView');
+			header('Location: /#/ManAccounts');
 		}else{
-			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php");
-			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php");
+			$ctx = stream_context_create(array(
+			    'http' => array(
+				'timeout' => 1
+				)
+			    )
+			);
+			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
+			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
 				
 			header('Location: /#/mainFeed');
 		}
@@ -72,10 +78,16 @@
 	if(isset($_GET['linkedin']) && $_GET['linkedin'] == "true"){
 		setcookie("linkedinCook", $_COOKIE['PHPSESSID'], time()+ (3600 * 24), '/', 'amazonaws.com', false, false);
 		if(isset($_GET['login']) && $_GET['login'] !== "second"){
-			header('Location: /#/appHelp/ManAccountsHelpView');
+			header('Location: /#/ManAccounts');
 		}else{
-			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php");
-			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php");
+			$ctx = stream_context_create(array(
+			    'http' => array(
+				'timeout' => 1
+				)
+			    )
+			);
+			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
+			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
 				
 			header('Location: /#/mainFeed');
 		}
@@ -83,10 +95,16 @@
 	if(isset($_GET['twitter']) && $_GET['twitter'] == "true"){
 		setcookie("twitterCook", $_COOKIE['PHPSESSID'], time()+ (3600 * 24), '/', 'amazonaws.com', false, false);
 		if(isset($_GET['login']) && $_GET['login'] !== "second"){
-			header('Location: /#/appHelp/ManAccountsHelpView');
+			header('Location: /#/ManAccounts');
 		}else{
-			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php");
-			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php");
+			$ctx = stream_context_create(array(
+			    'http' => array(
+				'timeout' => 1
+				)
+			    )
+			);
+			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
+			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
 				
 			header('Location: /#/mainFeed');
 		}
@@ -94,10 +112,16 @@
 	if(isset($_GET['instagram']) && $_GET['instagram'] == "true"){
 		setcookie("instagramCook", $_COOKIE['PHPSESSID'], time()+ (3600 * 24), '/', 'amazonaws.com', false, false);
 		if(isset($_GET['login']) && $_GET['login'] !== "second"){
-			header('Location: /#/appHelp/ManAccountsHelpView');
+			header('Location: /#/ManAccounts');
 		}else{
-			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php");
-			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php");
+			$ctx = stream_context_create(array(
+			    'http' => array(
+				'timeout' => 1
+				)
+			    )
+			);
+			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
+			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
 				
 			header('Location: /#/mainFeed');
 		}
@@ -217,11 +241,6 @@
 						});
 						domWindow.body().appendChild(leftPane.domNode);
 
-						//console.log("android is: ", has('android'));
-						//console.log("iphone is: ", has('iphone'));
-
-						//domWindow.body().style.overflow = "scroll";
-
 						if(has('iphone') != undefined){
 							domWindow.body().style.overflow = "scroll";
 						}
@@ -279,7 +298,7 @@
 			},
 			
 			loginButtonsNitems = function(param, div, serviceCreds, mainDiv){
-				if(param == "facebook" && serviceCreds[param].length > 0){
+				if(param == "facebook"){
 					var button = new Button({
 						"class": "loginLogoButton",
 						onClick: lang.hitch(null, function(){
@@ -290,7 +309,7 @@
 					button.domNode.appendChild(faceDiv);
 					div.appendChild(button.domNode);
 				}
-				if(param == "twitter" && serviceCreds[param].length > 0){
+				if(param == "twitter"){
 					var button = new Button({
 						"class": "loginLogoButton",
 						onClick: lang.hitch(null, function(){
@@ -301,7 +320,7 @@
 					button.domNode.appendChild(twitDiv);
 					div.appendChild(button.domNode);	
 				}
-				if(param == "instagram" && serviceCreds[param].length > 0){
+				if(param == "instagram"){
 					var button = new Button({
 						"class": "loginLogoButton",
 						onClick: lang.hitch(null, function(){
@@ -312,7 +331,7 @@
 					button.domNode.appendChild(instaDiv);
 					div.appendChild(button.domNode);
 				}
-				if(param == "linkedin" && serviceCreds[param].length > 0){
+				if(param == "linkedin"){
 					var button = new Button({
 						"class": "loginLogoButton",
 						onClick: lang.hitch(null, function(){

@@ -61,10 +61,16 @@
 	if(isset($_GET['facebook']) && $_GET['facebook'] == "true"){
 		setcookie("facebookCook", $_COOKIE['PHPSESSID'], time()+ (3600 * 24), '/', 'clemson.edu', false, false);
 		if(isset($_GET['login']) && $_GET['login'] !== "second"){
-			header('Location: /#/appHelp/ManAccountsHelpView');
+			header('Location: /#/ManAccounts');
 		}else{
-			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php");
-			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php");
+			$ctx = stream_context_create(array(
+			    'http' => array(
+				'timeout' => 1
+				)
+			    )
+			);
+			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
+			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
 				
 			header('Location: /#/mainFeed');
 		}
@@ -72,10 +78,16 @@
 	if(isset($_GET['linkedin']) && $_GET['linkedin'] == "true"){
 		setcookie("linkedinCook", $_COOKIE['PHPSESSID'], time()+ (3600 * 24), '/', 'clemson.edu', false, false);
 		if(isset($_GET['login']) && $_GET['login'] !== "second"){
-			header('Location: /#/appHelp/ManAccountsHelpView');
+			header('Location: /#/ManAccounts');
 		}else{
-			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php");
-			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php");
+			$ctx = stream_context_create(array(
+			    'http' => array(
+				'timeout' => 1
+				)
+			    )
+			);
+			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
+			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
 				
 			header('Location: /#/mainFeed');
 		}
@@ -83,10 +95,16 @@
 	if(isset($_GET['twitter']) && $_GET['twitter'] == "true"){
 		setcookie("twitterCook", $_COOKIE['PHPSESSID'], time()+ (3600 * 24), '/', 'clemson.edu', false, false);
 		if(isset($_GET['login']) && $_GET['login'] !== "second"){
-			header('Location: /#/appHelp/ManAccountsHelpView');
+			header('Location: /#/ManAccounts');
 		}else{
-			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php");
-			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php");
+			$ctx = stream_context_create(array(
+			    'http' => array(
+				'timeout' => 1
+				)
+			    )
+			);
+			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
+			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
 				
 			header('Location: /#/mainFeed');
 		}
@@ -94,10 +112,16 @@
 	if(isset($_GET['instagram']) && $_GET['instagram'] == "true"){
 		setcookie("instagramCook", $_COOKIE['PHPSESSID'], time()+ (3600 * 24), '/', 'clemson.edu', false, false);
 		if(isset($_GET['login']) && $_GET['login'] !== "second"){
-			header('Location: /#/appHelp/ManAccountsHelpView');
+			header('Location: /#/ManAccounts');
 		}else{
-			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php");
-			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php");
+			$ctx = stream_context_create(array(
+			    'http' => array(
+				'timeout' => 1
+				)
+			    )
+			);
+			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
+			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
 				
 			header('Location: /#/mainFeed');
 		}

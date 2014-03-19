@@ -109,7 +109,7 @@ eval /usr/bin/wget -q -O /dev/null http://'$HOST'/cron/poller/amazonRebootManage
 
 EOF
 
-CRONGREP=`crontab -l | grep socialreader`
+CRONGREP=`crontab -l | grep /cron/`
 if [ "$CRONGREP" = "" ]; then
 	echo "no socialreader crons were found... adding cronjobs"
 

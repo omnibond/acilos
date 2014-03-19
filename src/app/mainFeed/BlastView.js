@@ -207,7 +207,7 @@ define(['dojo/_base/declare',
 			}
 
 			this.submitButton = new Button({
-				label: "Post",
+				label: "Blast",
 				style: "margin-left: 0px",
 				onClick: lang.hitch(this, function(){
 					document.body.onkeyup = ""; 

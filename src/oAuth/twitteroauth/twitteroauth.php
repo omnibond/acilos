@@ -9,8 +9,6 @@
 /* Load OAuth lib. You can find it at http://oauth.net */
 require_once(realpath(dirname(__FILE__)) . '/OAuth.php');
 
-require_once(realpath(dirname(__FILE__)) .'/../../cron/logs/KLogger.php');
-
 //we cant define logprefix here because it will overwrite 
 //$logprefix in twitterAccess.php when this file gets required...
 //So instead lets define logprefix in every function...
@@ -105,10 +103,10 @@ class TwitterOAuth {
 
     if (empty($sign_in_with_twitter)) {
      
-      return $this->authorizeURL() . "?oauth_token={$token}" . "&force_login=true";
+      return $this->authorizeURL() . "?oauth_token={$token}";
     }
     
-    return $this->authenticateURL() . "?oauth_token={$token}" . "&force_login=true";
+    return $this->authenticateURL() . "?oauth_token={$token}";
   }
 
   /**
