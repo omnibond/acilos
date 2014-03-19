@@ -228,8 +228,14 @@ class Database{
 	}
 
 	function manualCrons(){
-		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php");
-		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php");
+		$ctx = stream_context_create(array(
+		    'http' => array(
+			'timeout' => 1
+			)
+		    )
+		);
+		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
+		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
 	}
 
 	function restoreBackUpData(){
