@@ -68,7 +68,7 @@ require_once('../../oAuth/twitteroauth/twitteroauth.php');
 	$thing = '';
 	$count = 0;
 	for($f = 0; $f < count($thingArr); $f++){
-		if($thingArr[$f] == "src"){
+		if($thingArr[$f] == "src" || $thingArr[$f] == "app-production"){
 			$thing = $thing.$thingArr[$f]."/";
 			$count = -1;
 		}
