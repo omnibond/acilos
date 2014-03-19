@@ -12,3 +12,12 @@ callCronManager.sh
 feedList.json
 tmpUpload/
 app.css
+src/dojo
+src/dojox
+src/util
+src/dijit
+composer.lock
+src/vendor
+dist
+profiles/app-production.profile.js
+profiles/app-development.profile.js
