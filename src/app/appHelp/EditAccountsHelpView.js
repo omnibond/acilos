@@ -53,8 +53,7 @@ define([
 		"dojox/mobile/RoundRectList",
 		"dojox/mobile/EdgeToEdgeList",	
 		"dojox/mobile/ListItem",	
-		"dojox/mobile/Button",	
-		"dijit/Dialog",
+		"dojox/mobile/Button",
 		"dojox/mobile/GridLayout",
 		"dojox/mobile/Pane",
 		
@@ -92,7 +91,6 @@ define([
 		EdgeToEdgeList,
 		ListItem,
 		Button,
-		Dialog,
 		GridLayout,
 		Pane,
 		
