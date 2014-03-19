@@ -208,7 +208,7 @@ define(['dojo/_base/declare',
 
 			this.submitButton = new Button({
 				label: "Blast",
-				style: "margin-left: 0px",
+				style: "margin-left: 0px;margin-top:20px",
 				onClick: lang.hitch(this, function(){
 					document.body.onkeyup = ""; 
 					var msg = this.textArea.get("value");
