@@ -164,7 +164,7 @@ define(['dojo/_base/declare',
 			this.textArea = new TextArea({
 				trim: true,
 				style: "height:100px;width:99%",
-				value: this.blastObj.msg
+				value: "BL: " + this.blastObj.msg + " - " + this.blastObj.poster
 			});
 
 			this.textAreaCountDiv = domConstruct.create("div", {innerHTML: this.textArea.get("value").length + " characters"});
@@ -227,7 +227,9 @@ define(['dojo/_base/declare',
 						
 					console.log("tokenArr is: ", tokenArr);
 					
-					this.sendPostFile(this.blastObj.imgName, tokenArr, msg).then(lang.hitch(this, this.handleResponse));
+					this.sendPostFile(this.blastObj.imgName, tokenArr, msg).then(lang.hitch(this, function(obj){
+						window.location = "#/mainFeed";
+					}));
 				})
 			});
 			this.mainList.addChild(this.submitButton);

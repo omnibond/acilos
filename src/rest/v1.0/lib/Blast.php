@@ -25,6 +25,7 @@
 **
 ** $QT_END_LICENSE$
 */
+require_once('../../oAuth/twitteroauth/twitteroauth.php');
 
 class Blast{
 

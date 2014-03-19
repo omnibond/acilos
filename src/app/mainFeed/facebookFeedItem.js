@@ -516,6 +516,7 @@ define([
 					this.blastView.blastObj.imgName = source.content.id;
 					this.blastView.blastObj.postLink = source.postLink;
 					this.blastView.blastObj.service = source.service;
+					this.blastView.blastObj.poster = source.actor.displayName;
 					this.blastView.blastObj.msg = source.content.text.text;
 					this.downloadImage(this.blastView.blastObj.url, this.blastView.blastObj.imgName).then(lang.hitch(this, function(){
 						window.location = "#/"+this.blastView.mod+this.blastView.route;
