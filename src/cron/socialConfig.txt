@@ -2,6 +2,6 @@ INDEX=app
 MAPPING=app
 HOST=localhost
 PORT=9200
-INDEXDIR=elasticSearch/data/elasticsearch/nodes/0/indices/socialreader
+INDEXDIR=elasticSearch/data/elasticsearch/nodes/0/indices/
 HTTPUSER=stuser
 HTTPPASSWORD=st12345
