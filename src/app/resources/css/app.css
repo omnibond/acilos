@@ -4213,13 +4213,13 @@ select {
 }
 .loginLogoButton {
   background: white;
-  width: 140px;
-  height: 140px;
+  width: 130px;
+  height: 130px;
   margin: 5px;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
-  border: 1px solid #e7e7de;
+  border: 2px solid #878787;
 }
 .accountLogo {
   height: 40px;
