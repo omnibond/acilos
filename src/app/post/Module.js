@@ -51,7 +51,8 @@ define(['dojo/_base/declare',
 				
 				sendPostFile: lang.hitch(this, this.sendPostFile),
 				runAtCommand: lang.hitch(this, this.runAtCommand),
-				getServiceCreds: lang.hitch(this, this.getServiceCreds)
+				getServiceCreds: lang.hitch(this, this.getServiceCreds),
+				getDomain: lang.hitch(this, this.getDomain)
 			});
 			
 			this.registerView(this.rootView);
@@ -72,6 +73,11 @@ define(['dojo/_base/declare',
 		getServiceCreds: function(){
 			params = {};
 			return xhrManager.send('POST', 'rest/v1.0/Credentials/getServiceCreds', params);
-		}
+		},
+		
+		getDomain: function(){
+			var params = {};
+			return xhrManager.send('GET', 'rest/v1.0/Database/getDomain', params);
+		},
 	});
 });
