@@ -73,36 +73,39 @@ EOF
 echo "Writing The Cron Manager"
 cat > cron/callCronManager.sh << 'EOF'
 #!/bin/bash
-#this script will be called by the cron every 5 minutes which 
+#this script will be called by the cron every 5 minutes which
 #will in turn call the actual poller to go get new information
 
-cd $(pwd)
-cd poller
-php cronManager.php
+EOF
+echo ". " $MAINPATH"/cron/socialConfig.txt" >> cron/callCronManager.sh
+cat >> cron/callCronManager.sh << 'EOF'
+eval /usr/bin/wget -q -O /dev/null http://'$HOST'/cron/poller/cronManager.php?index='$INDEX'&mapping='$MAPPING'&host='$HOST'&port='$PORT'
 
 EOF
 
 echo "Writing The Client Manager"
 cat > cron/callClientManager.sh << 'EOF'
 #!/bin/bash
-#this script will be called by the cron every 5 minutes which 
+#this script will be called by the cron every 5 minutes which
 #will in turn call the actual poller to go get new contact lists
 
-cd $(pwd)
-cd poller
-php clientManager.php
-
+EOF
+echo ". " $MAINPATH"/cron/socialConfig.txt" >> cron/callClientManager.sh
+cat >> cron/callClientManager.sh << 'EOF'
+eval /usr/bin/wget -q -O /dev/null http://'$HOST'/cron/poller/clientManager.php?index='$INDEX'&mapping='$MAPPING'&host='$HOST'&port='$PORT'
+	
 EOF
 
 echo "Writing The Amazon Reboot Manager"
 cat > cron/callAmazonRebootManager.sh << 'EOF'
 #!/bin/bash
-#this script will be called by the cron every 5 minutes which 
+#this script will be called by the cron every 5 minutes which
 #will in turn call the actual poller to go get new contact lists
-
-cd $(pwd)
-cd poller
-php amazonRebootManager.php
+	
+EOF
+echo ". " $MAINPATH"/cron/socialConfig.txt" >> cron/callAmazonRebootManager.sh
+cat >> cron/callAmazonRebootManager.sh << 'EOF'
+eval /usr/bin/wget -q -O /dev/null http://'$HOST'/cron/poller/amazonRebootManager.php?index='$INDEX'&mapping='$MAPPING'&host='$HOST'&port='$PORT'
 
 EOF
 
