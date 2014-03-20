@@ -22,3 +22,4 @@ dist
 profiles/app-production.profile.js
 profiles/app-development.profile.js
 *.log
+*.lock
