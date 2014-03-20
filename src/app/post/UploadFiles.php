@@ -55,7 +55,10 @@
 	    echo "Sorry your file was not uploaded";
 	}else {
 	    if(move_uploaded_file($_FILES['file']['tmp_name'], $target)){
-	       echo json_encode(array("success" => "The file ". basename( $_FILES['file']['name']). " has been uploaded"));
+	       echo json_encode(array(
+		"success" => "The file ". basename( $_FILES['file']['name']). " has been uploaded",
+		"fileName" => basename( $_FILES['file']['name'])
+		));
 	    }else{
 	        echo json_encode(array("error" => "Sorry, there was a problem uploading your file."));
 	    }

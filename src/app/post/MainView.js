@@ -73,8 +73,6 @@ define(['dojo/_base/declare',
 				style: "margin:none;border:none"
 			});
 
-			console.log("hello");
-
 			this.buildUploadBar();
 
 			this.addChild(this.mainList);
@@ -212,8 +210,14 @@ define(['dojo/_base/declare',
 				name: "file",
 				multiple: false,
 				uploadOnSelect: true,
-				onFocus: function(){this.inherited(arguments)},
-				onComplete: function(){console.log(arguments)},
+				//onFocus: function(){
+				//	this.inherited(arguments);
+				//},
+				onComplete: lang.hitch(this, function(){
+					console.log(arguments);
+					this.fileToUpload = arguments[0].fileName;
+					console.log(this.fileToUpload);
+				}),
 				url: "app/post/UploadFiles.php",
 				style: "background-image: linear-gradient(to bottom, #ffffff 0%, #e2e2e2 100%); border: 1px solid #c0c0c0; border-bottom-color: #9b9b9b; margin-bottom: 2px; font-size: 13px; font-weight: normal; height: 29px; line-height: 29px; margin-left: -8px"
 			}, upDiv);
@@ -223,23 +227,6 @@ define(['dojo/_base/declare',
                 style: "margin-left: -8px; margin-bottom: -9px"
             });
             fDiv.appendChild(fileList.domNode);
-                
-            console.log("fUploader is: ", fUploader);
-            console.log("HEY AARON!");
-            console.log("HEY AARON!");
-            console.log("HEY AARON!");
-            console.log("HEY AARON!");
-            console.log("HEY AARON!");
-            console.log("HEY AARON!");
-            console.log("HEY AARON!");
-            console.log("HEY AARON!");
-            console.log("HEY AARON!");
-            console.log("HEY AARON!");
-            console.log("HEY AARON!");
-            console.log("HEY AARON!");
-            console.log("HEY AARON!");
-            console.log("HEY AARON!");
-            console.log("HEY AARON!");
 
             fUploader.startup();
 
@@ -272,9 +259,6 @@ define(['dojo/_base/declare',
 							document.body.onkeyup = ""; 
 							var msg = this.textArea.get("value");
 							var file = '';
-							if(fUploader.get("value").length > 0){
-								var file = fUploader.get("value")[0]['name'];
-							}
 							
 							var tokenArr = {};
 							for(x=0; x<this.checkArray.length; x++){
@@ -294,10 +278,9 @@ define(['dojo/_base/declare',
 								fileType = fUploader.get("value")[0]['type'];
 							}else{
 								fileType = '';
-								file = '';
 							}
-							
-							this.sendPostFile(file, fileType, tokenArr, msg).then(lang.hitch(this, this.handleResponse));
+							console.log(this.fileToUpload);
+							this.sendPostFile(this.fileToUpload, fileType, tokenArr, msg).then(lang.hitch(this, this.handleResponse));
 						}, fUploader)
 					});
 					this.nowList.addChild(this.submitButton);
