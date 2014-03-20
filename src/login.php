@@ -51,7 +51,10 @@
 		header('Location: /auth.php');
 	}
 	
+<<<<<<< HEAD
 	#print_r($_COOKIE);
+=======
+>>>>>>> fixBuildIssues
 	$var = getData();
 	$fCount = (string)count($var['facebook']);
 	$lCount = (string)count($var['twitter']);
