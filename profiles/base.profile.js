@@ -65,7 +65,7 @@ var profile = {
 			// tiny files.
 			include: [
 				'dojo-mama/layout/responsiveTwoColumn/Layout',  // dojo-mama framework
-				'dojo-mama/layout/responsiveTwoColumn/index/Module'  // dojo-mama index module
+				//'dojo-mama/layout/responsiveTwoColumn/index/Module'  // dojo-mama index module
 			],
 
 			// By default, the build system will try to include `dojo/main` in the built `dojo/dojo` layer, which adds

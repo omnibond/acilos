@@ -130,7 +130,7 @@ php startES.php
 
 running=$(ps axho user,comm|grep -E "httpd|apache"|uniq|grep -v "root"|awk 'END {if ($1) print $1}')
 
-echo "setting $running and 775 on all files"
+echo "setting $running and 777 on all files"
 cd ..
 cd ..
 chown -R $running:$running *

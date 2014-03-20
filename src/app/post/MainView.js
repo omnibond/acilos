@@ -38,7 +38,6 @@ define(['dojo/_base/declare',
 		"dojox/mobile/RadioButton",
 		
 		"dojox/form/Uploader",
-		//"dojox/form/FileInputAuto",
 		
 		"app/post/FileList",
 		"dijit/Dialog",
@@ -213,69 +212,34 @@ define(['dojo/_base/declare',
 				name: "file",
 				multiple: false,
 				uploadOnSelect: true,
+				onFocus: function(){this.inherited(arguments)},
+				onComplete: function(){console.log(arguments)},
 				url: "app/post/UploadFiles.php",
-				style: "background-image: linear-gradient(to bottom, #ffffff 0%, #e2e2e2 100%); border: 1px solid #c0c0c0; border-bottom-color: #9b9b9b; margin-bottom: 2px; font-size: 13px; font-weight: normal; height: 29px; line-height: 29px; margin-left: -8px",
-				onComplete: lang.hitch(this, function(){
-					console.log("onComplete has fired");
-					this.inherited(arguments);
-				}),
-				onChange: lang.hitch(this, function(){
-					console.log("onChange has fired");
-					this.inherited(arguments);
-				}),
-				onCancel: lang.hitch(this, function(){
-					console.log("onCancel has fired");
-					this.inherited(arguments);
-				}),
-				onBegin: lang.hitch(this, function(){
-					console.log("onBegin has fired");
-					this.inherited(arguments);
-				}),
-				onProgress: lang.hitch(this, function(){
-					console.log("onProgress has fired");
-					this.inherited(arguments);
-				}),
-				onAbort: lang.hitch(this, function(){
-					console.log("onAbort has fired");
-					this.inherited(arguments);
-				}),
-				onError: lang.hitch(this, function(){
-					console.log("onError has fired");
-					this.inherited(arguments);
-				}),
-				onClick: lang.hitch(this, function(){
-					console.log("onClick has fired");
-					this.inherited(arguments);
-				}),
-				onCancel: lang.hitch(this, function(){
-					console.log("onCancel has fired");
-					this.inherited(arguments);
-				}),
-				onFocus: lang.hitch(this, function(){
-					console.log("onFocus has fired");
-					this.inherited(arguments);
-				}),
-				onKeyDown: lang.hitch(this, function(){
-					console.log("onKeyDown has fired");
-					this.inherited(arguments);
-				}),
-				onKeyUp: lang.hitch(this, function(){
-					console.log("onKeyUp has fired");
-					this.inherited(arguments);
-				}),
-				onKeyPress: lang.hitch(this, function(){
-					console.log("onKeyPress has fired");
-					this.inherited(arguments);
-				})
+				style: "background-image: linear-gradient(to bottom, #ffffff 0%, #e2e2e2 100%); border: 1px solid #c0c0c0; border-bottom-color: #9b9b9b; margin-bottom: 2px; font-size: 13px; font-weight: normal; height: 29px; line-height: 29px; margin-left: -8px"
 			}, upDiv);
 			
-				var fileList = new FileList({
+			var fileList = new FileList({
                 uploaderId: fUploader,
                 style: "margin-left: -8px; margin-bottom: -9px"
             });
             fDiv.appendChild(fileList.domNode);
                 
             console.log("fUploader is: ", fUploader);
+            console.log("HEY AARON!");
+            console.log("HEY AARON!");
+            console.log("HEY AARON!");
+            console.log("HEY AARON!");
+            console.log("HEY AARON!");
+            console.log("HEY AARON!");
+            console.log("HEY AARON!");
+            console.log("HEY AARON!");
+            console.log("HEY AARON!");
+            console.log("HEY AARON!");
+            console.log("HEY AARON!");
+            console.log("HEY AARON!");
+            console.log("HEY AARON!");
+            console.log("HEY AARON!");
+            console.log("HEY AARON!");
 
             fUploader.startup();
 
