@@ -372,6 +372,11 @@ define([
 					label: "nerve-tattoo es client — " + this.parseSpecialChars("https://github.com/nervetattoo/elasticsearch"),
 					"class": "borderlessWrapListItem"
 				});
+				var d3 = new ListItem({
+					variableHeight: true, 
+					label: "d3 Data Driven Documents — " + this.parseSpecialChars("http://d3js.org/"),
+					"class": "borderlessWrapListItem"
+				});
 				/*var omniExtra = new ListItem({
 					variableHeight: true, 
 					label: "omnibond — " + this.parseSpecialChars("http://www.omnibond.com"),
@@ -383,6 +388,7 @@ define([
 				creditList.addChild(mamaExtra);
 				creditList.addChild(abrahamExtra);
 				creditList.addChild(nerveExtra);
+				creditList.addChild(d3);
 				//creditList.addChild(omniExtra);
 				this.mainList.addChild(creditList);
 				
