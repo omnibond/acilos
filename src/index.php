@@ -43,28 +43,22 @@
 <body>	
     <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
 
+    	<!-- If you choose to remove this code, please consider donating at http://www.acilos.com -->
     	<script type="text/javascript" src="http://cf.cdn.inmobi.com/ad/inmobi.js"></script>
     	<div id="adSlot" style="display: none" innerHTML = '<div><img src="app/resources/img/AcilosStaticMob_1.png"></div>'>
     	<script type="text/javascript">
-        	//this is for setting up the slot and linking it to our account
 		    var inmobi_conf = {
 				siteid: "fd745bb626664223981f201858473cd3",
-				//this one is omnibond live - siteid : "fd745bb626664223981f201858473cd3", 
 				slot : "9", 
-				//testdeviceid: "HTC Sense",
-				test: true,
+				test: false,
 				autoRefresh: 20,
 				onError : function(code) {
-					console.log("Arguments are: ", arguments);
 					if(code == "nfr" || !arguments || arguments == null || arguments == undefined) {
 						document.getElementById('adSlot').innerHTML = '<div><img src="app/resources/img/AcilosStaticMob_1.png"></div>';
-						console.log("Received a no-fill response");
 					}
 				}
 		    };
-		    //this is to give us a function to get new ads for existing slots
 		    _inmobi.getNewAd(document.getElementById('adSlot'), inmobi_conf);
-		    console.log("adSlot is (from index.php): ", adSlot);
 		</script>
     	</div>
         
