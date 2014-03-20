@@ -1,31 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-# also note that i assme the branch has no '\' or '&'
-function create_versions_file {
-	cd $BASEDIR
-	SVN_REV=`svn info | grep Revision | awk '{print $2}'`
-	SVN_URL=`svn info | grep URL | awk '{print $2}'`
-	SVN_BRANCH=${SVN_URL##*/}
-	cd -
-
-	echo "Built using SVN Branch: $SVN_BRANCH, r$SVN_REV"
-
-	# this will be copied already with static resources
-	# cp $SRCDIR/version.json $DISTDIR/version.json
-
-	# patch versions.json
-	if [[ `uname` == 'Darwin' ]]; then
-		sed -i "" -e "s/UNBUILT_BRANCH/${SVN_BRANCH//\//\\/}/"  "$DISTDIR/version.json"
-		sed -i "" -e "s/UNBUILT_REVISION/${SVN_REV//\//\\/}/"  "$DISTDIR/version.json"
-		sed -i "" -e "s/UNBUILT_TIER/${TIER}/"  "$DISTDIR/version.json"
-	else
-		sed -i "s/UNBUILT_BRANCH/${SVN_BRANCH//\//\\/}/"  "$DISTDIR/version.json"
-		sed -i "s/UNBUILT_REVISION/${SVN_REV//\//\\/}/"  "$DISTDIR/version.json"
-		sed -i "s/UNBUILT_TIER/${TIER}/"  "$DISTDIR/version.json"
-	fi
-}
-
 # Build target
 if [ "$1" = "" ]; then
     APP=app
@@ -124,7 +99,6 @@ rsync -av --exclude .svn $SRCDIR/rest/ $DISTDIR/rest/
 rsync -av --exclude .svn $SRCDIR/vendor/ $DISTDIR/vendor/
 mkdir $DISTDIR/lockFiles
 
-create_versions_file
 # Copy & minify production.html
 # sed s/{{APP}}/$APP/g $SRCDIR/$TIER.html | tr -d '\n' > $DISTDIR/index.html
 
