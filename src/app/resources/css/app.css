@@ -3653,6 +3653,7 @@ select {
 }
 .dmRightPane {
   background-color: white;
+  max-height: 1000px;
 }
 .fullscreen_mode .dmLayout {
   bottom: 0 !important;
