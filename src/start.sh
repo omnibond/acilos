@@ -127,9 +127,6 @@ php startES.php
 
 running=$(ps axho user,comm|grep -E "httpd|apache"|uniq|grep -v "root"|awk 'END {if ($1) print $1}')
 
-echo "installing composer"
-php composer.phar install
-
 echo "setting $running and 775 on all files"
 cd ..
 cd ..
