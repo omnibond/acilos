@@ -78,6 +78,6 @@ define(['dojo/_base/declare',
 		getDomain: function(){
 			var params = {};
 			return xhrManager.send('GET', 'rest/v1.0/Database/getDomain', params);
-		},
+		}
 	});
 });

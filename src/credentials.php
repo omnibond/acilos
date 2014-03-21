@@ -150,7 +150,7 @@
 					
 					var item = new ListItem({
 						label: "Welcome to",
-						style: "border:none;height:35px;font-size;font-family:arial;font-size:20px; text-align: center"
+						style: "background-color:inherit;border:none;height:35px;font-size;font-family:arial;font-size:20px; text-align: center"
 					});
 					leftPane.addChild(item);
 					/*var item = new ListItem({
