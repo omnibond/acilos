@@ -452,6 +452,7 @@ define(['dojo/_base/declare',
 				});
 
 				var myListItem = new ListItem({
+					variableHeight: true,
 					style: "border:none; padding: 0; margin-left: 2px; margin-bottom: -2px"
 				});
 
