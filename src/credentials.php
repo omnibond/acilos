@@ -138,6 +138,16 @@
 					});
 					domWindow.body().appendChild(leftPane.domNode);
 					
+					if(has('iphone') != undefined){
+						domWindow.body().style.overflow = "scroll";
+					}
+
+					if(has('android' < 4)){
+						domWindow.body().style.overflow = "scroll";
+					}
+
+					document.body.style.backgroundColor = "#d0d3d4";
+					
 					var item = new ListItem({
 						label: "Welcome to",
 						style: "border:none;height:35px;font-size;font-family:arial;font-size:20px; text-align: center"

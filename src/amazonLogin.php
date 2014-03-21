@@ -248,10 +248,14 @@
 						if(has('android' < 4)){
 							domWindow.body().style.overflow = "scroll";
 						}
+
+						document.body.style.backgroundColor = "#d0d3d4";
+
+						console.log("document.body: ", document.body.style);
 						
 						var item = new ListItem({
 							label: "Welcome to",
-							style: "border:none;height:35px;font-size;font-family:arial;font-size:20px"
+							style: "border:none;height:35px;font-size;font-family:arial;font-size:20px; background-color: #d0d3d4"
 						});
 						leftPane.addChild(item);
 
@@ -260,7 +264,7 @@
 
 						var item = new ListItem({
 							label: "Please Log In To Continue",
-							style: "border:none;height:35px;font-size;font-family:arial;font-size:20px"
+							style: "border:none;height:35px;font-size;font-family:arial;font-size:20px; background-color: #d0d3d4"
 						});
 						leftPane.addChild(item);
 						
