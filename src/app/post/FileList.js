@@ -225,10 +225,10 @@ return declare("dojox.form.uploader.FileList", [formUploaderBase], {
 			domClass.add(c, "dojoxUploaderSize");
 			c.innerHTML = this.convertBytes(size).value;
 		}
-		
+
 		this.pic = pic;
 		this.c = r.insertCell(-1);
-		
+
 		this.rowAmt++;
 	}
 });

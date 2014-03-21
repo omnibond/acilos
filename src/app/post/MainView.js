@@ -38,6 +38,7 @@ define(['dojo/_base/declare',
 		"dojox/mobile/RadioButton",
 		
 		"dojox/form/Uploader",
+		"dojox/form/uploader/_IFrame",
 		
 		"app/post/FileList",
 		"dijit/Dialog",
@@ -60,6 +61,7 @@ define(['dojo/_base/declare',
 	RadioButton,
 	
 	Uploader,
+	iFramePlugin,
 	
 	FileList,
 	Dialog,
@@ -204,125 +206,84 @@ define(['dojo/_base/declare',
 			fileHolder.domNode.appendChild(upDiv);
 			var fDiv = domConstruct.create("div", {});
 			fileHolder.domNode.appendChild(fDiv);
-				
-			var fUploader = new Uploader({
-				label: "Select a file",
-				name: "file",
-				multiple: false,
-				uploadOnSelect: true,
-				//onFocus: function(){
-				//	this.inherited(arguments);
-				//},
-				onComplete: lang.hitch(this, function(){
-					console.log(arguments);
-					this.fileToUpload = arguments[0].fileName;
-					console.log(this.fileToUpload);
-				}),
-				url: "http://"+this.domain+"/app/post/UploadFiles.php",
-				style: "background-image: linear-gradient(to bottom, #ffffff 0%, #e2e2e2 100%); border: 1px solid #c0c0c0; border-bottom-color: #9b9b9b; margin-bottom: 2px; font-size: 13px; font-weight: normal; height: 29px; line-height: 29px; margin-left: -8px"
-			}, upDiv);
 			
-			var fileList = new FileList({
-                uploaderId: fUploader,
-                style: "margin-left: -8px; margin-bottom: -9px"
-            });
-            fDiv.appendChild(fileList.domNode);
+			this.getDomain().then(lang.hitch(this, function(obj){
+				this.domain = obj.domain;
+				console.log("http://"+this.domain+"/app/post/UploadFiles.php");
 
-            fUploader.startup();
+				var fUploader = new dojox.form.Uploader({
+					label: "Select a file",
+					name: "file[]",
+					multiple: false,
+					uploadOnSelect: true,
+					//onFocus: function(){
+					//	this.inherited(arguments);
+					//},
+					onComplete: lang.hitch(this, function(){
+						console.log("omComplete arguments are: ", arguments);
+						this.fileToUpload = arguments[0].fileName;
+						console.log("the file to upload is: ", this.fileToUpload);
+					}),
+					onBegin: lang.hitch(this, function(){
+						console.log("onBegin arguments are: ", arguments);
+						this.fileToUpload = arguments[0][0].name;
+						console.log("the file to upload is: ", this.fileToUpload);
+					}),
+					onChange: lang.hitch(this, function(){
+						console.log("onChange arguments are: ", arguments);
+					}),
+					onError: lang.hitch(this, function(){
+						console.log("onError arguments are: ", arguments);
+					}),
+					onLoad: lang.hitch(this, function(){
+						console.log("onLoad arguments are: ", arguments);
+					}),
+					onProgress: lang.hitch(this, function(){
+						console.log("onProgress arguments are: ", arguments);
+					}),
+					url: "http://"+this.domain+"/app/post/UploadFiles.php",
+					style: "background-image: linear-gradient(to bottom, #ffffff 0%, #e2e2e2 100%); border: 1px solid #c0c0c0; border-bottom-color: #9b9b9b; margin-bottom: 2px; font-size: 13px; font-weight: normal; height: 29px; line-height: 29px; margin-left: -8px"
+					}, upDiv);
 
-			var postNow = new RadioButton({
-				checked: true,
-				name: "post",
-				onClick: lang.hitch(this, function(){
-					if(this.atDate){
-						this.atDate.destroyRecursive();
-						this.atDate = null;
-					}
-					if(this.nowList){
-						this.nowList.destroyRecursive();
-						this.nowList = null;
-					}
-					if(this.laterList){
-						this.laterList.destroyRecursive();
-						this.laterList = null;
-					}
-					if(this.calendarDialog){
-						this.calendarDialog.destroy();
-						this.calendarDialog = null;
-					}
-					this.nowList = new EdgeToEdgeList({style: "margin-top: 3px; margin-left: 8px"})
+					var fileList = new FileList({
+					uploaderId: fUploader,
+					style: "margin-left: -8px; margin-bottom: -9px"
+				});
+				fDiv.appendChild(fileList.domNode);
 
-					this.submitButton = new Button({
-						label: "Post",
-						style: "margin-left: 0px",
-						onClick: lang.hitch(this, function(fUploader){
-							document.body.onkeyup = ""; 
-							var msg = this.textArea.get("value");
-							var file = '';
-							
-							var tokenArr = {};
-							for(x=0; x<this.checkArray.length; x++){
-								if(this.checkArray[x].checked == true){
-									if(tokenArr[this.checkArray[x]['leKey']]){
-										tokenArr[this.checkArray[x]['leKey']].push(this.checkArray[x]['leToken']);
-									}else{
-										tokenArr[this.checkArray[x]['leKey']] = [];
-										tokenArr[this.checkArray[x]['leKey']].push(this.checkArray[x]['leToken']);
-									}
-								}
-							}
-								
-							console.log("tokenArr is: ", tokenArr);
-							
-							if(fUploader.get('value') != ''){
-								fileType = fUploader.get("value")[0]['type'];
-							}else{
-								fileType = '';
-							}
-							console.log(this.fileToUpload);
-							this.sendPostFile(this.fileToUpload, fileType, tokenArr, msg).then(lang.hitch(this, this.handleResponse));
-						}, fUploader)
-					});
-					this.nowList.addChild(this.submitButton);
-					this.mainList.addChild(this.nowList);
-				})
-			});
+				fUploader.startup();
 
-			postNow.onClick();
+				fileList.startup();
 
-			var postLater = new RadioButton({
-				checked: false,
-				name: "post",
-				"style": "margin-left: 6px",
-				onClick: lang.hitch(this, function(){
-					if(this.laterList){
-						this.laterList.destroyRecursive();
-						this.laterList = null;
-					}
-					if(this.nowList){
-						this.nowList.destroyRecursive();
-						this.nowList = null;
-					}
-					this.laterList = new EdgeToEdgeList({style: "margin-top: 3px; margin-left: 8px"})
+				var postNow = new RadioButton({
+					checked: true,
+					name: "post",
+					onClick: lang.hitch(this, function(){
+						if(this.atDate){
+							this.atDate.destroyRecursive();
+							this.atDate = null;
+						}
+						if(this.nowList){
+							this.nowList.destroyRecursive();
+							this.nowList = null;
+						}
+						if(this.laterList){
+							this.laterList.destroyRecursive();
+							this.laterList = null;
+						}
+						if(this.calendarDialog){
+							this.calendarDialog.destroy();
+							this.calendarDialog = null;
+						}
+						this.nowList = new EdgeToEdgeList({style: "margin-top: 3px; margin-left: 8px"})
 
-					this.atCommandButton = new Button({
-						label: "Post",
-						style: "margin-left: 0px",
-						onClick: lang.hitch(this, function(){
-							if(chooseDateTextBox.get("value") != ""){
-								var date = this.formatDateAtCommand(chooseDateTextBox.get("value"));
-								console.log("DATE: ", date);
-
-								if(atBox.get("value") != "Example: 7:00 pm"){
-									var time = atBox.get("value");
-									console.log("TIME: ", time);
-								}
-
+						this.submitButton = new Button({
+							label: "Post",
+							style: "margin-left: 0px",
+							onClick: lang.hitch(this, function(fUploader){
+								document.body.onkeyup = ""; 
 								var msg = this.textArea.get("value");
 								var file = '';
-								if(fUploader.get("value").length > 0){
-									var file = fUploader.get("value")[0]['name'];
-								}
 								
 								var tokenArr = {};
 								for(x=0; x<this.checkArray.length; x++){
@@ -335,108 +296,173 @@ define(['dojo/_base/declare',
 										}
 									}
 								}
-								
-								console.log(tokenArr);
+									
+								console.log("tokenArr is: ", tokenArr);
 								
 								if(fUploader.get('value') != ''){
 									fileType = fUploader.get("value")[0]['type'];
 								}else{
 									fileType = '';
-									file = '';
 								}
-								
-								this.runAtCommand(date, time, file, fileType, tokenArr, msg).then(lang.hitch(this, this.handleResponse));
-							}else{
-								console.log("You must select a date first");
-							}
-						})
-					});
+								console.log("this.fileToUpload: ", this.fileToUpload);
+								this.sendPostFile(this.fileToUpload, fileType, tokenArr, msg).then(lang.hitch(this, this.handleResponse));
+							}, fUploader)
+						});
+						this.nowList.addChild(this.submitButton);
+						this.mainList.addChild(this.nowList);
+					})
+				});
 
-					var chooseDateTextBox = new TextBox({
-						style: "height: 24px; vertical-align: top",
-						placeHolder: "mm/dd/yyyy"
-					});
+				postNow.onClick();
 
-					chooseDateTextBox.on("click", lang.hitch(this, function(){
-						if(this.atDate){
-							var formatAtDate = this.formatDate(this.atDate.get("value"));
-							chooseDateTextBox.set("value", formatAtDate);
-							this.atDate.destroyRecursive();
-							this.atDate = null;
-							this.calendarDialog.destroy();
-							this.calendarDialog = null;
+				var postLater = new RadioButton({
+					checked: false,
+					name: "post",
+					"style": "margin-left: 6px",
+					onClick: lang.hitch(this, function(){
+						if(this.laterList){
+							this.laterList.destroyRecursive();
+							this.laterList = null;
 						}
+						if(this.nowList){
+							this.nowList.destroyRecursive();
+							this.nowList = null;
+						}
+						this.laterList = new EdgeToEdgeList({style: "margin-top: 3px; margin-left: 8px"})
 
-						if(!this.atDate){
-							this.atDate = new Calendar({
+						this.atCommandButton = new Button({
+							label: "Post",
+							style: "margin-left: 0px",
+							onClick: lang.hitch(this, function(){
+								if(chooseDateTextBox.get("value") != ""){
+									var date = this.formatDateAtCommand(chooseDateTextBox.get("value"));
+									console.log("DATE: ", date);
 
-							});
+									if(atBox.get("value") != "Example: 7:00 pm"){
+										var time = atBox.get("value");
+										console.log("TIME: ", time);
+									}
 
-							this.calendarDialog = new Dialog({
-								//title: "Select a date",
-								"class": "calendarDialog",
-								draggable: false
-							});
+									var msg = this.textArea.get("value");
+									var file = '';
+									if(fUploader.get("value").length > 0){
+										var file = fUploader.get("value")[0]['name'];
+									}
+									
+									var tokenArr = {};
+									for(x=0; x<this.checkArray.length; x++){
+										if(this.checkArray[x].checked == true){
+											if(tokenArr[this.checkArray[x]['leKey']]){
+												tokenArr[this.checkArray[x]['leKey']].push(this.checkArray[x]['leToken']);
+											}else{
+												tokenArr[this.checkArray[x]['leKey']] = [];
+												tokenArr[this.checkArray[x]['leKey']].push(this.checkArray[x]['leToken']);
+											}
+										}
+									}
+									
+									console.log(tokenArr);
+									
+									if(fUploader.get('value') != ''){
+										fileType = fUploader.get("value")[0]['type'];
+									}else{
+										fileType = '';
+										file = '';
+									}
+									
+									this.runAtCommand(date, time, file, fileType, tokenArr, msg).then(lang.hitch(this, this.handleResponse));
+								}else{
+									console.log("You must select a date first");
+								}
+							})
+						});
 
-							this.calendarDialog.set("content", this.atDate);
-							this.calendarDialog.show();
+						var chooseDateTextBox = new TextBox({
+							style: "height: 24px; vertical-align: top",
+							placeHolder: "mm/dd/yyyy"
+						});
 
-							this.atDate.startup();
-
-							this.atDate.dateRowsNode.onclick = lang.hitch(this, function(){
-								console.log("atDate's value is: ", this.atDate.get("value"));
-
-								var formatStartDate = this.formatDate(this.atDate.get("value"));
-
-								chooseDateTextBox.set("value", formatStartDate);
-
+						chooseDateTextBox.on("click", lang.hitch(this, function(){
+							if(this.atDate){
+								var formatAtDate = this.formatDate(this.atDate.get("value"));
+								chooseDateTextBox.set("value", formatAtDate);
 								this.atDate.destroyRecursive();
 								this.atDate = null;
 								this.calendarDialog.destroy();
 								this.calendarDialog = null;
-							});
-						}
-					}));
+							}
 
-					var atBox = new TextBox({
-						style: "height: 24px; vertical-align: top",
-						placeHolder: "Example: 7:00 pm"
-					});
-					this.laterList.addChild(this.atCommandButton);
-					this.laterList.addChild(chooseDateTextBox);
-					this.laterList.addChild(atBox);
-					this.mainList.addChild(this.laterList);
-				})
-			});
-			
-			var postNowLabel = domConstruct.create("span", {innerHTML: "Post Now", "class": "radioButtonLabel"});
-			var postLaterLabel = domConstruct.create("span", {innerHTML: "Post Later", "class": "radioButtonLabel"});
+							if(!this.atDate){
+								this.atDate = new Calendar({
 
-			postNowLabel.onclick = lang.hitch(this, function(){
-				if(postNow.get("checked") == false){
-					postNow.set("checked", true);
-				}
-				postNow.onClick();
-			});
+								});
 
-			postLaterLabel.onclick = lang.hitch(this, function(){
-				if(postLater.get("checked") == false){
-					postLater.set("checked", true);
-				}
-				postLater.onClick();
-			});
+								this.calendarDialog = new Dialog({
+									//title: "Select a date",
+									"class": "calendarDialog",
+									draggable: false
+								});
 
-			var myListItem = new ListItem({
-				style: "border:none; padding: 0; margin-left: 2px; margin-bottom: -2px"
-			});
+								this.calendarDialog.set("content", this.atDate);
+								this.calendarDialog.show();
 
-			myListItem.addChild(postNow);
-			myListItem.domNode.appendChild(postNowLabel);
-			myListItem.addChild(postLater);
-			myListItem.domNode.appendChild(postLaterLabel);
-			
-			this.mainList.addChild(myListItem);
-			dojo.place(myListItem.domNode, this.nowList.domNode, "before");
+								this.atDate.startup();
+
+								this.atDate.dateRowsNode.onclick = lang.hitch(this, function(){
+									console.log("atDate's value is: ", this.atDate.get("value"));
+
+									var formatStartDate = this.formatDate(this.atDate.get("value"));
+
+									chooseDateTextBox.set("value", formatStartDate);
+
+									this.atDate.destroyRecursive();
+									this.atDate = null;
+									this.calendarDialog.destroy();
+									this.calendarDialog = null;
+								});
+							}
+						}));
+
+						var atBox = new TextBox({
+							style: "height: 24px; vertical-align: top",
+							placeHolder: "Example: 7:00 pm"
+						});
+						this.laterList.addChild(this.atCommandButton);
+						this.laterList.addChild(chooseDateTextBox);
+						this.laterList.addChild(atBox);
+						this.mainList.addChild(this.laterList);
+					})
+				});
+				
+				var postNowLabel = domConstruct.create("span", {innerHTML: "Post Now", "class": "radioButtonLabel"});
+				var postLaterLabel = domConstruct.create("span", {innerHTML: "Post Later", "class": "radioButtonLabel"});
+
+				postNowLabel.onclick = lang.hitch(this, function(){
+					if(postNow.get("checked") == false){
+						postNow.set("checked", true);
+					}
+					postNow.onClick();
+				});
+
+				postLaterLabel.onclick = lang.hitch(this, function(){
+					if(postLater.get("checked") == false){
+						postLater.set("checked", true);
+					}
+					postLater.onClick();
+				});
+
+				var myListItem = new ListItem({
+					style: "border:none; padding: 0; margin-left: 2px; margin-bottom: -2px"
+				});
+
+				myListItem.addChild(postNow);
+				myListItem.domNode.appendChild(postNowLabel);
+				myListItem.addChild(postLater);
+				myListItem.domNode.appendChild(postLaterLabel);
+				
+				this.mainList.addChild(myListItem);
+				dojo.place(myListItem.domNode, this.nowList.domNode, "before");
+			}));
 		},
 
 		formatDate: function(date){
@@ -465,10 +491,6 @@ define(['dojo/_base/declare',
 		
 		activate: function(e){
 			topic.publish("/dojo-mama/updateSubNav", {back: "/", title: "Post, Tweet, Blog"} );
-			this.getDomain().then(lang.hitch(this, function(obj){
-				this.domain = obj.domain;
-				console.log("http://"+this.domain+"/app/post/UploadFiles.php");
-			}));
 			
 			if(this.mainList){
 				this.mainList.destroyRecursive();
