@@ -58,12 +58,10 @@ class Database{
         }
     }
 
-	public function rebootAmazonInstance(){
+	public function rebootHostSystem(){
 		#file get contents must originate from an amazon instance. 
-		$id = file_get_contents('http://169.254.169.254/latest/meta-data/instance-id');
-
-		$res = rebootEC2Instance($id);
-		return json_encode($res);
+		exec('sudo reboot');
+		return json_encode(array("response" => "if this worked, you wont get this message"));
 	}
 
 	public function getAmazonInstances(){

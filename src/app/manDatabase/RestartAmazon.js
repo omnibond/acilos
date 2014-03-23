@@ -64,14 +64,19 @@ define(['dojo/_base/declare',
 		
 		activate: function() {
 			topic.publish("/dojo-mama/updateSubNav", {back: '/manDatabase', title: "Restore previous saves"} );
-			this.rebootAmazonInstance().then(lang.hitch(this, function(obj){
+			this.rebootHostSystem().then(lang.hitch(this, function(obj){
 				console.log("getInstances returned: ", obj);
 			}));
 			
-			var item = new ListItem({
+			if(this.item){
+				this.item.destroyRecursive();
+				this.item = null; 
+			}
+			
+			this.item = new ListItem({
 				label: "Instance is currently restarting, give it just a moment"
 			});
-			this.addChild(item);
+			this.addChild(this.item);
 				
 		}
 	})

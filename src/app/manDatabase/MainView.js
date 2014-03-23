@@ -75,11 +75,11 @@ define(['dojo/_base/declare',
 			responseList.addChild(responseItem);
 			
 			var item = new ListItem({
-				label: "Restart the amazon instance",
+				label: "Restart the host system",
 				clickable:true,
 				onClick: lang.hitch(this, function(responseItem){
-					this.restartAmazon.response = responseItem;
-					this.router.go("/RestartAmazon");
+					this.restartHost.response = responseItem;
+					this.router.go("/RestartHost");
 				}, responseItem)
 			});
 			this.mainList.addChild(item);

@@ -42,7 +42,7 @@ define(['dojo/_base/declare',
 	xhrManager, 
 	
 	MainView,
-	RestartAmazon,
+	RestartHost,
 	RestoreDB
 ) {
 	return declare([Module], {
@@ -50,10 +50,10 @@ define(['dojo/_base/declare',
 		postCreate: function(){
 			this.inherited(arguments);
 
-			this.restartAmazon = new RestartAmazon({
-				route: '/RestartAmazon',
+			this.restartHost = new RestartHost({
+				route: '/RestartHost',
 				
-				rebootAmazonInstance: this.rebootAmazonInstance,
+				rebootHostSystem: this.rebootHostSystem,
 				getAmazonInstances: this.getAmazonInstances
 			});
 			this.restoreDB = new RestoreDB({
@@ -67,10 +67,10 @@ define(['dojo/_base/declare',
 				route: '/',
 				
 				restoreDB: this.restoreDB,
-				restartAmazon: this.restartAmazon
+				restartHost: this.restartHost
 			});
 			this.registerView(this.rootView);
-			this.registerView(this.restartAmazon);
+			this.registerView(this.restartHost);
 			this.registerView(this.restoreDB);
 
 		},
@@ -90,9 +90,9 @@ define(['dojo/_base/declare',
 			return xhrManager.send('GET', 'rest/v1.0/Database/getAmazonInstances', params);
 		},
 		
-		rebootAmazonInstance: function(){
+		rebootHostSystem: function(){
 			params = {};
-			return xhrManager.send('GET', 'rest/v1.0/Database/rebootAmazonInstance', params);
+			return xhrManager.send('GET', 'rest/v1.0/Database/rebootHostSystem', params);
 		}
 
 	})
