@@ -78,7 +78,6 @@ define(['dojo/_base/declare',
 				for(var x = 0; x < obj.length; x++){
 					var item = new ListItem({
 						label: obj[x].name,
-						icon: "app/resources/img/minus_icon_small.png",
 						clickable: true,
 						onClick: lang.hitch(this, function(obj, x){
 							this.deleteFeedList(obj[x].name).then(lang.hitch(this, function(){
