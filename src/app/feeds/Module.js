@@ -77,7 +77,9 @@ define(['dojo/_base/declare',
 				
 				blastView: this.blastView,
 				getSpecificFeedList: lang.hitch(this, this.getSpecificFeedList),
-				checkSpecificFeedList: lang.hitch(this, this.checkSpecificFeedList)
+				checkSpecificFeedList: lang.hitch(this, this.checkSpecificFeedList),
+				setStarred: lang.hitch(this, this.setStarred),
+				setStarredClient: lang.hitch(this, this.setStarredClient)
 			});
 			this.CreateFeedView = new CreateFeedView({
 				route: "/CreateFeedView",

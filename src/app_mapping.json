@@ -747,6 +747,18 @@
 				"verb": {
 					"type": "string",
 					"index": "not_analyzed"
+				},
+				"mainAccountName": {
+					"type": "string",
+					"index": "not_analyzed"
+				},
+				"mainAccountID": {
+					"type": "string",
+					"index": "not_analyzed"
+				},
+				"mainAccountColor": {
+					"type": "string",
+					"index": "not_analyzed"
 				}
 			}
 		}

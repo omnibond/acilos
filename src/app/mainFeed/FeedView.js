@@ -393,7 +393,9 @@ define([
 										getDate: this.list.getDate,
 										parseSpecialChars: this.list.parseSpecialChars,
 										isURL: this.list.isURL,
-										setStarred: this.setStarred
+										setStarred: this.setStarred,
+										setStarredClient: lang.hitch(this, this.setStarredClient)
+										
 									});
 									pane.addChild(item);
 								break;
@@ -406,7 +408,8 @@ define([
 										getDate: this.list.getDate,
 										parseSpecialChars: this.list.parseSpecialChars,
 										isURL: this.list.isURL,
-										setStarred: this.setStarred
+										setStarred: this.setStarred,
+										setStarredClient: lang.hitch(this, this.setStarredClient)
 									});
 									pane.addChild(item);
 								break;
@@ -419,7 +422,8 @@ define([
 										getDate: this.list.getDate,
 										parseSpecialChars: this.list.parseSpecialChars,
 										isURL: this.list.isURL,
-										setStarred: this.setStarred
+										setStarred: this.setStarred,
+										setStarredClient: lang.hitch(this, this.setStarredClient)
 									});
 									pane.addChild(item);
 								break;
@@ -432,7 +436,8 @@ define([
 										getDate: this.list.getDate,
 										parseSpecialChars: this.list.parseSpecialChars,
 										isURL: this.list.isURL,
-										setStarred: this.setStarred
+										setStarred: this.setStarred,
+										setStarredClient: lang.hitch(this, this.setStarredClient)
 									});
 									pane.addChild(item);								
 								break;

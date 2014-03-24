@@ -170,7 +170,7 @@
 					leftPane.domNode.appendChild(item2);
 					leftPane.domNode.appendChild(item4);
 					var errorItem = new ListItem({
-						style: "border:none;height:auto;font-size;font-family:arial;font-size:20px"
+						style: "border:none;height:auto;font-size;font-family:arial;font-size:20px;background-color:inherit"
 					});
 					leftPane.addChild(errorItem);
 					

@@ -278,7 +278,7 @@
 								var item = new ListItem({
 									variableHeight: true,
 									label: "Failed to authenticate user",
-									style: "border:none;height:30px;padding-left:4px"
+									style: "border:none;height:30px;padding-left:4px;background-color:inherit"
 								});
 								var button = new Button({
 									label: "Change accounts",
@@ -294,7 +294,7 @@
 							if('<?php echo $errorCode; ?>' == "2"){
 								var item = new ListItem({
 									label: "Error logging in to " + '<?php echo $errorService; ?>',
-									style: "background: #e7e7de"
+									style: "background-color:inherit"
 								});
 								leftPane.addChild(item);
 							}						
