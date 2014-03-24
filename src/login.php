@@ -25,6 +25,11 @@
 **
 ** $QT_END_LICENSE$
 */
+	$dom = $_SERVER['SERVER_NAME'];
+	$domArr = explode(".", $dom);
+	$one = array_pop($domArr);
+	$two = array_pop($domArr);
+	$cookieDom = $two . "." . $one;
 
 	function getData(){
 		try{
@@ -44,10 +49,10 @@
 	}
 	
 	if(isset($_GET['logout']) && $_GET['logout'] == "true"){
-		setcookie("facebookCook", $_COOKIE['PHPSESSID'], time()-3600, '/', 'clemson.edu', false, false);
-		setcookie("linkedinCook", $_COOKIE['PHPSESSID'], time()-3600, '/', 'clemson.edu', false, false);
-		setcookie("twitterCook", $_COOKIE['PHPSESSID'], time()-3600, '/', 'clemson.edu', false, false);
-		setcookie("instagramCook", $_COOKIE['PHPSESSID'], time()-3600, '/', 'clemson.edu', false, false);
+		setcookie("facebookCook", $_COOKIE['PHPSESSID'], time()-3600, '/', $cookieDom, false, false);
+		setcookie("linkedinCook", $_COOKIE['PHPSESSID'], time()-3600, '/', $cookieDom, false, false);
+		setcookie("twitterCook", $_COOKIE['PHPSESSID'], time()-3600, '/', $cookieDom, false, false);
+		setcookie("instagramCook", $_COOKIE['PHPSESSID'], time()-3600, '/', $cookieDom, false, false);
 		header('Location: /auth.php');
 	}
 	
@@ -59,7 +64,7 @@
 	$tCount = (string)count($var['instagram']);
 	
 	if(isset($_GET['facebook']) && $_GET['facebook'] == "true"){
-		setcookie("facebookCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', 'clemson.edu', false, false);
+		setcookie("facebookCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', $cookieDom, false, false);
 		if(isset($_GET['login']) && $_GET['login'] !== "second"){
 			header('Location: /#/ManAccounts');
 		}else{
@@ -76,7 +81,7 @@
 		}
 	}
 	if(isset($_GET['linkedin']) && $_GET['linkedin'] == "true"){
-		setcookie("linkedinCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', 'clemson.edu', false, false);
+		setcookie("linkedinCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', $cookieDom, false, false);
 		if(isset($_GET['login']) && $_GET['login'] !== "second"){
 			header('Location: /#/ManAccounts');
 		}else{
@@ -93,7 +98,7 @@
 		}
 	}
 	if(isset($_GET['twitter']) && $_GET['twitter'] == "true"){
-		setcookie("twitterCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', 'clemson.edu', false, false);
+		setcookie("twitterCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', $cookieDom, false, false);
 		if(isset($_GET['login']) && $_GET['login'] !== "second"){
 			header('Location: /#/ManAccounts');
 		}else{
@@ -110,7 +115,7 @@
 		}
 	}
 	if(isset($_GET['instagram']) && $_GET['instagram'] == "true"){
-		setcookie("instagramCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', 'clemson.edu', false, false);
+		setcookie("instagramCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', $cookieDom, false, false);
 		if(isset($_GET['login']) && $_GET['login'] !== "second"){
 			header('Location: /#/ManAccounts');
 		}else{
