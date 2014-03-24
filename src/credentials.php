@@ -87,6 +87,7 @@
 			'dojo/dom-style',
 			'dojo/_base/kernel',
 			"dojo/_base/lang",
+			"dojo/_base/json",
 			"dojo/DeferredList",
 			
 			"dojox/mobile/RoundRectList",
@@ -100,8 +101,7 @@
 			
 			"dijit/Dialog",
 			
-			"dojo/_base/xhr",
-			"../app/util/xhrManager",
+			"dojo/_base/xhr"
 		], function(
 			declare, 
 			domWindow,
@@ -111,6 +111,7 @@
 			domStyle,
 			kernel, 
 			lang, 
+			json,
 			DeferredList, 
 			
 			RoundRectList, 
@@ -124,8 +125,7 @@
 			
 			Dialog,
 			
-			xhr,
-			xhrManager			
+			xhr		
 		){
 			buildCredView = function(){		
 				if('<?php echo $fCount; ?>' == 0 &&
@@ -412,8 +412,20 @@
 			},
 			
 			saveServiceCreds = function(obj){
-				var params = {obj:obj};
-				return xhrManager.send('POST', 'rest/v1.0/Database/saveServiceCredsFirstTime', params);
+				var params = json.toJson({obj:obj});
+				var dfd = xhr.post({
+					url: 'rest/v1.0/Database/saveServiceCredsFirstTime',
+					handleAs: 'json',
+					preventCache: true,
+					headers: {
+						"Content-Type": "application/json"
+					},
+					postData: params,
+					error: function(error){
+						console.log("Error has occurred: " + error);
+					}
+				})
+				return dfd;
 			},
 			
 			buildCredView();

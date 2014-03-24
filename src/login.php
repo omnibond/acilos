@@ -44,10 +44,10 @@
 	}
 	
 	if(isset($_GET['logout']) && $_GET['logout'] == "true"){
-		setcookie("facebookCook", $_COOKIE['PHPSESSID'], time()-3600, '/', 'amazonaws.com', false, false);
-		setcookie("linkedinCook", $_COOKIE['PHPSESSID'], time()-3600, '/', 'amazonaws.com', false, false);
-		setcookie("twitterCook", $_COOKIE['PHPSESSID'], time()-3600, '/', 'amazonaws.com', false, false);
-		setcookie("instagramCook", $_COOKIE['PHPSESSID'], time()-3600, '/', 'amazonaws.com', false, false);
+		setcookie("facebookCook", $_COOKIE['PHPSESSID'], time()-3600, '/', 'clemson.edu', false, false);
+		setcookie("linkedinCook", $_COOKIE['PHPSESSID'], time()-3600, '/', 'clemson.edu', false, false);
+		setcookie("twitterCook", $_COOKIE['PHPSESSID'], time()-3600, '/', 'clemson.edu', false, false);
+		setcookie("instagramCook", $_COOKIE['PHPSESSID'], time()-3600, '/', 'clemson.edu', false, false);
 		header('Location: /auth.php');
 	}
 	
@@ -59,7 +59,7 @@
 	$tCount = (string)count($var['instagram']);
 	
 	if(isset($_GET['facebook']) && $_GET['facebook'] == "true"){
-		setcookie("facebookCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', 'amazonaws.com', false, false);
+		setcookie("facebookCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', 'clemson.edu', false, false);
 		if(isset($_GET['login']) && $_GET['login'] !== "second"){
 			header('Location: /#/ManAccounts');
 		}else{
@@ -76,7 +76,7 @@
 		}
 	}
 	if(isset($_GET['linkedin']) && $_GET['linkedin'] == "true"){
-		setcookie("linkedinCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', 'amazonaws.com', false, false);
+		setcookie("linkedinCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', 'clemson.edu', false, false);
 		if(isset($_GET['login']) && $_GET['login'] !== "second"){
 			header('Location: /#/ManAccounts');
 		}else{
@@ -93,7 +93,7 @@
 		}
 	}
 	if(isset($_GET['twitter']) && $_GET['twitter'] == "true"){
-		setcookie("twitterCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', 'amazonaws.com', false, false);
+		setcookie("twitterCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', 'clemson.edu', false, false);
 		if(isset($_GET['login']) && $_GET['login'] !== "second"){
 			header('Location: /#/ManAccounts');
 		}else{
@@ -110,7 +110,7 @@
 		}
 	}
 	if(isset($_GET['instagram']) && $_GET['instagram'] == "true"){
-		setcookie("instagramCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', 'amazonaws.com', false, false);
+		setcookie("instagramCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', 'clemson.edu', false, false);
 		if(isset($_GET['login']) && $_GET['login'] !== "second"){
 			header('Location: /#/ManAccounts');
 		}else{
@@ -175,7 +175,7 @@
 <body class="bodyCSS">
    
 	<script type="text/javascript">
-		require([
+		require([			
 			'dojo/_base/declare',
 			"dojo/_base/window",
 			'dojo/dom-construct',
@@ -193,9 +193,9 @@
 			"dojox/mobile/GridLayout",
 			"dojox/mobile/Pane",
 			
-			"dojo/_base/xhr",
-			"../app/util/xhrManager",
-		], function(
+			"dojo/_base/xhr"
+			
+		], function(			
 			declare, 
 			domWindow,
 			domConstruct, 
@@ -213,8 +213,7 @@
 			Grid, 
 			Pane, 
 			
-			xhr,
-			xhrManager			
+			xhr						
 		){
 		
 			buildLoginView = function(){

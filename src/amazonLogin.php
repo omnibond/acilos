@@ -193,8 +193,7 @@
 			"dojox/mobile/GridLayout",
 			"dojox/mobile/Pane",
 			
-			"dojo/_base/xhr",
-			"../app/util/xhrManager",
+			"dojo/_base/xhr"
 		], function(
 			declare, 
 			domWindow,
@@ -213,8 +212,7 @@
 			Grid, 
 			Pane, 
 			
-			xhr,
-			xhrManager			
+			xhr			
 		){
 		
 			buildLoginView = function(){
