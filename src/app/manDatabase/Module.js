@@ -61,7 +61,7 @@ define(['dojo/_base/declare',
 			this.restartDB = new restartDB({
 				route: '/restartDB',
 				
-				restartDBase: this.restartDBase,
+				restartDBase: this.restartDBase
 			});
 			
 			this.rootView = new MainView({

@@ -88,7 +88,7 @@ define([
 	){
 		return declare("DataObjFeedListView",[ModuleScrollableView], {			
 			activate: function() {				
-				topic.publish("/dojo-mama/updateSubNav", {back: '/help', title: "App Help"} );
+				topic.publish("/dojo-mama/updateSubNav", {back: '/', title: "App Help"} );
 
 				this.mainList = new EdgeToEdgeList({
 					style: "border: none"
