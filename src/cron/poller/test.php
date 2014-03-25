@@ -1,18 +1,10 @@
 <?php
 
-	$cTime = date('Y-m-d H:i:s', "1395770400");
-	echo $cTime;
+	$d = date('Y-m-d H:i:s', '1395782490');
 
-	$timeArr1 = explode(" ", $cTime);
-		$timeArr2 = explode("-", $timeArr1[0]);
+	$date = new DateTime($d, new DateTimeZone(date_default_timezone_get()));
+	$final = $date->format('Y-m-d H:i:s');
 
-		$month = $timeArr2[1];
-		$day = $timeArr2[2];
-		$year = $timeArr2[0];
-		$preTime = $timeArr1[1];
+	echo $final;
 
-		echo $month . " ";
-		echo $day . " ";
-		echo $year . " ";
-		echo $preTime . " ";
 ?>

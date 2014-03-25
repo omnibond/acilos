@@ -606,7 +606,11 @@ Class Post{
 function postFilesHandler($obj){
 	if(isset($obj['time'])){
 		$timeStamp = $obj['time'];
-		$cTime = date('Y-m-d H:i:s', $timeStamp);
+
+		$d = date('Y-m-d H:i:s', $timeStamp);
+
+		$date = new DateTime($d, new DateTimeZone(date_default_timezone_get()));
+		$cTime = $date->format('Y-m-d H:i:s');
 
 		$timeArr1 = explode(" ", $cTime);
 		$timeArr2 = explode("-", $timeArr1[0]);
