@@ -81,7 +81,7 @@ define(['dojo/_base/declare',
 		},
 		
 		activate: function(e){
-			topic.publish("/dojo-mama/updateSubNav", {back: '/help', title: "Restart the database"} );
+			topic.publish("/dojo-mama/updateSubNav", {back: '/manDatabase', title: "Restart the database"} );
 			
 			if(this.responseItem){
 				this.responseItem.destroyRecursive();
