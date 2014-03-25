@@ -604,15 +604,36 @@ Class Post{
 }
 
 function postFilesHandler($obj){
-	if(isset($obj['date'])){
-		$date = $obj['date'];
-	}else{
-		$date = "?";
-	}
 	if(isset($obj['time'])){
-		$time = $obj['time'];
+		$timeStamp = $obj['time'];
+		$cTime = date('Y-m-d H:i:s', $timeStamp);
+
+		$timeArr1 = explode(" ", $cTime);
+		$timeArr2 = explode("-", $timeArr1[0]);
+
+		$month = $timeArr2[1];
+		$day = $timeArr2[2];
+		$year = $timeArr2[0];
+		$preTime = $timeArr1[1];
+
+		$hoursTimeArr = explode(":", $preTime);
+		$preHours = $hoursTimeArr[0];
+		$minutes = $hoursTimeArr[1];
+		$seconds = $hoursTimeArr[2];
+
+		if(intval($preHours) > 12){
+			$hours = intval($preHours) - 12;
+			$suffix = "pm";
+		}else{
+			$hours = intval($preHours);
+			$suffix = "am";
+		}
+
+		$time = $hours . ":" . $minutes . " " . $suffix;
+		$date = $month . "/" . $day . "/" . $year;
 	}else{
 		$time = "?";
+		$date = "?";
 	}
 	if(isset($obj['file'])){
 		$file = $obj['file'];
