@@ -369,8 +369,42 @@ define(['dojo/_base/declare',
 										fileType = '';
 										file = '';
 									}
+
+									//console.log("date is: ", date);
+									//console.log("time is: ", atBox.get("value"));
+
+									var slashDate = date.split("-");
+									slashDate = slashDate[2] + "/" + slashDate[0] + "/" + slashDate[1];
+									//console.log("slashDate is: ", slashDate);
+
+									var postTime = atBox.get("value");
+
+									if(postTime.indexOf("pm") !== -1){
+										postTime = postTime.split(" ");
+										console.log("postTime is: ", postTime);
+										postTime = postTime[0];
+										console.log("postTime is: ", postTime);
+										postTime = postTime.split(":");
+										console.log("postTime is: ", postTime);
+										postTime[0] = parseInt(postTime[0]);
+										postTime[0] += 12;
+										console.log("postTime is: ", postTime);
+										postTime = postTime[0] + ":" + postTime[1];
+										console.log("postTime is: ", postTime);
+									}else{
+										postTime = postTime.split(" ");
+										postTime = postTime[0];	
+									}
+
+									console.log("postTime is: ", postTime);
+
+									var d = new Date(slashDate + " " + postTime);
+									var selectedTime = d.getTime();
+									selectedTime = selectedTime/1000;
+									console.log("selected time is: ", selectedTime);
+
 									
-									this.runAtCommand(date, time, file, fileType, tokenArr, msg).then(lang.hitch(this, this.handleResponse));
+									this.runAtCommand(selectedTime, file, fileType, tokenArr, msg).then(lang.hitch(this, this.handleResponse));
 								}else{
 									console.log("You must select a date first");
 								}

@@ -65,8 +65,8 @@ define(['dojo/_base/declare',
 			return xhrManager.send('POST', 'rest/v1.0/Post/postFiles', params);
 		},
 
-		runAtCommand: function(date, time, file, fileType, tokenArr, msg){
-			params = {date: date, time: time, file: file, fileType: fileType, tokenArr: tokenArr, msg: msg};
+		runAtCommand: function(time, file, fileType, tokenArr, msg){
+			params = {time: time, file: file, fileType: fileType, tokenArr: tokenArr, msg: msg};
 			return xhrManager.send('POST', 'rest/v1.0/Post/runAtCommand', params);
 		},
 		
