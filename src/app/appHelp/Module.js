@@ -66,35 +66,8 @@ define(['dojo/_base/declare',
 			this.inherited(arguments);
 			
 			this.rootView = new MainView({
-				route: '/',
-				title: "Get help with the app"
+				route: '/'
 			});	
-
-			this.ManAccountsHelpView = new ManAccountsHelpView({
-				route: '/ManAccountsHelpView',
-				title: "Get help with Manage Accounts",
-
-				getAuthCreds: lang.hitch(this, this.getAuthCreds)
-			});
-			
-			this.AddAccountsHelpView = new AddAccountsHelpView({
-				route: '/AddAccountsHelpView',
-				title: "Get help with Adding Accounts",
-				
-				getServiceCreds: lang.hitch(this, this.getServiceCreds),
-				saveServiceCreds: lang.hitch(this, this.saveServiceCreds),
-				getDomain: lang.hitch(this, this.getDomain)
-				
-			});
-			
-			this.EditAccountsHelpView = new EditAccountsHelpView({
-				route: '/EditAccountsHelpView',
-				title: "Get help with Editing Accounts",
-				
-				getServiceCreds: lang.hitch(this, this.getServiceCreds),
-				editServiceCreds: lang.hitch(this, this.editServiceCreds)
-				
-			});
 			
 			this.AboutView = new AboutView({
 				route: '/AboutView',
@@ -102,34 +75,7 @@ define(['dojo/_base/declare',
 			});
 
 			this.registerView(this.rootView);
-			this.registerView(this.ManAccountsHelpView);
-			this.registerView(this.AddAccountsHelpView);
-			this.registerView(this.EditAccountsHelpView);
 			this.registerView(this.AboutView);
-		},
-		
-		saveServiceCreds: function(key, secret, redir, color, param){
-			var params = {key: key, secret: secret, redir: redir, color: color, param: param};
-			return xhrManager.send('POST', 'rest/v1.0/Database/saveServiceCredsObj', params);
-		},
-		
-		editServiceCreds: function(obj){
-			var params = {obj: obj};
-			return xhrManager.send('POST', 'rest/v1.0/Database/editServiceCreds', params);
-		},
-		
-		deleteServiceCred: function(obj){
-			var params = {obj: obj};
-			return xhrManager.send('POST', 'rest/v1.0/Database/deleteServiceCred', params);
-		},
-		
-		getServiceCreds: function(){
-			return xhrManager.send('GET', 'rest/v1.0/Credentials/getServiceCreds',{});
-		},
-		
-		getAuthCreds: function(){
-			var params = {};
-			return xhrManager.send('GET', 'rest/v1.0/Credentials/getAuthCreds', params);
 		},
 		
 		getDomain: function(){

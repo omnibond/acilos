@@ -93,39 +93,9 @@ define([
 				this.mainList = new EdgeToEdgeList({
 					style: "border: none"
 				});
-
-				this.manageAccountsListItem = new ListItem({
-					label: "Manage Accounts Help",
-					"class": "helpListItemClass",
-					clickable: true,
-					noArrow: true,
-					onClick: lang.hitch(this, function(){
-						this.router.go("/ManAccountsHelpView");
-					})
-				});
-				
-				this.addAccountsListItem = new ListItem({
-					label: "Adding Accounts Help",
-					"class": "helpListItemClass",
-					clickable: true,
-					noArrow: true,
-					onClick: lang.hitch(this, function(){
-						this.router.go("/AddAccountsHelpView");
-					})
-				});
-				
-				this.editAccountsListItem = new ListItem({
-					label: "Editing Accounts Help",
-					"class": "helpListItemClass",
-					clickable: true,
-					noArrow: true,
-					onClick: lang.hitch(this, function(){
-						this.router.go("/EditAccountsHelpView");
-					})
-				});
 				
 				this.aboutListItem = new ListItem({
-					label: "About Acilos",
+					label: "Acilos Help",
 					"class": "helpListItemClass",
 					clickable: true,
 					noArrow: true,
@@ -143,10 +113,7 @@ define([
 						window.open("http://www.acilos.com/appHelp");
 					})
 				});
-
-				//this.mainList.addChild(this.manageAccountsListItem);
-				//this.mainList.addChild(this.addAccountsListItem);
-				///this.mainList.addChild(this.editAccountsListItem);
+				
 				this.mainList.addChild(this.helpAcilos);
 				this.mainList.addChild(this.aboutListItem);
 				this.addChild(this.mainList);

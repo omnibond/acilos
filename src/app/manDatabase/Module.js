@@ -32,7 +32,8 @@ define(['dojo/_base/declare',
 		
 		'app/manDatabase/MainView',
 		'app/manDatabase/RestartAmazon',
-		'app/manDatabase/RestoreDB'
+		'app/manDatabase/RestoreDB',
+		'app/manDatabase/restartDB'
 ], function(
 	declare, 
 	Module, 
@@ -43,7 +44,8 @@ define(['dojo/_base/declare',
 	
 	MainView,
 	RestartHost,
-	RestoreDB
+	RestoreDB,
+	restartDB
 ) {
 	return declare([Module], {
 		
@@ -56,22 +58,21 @@ define(['dojo/_base/declare',
 				rebootHostSystem: this.rebootHostSystem,
 				getAmazonInstances: this.getAmazonInstances
 			});
-			this.restoreDB = new RestoreDB({
-				route: '/RestoreDB',
+			this.restartDB = new restartDB({
+				route: '/restartDB',
 				
-				restoreBackUpData: lang.hitch(this, this.restoreBackUpData),
-				getBackUpList: lang.hitch(this, this.getBackUpList)
+				restartDBase: this.restartDBase,
 			});
 			
 			this.rootView = new MainView({
 				route: '/',
 				
-				restoreDB: this.restoreDB,
-				restartHost: this.restartHost
+				restartHost: this.restartHost,
+				restartDB: this.restartDB
 			});
 			this.registerView(this.rootView);
 			this.registerView(this.restartHost);
-			this.registerView(this.restoreDB);
+			this.registerView(this.restartDB);
 
 		},
 		
@@ -93,6 +94,10 @@ define(['dojo/_base/declare',
 		rebootHostSystem: function(){
 			params = {};
 			return xhrManager.send('GET', 'rest/v1.0/Database/rebootHostSystem', params);
+		},
+		
+		restartDBase: function(){
+			return xhrManager.send('GET', 'rest/v1.0/Database/restart', {});
 		}
 
 	})

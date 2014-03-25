@@ -84,11 +84,11 @@ define(['dojo/_base/declare',
 			});
 			this.mainList.addChild(item);
 			var item = new ListItem({
-				label: "Restore previous saves",
+				label: "Restart the database",
 				clickable:true,
 				onClick: lang.hitch(this, function(responseItem){
-					this.restoreDB.response = responseItem;
-					this.router.go("/RestoreDB");
+					this.restartDB.response = responseItem;
+					this.router.go("/restartDB");
 				}, responseItem)
 			});
 			this.mainList.addChild(item);

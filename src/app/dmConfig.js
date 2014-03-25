@@ -93,8 +93,7 @@ define({
 		},
 		help: {
 			title: 'Help',
-			moduleId: 'dojo-mama/util/ModuleGroup',
-			modules: ['restartDB', 'appHelp']
+			moduleId: 'app/appHelp/Module'
 		},
 
 		/* analytics modules */
@@ -197,12 +196,13 @@ define({
 			selectedPrimaryNavItem: "settings"
 		},
 				
-		/*help modules*/
+		/*help modules
 		restartDB: {
 			title: 'Restart the Database',
 			moduleId: 'app/restartDB/Module',
 			selectedPrimaryNavItem: "help"
 		},
+		*/
 		/*
 		factoryReset: {
 			title: 'Reset the app to factory defaults',
