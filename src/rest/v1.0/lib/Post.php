@@ -606,7 +606,8 @@ Class Post{
 function postFilesHandler($obj){
 	if(isset($obj['time'])){
 		$timeStamp = $obj['time'];
-
+		
+		#date_default_timezone_set("UTC");
 		$d = date('Y-m-d H:i:s', $timeStamp);
 
 		$date = new DateTime($d, new DateTimeZone(date_default_timezone_get()));
