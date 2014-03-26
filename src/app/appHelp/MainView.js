@@ -95,7 +95,7 @@ define([
 				});
 				
 				this.aboutListItem = new ListItem({
-					label: "Acilos Help",
+					label: "About",
 					"class": "helpListItemClass",
 					clickable: true,
 					noArrow: true,
@@ -110,7 +110,7 @@ define([
 					clickable: true,
 					noArrow: true,
 					onClick: lang.hitch(this, function(){
-						window.open("http://www.acilos.com/appHelp");
+						window.open("http://www.acilos.com/apphelp");
 					})
 				});
 				

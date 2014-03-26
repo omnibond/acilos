@@ -607,7 +607,7 @@ function postFilesHandler($obj){
 	if(isset($obj['time'])){
 		$timeStamp = $obj['time'];
 		
-		#date_default_timezone_set("UTC");
+		//date_default_timezone_set("UTC");
 		$d = date('Y-m-d H:i:s', $timeStamp);
 
 		$date = new DateTime($d, new DateTimeZone(date_default_timezone_get()));
@@ -636,6 +636,9 @@ function postFilesHandler($obj){
 
 		$time = $hours . ":" . $minutes . " " . $suffix;
 		$date = $month . "/" . $day . "/" . $year;
+
+		print_r($date . "  ");
+		print_r($time . "  ");
 	}else{
 		$time = "?";
 		$date = "?";
@@ -662,16 +665,6 @@ function postFilesHandler($obj){
 	}
 
 	$msg = str_replace(" ", "+", $msg);
-
-	$dateArr = explode("-", $date);
-
-	$date = "";
-
-	for($i = 0; $i < count($dateArr); $i++){
-		$date = $date.$dateArr[$i]."/";
-	}
-
-	$date = rtrim($date, "/");
 
 	$dir = getcwd();
 
