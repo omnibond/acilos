@@ -461,10 +461,10 @@ define(['dojo/_base/declare',
 							style: "height: 24px; vertical-align: top",
 							placeHolder: "Example: 7:00 pm"
 						});
-						this.laterList.addChild(this.atCommandButton);
-						this.laterList.addChild(chooseDateTextBox);
-						this.laterList.addChild(atBox);
-						this.mainList.addChild(this.laterList);
+						//this.laterList.addChild(this.atCommandButton);
+						//this.laterList.addChild(chooseDateTextBox);
+						//this.laterList.addChild(atBox);
+						//this.mainList.addChild(this.laterList);
 					})
 				});
 				
