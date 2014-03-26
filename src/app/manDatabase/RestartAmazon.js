@@ -35,7 +35,7 @@ define(['dojo/_base/declare',
 		'app/SelectorBar',
 		'app/TitleBar',
 		
-		"dojox/mobile/EdgeToEdgeList",
+		"dojo-mama/util/EdgeToEdgeList",
 		"dojox/mobile/Button",
 		"dojox/mobile/ListItem",
 		"dojox/mobile/ToolBarButton",

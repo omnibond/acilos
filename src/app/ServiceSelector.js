@@ -45,7 +45,7 @@ define([
 ){
 
 	// module:
-	//		dojox/mobile/RoundRectList
+	//		dojo-mama/util/RoundRectList
 
 	return declare("dojox.mobile.ServiceSelector", [WidgetBase, Container, Contained], {
 		// summary:

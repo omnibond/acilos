@@ -42,7 +42,7 @@ define([
 		"app/mainFeed/instagramFeedItem",
 		'app/util/xhrManager',
 
-		"dojox/mobile/EdgeToEdgeList",
+		"dojo-mama/util/EdgeToEdgeList",
 		"dojox/mobile/ListItem",
 		"dojox/mobile/ToolBarButton",
 		

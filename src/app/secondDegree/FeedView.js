@@ -37,7 +37,7 @@ define(['dojo/_base/declare',
 		"app/SearchScroller",
 		"app/SelectorBar",
 		
-		"dojox/mobile/RoundRectList",
+		"dojo-mama/util/RoundRectList",
 		"dojox/mobile/ListItem",
 		"dojox/mobile/ToolBarButton",
 		"dojox/mobile/EdgeToEdgeCategory",

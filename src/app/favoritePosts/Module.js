@@ -31,7 +31,7 @@ define(['dojo/_base/declare',
 	
 	'dojo-mama/Module',
 	
-	'dojox/mobile/EdgeToEdgeList',
+	'dojo-mama/util/EdgeToEdgeList',
 	
 	'app/favoritePosts/MainView',
 	'app/util/error-utils',

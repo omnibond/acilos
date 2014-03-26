@@ -60,7 +60,7 @@ define([
 		"dojox/mobile/ScrollableView",
 		"dojox/mobile/Heading",
 		"dojox/mobile/ToolBarButton",
-		"dojox/mobile/RoundRectList",	
+		"dojo-mama/util/RoundRectList",	
 		"dojox/mobile/ListItem",
 		"dojox/mobile/Accordion",
 		"dojox/mobile/ContentPane",		

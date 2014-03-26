@@ -48,7 +48,7 @@ define([
 		
 		"dojox/mobile/ToolBarButton",
 		"dojox/mobile/TextBox",
-		"dojox/mobile/RoundRectList",	
+		"dojo-mama/util/RoundRectList",	
 		"dojox/mobile/ListItem",	
 		"dojox/mobile/Button",	
 		

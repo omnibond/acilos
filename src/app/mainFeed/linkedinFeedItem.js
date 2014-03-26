@@ -39,7 +39,7 @@ define([
 		,"dijit/registry"
 		,"dijit/Dialog"
 
-		,"dojox/mobile/RoundRectList"
+		,"dojo-mama/util/RoundRectList"
 		,"dojox/mobile/ListItem"
 		,"dojox/mobile/ContentPane"
 		,"dojox/mobile/ToolBarButton"

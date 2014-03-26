@@ -42,8 +42,8 @@ define([
 	,"dojox/mobile/ContentPane"
 	,"dojox/mobile/ToolBarButton"
 	,"dojox/mobile/TextBox"
-	,"dojox/mobile/RoundRectList"
-	,"dojox/mobile/EdgeToEdgeList"
+	,"dojo-mama/util/RoundRectList"
+	,"dojo-mama/util/EdgeToEdgeList"
 	,"dojox/mobile/ListItem"
 		
 	,"require"
