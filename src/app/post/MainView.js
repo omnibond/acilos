@@ -461,10 +461,10 @@ define(['dojo/_base/declare',
 							style: "height: 24px; vertical-align: top",
 							placeHolder: "Example: 7:00 pm"
 						});
-						//this.laterList.addChild(this.atCommandButton);
-						//this.laterList.addChild(chooseDateTextBox);
-						//this.laterList.addChild(atBox);
-						//this.mainList.addChild(this.laterList);
+						this.laterList.addChild(this.atCommandButton);
+						this.laterList.addChild(chooseDateTextBox);
+						this.laterList.addChild(atBox);
+						this.mainList.addChild(this.laterList);
 					})
 				});
 				
@@ -490,10 +490,10 @@ define(['dojo/_base/declare',
 					style: "border:none; padding: 0; margin-left: 2px; margin-bottom: -2px"
 				});
 
-				myListItem.addChild(postNow);
-				myListItem.domNode.appendChild(postNowLabel);
-				myListItem.addChild(postLater);
-				myListItem.domNode.appendChild(postLaterLabel);
+				//myListItem.addChild(postNow);
+				//myListItem.domNode.appendChild(postNowLabel);
+				//myListItem.addChild(postLater);
+				//myListItem.domNode.appendChild(postLaterLabel);
 				
 				this.mainList.addChild(myListItem);
 				dojo.place(myListItem.domNode, this.nowList.domNode, "before");
