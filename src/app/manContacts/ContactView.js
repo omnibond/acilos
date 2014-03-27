@@ -103,7 +103,7 @@ define(['dojo/_base/declare',
 
 			this.mainList.domNode.appendChild(item);
 
-			var iconDiv = domConstruct.create("div", {style: "float:right", "class": "serviceIcon2"});
+			var iconDiv = domConstruct.create("div", {style: "float:right", "class": "serviceIcon3"});
 			
 			if('Facebook' in serviceObj){
 				var divFacebook = domConstruct.create("div", {style:"float:right", innerHTML: "<img src=app/resources/img/Facebook_logo.png>"});
@@ -125,12 +125,10 @@ define(['dojo/_base/declare',
 			item.appendChild(iconDiv);
 
 			//OWNED PEOPLE NOW
-			
+			var oneTabList = new RoundRectList({
+				style: "margin: 0px 0px 0px 20px"
+			});
 			for(var y = 0; y < ownedUsers.length; y++){
-				var oneTabList = new RoundRectList({
-					style: "margin: 0px 0px 0px 20px"
-				});
-
 				var serviceObj = {};
 				var services = {};
 					
@@ -149,11 +147,11 @@ define(['dojo/_base/declare',
 					serviceObj[k[f]] = "";
 				}
 				
-				var item = domConstruct.create("div", {innerHTML: ownedUsers[y].data.displayName, "class": "divListItem"});
+				var item = domConstruct.create("div", {"class": "divListItem"});
 
 				oneTabList.domNode.appendChild(item);
 
-				var iconDiv = domConstruct.create("div", {style: "float:right", "class": "serviceIcon2"});
+				var iconDiv = domConstruct.create("div", {style: "float:right", "class": "serviceIcon3"});
 				
 				if('Facebook' in serviceObj){
 					var divFacebook = domConstruct.create("div", {style:"float:right", innerHTML: "<img src=app/resources/img/Facebook_logo.png>"});
@@ -174,18 +172,18 @@ define(['dojo/_base/declare',
 
 				item.appendChild(iconDiv);
 				
-				var div = domConstruct.create("div", {style:"layout:left"});
+				var div = domConstruct.create("span", {innerHTML: ownedUsers[y].data.displayName});
 				var unMergeButton = new ToolBarButton({
 					label: "UnMerge",
-					style: "float:left;",
+					//style: "float:left;",
 					onClick: lang.hitch(this, function(ownedUsers, y){						
 						this.unMergeFriends([mainUser.data.id, ownedUsers[y].data.id]).then(lang.hitch(this, this.activate));
 					}, ownedUsers, y)
 				});
 				item.appendChild(unMergeButton.domNode);
-				
-				this.mainList.addChild(oneTabList);
+				item.appendChild(div);
 			}
+			this.mainList.addChild(oneTabList);
 			
 			var category = new EdgeToEdgeCategory({
 				label: "Settings",
