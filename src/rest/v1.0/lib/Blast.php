@@ -65,9 +65,24 @@ class Blast{
 	function blastFiles(){
 		$var = file_get_contents("php://input");
 		$varObj = json_decode($var, true);
-		$msg = $varObj['msg'];
-		$tokenArr = $varObj['tokenArr'];
-		$fileName = $varObj['file'];
+
+		if(isset($varObj['msg'])){
+			$msg = $varObj['msg'];
+		}else{
+			$msg = "Posted from acilos";
+		}
+
+		if(isset($varObj['tokenArr'])){
+			$tokenArr = $varObj['tokenArr'];
+		}else{
+			$tokenArr = "";
+		}
+
+		if(isset($varObj['file']) && $varObj['file'] != ""){
+			$fileName = $varObj['file'];
+		}else{
+			$fileName = "";
+		}
 
 		//print_r($tokenArr);
 

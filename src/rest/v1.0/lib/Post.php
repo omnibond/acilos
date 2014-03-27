@@ -381,10 +381,33 @@ Class Post{
 	function postFiles(){
 		$var = file_get_contents("php://input");
 		$varObj = json_decode($var, true);
-		$msg = $varObj['msg'];
-		$tokenArr = $varObj['tokenArr'];
-		$fileName = $varObj['file'];
-		$fileType = $varObj['fileType'];
+
+		if(isset($varObj['msg'])){
+			$msg = $varObj['msg'];
+		}else{
+			$msg = "";
+		}
+
+
+		if(isset($varObj['tokenArr'])){
+			$tokenArr = $varObj['tokenArr'];
+		}else{
+			$tokenArr = "";
+		}
+
+
+		if(isset($varObj['file'])){
+			$fileName = $varObj['file'];
+		}else{
+			$fileName = "";
+		}
+
+
+		if(isset($varObj['fileType'])){
+			$fileType = $varObj['fileType'];
+		}else{
+			$fileType = "";
+		}
 
 		//print_r($tokenArr);
 
@@ -426,6 +449,7 @@ Class Post{
 
 						$statusURL = 'https://graph.facebook.com/me/feed';
 
+						if(isset($fileName)){}
 						if($fileName == ""){
 							$url = $statusURL;
 						}else{
@@ -636,12 +660,12 @@ function postFilesHandler($obj){
 		$time = "?";
 		$date = "?";
 	}
-	if(isset($obj['file'])){
+	if(isset($obj['file']) && $obj['file'] != "?"){
 		$file = $obj['file'];
 	}else{
 		$file = "?";
 	}
-	if(isset($obj['fileType'])){
+	if(isset($obj['fileType']) && $obj['fileType'] != "?"){
 		$fileType = $obj['fileType'];
 	}else{
 		$fileType = "?";
@@ -651,10 +675,10 @@ function postFilesHandler($obj){
 	}else{
 		$tokenArr = "?";
 	}
-	if(isset($obj['msg'])){
+	if(isset($obj['msg']) && $obj['msg'] != "?"){
 		$msg = $obj['msg'];
 	}else{
-		$msg = "?";
+		$msg = "Sent from acilos";
 	}
 
 	$msg = str_replace(" ", "+", $msg);

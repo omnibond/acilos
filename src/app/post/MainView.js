@@ -302,9 +302,14 @@ define(['dojo/_base/declare',
 								if(fUploader.get('value') != ''){
 									fileType = fUploader.get("value")[0]['type'];
 								}else{
-									fileType = '';
+									fileType = '?';
 								}
 								console.log("this.fileToUpload: ", this.fileToUpload);
+
+								if(this.fileToUpload == ""){
+									this.fileToUpload = "?";
+								}
+								
 								this.sendPostFile(this.fileToUpload, fileType, tokenArr, msg).then(lang.hitch(this, this.handleResponse));
 							}, fUploader)
 						});
@@ -366,8 +371,12 @@ define(['dojo/_base/declare',
 									if(fUploader.get('value') != ''){
 										fileType = fUploader.get("value")[0]['type'];
 									}else{
-										fileType = '';
-										file = '';
+										fileType = '?';
+										file = '?';
+									}
+
+									if(msg == ""){
+										msg = " ";
 									}
 
 									var slashDate = date.split("-");

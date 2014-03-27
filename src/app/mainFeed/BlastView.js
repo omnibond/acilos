@@ -224,8 +224,13 @@ define(['dojo/_base/declare',
 							}
 						}
 					}
+
+					if(this.blastObj.url == ""){
+						this.blastObj.imgName = "";
+					}
 						
 					console.log("tokenArr is: ", tokenArr);
+
 					
 					this.sendPostFile(this.blastObj.imgName, tokenArr, msg).then(lang.hitch(this, function(obj){
 						window.location = "#/mainFeed";
