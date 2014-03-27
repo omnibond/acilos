@@ -29,7 +29,7 @@ define(['dojo/_base/declare',
 		'dojo/topic',
 		"dojo/_base/lang",
 		
-		"dojo-mama/util/RoundRectList",
+		"app/SelRoundRectList",
 		"dojox/mobile/ListItem",
 		"dojox/mobile/Button"
 ], function(declare, ModuleScrollableView, domConstruct, topic, lang, RoundRectList, ListItem, Button) {

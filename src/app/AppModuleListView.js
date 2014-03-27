@@ -24,7 +24,7 @@
 ** $QT_END_LICENSE$
 */
 define(['dojo/_base/declare',
-		'dojo-mama/util/EdgeToEdgeList',
+		'app/SelEdgeToEdgeList',
 		'dojo-mama/util/LinkListItem',
 		'dojo-mama/views/ModuleScrollableView'
 ], function(declare, EdgeToEdgeList, LinkListItem, ModuleScrollableView) {

@@ -40,8 +40,8 @@ define([
 	"dojox/mobile/ContentPane",
 	"dojox/mobile/Button",
 	"dojox/mobile/TextBox",
-	"dojo-mama/util/RoundRectList",
-	"dojo-mama/util/EdgeToEdgeList",
+	"app/SelRoundRectList",
+	"app/SelEdgeToEdgeList",
 	"dojox/mobile/ListItem",
 
 	'app/util/xhrManager'

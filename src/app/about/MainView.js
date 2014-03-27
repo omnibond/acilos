@@ -30,7 +30,7 @@ define(['dojo/_base/declare',
 		"dojo/_base/lang",
 		"dojo/DeferredList",
 		
-		"dojo-mama/util/RoundRectList",
+		"app/SelRoundRectList",
 		"dojox/mobile/ListItem",
 		"dojox/mobile/Button",
 		

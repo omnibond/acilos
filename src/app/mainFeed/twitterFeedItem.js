@@ -40,7 +40,7 @@ define([
 		,"dijit/Dialog"
 		,"app/dropDown"
 
-		,"dojo-mama/util/RoundRectList"
+		,"app/SelRoundRectList"
 		,"dojox/mobile/ListItem"
 		,"dojox/mobile/ContentPane"
 		,"dojox/mobile/Accordion"

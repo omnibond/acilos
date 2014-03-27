@@ -30,7 +30,7 @@ define(['dojo/_base/declare',
 	
 	'dojo-mama/Module',
 	
-	'dojo-mama/util/EdgeToEdgeList',
+	'app/SelEdgeToEdgeList',
 	
 	'app/appHelp/MainView',
 	'app/appHelp/ManAccountsHelpView',

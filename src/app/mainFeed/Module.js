@@ -31,7 +31,7 @@ define(['dojo/_base/declare',
 	
 	'dojo-mama/Module',
 	
-	'dojo-mama/util/EdgeToEdgeList',
+	'app/SelEdgeToEdgeList',
 	
 	'app/mainFeed/FeedView',
 	"app/mainFeed/SearchView",

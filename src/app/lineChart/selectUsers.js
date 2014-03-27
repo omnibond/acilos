@@ -42,7 +42,7 @@ define(['dojo/_base/declare',
 		'app/TitleBar',
 		
 		"dojox/mobile/sniff",
-		"dojo-mama/util/RoundRectList",
+		"app/SelRoundRectList",
 		"dojox/mobile/ListItem",
 		"dojox/mobile/Button",
 		"dojox/mobile/ToolBarButton",

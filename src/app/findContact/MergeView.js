@@ -36,7 +36,7 @@ define(['dojo/_base/declare',
 		'app/SelectorBar',
 		
 		"dojox/mobile/ScrollableView",
-		"dojo-mama/util/RoundRectList",
+		"app/SelRoundRectList",
 		"dojox/mobile/ListItem",
 		"dojox/mobile/Button",
 		"dojox/mobile/EdgeToEdgeCategory",

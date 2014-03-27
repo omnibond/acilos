@@ -34,7 +34,7 @@ define(['dojo/_base/declare',
 		'app/util/xhrManager',
 		'app/TitleBar',
 		
-		"dojo-mama/util/EdgeToEdgeList",
+		"app/SelEdgeToEdgeList",
 		"dojox/mobile/Button",
 		"dojox/mobile/ListItem",
 		"dojox/mobile/ToolBarButton",

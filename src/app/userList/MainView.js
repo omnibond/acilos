@@ -35,7 +35,7 @@ define(['dojo/_base/declare',
 		'app/util/xhrManager',
 		'app/SelectorBar',
 		
-		"dojo-mama/util/RoundRectList",
+		"app/SelRoundRectList",
 		"dojox/mobile/Button",
 		"dojox/mobile/ListItem",
 		"dojox/mobile/ToolBarButton",

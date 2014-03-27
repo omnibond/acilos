@@ -27,8 +27,8 @@ define(['dojo/_base/declare',
 		'dojo-mama/views/ModuleScrollableView',
 		"dojo/_base/lang",
 
-		"dojo-mama/util/RoundRectList",
-		"dojo-mama/util/EdgeToEdgeList",
+		"app/SelRoundRectList",
+		"app/SelEdgeToEdgeList",
 		"dojox/mobile/CheckBox",
 		'dojox/mobile/TextArea',
 		'dojox/mobile/Button',
@@ -370,32 +370,10 @@ define(['dojo/_base/declare',
 										file = '';
 									}
 
-									//console.log("date is: ", date);
-									//console.log("time is: ", atBox.get("value"));
-
 									var slashDate = date.split("-");
 									slashDate = slashDate[2] + "/" + slashDate[0] + "/" + slashDate[1];
-									//console.log("slashDate is: ", slashDate);
 
 									var postTime = atBox.get("value");
-
-									if(postTime.indexOf("pm") !== -1){
-										postTime = postTime.split(" ");
-										console.log("postTime is: ", postTime);
-										postTime = postTime[0];
-										console.log("postTime is: ", postTime);
-										postTime = postTime.split(":");
-										console.log("postTime is: ", postTime);
-										postTime[0] = parseInt(postTime[0]);
-										postTime[0] += 12;
-										console.log("postTime is: ", postTime);
-										postTime = postTime[0] + ":" + postTime[1];
-										console.log("postTime is: ", postTime);
-									}else{
-										postTime = postTime.split(" ");
-										postTime = postTime[0];	
-									}
-
 									console.log("postTime is: ", postTime);
 
 									var d = new Date(slashDate + " " + postTime);
@@ -490,10 +468,10 @@ define(['dojo/_base/declare',
 					style: "border:none; padding: 0; margin-left: 2px; margin-bottom: -2px"
 				});
 
-				//myListItem.addChild(postNow);
-				//myListItem.domNode.appendChild(postNowLabel);
-				//myListItem.addChild(postLater);
-				//myListItem.domNode.appendChild(postLaterLabel);
+				myListItem.addChild(postNow);
+				myListItem.domNode.appendChild(postNowLabel);
+				myListItem.addChild(postLater);
+				myListItem.domNode.appendChild(postLaterLabel);
 				
 				this.mainList.addChild(myListItem);
 				dojo.place(myListItem.domNode, this.nowList.domNode, "before");

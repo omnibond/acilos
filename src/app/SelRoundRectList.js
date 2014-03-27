@@ -6,7 +6,7 @@ define([
 ], function(declare, lang, array, EdgeToEdgeList){
 
 	// module:
-	//		dojo-mama/util/EdgeToEdgeList
+	//		app/SelEdgeToEdgeList
 
 	return declare([EdgeToEdgeList], {
 		// summary:

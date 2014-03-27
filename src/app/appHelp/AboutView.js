@@ -50,8 +50,8 @@ define([
 		
 		"dojox/mobile/ToolBarButton",
 		"dojox/mobile/TextBox",
-		"dojo-mama/util/RoundRectList",
-		"dojo-mama/util/EdgeToEdgeList",	
+		"app/SelRoundRectList",
+		"app/SelEdgeToEdgeList",	
 		"dojox/mobile/ListItem",	
 		"dojox/mobile/Button",
 		"dojox/mobile/GridLayout",
