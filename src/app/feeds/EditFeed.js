@@ -76,7 +76,7 @@ define(['dojo/_base/declare',
 				for(var x = 0; x < obj.length; x++){
 					var item = new ListItem({
 						label: obj[x].name,
-						icon: "app/resources/img/edit_icon_small.png",
+						//icon: "app/resources/img/edit_icon_small.png",
 						clickable: true,
 						onClick: lang.hitch(this, function(obj, x){
 							console.log("console: ", obj);
