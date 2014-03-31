@@ -33,14 +33,22 @@ class Blast{
 		$var = file_get_contents("php://input");
 		$imgURL = json_decode($var, true);
 		
-		$imgName = $imgURL['imgName'];
+		if(isset($imgURL['imgName'])){
+			$imgName = $imgURL['imgName'];
+		}else{
+			$imgName = '';
+		}
+		if(isset($imgURL['url'])){
+			$url = $imgURL['url'];
+		}else{
+			$url = '';
+		}
 		
-		$path = "../../app/post/tmpUpload/" . $imgName;
-		$url = $imgURL['url'];
-		
-		if($url == ''){
+		if($url == '' || $imgName == ''){
 			return;
 		}
+		
+		$path = "../../app/post/tmpUpload/" . $imgName;
 		
 		$file = fopen ($url, "rb");
 		if ($file) {
@@ -235,7 +243,6 @@ class Blast{
 						print_r($result);
 
 						$profileLink = $result['siteStandardProfileRequest']['url'];*/
-
 						$headerOptions = array(
 							"Content-Type: text/xml;charset=utf-8"
 						);
@@ -280,16 +287,19 @@ class Blast{
 						curl_setopt($ch2, CURLOPT_HTTPHEADER, $headerOptions);
 						$response = curl_exec($ch2);
 						$code = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
-
+						
+						#print_r($response);
+						
 						curl_close($ch2);
 						
 						if(isset($code)){
 							if($code == "201"){
 								$returnArray['linkedinSuccess'] = "Your LinkedIn message was posted successfully";
 							}else{
-								$returnArray['linkedinFailure'] = "Your LinkedIn message could not be posted";
+								$returnArray['linkedinFailure'] = "Your LinkedIn message could not be posted: " . $response;
 							}
 						}
+						return json_encode($returnArray);
 					}
 
 					break;

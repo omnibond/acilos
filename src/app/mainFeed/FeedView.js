@@ -179,8 +179,10 @@ define([
 							console.log("You must enter a term to search");
 						}else{
 							searchString = searchString.replace(/ /gi, "+");
-
+							
+							
 							this.searchView.queryObj = searchString;
+							this.searchView.blastView = this.blastView;
 							this.router.go("/searchView");
 						}
 					})

@@ -81,7 +81,8 @@ define(['dojo/_base/declare',
 			
 			this.searchView = new SearchView({
 				route: '/searchView',
-
+				
+				blastView: this.blastView,
 				updateFeedData: lang.hitch(this, this.updateFeedData),
 				getFeedData: lang.hitch(this, this.getFeedData),
 				checkForNewItems: lang.hitch(this, this.checkForNewItems),

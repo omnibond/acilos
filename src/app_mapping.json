@@ -20,8 +20,7 @@
 							"index": "no"
 						},
 						"id": {
-							"type": "string",
-							"index": "not_analyzed"
+							"type": "string"
 						},
 						"image": {
 							"type": "string",
@@ -32,12 +31,10 @@
 							"index": "no"
 						},
 						"name": {
-							"type": "string",
-							"index": "not_analyzed"
+							"type": "string"
 						},
 						"searchable": {
-							"type": "string",
-							"index": "not_analyzed"
+							"type": "string"
 						},
 						"url": {
 							"type": "string",

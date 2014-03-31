@@ -300,6 +300,7 @@ define([
 				//class still works
 				this.list = new SearchScroller({
 					feedName: searchString,
+					blastView: this.blastView,
 					getFeedData: lang.hitch(this, this.sendSearchString),
 					getNextGroup: lang.hitch(this, this.getNextGroup),
 					setStarred: lang.hitch(this, this.setStarred),
@@ -340,6 +341,7 @@ define([
 				}else{
 					this.list = new SearchScroller({
 						feedName: this.queryObj,
+						blastView: this.blastView,
 						postAddArray: this.postAddArray,
 						getFeedData: lang.hitch(this, this.sendSearchString),
 						getNextGroup: lang.hitch(this, this.getNextGroup),
