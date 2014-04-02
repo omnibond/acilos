@@ -76,44 +76,49 @@ class Credentials{
 
 		if(isset($serviceCreds['instagram'])){
 			for($a=0; $a < count($serviceCreds['instagram']); $a++){
-				if(isset($serviceCreds['instagram'][$a]['accessToken'])){
-					$obj = $serviceCreds['instagram'][$a];
+				for($d=0; $d < count($serviceCreds['instagram'][$a]['accounts']); $d++){
+					if(isset($serviceCreds['instagram'][$a]['accounts'][$d]['accessToken'])){
+						$obj = $serviceCreds['instagram'][$a]['accounts'][$d];
 
-					$url = 'https://api.instagram.com/v1/users/self/?&access_token=' . $obj['accessToken'];
-					$ch = curl_init($url);
-					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-					$response = curl_exec($ch);
-					curl_close($ch);
+						$url = 'https://api.instagram.com/v1/users/self/?&access_token=' . $obj['accessToken'];
+						$ch = curl_init($url);
+						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+						$response = curl_exec($ch);
+						curl_close($ch);
 
-					$account;
-					$responseObj = json_decode($response, true);
-					if(isset($responseObj['data']['username'])){
-						$account = array(
-							"user" => $obj['user'],
-							"status" => "good",
-							"auth" => $obj['auth'],
-							"name" => $obj['name'],
-							"image" => $obj['image'],
-							"color" => $obj['color']
-						);
+						$account;
+						$responseObj = json_decode($response, true);
+						if(isset($responseObj['data']['username'])){
+							$account = array(
+								"user" => $obj['user'],
+								"status" => "good",
+								"auth" => $serviceCreds['instagram'][$a]['auth'],
+								"name" => $obj['name'],
+								"image" => $obj['image'],
+								"color" => $obj['color'],
+								"loginDisallow" => $obj['loginDisallow'],
+								"authenticated" => $obj['authenticated']
+							);
+						}else{
+							$account = array(
+								"user" => $obj['user'],
+								"status" => "bad",
+								"auth" => $serviceCreds['instagram'][$a]['auth'],
+								"name" => $obj['name'],
+								"image" => $obj['image'],
+								"color" => $obj['color'],
+								"loginDisallow" => $obj['loginDisallow'],
+								"authenticated" => $obj['authenticated']
+							);
+						}
+						array_push($returnArr['instagram'], $account);
 					}else{
 						$account = array(
-							"user" => $obj['user'],
-							"status" => "bad",
-							"auth" => $obj['auth'],
-							"name" => $obj['name'],
-							"image" => $obj['image'],
-							"color" => $obj['color']
+							"status" => "unauthorized",
+							"auth" => $serviceCreds['instagram'][$a]['auth']
 						);
+						array_push($returnArr['instagram'], $account);
 					}
-					array_push($returnArr['instagram'], $account);
-				}else{
-					$account = array(
-						"status" => "unauthorized",
-						"auth" => $serviceCreds['instagram'][$a]['auth'],
-						"color" => $serviceCreds['instagram'][$a]['color']
-					);
-					array_push($returnArr['instagram'], $account);
 				}
 			}
 		}else{
@@ -125,42 +130,47 @@ class Credentials{
 
 		if(isset($serviceCreds['facebook'])){
 			for($a=0; $a < count($serviceCreds['facebook']); $a++){
-				if(isset($serviceCreds['facebook'][$a]['accessToken'])){
-					$obj = $serviceCreds['facebook'][$a];
+				for($d=0; $d < count($serviceCreds['facebook'][$a]['accounts']); $d++){
+					if(isset($serviceCreds['facebook'][$a]['accounts'][$d]['accessToken'])){
+						$obj = $serviceCreds['facebook'][$a]['accounts'][$d];
 
-					$graph_url = "https://graph.facebook.com/me?access_token=" . $obj['accessToken'];
-					$user = json_decode(file_get_contents($graph_url));
+						$graph_url = "https://graph.facebook.com/me?access_token=" . $obj['accessToken'];
+						$user = json_decode(file_get_contents($graph_url));
 
-					$account;
-					if(isset($user->id)){
+						$account;
+						if(isset($user->id)){
+							$account = array(
+								"user" => $obj['user'],
+								"status" => "good",
+								"auth" => $serviceCreds['facebook'][$a]['auth'],
+								"name" => $obj['name'],
+								"color" => $obj['color'],
+								"image" => $obj['image'],
+								'expiresAt' => $obj['expiresAt'],
+								"loginDisallow" => $obj['loginDisallow'],
+								"authenticated" => $obj['authenticated']
+							);
+						}else{
+							$account = array(
+								"user" => $obj['user'],
+								"status" => "bad",
+								"auth" => $serviceCreds['facebook'][$a]['auth'],
+								"name" => $obj['name'],
+								"color" => $obj['color'],
+								"image" => $obj['image'],
+								'expiresAt' => $obj['expiresAt'],
+								"loginDisallow" => $obj['loginDisallow'],
+								"authenticated" => $obj['authenticated']
+							);
+						}
+						array_push($returnArr['facebook'], $account);
+					}else{					
 						$account = array(
-							"user" => $obj['user'],
-							"status" => "good",
-							"auth" => $obj['auth'],
-							"name" => $obj['name'],
-							"color" => $obj['color'],
-							"image" => $obj['image'],
-							'expiresAt' => $obj['expiresAt']
+							"status" => "unauthorized",
+							"auth" => $serviceCreds['facebook'][$a]['auth']
 						);
-					}else{
-						$account = array(
-							"user" => $obj['user'],
-							"status" => "bad",
-							"auth" => $obj['auth'],
-							"name" => $obj['name'],
-							"color" => $obj['color'],
-							"image" => $obj['image'],
-							'expiresAt' => $obj['expiresAt']
-						);
+						array_push($returnArr['facebook'], $account);
 					}
-					array_push($returnArr['facebook'], $account);
-				}else{					
-					$account = array(
-						"status" => "unauthorized",
-						"auth" => $serviceCreds['facebook'][$a]['auth'],
-						"color" => $serviceCreds['facebook'][$a]['color']
-					);
-					array_push($returnArr['facebook'], $account);
 				}
 			}
 		}else{
@@ -172,46 +182,51 @@ class Credentials{
 
 		if(isset($serviceCreds['twitter'])){
 			for($a=0; $a < count($serviceCreds['twitter']); $a++){
-				if(isset($serviceCreds['twitter'][$a]['accessToken'])){
-					$obj = $serviceCreds['twitter'][$a];
+				for($d=0; $d < count($serviceCreds['twitter'][$a]['accounts']); $d++){
+					if(isset($serviceCreds['twitter'][$a]['accounts'][$d]['accessToken'])){
+						$obj = $serviceCreds['twitter'][$a]['accounts'][$d];
 
-					$oauth_Token = $obj['accessToken'];
-					$access_secret = $obj['accessSecret'];
-					$consumer_key = $obj['key'];
-					$consumer_secret = $obj['secret'];
+						$oauth_Token = $obj['accessToken'];
+						$access_secret = $obj['accessSecret'];
+						$consumer_key = $serviceCreds['twitter'][$a]['key'];
+						$consumer_secret = $serviceCreds['twitter'][$a]['secret'];
 
-					$connection = new TwitterOAuth($consumer_key, $consumer_secret, $oauth_Token, $access_secret);
+						$connection = new TwitterOAuth($consumer_key, $consumer_secret, $oauth_Token, $access_secret);
 
-					$accounts = $connection->get('account/verify_credentials');
+						$accounts = $connection->get('account/verify_credentials');
 
-					$account;
-					if(isset($accounts->name)){
-						$account = array(
-							"user" => $obj['user'],
-							"status" => "good",
-							"auth" => $obj['auth'],
-							"name" => $obj['name'],
-							"image" => $obj['image'],
-							"color" => $obj['color']
-						);
+						$account;
+						if(isset($accounts->name)){
+							$account = array(
+								"user" => $obj['user'],
+								"status" => "good",
+								"auth" => $serviceCreds['twitter'][$a]['auth'],
+								"name" => $obj['name'],
+								"image" => $obj['image'],
+								"color" => $obj['color'],
+								"loginDisallow" => $obj['loginDisallow'],
+								"authenticated" => $obj['authenticated']
+							);
+						}else{
+							$account = array(
+								"user" => $obj['user'],
+								"status" => "bad",
+								"auth" => $serviceCreds['twitter'][$a]['auth'],
+								"name" => $obj['name'],
+								"image" => $obj['image'],
+								"color" => $obj['color'],
+								"loginDisallow" => $obj['loginDisallow'],
+								"authenticated" => $obj['authenticated']
+							);
+						}
+						array_push($returnArr['twitter'], $account);
 					}else{
 						$account = array(
-							"user" => $obj['user'],
-							"status" => "bad",
-							"auth" => $obj['auth'],
-							"name" => $obj['name'],
-							"image" => $obj['image'],
-							"color" => $obj['color']
+							"status" => "unauthorized",
+							"auth" => $serviceCreds['twitter'][$a]['auth']
 						);
+						array_push($returnArr['twitter'], $account);
 					}
-					array_push($returnArr['twitter'], $account);
-				}else{
-					$account = array(
-						"status" => "unauthorized",
-						"auth" => $serviceCreds['twitter'][$a]['auth'],
-						"color" => $serviceCreds['twitter'][$a]['color']
-					);
-					array_push($returnArr['twitter'], $account);
 				}
 			}
 		}else{
@@ -223,57 +238,58 @@ class Credentials{
 
 		if(isset($serviceCreds['linkedin'])){
 			for($a=0; $a < count($serviceCreds['linkedin']); $a++){
-				if(isset($serviceCreds['linkedin'][$a]['accessToken'])){
-					$obj = $serviceCreds['linkedin'][$a];
+				for($d=0; $d < count($serviceCreds['linkedin'][$a]['accounts']); $d++){
+					if(isset($serviceCreds['linkedin'][$a]['accounts'][$d]['accessToken'])){
+						$obj = $serviceCreds['linkedin'][$a]['accounts'][$d];
 
-					$params = array(
-						'oauth2_access_token' => $obj['accessToken'],
-						'format' => 'json'
-					);
-					$url = 'https://api.linkedin.com/v1/people/~:(id)?' . http_build_query($params);
-					$context = stream_context_create(
-						array('http' => 
-							array('method' => 'GET')
-						)
-					);
-
-					try{
-						$response = file_get_contents($url, false, $context);
-						$user = json_decode($response, true);
-					}catch(Exception $e){
-						$user = array();
-					}
-
-					$account;
-					if(isset($user['id'])){
-						$account = array(
-							"user" => $obj['user'],
-							"status" => "good",
-							"auth" => $obj['auth'],
-							"name" => $obj['name'],
-							"image" => $obj['image'],
-							"color" => $obj['color'],
-							'expiresAt' => $obj['expiresAt']
+						$params = array(
+							'oauth2_access_token' => $obj['accessToken'],
+							'format' => 'json'
 						);
+						$url = 'https://api.linkedin.com/v1/people/~:(id)?' . http_build_query($params);
+						$context = stream_context_create(
+							array('http' => 
+								array('method' => 'GET')
+							)
+						);
+
+						try{
+							$response = file_get_contents($url, false, $context);
+							$user = json_decode($response, true);
+						}catch(Exception $e){
+							$user = array();
+						}
+
+						$account;
+						if(isset($user['id'])){
+							$account = array(
+								"user" => $obj['user'],
+								"status" => "good",
+								"auth" => $serviceCreds['linkedin'][$a]['auth'],
+								"name" => $obj['name'],
+								"image" => $obj['image'],
+								"color" => $obj['color'],
+								'expiresAt' => $obj['expiresAt']
+							);
+						}else{
+							$account = array(
+								"user" => $obj['user'],
+								"status" => "bad",
+								"auth" => $serviceCreds['linkedin'][$a]['auth'],
+								"name" => $obj['name'],
+								"image" => $obj['image'],
+								"color" => $obj['color'],
+								'expiresAt' => $obj['expiresAt']
+							);
+						}
+						array_push($returnArr['linkedin'], $account);
 					}else{
 						$account = array(
-							"user" => $obj['user'],
-							"status" => "bad",
-							"auth" => $obj['auth'],
-							"name" => $obj['name'],
-							"image" => $obj['image'],
-							"color" => $obj['color'],
-							'expiresAt' => $obj['expiresAt']
+							"status" => "unauthorized",
+							"auth" => $serviceCreds['linkedin'][$a]['auth']
 						);
+						array_push($returnArr['linkedin'], $account);
 					}
-					array_push($returnArr['linkedin'], $account);
-				}else{
-					$account = array(
-						"status" => "unauthorized",
-						"auth" => $serviceCreds['linkedin'][$a]['auth'],
-						"color" => $serviceCreds['linkedin'][$a]['color']
-					);
-					array_push($returnArr['linkedin'], $account);
 				}
 			}
 		}else{

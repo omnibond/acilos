@@ -255,7 +255,45 @@ class Database{
 			return json_encode(array("error" => "This file version is not up to date"));
 		}
 	}
+	
+	public function saveNewAccount(){
+		$var = file_get_contents("php://input");
+		$obj = json_decode($var, true);
+		$credObj;		
 
+		try{
+			$credObj = file_get_contents("../../serviceCreds.json");
+			$credObj = json_decode($credObj, true);
+		}catch (Exception $e){
+			$credObj = array(
+				"facebook" => array(),
+				"twitter" => array(),
+				"linkedin" => array(),
+				"instagram" => array(),
+				"login" => "first"
+			);
+			file_put_contents("../../serviceCreds.json", json_encode($credObj));
+		}
+		
+		$color = $obj['color'];
+		$loginDisallow = $obj['login'];
+		$authenticated = $obj['auth'];
+		$param = $obj['param'];
+		$id = uniqid();
+		
+		$temp = array(
+			"color" => $color,
+			"loginDisallow" => $loginDisallow,
+			"authenticated" => $authenticated,
+			"uuid" => $id
+		);
+		array_push($credObj[$param][0]['accounts'], $temp);
+
+		file_put_contents("../../serviceCreds.json", json_encode($credObj));
+
+		return json_encode(array("success" => "App Saved"));		
+	}
+	
 	public function saveServiceCredsObj(){
 		$var = file_get_contents("php://input");
 		$obj = json_decode($var, true);
@@ -275,29 +313,25 @@ class Database{
 			file_put_contents("../../serviceCreds.json", json_encode($credObj));
 		}
 
-		$exists = false;
-
-		if(isset($credObj[$obj['param']])){
-			if(count($credObj[$obj['param']]) > 0){
-				for($x = 0; $x < count($credObj[$obj['param']]); $x++){
+		if(count($credObj[$obj['param']]) > 0){
+			for($x = 0; $x < count($credObj[$obj['param']]); $x++){
+				for($f = 0; $f < count($credObj[$obj['param']]); $f++){
 					if($credObj[$obj['param']][$x]['key'] == $obj['key']){
 						$exists = true;
-						break;
+						return json_encode(array("error" => "You have already saved this app Id/Secret combo"));
 					}
-				}			
-			}
-		}else{
-			$credObj[$obj['param']] = array();
+				}
+			}			
 		}
 
 
 		$authLink = '';
 		if($obj['param'] == "linkedin"){
 			$scope = "rw_groups r_fullprofile r_contactinfo r_network r_basicprofile rw_nus w_messages";
-			$authLink = $obj['redir']."?apiKey=".$obj['key']."&secretKey=".$obj['secret']."&lredirect_uri=".$obj['redir']."&scope=".$scope."&color=".$obj['color'];
+			$authLink = $obj['redir']."?apiKey=".$obj['key']."&secretKey=".$obj['secret']."&lredirect_uri=".$obj['redir']."&scope=".$scope;
 		}
 		if($obj['param'] == "twitter"){
-			$authLink = $obj['redir']."?appKey=".$obj['key']."&appSecret=".$obj['secret']."&twitterRedirect=".$obj['redir']."&color=".$obj['color'];
+			$authLink = $obj['redir']."?appKey=".$obj['key']."&appSecret=".$obj['secret']."&twitterRedirect=".$obj['redir'];
 		}
 		if($obj['param'] == "facebook"){
 			$scope = "friends_location,friends_hometown,user_hometown,user_location,publish_actions,publish_stream,read_stream,read_friendlists,friends_birthday,friends_religion_politics,email,user_likes,friends_likes,manage_notifications";
@@ -307,26 +341,56 @@ class Database{
 			$scope = "relationships likes comments";
 			$authLink = "https://api.instagram.com/oauth/authorize/?client_id=".$obj['key']."&redirect_uri=".$obj['redir']."&response_type=code&scope=".$scope."&state=".$obj['key'];
 		}
+		$temp = array(
+			"key" => $obj['key'],
+			"secret" => $obj['secret'],
+			"redir" => $obj['redir'],
+			"auth" => $authLink,
+			"accounts" => array()
+		);
+		array_push($credObj[$obj['param']], $temp);
 
-		if($exists == false){
-			$temp = array(
-				"key" => $obj['key'],
-				"secret" => $obj['secret'],
-				"redir" => $obj['redir'],
-				"color" => $obj['color'],
-				"auth" => $authLink,
-			);
-			array_push($credObj[$obj['param']], $temp);
-		}else{
-			return json_encode(array("error" => "You have already saved this app Id/Secret"));
-		}
 
 		file_put_contents("../../serviceCreds.json", json_encode($credObj));
 
 		return json_encode(array("success" => "App Saved"));
 	}
-
+	
 	public function deleteServiceCred(){
+		$var = file_get_contents("php://input");
+		$obj = json_decode($var, true);
+		$obj = $obj['obj'];
+		$credObj;
+		
+		try{
+			$credObj = file_get_contents("../../serviceCreds.json");
+			$credObj = json_decode($credObj, true);
+		}catch (Exception $e){
+			$credObj = array(
+				"facebook" => array(),
+				"twitter" => array(),
+				"linkedin" => array(),
+				"instagram" => array(),
+				"login" => "first"
+			);
+			file_put_contents("../../serviceCreds.json", json_encode($credObj));
+		}
+		
+		if(count($credObj[$obj['param']]) > 0){
+			for($x = 0; $x < count($credObj[$obj['param']]); $x++){
+				if($credObj[$obj['param']][$x]["key"] == $obj["key"]){
+					array_splice($credObj[$obj['param']], $x, 1);
+					break;
+				}
+			}			
+		}
+
+		file_put_contents("../../serviceCreds.json", json_encode($credObj));
+
+		return json_encode(array("success" => "Authenticator Deleted"));
+	}
+	
+	public function deleteAccountCred(){
 		$var = file_get_contents("php://input");
 		$obj = json_decode($var, true);
 		$obj = $obj['obj'];
@@ -346,12 +410,13 @@ class Database{
 			file_put_contents("../../serviceCreds.json", json_encode($credObj));
 		}
 
-		$exists = false;
 		if(count($credObj[$obj['param']]) > 0){
 			for($x = 0; $x < count($credObj[$obj['param']]); $x++){
-				if($credObj[$obj['param']][$x]['key'] == $obj['key']){
-					array_splice($credObj[$obj['param']], $x, 1);
-					break;
+				for($f = 0; $f < count($credObj[$obj['param']][$x]['accounts']); $f++){
+					if($credObj[$obj['param']][$x]['accounts'][$f]["uuid"] == $obj["uuid"]){
+						array_splice($credObj[$obj['param']][$x]['accounts'], $f, 1);
+						break;
+					}
 				}
 			}			
 		}
@@ -386,12 +451,14 @@ class Database{
 		}
 
 		if(count($credObj[$obj['param']]) > 0){
-			for($x = 0; $x < count($credObj[$obj['param']]); $x++){
-				if($credObj[$obj['param']][$x]['key'] == $obj['key']){
-					$credObj[$obj['param']][$x]['color'] = $obj['color'];
-					break;
-				}
-			}			
+			if(count($credObj[$obj['param']][0]['accounts']) > 0){
+				for($x = 0; $x < count($credObj[$obj['param']][0]['accounts']); $x++){
+					if($credObj[$obj['param']][0]['accounts'][$x]["uuid"] == $obj['uuid']){
+						$credObj[$obj['param']][0]['accounts'][$x]['color'] = $obj['color'];
+						break;
+					}
+				}	
+			}
 		}
 
 		file_put_contents("../../serviceCreds.json", json_encode($credObj));
@@ -399,7 +466,7 @@ class Database{
 		return json_encode(array("success" => "Account Edited"));
 	}
 
-	public function setMainLogin(){
+	public function setDisableLogin(){
 		$var = file_get_contents("php://input");
 		$obj = json_decode($var, true);
 		$loginObj = $obj['obj'];
@@ -417,15 +484,17 @@ class Database{
 			);
 			file_put_contents("../../serviceCreds.json", json_encode($credObj));
 		}
-
+		
 		$exists = false;
 		if(count($credObj[$loginObj['param']]) > 0){
-			for($x = 0; $x < count($credObj[$loginObj['param']]); $x++){
-				if(isset($credObj[$loginObj['param']][$x]['user'])){
-					if($credObj[$loginObj['param']][$x]['user'] == $loginObj['user']){
-						$temp = $credObj[$loginObj['param']][$x];
-						array_splice($credObj[$loginObj['param']], $x, 1);
-						array_unshift($credObj[$loginObj['param']], $temp);
+			for($x = 0; $x < count($credObj[$loginObj['param']][0]['accounts']); $x++){
+				if(isset($credObj[$loginObj['param']][0]['accounts'][$x]['user'])){
+					if($credObj[$loginObj['param']][0]['accounts'][$x]['user'] == $loginObj['user']){
+						if($credObj[$loginObj['param']][0]['accounts'][$x]['loginDisallow'] == "true"){
+							$credObj[$loginObj['param']][0]['accounts'][$x]['loginDisallow'] = "false";
+						}else{
+							$credObj[$loginObj['param']][0]['accounts'][$x]['loginDisallow'] = "true";
+						}
 						break;
 					}
 				}
@@ -446,66 +515,33 @@ class Database{
 		foreach ($credObj as $key => $value) {
 			if($key == "linkedin"){
 				$scope = "rw_groups r_fullprofile r_contactinfo r_network r_basicprofile rw_nus w_messages";
-				$authLink = $obj[$key]['redir']."?apiKey=".$obj[$key]['key']."&secretKey=".$obj[$key]['secret']."&lredirect_uri=".$obj[$key]['redir']."&scope=".$scope."&color=".$obj[$key]['color'];
-				$credObj[$key]['auth'] = $authLink;
-
-				$finalObj[$key] = array();
-				$temp = array(
-					"key" => $obj[$key]['key'],
-					"secret" => $obj[$key]['secret'],
-					"redir" => $obj[$key]['redir'],
-					"color" => $obj[$key]['color'],
-					"auth" => $authLink,
-				);
-				array_push($finalObj[$key], $temp);
+				$authLink = $obj[$key]['redir']."?apiKey=".$obj[$key]['key']."&secretKey=".$obj[$key]['secret']."&lredirect_uri=".$obj[$key]['redir']."&scope=".$scope;
 			}
 			if($key == "twitter"){
-				$authLink = $obj[$key]['redir']."?appKey=".$obj[$key]['key']."&appSecret=".$obj[$key]['secret']."&twitterRedirect=".$obj[$key]['redir']."&color=".$obj[$key]['color'];
-				$credObj[$key]['auth'] = $authLink;
-
-				$finalObj[$key] = array();
-				$temp = array(
-					"key" => $obj[$key]['key'],
-					"secret" => $obj[$key]['secret'],
-					"redir" => $obj[$key]['redir'],
-					"color" => $obj[$key]['color'],
-					"auth" => $authLink,
-				);
-				array_push($finalObj[$key], $temp);
+				$authLink = $obj[$key]['redir']."?appKey=".$obj[$key]['key']."&appSecret=".$obj[$key]['secret']."&twitterRedirect=".$obj[$key]['redir'];
 			}
 			if($key == "facebook"){
 				$scope = "friends_location,friends_hometown,user_hometown,user_location,publish_stream,read_stream,read_friendlists,friends_birthday,friends_religion_politics,email,user_likes,friends_likes,manage_notifications";
-				$authLink = "https://www.facebook.com/dialog/oauth?client_id=".$obj[$key]['key']."&redirect_uri=".$obj[$key]['redir']."&scope=".$scope."&state=".$obj[$key]['key'];
-				$credObj[$key]['auth'] = $authLink;
-
-				$finalObj[$key] = array();
-				$temp = array(
-					"key" => $obj[$key]['key'],
-					"secret" => $obj[$key]['secret'],
-					"redir" => $obj[$key]['redir'],
-					"color" => $obj[$key]['color'],
-					"auth" => $authLink,
-				);
-				array_push($finalObj[$key], $temp);
+				$authLink = "https://www.facebook.com/dialog/oauth?client_id=".$obj[$key]['key']."&redirect_uri=".$obj[$key]['redir']."&scope=".$scope;
 			}
 			if($key == "instagram"){
 				$scope = "relationships likes comments";
-				$authLink = "https://api.instagram.com/oauth/authorize/?client_id=".$obj[$key]['key']."&redirect_uri=".$obj[$key]['redir']."&response_type=code&scope=".$scope."&state=".$obj[$key]['key'];
-				$credObj[$key]['auth'] = $authLink;
-
-				$finalObj[$key] = array();
-				$temp = array(
-					"key" => $obj[$key]['key'],
-					"secret" => $obj[$key]['secret'],
-					"redir" => $obj[$key]['redir'],
-					"color" => $obj[$key]['color'],
-					"auth" => $authLink,
-				);
-				array_push($finalObj[$key], $temp);
+				$authLink = "https://api.instagram.com/oauth/authorize/?client_id=".$obj[$key]['key']."&redirect_uri=".$obj[$key]['redir']."&response_type=code&scope=".$scope;
 			}
+			$credObj[$key]['auth'] = $authLink;
+
+			$finalObj[$key] = array();
+			$temp = array(
+				"key" => $obj[$key]['key'],
+				"secret" => $obj[$key]['secret'],
+				"auth" => $authLink,
+				"accounts" => array(),
+				"redir" => $obj[$key]['redir']	
+			);
+			array_push($finalObj[$key], $temp);
 		}
 
-		$finalObj['login'] = "first";
+		$finalObj['login'] = "";
 		
 		if(!isset($finalObj['twitter'])){
 			$finalObj['twitter'] = array();

@@ -49,7 +49,7 @@ if (isset($_GET['error'])) {
 		"apiKey" => $_GET['apiKey'],
 		"secretKey" => $_GET['secretKey'],
 		"lredirect_uri" => $_GET['lredirect_uri'],
-		"color" => $_GET['color']
+		'state' => $_GET['state']
 	);
 
 	$obj = json_encode($param);
@@ -115,23 +115,38 @@ function getAccessToken() {
 	$credObj = file_get_contents("../serviceCreds.json");
 	$credObj = json_decode($credObj, true);
 	
-	$temp;
+	$tempApp;
 	for($g=0; $g<count($credObj['linkedin']); $g++){
 		if($credObj['linkedin'][$g]['key'] == $json['apiKey']){
-			$temp = $credObj['linkedin'][$g];
+			$tempApp = $credObj['linkedin'][$g];
 			break;
 		}
 	}
 	
-	//if the id is not empty then check it
-	if(isset($temp['user'])){
-		//if the ids do not match
-		if($temp['user'] != $user->id){
-			//you are not the correct facebook user
-			header('Location: ../login.php?error=1&service=linkedin');
-			//just to be safe return here
-			return;
+	$found = "false";
+	$open = 0;
+	//check all accounts for this user if there are accounts
+	if(isset($tempApp['accounts']) && count($tempApp['accounts']) > 0){
+		for($j=0; $j<count($tempApp['accounts']); $j++){
+			if($tempApp['accounts'][$j]['user'] == $user->id && $tempApp['accounts'][$j]['loginDisallow'] == "false"){
+				//if we find the user $temp is now that user
+				$temp = $tempApp['accounts'][$j];
+				$found = "true";
+				break;
+			}
+			if($tempApp['accounts'][$j]['authenticated'] == "false"){
+				$open = $j;
+			}
 		}
+		//if we loop through everyone and done find the user
+		if($found == "false"){
+			if($json['state'] == "outside"){
+				header('Location: ../login.php?error=1&service=linkedin');
+				return;
+			}
+		}
+	}else{
+		$j = 0;
 	}
 	
 	if($credObj['login'] == "first"){
@@ -146,9 +161,21 @@ function getAccessToken() {
 	$temp['user'] = $user->id;
 	$temp['image'] = $user->pictureUrl;
 	$temp['name'] = $user->firstName . " " . $user->lastName;
-	
-	$credObj['linkedin'][$g] = $temp;
-	
+	$temp['authenticated'] = "true";
+	$temp['loginDisallow'] = "false";
+	if(!isset($temp['color'])){
+		$temp['color'] = "#B33DA5";
+	}
+	if(!isset($temp['uuid'])){
+		$temp['uuid'] = uniqid();
+	}
+		
+	if($found == "false"){
+		$credObj['linkedin'][0]['accounts'][$open] = $temp;
+	}else{
+		$credObj['linkedin'][0]['accounts'][$j] = $temp;
+	}
+		
 	file_put_contents("../serviceCreds.json", json_encode($credObj));
 	
 	header('Location: ../login.php?linkedin=true');

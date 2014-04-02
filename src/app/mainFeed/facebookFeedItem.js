@@ -143,14 +143,17 @@ define([
 
 				var obj = this.data.hits.hits[this.counter]._source;
 
-				for(var g = 0; g < this.authObj['facebook'].length; g++){
-					if(this.authObj['facebook'][g]['user'] == obj.mainAccountID){
-						this.domNode.style.borderLeft = "5px solid " + this.authObj['facebook'][g]['color'];
-						this.domNode.style.marginBottom = "10px";
-						break;
-					}else{
-						this.domNode.style.borderLeft = "5x solid " + obj.mainAccountColor;
-						this.domNode.style.marginBottom = "10px";
+				if(this.authObj['facebook'].length > 0){
+					var acctArr = this.authObj['facebook'][0]['accounts'];
+					for(var g = 0; g < acctArr.length; g++){
+						if(acctArr[g]['user'] == obj.mainAccountID){
+							this.domNode.style.borderLeft = "5px solid " + acctArr[g]['color'];
+							this.domNode.style.marginBottom = "10px";
+							break;
+						}else{
+							this.domNode.style.borderLeft = "5x solid " + obj.mainAccountColor;
+							this.domNode.style.marginBottom = "10px";
+						}
 					}
 				}
 				

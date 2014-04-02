@@ -91,66 +91,69 @@ define(['dojo/_base/declare',
 			this.checkArray = [];
 			for(var key in this.authObj){
 				if(key !== "login"){
-					for(var d = 0; d < this.authObj[key].length; d++){	
-						if(this.authObj[key][d].accessToken != undefined){
-							var divHolder = domConstruct.create("span", {style: "float: left"});
-							if(key == "twitter"){
-								var checkBox = new CheckBox({
-									leToken: this.authObj[key][d]['accessToken']+":"+this.authObj[key][d]['accessSecret']+":"+this.authObj[key][d]['key']+":"+this.authObj[key][d]['secret'],
-									leKey: key,
-									style:"width:20px;height:20px"
-								});
-								//var picUrl = this.authObj[key][d].image;
-								var serviceUrl = "app/resources/img/Twitter_logo_blue_small.png";
+					if(this.authObj[key].length > 0){
+						var accountArr = this.authObj[key][0]['accounts'];	
+						for(var d = 0; d < accountArr.length; d++){	
+							if(accountArr[d].accessToken != undefined){
+								var divHolder = domConstruct.create("span", {style: "float: left"});
+								if(key == "twitter"){
+									var checkBox = new CheckBox({
+										leToken: accountArr[d]['accessToken']+":"+accountArr[d]['accessSecret']+":"+accountArr[d]['key']+":"+accountArr[d]['secret'],
+										leKey: key,
+										style:"width:20px;height:20px"
+									});
+									//var picUrl = accountArr[d].image;
+									var serviceUrl = "app/resources/img/Twitter_logo_blue_small.png";
 
-								checkBox.onClick = lang.hitch(this, function(){
-									if(checkBox.get("checked") == true){
-										if(this.textArea.get('value').length > 140){
-											this.textAreaCountDiv.style.color = "red";
+									checkBox.onClick = lang.hitch(this, function(){
+										if(checkBox.get("checked") == true){
+											if(this.textArea.get('value').length > 140){
+												this.textAreaCountDiv.style.color = "red";
+											}else{
+												this.textAreaCountDiv.style.color = "black";
+											}
+
+											this.textAreaCountDiv.innerHTML = this.textArea.get("value").length + "/140 characters";
 										}else{
 											this.textAreaCountDiv.style.color = "black";
+											this.textAreaCountDiv.innerHTML = this.textArea.get("value").length + " characters";
 										}
-
-										this.textAreaCountDiv.innerHTML = this.textArea.get("value").length + "/140 characters";
-									}else{
-										this.textAreaCountDiv.style.color = "black";
-										this.textAreaCountDiv.innerHTML = this.textArea.get("value").length + " characters";
+									});
+								}
+								if(key == "facebook"){
+									var checkBox = new CheckBox({
+										leToken: accountArr[d]['accessToken']+":"+accountArr[d]['key']+":"+accountArr[d]['user'],
+										leKey: key,
+										style:"width:20px;height:20px"
+									});
+									//var picUrl = "https://graph.facebook.com/"+accountArr[d].image+"/picture";
+									serviceUrl = "app/resources/img/Facebook_logo.png";
+								}if(key == "linkedin"){
+									var checkBox = new CheckBox({
+										leToken: accountArr[d]['accessToken'],
+										leKey: key,
+										style:"width:20px;height:20px"
+									});
+									if(key == "linkedin"){
+										serviceUrl = "app/resources/img/LinkedIn_logo.png";
 									}
-								});
+									if(key == "instagram"){
+										serviceUrl = "app/resources/img/Instagram_logo.png";
+									}
+								}if(key == "instagram"){
+									break;
+								}	
+								
+								divHolder.appendChild(checkBox.domNode);
+								//For profile picture
+								/*var picSpan = domConstruct.create("span", {innerHTML: '<img src='+serviceUrl+' height=20px width=20px/>', style: "margin-left: 10px; margin-right: 5px; height: 20px; width: 20px"});*/
+								var picSpan = domConstruct.create("span", {innerHTML: '<img src='+serviceUrl+'>', style: "margin-left: 10px; margin-right: 5px; height: 20px; width: 24px"});
+								var div = domConstruct.create("span", {style:"margin-right: 5px; float:left;border-left:5px solid "+accountArr[d]['color'], innerHTML: accountArr[d]['name']});
+								div.appendChild(picSpan);
+								div.appendChild(divHolder);
+								this.checkArray.push(checkBox);
+								this.mainList.domNode.appendChild(div);
 							}
-							if(key == "facebook"){
-								var checkBox = new CheckBox({
-									leToken: this.authObj[key][d]['accessToken']+":"+this.authObj[key][d]['key']+":"+this.authObj[key][d]['user'],
-									leKey: key,
-									style:"width:20px;height:20px"
-								});
-								//var picUrl = "https://graph.facebook.com/"+this.authObj[key][d].image+"/picture";
-								serviceUrl = "app/resources/img/Facebook_logo.png";
-							}if(key == "linkedin"){
-								var checkBox = new CheckBox({
-									leToken: this.authObj[key][d]['accessToken'],
-									leKey: key,
-									style:"width:20px;height:20px"
-								});
-								if(key == "linkedin"){
-									serviceUrl = "app/resources/img/LinkedIn_logo.png";
-								}
-								if(key == "instagram"){
-									serviceUrl = "app/resources/img/Instagram_logo.png";
-								}
-							}if(key == "instagram"){
-								break;
-							}	
-							
-							divHolder.appendChild(checkBox.domNode);
-							//For profile picture
-							/*var picSpan = domConstruct.create("span", {innerHTML: '<img src='+serviceUrl+' height=20px width=20px/>', style: "margin-left: 10px; margin-right: 5px; height: 20px; width: 20px"});*/
-							var picSpan = domConstruct.create("span", {innerHTML: '<img src='+serviceUrl+'>', style: "margin-left: 10px; margin-right: 5px; height: 20px; width: 24px"});
-							var div = domConstruct.create("span", {style:"margin-right: 5px; float:left;border-left:5px solid "+this.authObj[key][d]['color'], innerHTML: this.authObj[key][d]['name']});
-							div.appendChild(picSpan);
-							div.appendChild(divHolder);
-							this.checkArray.push(checkBox);
-							this.mainList.domNode.appendChild(div);
 						}
 					}
 				}

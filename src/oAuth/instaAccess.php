@@ -26,8 +26,7 @@
 */
 
 require_once('../cron/logs/KLogger.php');
-//$log   = KLogger::instance('../logs/oAuth');
-//$logPrefix = '['.basename(__FILE__).']:';
+
 require_once('../vendor/autoload.php');
 require_once('../cron/objects/authObject.php');
 
@@ -37,30 +36,20 @@ if(isset($_GET['code'])){
 	$code = $_GET["code"];
 	$state = $_GET["state"];
 	
-	$arr = explode("|||", $state);
-	$key = $arr[0];
-	$color = $arr[1];
-	
 	$grant = "authorization_code";
 	
 	$credObj = file_get_contents("../serviceCreds.json");
 	$credObj = json_decode($credObj, true);
 	
-	$temp;
-	for($g=0; $g<count($credObj['instagram']); $g++){
-		if($credObj['instagram'][$g]['key'] == $key){
-			$temp = $credObj['instagram'][$g];
-			break;
-		}
-	}
-	
+	$app = $credObj['instagram'][0];
 	$params = array(
-		"client_id" => $temp['key'],
-		"client_secret" => $temp['secret'],
-		"redirect_uri" => $temp['redir'],
+		"client_id" => $app['key'],
+		"client_secret" => $app['secret'],
+		"redirect_uri" => $app['redir'],
 		"code" => $code,
 		"grant_type" => $grant,
 	);
+	$tempApp = $credObj['instagram'][0]['accounts'];
 
 	$url = "https://api.instagram.com/oauth/access_token";
 	$ch = curl_init($url);
@@ -69,18 +58,34 @@ if(isset($_GET['code'])){
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	$response = curl_exec($ch);
 	curl_close($ch);
-		
+
 	$obj = json_decode($response, true);
 	
-	if($obj['access_token']){
-		if(isset($temp['user'])){
-			//if the ids do not match
-			if($temp['user'] != $obj['user']['id']){
-				//you are not the correct facebook user
-				header('Location: ../login.php?error=1&service=instagram');
-				//just to be safe return here
-				return;
+	if($obj['access_token']){		
+		$found = "false";
+		$open = 0;
+		//check all accounts for this user if there are accounts
+		if(isset($tempApp['accounts']) && count($tempApp['accounts']) > 0){
+			for($j=0; $j<count($tempApp['accounts']); $j++){
+				if($tempApp['accounts'][$j]['user'] == $obj['user']['id'] && $tempApp['accounts'][$j]['loginDisallow'] == "false"){
+					//if we find the user $temp is now that user
+					$temp = $tempApp['accounts'][$j];
+					$found = "true";
+					break;
+				}
+				if($tempApp['accounts'][$j]['authenticated'] == "false"){
+					$open = $j;
+				}
 			}
+			//if we loop through everyone and done find the user
+			if($found == "false"){
+				if($state == "outside"){
+					#header('Location: ../login.php?error=1&service=instagram');
+					return;
+				}
+			}
+		}else{
+			$j = 0;
 		}
 		
 		if($credObj['login'] == "first"){
@@ -95,8 +100,20 @@ if(isset($_GET['code'])){
 		$temp['user'] = $obj['user']['id'];
 		$temp['image'] = $obj['user']['profile_picture'];
 		$temp['name'] =  $obj['user']['username'];
+		$temp['authenticated'] = "true";
+		$temp['loginDisallow'] = "false";
+		if(!isset($temp['color'])){
+			$temp['color'] = "#F66733";
+		}
+		if(!isset($temp['uuid'])){
+			$temp['uuid'] = uniqid();
+		}
 		
-		$credObj['instagram'][$g] = $temp;
+		if($found == "false"){
+			$credObj['instagram'][0]['accounts'][$open] = $temp;
+		}else{
+			$credObj['instagram'][0]['accounts'][$j] = $temp;
+		}
 		
 		file_put_contents("../serviceCreds.json", json_encode($credObj));
 		

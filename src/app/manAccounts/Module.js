@@ -55,11 +55,13 @@ define(['dojo/_base/declare',
 			this.AddEditAccountsView = new AddEditAccountsView({
 				route: '/AddEditAccountsView',
 				title: "Add/Edit new Accounts",
-
+	
+				saveNewAccount: lang.hitch(this, this.saveNewAccount),			
 				saveServiceCreds: lang.hitch(this, this.saveServiceCreds),			
 				getDomain: lang.hitch(this, this.getDomain),
 				getServiceCreds: lang.hitch(this, this.getServiceCreds),
 				editServiceCreds: lang.hitch(this, this.editServiceCreds),
+				deleteAccountCred: lang.hitch(this, this.deleteAccountCred),				
 				deleteServiceCred: lang.hitch(this, this.deleteServiceCred)				
 			});
 
@@ -70,7 +72,7 @@ define(['dojo/_base/declare',
 				manualCrons: lang.hitch(this, this.manualCrons),
 				getServiceCreds: lang.hitch(this, this.getServiceCreds),
 				getAuthCreds: lang.hitch(this, this.getAuthCreds),
-				setMainLogin: lang.hitch(this, this.setMainLogin)
+				setDisableLogin: lang.hitch(this, this.setDisableLogin)
 			});
 
 			this.registerView(this.rootView);
@@ -90,16 +92,26 @@ define(['dojo/_base/declare',
 			return xhrManager.send('GET', 'rest/v1.0/Credentials/getServiceCreds',{});
 		},
 
-		saveServiceCreds: function(key, secret, redir, color, param){
-			var params = {key: key, secret: secret, redir: redir, color: color, param: param};
+		saveServiceCreds: function(key, secret, redir, param){
+			var params = {key: key, secret: secret, redir: redir, param: param};
 			return xhrManager.send('POST', 'rest/v1.0/Database/saveServiceCredsObj', params);
 		},
+		
+		saveNewAccount: function(color, login, auth, param){
+			var params = {color: color, login: login, auth: auth, param: param};
+			return xhrManager.send('POST', 'rest/v1.0/Database/saveNewAccount', params);
+		},
 
-		editServiceCreds: function(key, color, param){
-			var params = {key: key, color: color, param: param};
+		editServiceCreds: function(uuid, color, param){
+			var params = {uuid: uuid, color: color, param: param};
 			return xhrManager.send('POST', 'rest/v1.0/Database/editServiceCreds', params);
 		},
 
+		deleteAccountCred: function(obj){
+			var params = {obj: obj};
+			return xhrManager.send('POST', 'rest/v1.0/Database/deleteAccountCred', params);
+		},
+		
 		deleteServiceCred: function(obj){
 			var params = {obj: obj};
 			return xhrManager.send('POST', 'rest/v1.0/Database/deleteServiceCred', params);
@@ -110,9 +122,9 @@ define(['dojo/_base/declare',
 			return xhrManager.send('GET', 'rest/v1.0/Database/getDomain', params);
 		},
 
-		setMainLogin: function(obj){
+		setDisableLogin: function(obj){
 			var params = {obj: obj};
-			return xhrManager.send('POST', 'rest/v1.0/Database/setMainLogin', params);
+			return xhrManager.send('POST', 'rest/v1.0/Database/setDisableLogin', params);
 		}
 	})
 });

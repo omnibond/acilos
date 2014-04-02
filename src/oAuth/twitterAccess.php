@@ -26,8 +26,7 @@
 */
 
 require_once('../cron/logs/KLogger.php');
-//$log   = KLogger::instance('../logs/oAuth');
-//$logPrefix = '['.basename(__FILE__).']:';
+
 require_once('../vendor/autoload.php');
 require_once('../cron/objects/authObject.php');
 
@@ -47,14 +46,14 @@ if(isset($_GET['appKey']) && isset($_GET['appSecret'])){
 	$_SESSION['oauth_token'] = $token = $request_token['oauth_token'];
 
 	$_SESSION['oauth_token_secret'] = $request_token['oauth_token_secret'];
-
+	
 	$array = array(
 		"appKey" => $_GET['appKey'],
 		"appSecret" => $_GET['appSecret'],
 		"redirectURL" => $_GET['twitterRedirect'],
 		"oauthToken" => $_SESSION['oauth_token'],
 		"oauthSecret" => $_SESSION['oauth_token_secret'],
-		"color" => $_GET['color']
+		"state" => $_GET['state']
 	);
 	//$log->logInfo("$logPrefix array contains ",$array);
 	$json = json_encode($array);
@@ -93,32 +92,49 @@ if(isset($_REQUEST['oauth_verifier'])){
 	$credObj = file_get_contents("../serviceCreds.json");
 	$credObj = json_decode($credObj, true);
 	
-	$temp;
+	$tempApp;
 	for($g=0; $g<count($credObj['twitter']); $g++){
 		if($credObj['twitter'][$g]['key'] == $obj['appKey']){
-			$temp = $credObj['twitter'][$g];
+			$tempApp = $credObj['twitter'][$g];
 			break;
 		}
 	}
+	
 	/* Create TwitteroAuth object with app key/secret and token key/secret from default phase */
 	$connection = new TwitterOAuth($obj['appKey'], $obj['appSecret'], $obj['oauthToken'], $obj['oauthSecret']);
 	/* Request access tokens from twitter */
 	$access_token = $connection->getAccessToken($_REQUEST['oauth_verifier']);
+
 	$account = $connection->get('account/verify_credentials');
 	
 	if(isset($access_token['oauth_token'])){
 		$obj['accessToken'] = $access_token['oauth_token'];
 		$obj['accessSecret'] = $access_token['oauth_token_secret'];
 		
-		if(isset($temp['user'])){
-			//if the ids do not match
-			if($temp['user'] != $account->id){
-				//you are not the correct facebook user
-				header('Location: ../login.php?error=1&service=twitter');
-				//just to be safe return here
-				return;
+		$found = "false";
+		$open = 0;
+		//check all accounts for this user if there are accounts
+		if(isset($tempApp['accounts']) && count($tempApp['accounts']) > 0){
+			for($j=0; $j<count($tempApp['accounts']); $j++){
+				if($tempApp['accounts'][$j]['user'] == $account->id && $tempApp['accounts'][$j]['loginDisallow'] == "false"){
+					//if we find the user $temp is now that user
+					$temp = $tempApp['accounts'][$j];
+					$found = "true";
+					break;
+				}
+				if($tempApp['accounts'][$j]['authenticated'] == "false"){
+					$open = $j;
+				}
 			}
-		//else if the id is empty, this is the first time
+			//if we loop through everyone and done find the user
+			if($found == "false"){
+				if($obj['state'] == "outside"){
+					header('Location: ../login.php?error=1&service=twitter');
+					return;
+				}
+			}
+		}else{
+			$j = 0;
 		}
 		
 		if($credObj['login'] == "first"){
@@ -130,12 +146,26 @@ if(isset($_REQUEST['oauth_verifier'])){
 					
 		$temp['accessToken'] = $access_token['oauth_token'];
 		$temp['accessSecret'] = $access_token['oauth_token_secret'];
+		$temp['key'] = $obj['appKey'];
+		$temp['secret'] = $obj['appSecret'];
 		$temp['expiresAt'] = `date +%s`;
 		$temp['user'] = $account->id;
 		$temp['image'] = $account->profile_image_url;
 		$temp['name'] = $account->screen_name;
+		$temp['authenticated'] = "true";
+		$temp['loginDisallow'] = "false";
+		if(!isset($temp['color'])){
+			$temp['color'] = "#E32252";
+		}
+		if(!isset($temp['uuid'])){
+			$temp['uuid'] = uniqid();
+		}
 		
-		$credObj['twitter'][$g] = $temp;
+		if($found == "false"){
+			$credObj['twitter'][0]['accounts'][$open] = $temp;
+		}else{
+			$credObj['twitter'][0]['accounts'][$j] = $temp;
+		}
 		
 		file_put_contents("../serviceCreds.json", json_encode($credObj));
 		

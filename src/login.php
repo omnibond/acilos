@@ -307,48 +307,116 @@
 			
 			loginButtonsNitems = function(param, div, serviceCreds, mainDiv){
 				if(param == "facebook"){
-					var button = new Button({
-						"class": "loginLogoButton",
-						onClick: lang.hitch(null, function(){
-							window.location = serviceCreds[param][0]["auth"];
-						},serviceCreds, param)
-					});
-					var faceDiv = domConstruct.create("div", {"class":"loginLogo", innerHTML: "<img src=app/resources/img/facebookLogin.png>"});
-					button.domNode.appendChild(faceDiv);
-					div.appendChild(button.domNode);
+					if('<?php echo $login; ?>' == "first"){
+						var button = new Button({
+							"class": "loginLogoButton",
+							onClick: lang.hitch(null, function(){
+								window.location = serviceCreds[param][0]["auth"] + "&state=outside";
+							},serviceCreds, param)
+						});
+						var faceDiv = domConstruct.create("div", {"class":"loginLogo", innerHTML: "<img src=app/resources/img/facebookLogin.png>"});
+						button.domNode.appendChild(faceDiv);
+						div.appendChild(button.domNode);
+					}else{						
+						for(var o = 0; o < serviceCreds[param][0]["accounts"].length; o++){
+							if(serviceCreds[param][0]["accounts"][o].authenticated == "true"){
+								var button = new Button({
+									"class": "loginLogoButton",
+									onClick: lang.hitch(null, function(){
+										window.location = serviceCreds[param][0]["auth"] + "&state=outside";
+									},serviceCreds, param)
+								});
+								var faceDiv = domConstruct.create("div", {"class":"loginLogo", innerHTML: "<img src=app/resources/img/facebookLogin.png>"});
+								button.domNode.appendChild(faceDiv);
+								div.appendChild(button.domNode);
+								break;
+							}
+						}
+					}
 				}
 				if(param == "twitter"){
-					var button = new Button({
-						"class": "loginLogoButton",
-						onClick: lang.hitch(null, function(){
-							window.location = serviceCreds[param][0]["auth"];
-						},serviceCreds, param)
-					});
-					var twitDiv = domConstruct.create("div", {"class":"loginLogo", innerHTML: "<img src=app/resources/img/twitterLogin.png>"});
-					button.domNode.appendChild(twitDiv);
-					div.appendChild(button.domNode);	
+					if('<?php echo $login; ?>' == "first"){
+						var button = new Button({
+							"class": "loginLogoButton",
+							onClick: lang.hitch(null, function(){
+								window.location = serviceCreds[param][0]["auth"] + "&state=outside";
+							},serviceCreds, param)
+						});
+						var twitDiv = domConstruct.create("div", {"class":"loginLogo", innerHTML: "<img src=app/resources/img/twitterLogin.png>"});
+						button.domNode.appendChild(twitDiv);
+						div.appendChild(button.domNode);
+					}else{
+						for(var o = 0; o < serviceCreds[param][0]["accounts"].length; o++){
+							if(serviceCreds[param][0]["accounts"][o].authenticated == "true"){
+								var button = new Button({
+									"class": "loginLogoButton",
+									onClick: lang.hitch(null, function(){
+										window.location = serviceCreds[param][0]["auth"] + "&state=outside";
+									},serviceCreds, param)
+								});
+								var twitDiv = domConstruct.create("div", {"class":"loginLogo", innerHTML: "<img src=app/resources/img/twitterLogin.png>"});
+								button.domNode.appendChild(twitDiv);
+								div.appendChild(button.domNode);
+								break;
+							}
+						}
+					}					
 				}
 				if(param == "instagram"){
-					var button = new Button({
-						"class": "loginLogoButton",
-						onClick: lang.hitch(null, function(){
-							window.location = serviceCreds[param][0]["auth"];
-						},serviceCreds, param)
-					});
-					var instaDiv = domConstruct.create("div", {"class":"loginLogo", innerHTML: "<img src=app/resources/img/instagramLogin.png>"});
-					button.domNode.appendChild(instaDiv);
-					div.appendChild(button.domNode);
+					if('<?php echo $login; ?>' == "first"){
+						var button = new Button({
+							"class": "loginLogoButton",
+							onClick: lang.hitch(null, function(){
+								window.location = serviceCreds[param][0]["auth"] + "&state=outside";
+							},serviceCreds, param)
+						});
+						var instaDiv = domConstruct.create("div", {"class":"loginLogo", innerHTML: "<img src=app/resources/img/instagramLogin.png>"});
+						button.domNode.appendChild(instaDiv);
+						div.appendChild(button.domNode);
+					}else{
+						for(var o = 0; o < serviceCreds[param][0]["accounts"].length; o++){
+							if(serviceCreds[param][0]["accounts"][o].authenticated == "true"){
+								var button = new Button({
+									"class": "loginLogoButton",
+									onClick: lang.hitch(null, function(){
+										window.location = serviceCreds[param][0]["auth"] + "&state=outside";
+									},serviceCreds, param)
+								});
+								var instaDiv = domConstruct.create("div", {"class":"loginLogo", innerHTML: "<img src=app/resources/img/instagramLogin.png>"});
+								button.domNode.appendChild(instaDiv);
+								div.appendChild(button.domNode);
+								break;
+							}
+						}
+					}
 				}
 				if(param == "linkedin"){
-					var button = new Button({
-						"class": "loginLogoButton",
-						onClick: lang.hitch(null, function(){
-							window.location = serviceCreds[param][0]["auth"];
-						},serviceCreds, param)
-					});
-					var linkDiv = domConstruct.create("div", {"class":"loginLogo", innerHTML: "<img src=app/resources/img/linkedinLogin.png>"});
-					button.domNode.appendChild(linkDiv);
-					div.appendChild(button.domNode);						
+					if('<?php echo $login; ?>' == "first"){
+						var button = new Button({
+							"class": "loginLogoButton",
+							onClick: lang.hitch(null, function(){
+								window.location = serviceCreds[param][0]["auth"] + "&state=outside";
+							},serviceCreds, param)
+						});
+						var linkDiv = domConstruct.create("div", {"class":"loginLogo", innerHTML: "<img src=app/resources/img/linkedinLogin.png>"});
+						button.domNode.appendChild(linkDiv);
+						div.appendChild(button.domNode);	
+					}else{
+						for(var o = 0; o < serviceCreds[param][0]["accounts"].length; o++){
+							if(serviceCreds[param][0]["accounts"][o].authenticated == "true"){
+								var button = new Button({
+									"class": "loginLogoButton",
+									onClick: lang.hitch(null, function(){
+										window.location = serviceCreds[param][0]["auth"] + "&state=outside";
+									},serviceCreds, param)
+								});
+								var linkDiv = domConstruct.create("div", {"class":"loginLogo", innerHTML: "<img src=app/resources/img/linkedinLogin.png>"});
+								button.domNode.appendChild(linkDiv);
+								div.appendChild(button.domNode);
+								break;
+							}
+						}
+					}
 				}
 				mainDiv.appendChild(div);
 			},

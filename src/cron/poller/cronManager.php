@@ -224,10 +224,17 @@ function getUserFeed(){
 	$file = file_get_contents($filename);
 
 	$tokenObject = json_decode($file, true);
-	$instagramTokens = $tokenObject['instagram'];
-
-	foreach($instagramTokens as $obj){	
-		$url = "https://api.instagram.com/v1/users/self/feed?access_token=".$obj['accessToken'];
+	
+	if(count($tokenObject['instagram']) > 0){
+		if(isset($tokenObject['instagram'][0]['accounts'])){
+			$accts = $tokenObject['instagram'][0]['accounts'];
+		}else{
+			$accts = array();
+		}
+	}
+	
+	for($h=0; $h < count($accts); $h++){
+		$url = "https://api.instagram.com/v1/users/self/feed?access_token=".$accts[$h]['accessToken'];
 
 		$ch = curl_init($url);
 
@@ -237,15 +244,12 @@ function getUserFeed(){
 
 		$var = json_decode($res, true);
 
-		normalizeInstaObject($var['data'], $obj);
+		normalizeInstaObject($var['data'], $accts[$h]);
 	}
 }
 
 function normalizeInstaObject($objArray, $account){
 	echo "normal insta";
-	//global //$log;
-	//global //?$logPrefix;
-	//$log->logInfo($logPrefix."There are " . count($objArray) . " objects in the Instagram timeline");
 
 	$mediaArray = array();
 	for($k = 0; $k < count($objArray); $k++){
@@ -299,10 +303,17 @@ function getUserNewsFeed(){
 	$file = file_get_contents($filename);
 
 	$tokenObject = json_decode($file, true);
-	$facebookTokens = $tokenObject['facebook'];
-
-	foreach($facebookTokens as $obj){
-		$url = 'https://graph.facebook.com/me/home?&access_token=' . $obj['accessToken'];
+	
+	if(count($tokenObject['facebook']) > 0){
+		if(isset($tokenObject['facebook'][0]['accounts'])){
+			$accts = $tokenObject['facebook'][0]['accounts'];
+		}else{
+			$accts = array();
+		}
+	}
+	
+	for($h=0; $h < count($accts); $h++){
+		$url = 'https://graph.facebook.com/me/home?&access_token=' . $accts[$h]['accessToken'];
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$response = curl_exec($ch);
@@ -313,7 +324,7 @@ function getUserNewsFeed(){
 		#print_r($var);
 
 		#take off the data layer so that 90% of the obj is top level
-		normalizeNewsFeedObj($var['data'], $obj);
+		normalizeNewsFeedObj($var['data'], $accts[$h]);
 	}
 }
 //FACEBOOK STOP ----------------------------------------------------------------------------
@@ -345,10 +356,17 @@ function getUserTimeline(){
 	$file = file_get_contents($filename);
 
 	$tokenObject = json_decode($file, true);
-	$twitterTokens = $tokenObject['twitter'];
-
-	foreach($twitterTokens as $obj){
-		$connection = new TwitterOAuth($obj['key'], $obj['secret'], $obj['accessToken'], $obj['accessSecret']);
+	
+	if(count($tokenObject['twitter']) > 0){
+		if(isset($tokenObject['twitter'][0]['accounts'])){
+			$accts = $tokenObject['twitter'][0]['accounts'];
+		}else{
+			$accts = array();
+		}
+	}
+	
+	for($h=0; $h < count($accts); $h++){
+		$connection = new TwitterOAuth($accts[$h]['key'], $accts[$h]['secret'], $accts[$h]['accessToken'], $accts[$h]['accessSecret']);
 		$connection->host = "https://api.twitter.com/1.1";
 
 		$method = "/statuses/home_timeline";
@@ -363,7 +381,7 @@ function getUserTimeline(){
 			//refresh token or call get new token again
 			//file_get_contents("../../oAuth/twitterAccess.php?appKey=" + $obj['appKey'] + "&appSecret=" + $obj['appSecret']);
 		}else{
-			normalizeTwitterObject($array, $obj);	    
+			normalizeTwitterObject($array, $accts[$h]);	    
 		}
 	}
 }
@@ -477,18 +495,25 @@ function getPersonalFeed(){
 
 	$filename = "../../serviceCreds.json";
 	$file = file_get_contents($filename);
-
+	
 	$tokenObject = json_decode($file, true);
-	$linkedinTokens = $tokenObject['linkedin'];
-
-	foreach($linkedinTokens as $obj){
-		$feed = linkedInFetchWithParams('GET', '/v1/people/~/network/updates', $obj['accessToken'], 0, 100);
+	
+	if(count($tokenObject['linkedin']) > 0){
+		if(isset($tokenObject['linkedin'][0]['accounts'])){
+			$accts = $tokenObject['linkedin'][0]['accounts'];
+		}else{
+			$accts = array();
+		}
+	}
+	
+	for($h=0; $h < count($accts); $h++){
+		$feed = linkedInFetchWithParams('GET', '/v1/people/~/network/updates', $accts[$h]['accessToken'], 0, 100);
 
 		$feed = objectToArray($feed);
 
 		#print_r($feed);
 
-		normalizeLinkedinObj($feed['values'], $obj);
+		normalizeLinkedinObj($feed['values'], $accts[$h]);
 	}
 }
 
@@ -499,10 +524,17 @@ function getDiscussionObjects(){
 	$file = file_get_contents($filename);
 
 	$tokenObject = json_decode($file, true);
-	$linkedinTokens = $tokenObject['linkedin'];
-
-	foreach($linkedinTokens as $obj){	
-		$user = linkedInFetch('GET', '/v1/people/~/group-memberships', $obj['accessToken']);
+	
+	if(count($tokenObject['linkedin']) > 0){
+		if(isset($tokenObject['linkedin'][0]['accounts'])){
+			$accts = $tokenObject['linkedin'][0]['accounts'];
+		}else{
+			$accts = array();
+		}
+	}
+	
+	for($h=0; $h < count($accts); $h++){	
+		$user = linkedInFetch('GET', '/v1/people/~/group-memberships', $accts[$h]['accessToken']);
 		#print_r($token);
 		$user = objectToArray($user);
 
@@ -560,7 +592,7 @@ function getDiscussionObjects(){
 			$counter++;
 			}
 		}
-		normalizeDiscussionObj($groupArr, $obj);
+		normalizeDiscussionObj($groupArr, $accts[$h]);
 	}
 }
 

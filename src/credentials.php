@@ -360,18 +360,14 @@
 								obj['facebook'] = {};
 								obj['facebook']['key'] = faceKey.get("value");
 								obj['facebook']['secret'] = faceSecret.get("value");
-								obj['facebook']['redir'] = faceRedirect.get("value");
-								obj['facebook']['color'] = "#0066FF";							
-								obj['facebook']['login'] = "first";							
+								obj['facebook']['redir'] = faceRedirect.get("value");					
 							}
 							
 							if(linkedKey.get("value") != "" && linkedSecret.get("value") != ""){
 								obj['linkedin'] = {};
 								obj['linkedin']['key'] = linkedKey.get("value");
 								obj['linkedin']['secret'] = linkedSecret.get("value");
-								obj['linkedin']['redir'] = linkedRedirect.get("value");
-								obj['linkedin']['color'] = "#B33DA5";	
-								obj['linkedin']['login'] = "first";			
+								obj['linkedin']['redir'] = linkedRedirect.get("value");		
 							}
 							
 							if(twitterKey.get("value") != "" && twitterSecret.get("value") != ""){
@@ -379,17 +375,13 @@
 								obj['twitter']['key'] = twitterKey.get("value");
 								obj['twitter']['secret'] = twitterSecret.get("value");
 								obj['twitter']['redir'] = twitterRedirect.get("value");
-								obj['twitter']['color'] = "#E32252";	
-								obj['twitter']['login'] = "first";			
 							}
 							
 							if(instaKey.get("value") != "" && instaSecret.get("value") != ""){
 								obj['instagram'] = {};
 								obj['instagram']['key'] = instaKey.get("value");
 								obj['instagram']['secret'] = instaSecret.get("value");
-								obj['instagram']['redir'] = instaRedirect.get("value");
-								obj['instagram']['color'] = "#F66733";	
-								obj['instagram']['login'] = "first";		
+								obj['instagram']['redir'] = instaRedirect.get("value");	
 							}
 							
 							saveServiceCreds(obj).then(lang.hitch(null, function(errorItem, obj){

@@ -158,10 +158,17 @@ function getFriendsList($service){
 				echo ("Cannot open the file: " . $filename);
 			}else{
 				$tokenObject = json_decode($file, true);
-				$facebookTokens =$tokenObject['facebook'];
-
-				foreach($facebookTokens as $obj){
-					$url = 'https://graph.facebook.com/me/friends?fields=id,name,location,hometown&access_token=' . $obj['accessToken'];
+				
+				if(count($tokenObject['facebook']) > 0){
+					if(isset($tokenObject['facebook'][0]['accounts'])){
+						$accts = $tokenObject['facebook'][0]['accounts'];
+					}else{
+						$accts = array();
+					}
+				}
+	
+				for($h=0; $h < count($accts); $h++){
+					$url = 'https://graph.facebook.com/me/friends?fields=id,name,location,hometown&access_token=' . $accts[$h]['accessToken'];
 					$ch = curl_init($url);
 					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 					$response = curl_exec($ch);
@@ -205,11 +212,18 @@ function getFriendsList($service){
 				echo "Cannot open file $filename";
 			}else{
 				$tokenObject = json_decode($file, true);
-				$twitterTokens = $tokenObject['twitter'];
-
-				foreach($twitterTokens as $obj){
+				
+				if(count($tokenObject['twitter']) > 0){
+					if(isset($tokenObject['twitter'][0]['accounts'])){
+						$accts = $tokenObject['twitter'][0]['accounts'];
+					}else{
+						$accts = array();
+					}
+				}
+	
+				for($h=0; $h < count($accts); $h++){
 					/* Create TwitteroAuth object with app key/secret and token key/secret from default phase */
-					$connection = new TwitterOAuth($obj['appKey'], $obj['appSecret'], $obj['accessToken'], $obj['accessSecret']);
+					$connection = new TwitterOAuth($accts[$h]['appKey'], $accts[$h]['appSecret'], $accts[$h]['accessToken'], $accts[$h]['accessSecret']);
 					$cursor = -1;
 					$returnArr = array();
 					do{
@@ -259,10 +273,17 @@ function getFriendsList($service){
 				echo(json_encode($returnArr['Instagram'] = array("false" =>"Cannot open the file")));
 			}else{
 				$tokenObject = json_decode($file, true);
-				$instagramTokens = $tokenObject['instagram'];
-
-				foreach($instagramTokens as $obj){
-					$url = "https://api.instagram.com/v1/users/".$obj['user_id']."/follows?access_token=".$obj['accessToken'];
+				
+				if(count($tokenObject['instagram']) > 0){
+					if(isset($tokenObject['instagram'][0]['accounts'])){
+						$accts = $tokenObject['instagram'][0]['accounts'];
+					}else{
+						$accts = array();
+					}
+				}
+	
+				for($h=0; $h < count($accts); $h++){
+					$url = "https://api.instagram.com/v1/users/".$accts[$h]['user_id']."/follows?access_token=".$accts[$h]['accessToken'];
 
 					$ch = curl_init($url);
 
@@ -307,9 +328,17 @@ function getFriendsList($service){
 			}else{
 				$tokenObject = json_decode($file, true);
 				$linkedinTokens = $tokenObject['linkedin'];
-
-				foreach($linkedinTokens as $obj){
-					$user = linkedInFetch('GET', '/v1/people/~/connections', $obj['accessToken'], true);
+				
+				if(count($tokenObject['linkedin']) > 0){
+					if(isset($tokenObject['linkedin'][0]['accounts'])){
+						$accts = $tokenObject['linkedin'][0]['accounts'];
+					}else{
+						$accts = array();
+					}
+				}
+	
+				for($h=0; $h < count($accts); $h++){
+					$user = linkedInFetch('GET', '/v1/people/~/connections', $accts[$h]['accessToken'], true);
 
 					$user = objectToArray($user);
 

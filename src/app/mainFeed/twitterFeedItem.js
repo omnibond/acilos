@@ -156,14 +156,17 @@ define([
 
 				var dataObj = this.data.hits.hits[this.counter]._source;
 
-				for(var g = 0; g < this.authObj['twitter'].length; g++){
-					if(this.authObj['twitter'][g]['user'] == dataObj.mainAccountID){
-						this.domNode.style.borderLeft = "5px solid " + this.authObj['twitter'][g]['color'];
-						this.domNode.style.marginBottom = "10px";
-						break;
-					}else{
-						this.domNode.style.borderLeft = "5px solid " + dataObj.mainAccountColor;
-						this.domNode.style.marginBottom = "10px";
+				if(this.authObj['twitter'].length > 0){
+					var acctArr = this.authObj['twitter'][0]['accounts'];
+					for(var g = 0; g < acctArr.length; g++){
+						if(acctArr[g]['user'] == dataObj.mainAccountID){
+							this.domNode.style.borderLeft = "5px solid " + acctArr[g]['color'];
+							this.domNode.style.marginBottom = "10px";
+							break;
+						}else{
+							this.domNode.style.borderLeft = "5px solid " + dataObj.mainAccountColor;
+							this.domNode.style.marginBottom = "10px";
+						}
 					}
 				}
 				

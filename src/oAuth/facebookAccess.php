@@ -25,8 +25,7 @@
 */
 
 require_once('../cron/logs/KLogger.php');
-//$log   = KLogger::instance('../logs/oAuth');
-//$logPrefix = '['.basename(__FILE__).']:';
+
 require_once('../vendor/autoload.php');
 require_once('../cron/objects/authObject.php');
 
@@ -42,21 +41,15 @@ session_start();
 		$credObj = file_get_contents("../serviceCreds.json");
 		$credObj = json_decode($credObj, true);
 		
-		$temp;
-		for($g=0; $g<count($credObj['facebook']); $g++){
-			if($credObj['facebook'][$g]['key'] == $state){
-				$temp = $credObj['facebook'][$g];
-				break;
-			}
-		}
-		
-		#with the new code we set up the post to get the accessToken from google
+		#with the new code we set up the post to get the accessToken from facebook
+		$app = $credObj['facebook'][0];
 		$params = array(
 			"code" => $code,
-			"client_id" => $temp['key'],
-			"client_secret" => $temp['secret'],
-			"redirect_uri" => $temp['redir']
+			"client_id" => $app['key'],
+			"client_secret" => $app['secret'],
+			"redirect_uri" => $app['redir']
 		);
+		$tempApp = $credObj['facebook'][0]['accounts'];
 		
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_POST, 1);
@@ -66,8 +59,6 @@ session_start();
 		$response = curl_exec($ch);
 		curl_close($ch);
 		
-		//$log->logInfo("$logPrefix curl_exec complete, parsed params",$response);
-
 		#make the response into an array we can use more easily
 		$vars = explode('&', $response);
 		$accessToken = explode('=', $vars[0]);
@@ -76,7 +67,7 @@ session_start();
 		$graph_url = "https://graph.facebook.com/me?access_token=" . $accessToken[1];
 		$user = json_decode(file_get_contents($graph_url));
 		
-		$url = "https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=".$temp['key']."&client_secret=".$temp['secret']."&fb_exchange_token=".$accessToken[1];
+		$url = "https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=".$app['key']."&client_secret=".$app['secret']."&fb_exchange_token=".$accessToken[1];
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$response = curl_exec($ch);
@@ -89,15 +80,31 @@ session_start();
 			$arr[$two[0]] = $two[1];
 		}
 
-		if(isset($arr['access_token'])){
-			if(isset($temp['user'])){
-				//if the ids do not match
-				if($temp['user'] != $user->id){
-					//you are not the correct facebook user
-					header('Location: ../login.php?error=1&service=facebook');
-					//just to be safe return here
-					return;
+		if(isset($arr['access_token'])){			
+			$found = "false";
+			$open = 0;
+			//check all accounts for this user if there are accounts
+			if(isset($tempApp['accounts']) && count($tempApp['accounts']) > 0){
+				for($j=0; $j<count($tempApp['accounts']); $j++){
+					if($tempApp['accounts'][$j]['user'] == $user->id && $tempApp['accounts'][$j]['loginDisallow'] == "false"){
+						//if we find the user $temp is now that user
+						$temp = $tempApp['accounts'][$j];
+						$found = "true";
+						break;
+					}
+					if($tempApp['accounts'][$j]['authenticated'] == "false"){
+						$open = $j;
+					}
 				}
+				//if we loop through everyone and done find the user
+				if($found == "false"){
+					if($state == "outside"){
+						header('Location: ../login.php?error=1&service=facebook');
+						return;
+					}
+				}
+			}else{
+				$j = 0;
 			}
 			
 			if($credObj['login'] == "first"){
@@ -112,8 +119,20 @@ session_start();
 			$temp['user'] = $user->id;
 			$temp['image'] = $user->id;
 			$temp['name'] = $user->name;
+			$temp['authenticated'] = "true";
+			$temp['loginDisallow'] = "false";
+			if(!isset($temp['color'])){
+				$temp['color'] = "#0066FF";
+			}
+			if(!isset($temp['uuid'])){
+				$temp['uuid'] = uniqid();
+			}
 			
-			$credObj['facebook'][$g] = $temp;
+			if($found == "false"){
+				$credObj['facebook'][0]['accounts'][$open] = $temp;
+			}else{
+				$credObj['facebook'][0]['accounts'][$j] = $temp;
+			}
 			
 			file_put_contents("../serviceCreds.json", json_encode($credObj));
 

@@ -35,7 +35,7 @@ define(['dojo/_base/declare',
 		"app/SelEdgeToEdgeList",
 		"dojox/mobile/ListItem",
 		"dojox/mobile/Button",
-		"dojox/mobile/RadioButton",
+		"dojox/mobile/CheckBox",
 
 		'app/util/xhrManager'
 ], function(
@@ -51,7 +51,7 @@ define(['dojo/_base/declare',
 		EdgeToEdgeList,
 		ListItem, 
 		Button, 
-		RadioButton, 
+		CheckBox, 
 
 		xhrManager
 ) {
@@ -116,22 +116,22 @@ define(['dojo/_base/declare',
 				})
 				list.addChild(toDoLabel);
 				
-				if(d == 0){
-					var nub = true;
+				if(this.authCreds[param][d]['loginDisallow'] == "true"){
+					var allow = true;
 				}else{
-					var nub = false;
+					var allow = false;
 				}
-				var radio = new RadioButton({
+				var check = new CheckBox({
 					name: param,
-					checked: nub,
+					checked: allow,
 					style: "top:18px;position:absolute;width:20px;height:20px",
 					onClick: lang.hitch(this, function(param, d){
 						console.log("clicked");
 						this.authCreds[param][d].param = param;
-						this.setMainLogin(this.authCreds[param][d]);
+						this.setDisableLogin(this.authCreds[param][d]);
 					}, param, d)
 				});
-				var radioLabel = domConstruct.create("div", {style:"top:6px;position:absolute;margin-left:30px; margin-top: 4px", innerHTML:"Main " + this.capitalizeFirstLetter(param) + " login"});
+				var checkLabel = domConstruct.create("div", {style:"top:6px;position:absolute;margin-left:30px; margin-top: 4px", innerHTML:"Disable login"});
 				loginHolder = new ListItem({
 					style:"border:none"
 				})
@@ -151,7 +151,7 @@ define(['dojo/_base/declare',
 							var refresh = new Button({
 								style: "width:68px;height:50px;margin-right:10px; display: block",
 								onClick: lang.hitch(this, function(param, d){
-									window.location = this.authCreds[param][d]["auth"];
+									window.location = this.authCreds[param][d]["auth"]+"&state=inside";
 								}, param, d)
 							});
 							var faceDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/facebookLoginHalfSize.png>"});
@@ -170,8 +170,8 @@ define(['dojo/_base/declare',
 							list.addChild(item);
 							list.addChild(statusItem);
 						}else{
-							loginHolder.addChild(radio);
-							loginHolder.domNode.appendChild(radioLabel);
+							loginHolder.addChild(check);
+							loginHolder.domNode.appendChild(checkLabel);
 							if(this.authCreds[param][d]['status'] === "good"){
 								var date = new Date(this.authCreds[param][d]['expiresAt'] * 1000);
 								var str = "Token Expires: " + date;
@@ -188,7 +188,7 @@ define(['dojo/_base/declare',
 							var refresh = new Button({
 								style: "width:68px;height:50px;margin-right:10px; display: block",
 								onClick: lang.hitch(this, function(param, d){
-									window.location = this.authCreds[param][d]["auth"];
+									window.location = this.authCreds[param][d]["auth"]+"&state=inside";
 								}, param, d)
 							});
 							var faceDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/facebookLoginHalfSize.png>"});
@@ -228,7 +228,7 @@ define(['dojo/_base/declare',
 							var refresh = new Button({
 								style: "width:68px;height:50px;margin-right:10px; display: block",
 								onClick: lang.hitch(this, function(param, d){
-									window.location = this.authCreds[param][d]["auth"];
+									window.location = this.authCreds[param][d]["auth"]+"&state=inside";
 								}, param, d)
 							});
 							var twitDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/twitterLoginHalfSize.png>"});
@@ -249,8 +249,8 @@ define(['dojo/_base/declare',
 							list.addChild(item);
 							list.addChild(statusItem);
 						}else{
-							loginHolder.addChild(radio);
-							loginHolder.domNode.appendChild(radioLabel);
+							loginHolder.addChild(check);
+							loginHolder.domNode.appendChild(checkLabel);
 							if(this.authCreds[param][d]['status'] === "good"){
 								var str = " and expires when revoked";
 							}else{
@@ -265,7 +265,7 @@ define(['dojo/_base/declare',
 							var refresh = new Button({
 								style: "width:68px;height:50px;margin-right:10px; display: block",
 								onClick: lang.hitch(this, function(param, d){
-									window.location = this.authCreds[param][d]["auth"];
+									window.location = this.authCreds[param][d]["auth"]+"&state=inside";
 								}, param, d)
 							});
 							var twitDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/twitterLoginHalfSize.png>"});
@@ -307,7 +307,7 @@ define(['dojo/_base/declare',
 							var refresh = new Button({
 								style: "width:68px;height:50px;margin-right:10px",
 								onClick: lang.hitch(this, function(param, d){
-									window.location = this.authCreds[param][d]["auth"];
+									window.location = this.authCreds[param][d]["auth"]+"&state=inside";
 								}, param, d)
 							});
 							var instaDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/instagramLoginHalfSize.png>"});
@@ -326,8 +326,8 @@ define(['dojo/_base/declare',
 							list.addChild(item);
 							list.addChild(statusItem);
 						}else{
-							loginHolder.addChild(radio);
-							loginHolder.domNode.appendChild(radioLabel);
+							loginHolder.addChild(check);
+							loginHolder.domNode.appendChild(checkLabel);
 							if(this.authCreds[param][d]['status'] === "good"){
 								var str = " and expires when revoked";
 							}else{
@@ -343,7 +343,7 @@ define(['dojo/_base/declare',
 							var refresh = new Button({
 								style: "width:68px;height:50px;margin-right:10px",
 								onClick: lang.hitch(this, function(param, d){
-									window.location = this.authCreds[param][d]["auth"];
+									window.location = this.authCreds[param][d]["auth"]+"&state=inside";
 								}, param, d)
 							});
 							var instaDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/instagramLoginHalfSize.png>"});
@@ -383,7 +383,7 @@ define(['dojo/_base/declare',
 							var refresh = new Button({
 								style: "width:68px;height:50px;margin-right:10px; display: block",
 								onClick: lang.hitch(this, function(param, d){
-									window.location = this.authCreds[param][d]["auth"];
+									window.location = this.authCreds[param][d]["auth"]+"&state=inside";
 								}, param, d)
 							});
 							var linkDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/linkedinLoginHalfSize.png>"});
@@ -402,8 +402,8 @@ define(['dojo/_base/declare',
 							list.addChild(item);
 							list.addChild(statusItem);
 						}else{
-							loginHolder.addChild(radio);
-							loginHolder.domNode.appendChild(radioLabel);
+							loginHolder.addChild(check);
+							loginHolder.domNode.appendChild(checkLabel);
 							if(this.authCreds[param][d]['status'] === "bad"){
 								statusItem = new ListItem({
 									label: "Token is expired",
@@ -423,7 +423,7 @@ define(['dojo/_base/declare',
 							var refresh = new Button({
 								style: "width:68px;height:50px;margin-right:10px; display: block",
 								onClick: lang.hitch(this, function(param, d){
-									window.location = this.authCreds[param][d]["auth"];
+									window.location = this.authCreds[param][d]["auth"]+"&state=inside";
 								}, param, d)
 							});
 							var linkDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/linkedinLoginHalfSize.png>"});
