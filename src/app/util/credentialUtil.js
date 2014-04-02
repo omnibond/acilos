@@ -67,8 +67,7 @@ define(['dojo/_base/declare',
 			window.setInterval(lang.hitch(this, function(){
 				checkCredentials().then(lang.hitch(this, updateCredStatus));
 			//check every 30 seconds
-			//}), 90000);	
-			}), 5000);
+			}), 90000);	
 		}
 	
 	});

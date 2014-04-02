@@ -93,8 +93,9 @@ define(['require'], function (require) {
 				}
 				
 				kernel.global.notifications = {};
+					
 				credentialUtil.makeItHappen();
-				notificationUtil.makeItHappen();
+				notificationUtil.makeItHappen();					
 				cookieChecker.makeItHappen();
 			});
 		});
