@@ -54,9 +54,8 @@ define(['dojo/_base/declare',
 	
 	var passFail = function(obj){
 		if(obj['status'] == "false"){
-			window.location = "login.php";
+			window.location = "login.php?logout=true";
 		}
-		//console.log("Cookie is good");
 	};
 	
 	var cookieChecker = declare([], {

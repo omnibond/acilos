@@ -48,57 +48,27 @@ define(['dojo/_base/declare',
 	
 	//define these as normal functions that can then be called from the rest of the object
 	var checkCredentials = function(){
-		return xhrManager.send('GET', 'rest/v1.0/Credentials/checkCredentials')
+		return xhrManager.send('GET', 'rest/v1.0/Credentials/checkForServiceCreds')
 	};
 	
-	var updateNotifications = function(obj){
-		var numberNots = 0;
-		var keys = [];
-		for(var k in obj){
-			keys.push(k);
+	var updateCredStatus = function(obj){
+		kernel.global.notifications.credObj = '';
+		console.log("credStatus: ", obj);
+		if(obj['status'] == "false"){
+			window.location = "login.php?logout=true";
 		}
-		for(var x = 0; x < keys.length; x++){
-			if(obj[keys[x]]['status'] == 'bad'){
-				numberNots++;
-			}
-		}
-		if(numberNots > 0){
-			var list = query(".dmMenuBar");
-			var menuBar = list[0];
-			//if(menuBar != null){
-				menuBar.firstChild.innerHTML = "Pending ("+numberNots+")";
-			//}
-			/*
-			if(dom.byId("dojox_mobile_Pane_6") != null){
-				if(domClass.contains(dom.byId("dojox_mobile_Pane_6"), "dmMenuBar")){
-					var menuBar = dom.byId("dojox_mobile_Pane_6");
-				}else{
-					//otherwise start walking down right pane
-					var possible = dom.byId("dojox_mobile_Pane_1");
-					var out = false;
-					while(out != true){
-						possible = possible.firstChild;
-						if(domClass.contains(possible, "dmMenuBar")){
-							var menuBar = possible;
-							out = true;
-						}
-					}
-				}
-			}
-			*/
-		}
-		kernel.global.notifications.credObj = obj;
 	};
 		
 	var credentialUtil = declare([], {
 		
 		makeItHappen: function(){
-			checkCredentials().then(lang.hitch(this, updateNotifications));
+			checkCredentials().then(lang.hitch(this, updateCredStatus));
 			//still need to lang.hitch this where this is the function scope
 			window.setInterval(lang.hitch(this, function(){
-				checkCredentials().then(lang.hitch(this, updateNotifications));
-			//check every 5 minutes (cron is 5 minutes)
-			}), 300000);	
+				checkCredentials().then(lang.hitch(this, updateCredStatus));
+			//check every 30 seconds
+			//}), 90000);	
+			}), 5000);
 		}
 	
 	});

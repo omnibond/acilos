@@ -54,7 +54,22 @@ class Credentials{
                  return $status;   
             }
 	}
-
+	
+	public function checkForServiceCreds(){
+		try{
+			$credObj = file_get_contents("../../serviceCreds.json");
+			$credObj = json_decode($credObj, true);
+			foreach($credObj as $key => $value){
+				if(count($credObj[$key]) > 0){
+					return json_encode(array("status" => "true"));
+				}
+			}
+			return json_encode(array("status" => "false"));
+		}catch (Exception $e){
+			return json_encode(array("status" => "false"));
+		}
+	}
+	
 	public function getServiceCreds(){
 		$file = "../../serviceCreds.json";
 		$var = file_get_contents($file);
