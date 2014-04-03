@@ -3917,6 +3917,7 @@ select {
   margin-left: 5px;
   height: 35px;
   width: 35px;
+  margin-bottom: 10px;
 }
 .optionsButtonClass {
   background: url(../img/not-allowed-sign_small.png) no-repeat 0 0;
@@ -3949,6 +3950,7 @@ select {
   margin-left: 5px;
   height: 35px;
   width: 35px;
+  margin-bottom: 10px;
 }
 .feedNameServiceItemClass.mblListItem {
   border: none;
@@ -4049,7 +4051,7 @@ select {
 }
 .commentLikeAccordionItemClass {
   font-weight: normal;
-  background: #eeeeee;
+  background: #ffffff;
   font-size: 17px;
   margin-right: 9px;
   margin-left: 9px;

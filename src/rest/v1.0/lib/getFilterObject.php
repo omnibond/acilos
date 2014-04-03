@@ -120,21 +120,15 @@ function getFilterObject($filterObj, $from){
 	if($filterObj['start'] != "" && $filterObj['end'] != "" && $filterObj['start'] != "NaN-NaN-NaN" && $filterObj['end'] != "NaN-NaN-NaN"){
 	
 		//Code I added to convert the dates from the DatePickers to the appropriate format
-		$myDateTime = DateTime::createFromFormat('Y-m-d', $filterObj['start']);
-		$filterObj['start'] = $myDateTime->format('m/d/Y');
-		
-		$myDateTime = DateTime::createFromFormat('Y-m-d', $filterObj['end']);
-		$filterObj['end'] = $myDateTime->format('m/d/Y');
-	
-		$sArr = explode("/", $filterObj['start']);
-		$eArr = explode("/", $filterObj['end']);
-		$sDate = new DateTime($sArr[2] . "/" . $sArr[0] . "/" . $sArr[1] . " 00:00:01");
-		$eDate = new DateTime($eArr[2] . "/" . $eArr[0] . "/" . $eArr[1] . " 23:59:59");
-		array_push($searchArr['filter']['bool']['must'],
-			array("range" => array("published" =>
-			array("from" =>$sDate->format('U'),"to" => $eDate->format('U'))
-			))
-		);
+        $myStartTime = @DateTime::createFromFormat('Y-m-d H:i:s', $filterObj['start'] . " 00:00:01");
+        
+        $myEndTime = @DateTime::createFromFormat('Y-m-d H:i:s', $filterObj['end'] . " 23:59:59");
+
+        array_push($searchArr['filter']['bool']['must'],
+                array("range" => array("published" =>
+                array("from" =>$myStartTime->format('U'),"to" => $myEndTime->format('U'))
+                ))
+        );
 	}
 	#print_r($searchArr);
 	$res = $es->search($searchArr);

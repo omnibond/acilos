@@ -153,7 +153,7 @@ define(['dojo/_base/declare',
 	    		    div.transition()        
 	                   .duration(200)      
 	                   .style("opacity", .9);      
-			        div.html(d.data.NumUsers + " users")  
+			        div.html(d.data.Service + " - " + d.data.NumUsers + " users")  
 			           .style("left", (x + 100) + "px")     
 			           .style("top", (y + 150) + "px"); 
 			      })
@@ -167,7 +167,7 @@ define(['dojo/_base/declare',
 			      .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
 			      .attr("dy", ".35em")
 			      .style("text-anchor", "middle")
-			      .text(function(d) { return d.data.Service; });
+			      //.text(function(d) { return d.data.Service; });
 
 			//});
 		}	
