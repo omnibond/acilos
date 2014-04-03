@@ -143,7 +143,7 @@ class Search{
 		if($contains == "hasQuoteshasColon"){
 			$contains = "hasBoth";
 		}
-
+	
 		switch ($contains){
 			case "normal":
 				$termList = explode("+", $searchString);
@@ -220,7 +220,7 @@ class Search{
 					}
 				}
 				$searchObj["normal"] = $normObj;
-				
+
 				$response = matchQueryString($contains, $searchObj, $from);
 			break;
 

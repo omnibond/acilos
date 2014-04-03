@@ -303,6 +303,11 @@ function matchSpecificContent($termList, $from){
 				)
 			)
 		),
+		'filter' => array(
+			'or' => array(
+				
+			)
+		),
 		'sort' => array(
 			'published' => array(
 				"order" => "desc"
@@ -354,6 +359,12 @@ function matchQueryString($action, $searchObj, $from){
 				)
 			)
 		),
+		'filter' => array(
+			'bool' => array(
+				'should' => array(
+				)
+			)
+		),
 		'sort' => array(
 			'published' => array(
 				"order" => "desc"
@@ -372,7 +383,7 @@ function matchQueryString($action, $searchObj, $from){
 		
 		case "hasQuotes":
 			for($f=0; $f<count($searchObj['normal']); $f++){
-				if($searchObj['normal'][0] != ""){
+				if($searchObj['normal'][$f] != ""){
 					$temp = array("term" => array("content.queryString" => strtolower($searchObj['normal'][$f])));
 					array_push($searchArr['query']['bool']['should'], $temp);
 				}
@@ -393,12 +404,12 @@ function matchQueryString($action, $searchObj, $from){
 		
 		case "hasColon":
 			for($f=0; $f<count($searchObj['normal']); $f++){
-				if($searchObj['normal'][0] != ""){
+				if($searchObj['normal'][$f] != ""){
 					$temp = array("term" => array("content.queryString" => strtolower($searchObj['normal'][$f])));
-					array_push($searchArr['query']['bool']['should'], $temp);
+					array_push($searchArr['filter']['bool']['should'], $temp);
 				}
 			}
-
+	
 			if($searchObj['colon'] == "twitter" || $searchObj['colon'] == "Twitter" ||
 			$searchObj['colon'] == "facebook" || $searchObj['colon'] == "Facebook" ||
 			$searchObj['colon'] == "instagram" || $searchObj['colon'] == "Instagram" ||
@@ -430,9 +441,9 @@ function matchQueryString($action, $searchObj, $from){
 			}
 			
 			for($f=0; $f<count($searchObj['normal']); $f++){
-				if($searchObj['normal'][0] != ""){
+				if($searchObj['normal'][$f] != ""){
 					$temp = array("term" => array("content.queryString" => strtolower($searchObj['normal'][$f])));
-					array_push($searchArr['query']['bool']['should'], $temp);
+					array_push($searchArr['filter']['bool']['should'], $temp);
 				}
 			}
 			
