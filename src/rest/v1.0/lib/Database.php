@@ -58,6 +58,16 @@ class Database{
         }
     }
 
+	public function getHostSystem(){
+		$var = exec("uname -a | grep amzn1");
+		if($var != ""){
+			$instance = "amazon";
+		}else{
+			$instance = "other";
+		}
+		return json_encode(array("system" => $instance));
+	}
+
 	public function rebootHostSystem(){
 		#file get contents must originate from an amazon instance. 
 		$var = exec("wget -q -O - http://169.254.169.254/latest/meta-data/instance-id");

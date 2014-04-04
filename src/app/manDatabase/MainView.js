@@ -61,12 +61,9 @@ define(['dojo/_base/declare',
 ) {
 	return declare([ModuleScrollableView], {		
 		style: "overflow:scroll",
-		
-		postCreate: function(){
-			this.buildMainList();
-		},
-		
-		buildMainList: function(){
+			
+		buildMainList: function(obj){
+			console.log(obj);
 			this.mainList = new EdgeToEdgeList({ });
 			var responseList = new EdgeToEdgeList({ });
 			var responseItem = new ListItem({
@@ -74,25 +71,28 @@ define(['dojo/_base/declare',
 			});
 			responseList.addChild(responseItem);
 			
-			var item = new ListItem({
-				label: "Restart the host system",
-				clickable:true,
-				onClick: lang.hitch(this, function(responseItem){
-					this.restartHost.response = responseItem;
-					this.router.go("/RestartHost");
-				}, responseItem)
-			});
-			this.mainList.addChild(item);
-			var item = new ListItem({
-				label: "Restart the database",
-				clickable:true,
-				onClick: lang.hitch(this, function(responseItem){
-					this.restartDB.response = responseItem;
-					this.router.go("/restartDB");
-				}, responseItem)
-			});
-			this.mainList.addChild(item);
-
+			if(obj.success == "amazon"){
+				var item = new ListItem({
+					label: "Restart Amazon Instance",
+					clickable:true,
+					onClick: lang.hitch(this, function(responseItem){
+						this.restartHost.response = responseItem;
+						this.router.go("/RestartHost");
+					}, responseItem)
+				});
+				this.mainList.addChild(item);
+			}else{
+				var item = new ListItem({
+					label: "Restart the database",
+					clickable:true,
+					onClick: lang.hitch(this, function(responseItem){
+						this.restartDB.response = responseItem;
+						this.router.go("/restartDB");
+					}, responseItem)
+				});
+				this.mainList.addChild(item);
+			}
+			
 			this.mainList.addChild(responseList);
 			this.addChild(this.mainList);
 		},
@@ -100,6 +100,14 @@ define(['dojo/_base/declare',
 		activate: function() {
 			topic.publish("/dojo-mama/updateSubNav", {back: '/settings', title: "Restore previous saves"} );
 			
+			if(this.mainList){
+				this.mainList.destroyRecursive();
+				this.mainList = null;
+			}
+			
+			this.getHostSystem().then(lang.hitch(this, function(obj){
+				this.buildMainList(obj);
+			}))
 		}
 	})
 });

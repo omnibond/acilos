@@ -68,7 +68,8 @@ define(['dojo/_base/declare',
 				route: '/',
 				
 				restartHost: this.restartHost,
-				restartDB: this.restartDB
+				restartDB: this.restartDB,
+				getHostSystem: this.getHostSystem
 			});
 			this.registerView(this.rootView);
 			this.registerView(this.restartHost);
@@ -98,6 +99,10 @@ define(['dojo/_base/declare',
 		
 		restartDBase: function(){
 			return xhrManager.send('GET', 'rest/v1.0/Database/restart', {});
+		},
+		
+		getHostSystem: function(){
+			return xhrManager.send('GET', 'rest/v1.0/Database/getHostSystem', {});
 		}
 
 	})
