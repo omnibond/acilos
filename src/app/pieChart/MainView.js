@@ -72,7 +72,7 @@ define(['dojo/_base/declare',
 
 			if(this.helpDiv){
 				this.domNode.removeChild(this.helpDiv);
-				helpDiv = null;
+				this.helpDiv = null;
 			}
 
 			this.getPieChartUsers().then(lang.hitch(this, this.buildPieChart));
@@ -97,8 +97,8 @@ define(['dojo/_base/declare',
 
 			console.log("OUR DATA IS: ", data);
 
-			var width = 350,
-			    height = 350,
+			var width = this.domNode.offsetWidth - 25,
+			    height = this.domNode.offsetHeight - 25,
 			    radius = Math.min(width, height) / 2;
 
 			var color = d3.scale.ordinal()
@@ -112,10 +112,10 @@ define(['dojo/_base/declare',
 			    .sort(null)
 			    .value(function(d) { return d.NumUsers; });
 
-			this.helpDiv = domConstruct.create("div", {innerHTML: "Mouse over or tap a service to see the number of users", style: "font-weight: bold; color: #000000"});
+			this.helpDiv = domConstruct.create("div", {innerHTML: "Mouse over or tap and hold on a service to see the number of users", style: "font-weight: bold; color: #000000; text-align: center"});
 			this.domNode.appendChild(this.helpDiv);
 
-			this.div = domConstruct.create("div", {id: "blah"});
+			this.div = domConstruct.create("div", {id: "blah", style: "text-align: center"});
 			this.domNode.appendChild(this.div);
 
 			var div = d3.select(this.div).append("div")   

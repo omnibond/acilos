@@ -33,6 +33,7 @@ define(['dojo/_base/declare',
 		
 		'app/util/xhrManager',
 		"app/TitleBar",
+		'dojox/mobile/ProgressIndicator',
 		
 		"dojox/mobile/ScrollableView",
 		"app/SelRoundRectList",
@@ -51,6 +52,7 @@ define(['dojo/_base/declare',
 	
 	xhrManager,
 	TitleBar,
+	ProgressIndicator,
 	
 	ScrollableView,
 	RoundRectList,
@@ -85,12 +87,16 @@ define(['dojo/_base/declare',
 					
 					var fill = d3.scale.category20();
 
+					var translateX = (this.domNode.offsetWidth - 25)/2;
+					var translateY = (this.domNode.offsetHeight - 25)/2;
+
 					var draw = function(words) {
 					    d3.select(this.div).append("svg")
-						.attr("width", 300)
-						.attr("height", 300)
+						.attr("width", this.domNode.offsetWidth - 25)
+						.attr("height", this.domNode.offsetHeight - 25)
 					      .append("g")
-						.attr("transform", "translate(150,150)")
+						//.attr("transform", "translate(150,150)")
+						.attr("transform", "translate(" + translateX + "," + translateY + ")")
 					      .selectAll("text")
 						.data(words)
 					      .enter().append("text")
@@ -104,7 +110,7 @@ define(['dojo/_base/declare',
 						.text(function(d) { return d.text; });
 					 }
 					
-					d3.layout.cloud().size([300, 300])
+					d3.layout.cloud().size([this.domNode.offsetWidth - 25, this.domNode.offsetHeight - 25])
 					.words(wordArr.map(function(d) {
 					return {text: d, size: 10 + Math.random() * 90};
 					}))
@@ -121,6 +127,10 @@ define(['dojo/_base/declare',
 		
 		activate: function(e){
 			topic.publish("/dojo-mama/updateSubNav", {back: '/wordCloud', title: this.name} );
+
+			this.pi = new ProgressIndicator();
+			this.pi.placeAt(document.body);
+			this.pi.start();
 			
 			this.getSpecificClients(this.users).then(lang.hitch(this, function(obj){
 				for(y = 0; y < obj.length; y++){
@@ -137,8 +147,11 @@ define(['dojo/_base/declare',
 						var clients = obj;
 						clients.push(mainUser);
 						console.log("CLIENTS: ", clients);
+
 						//build and return a list for each user/ownedGroup
 						this.cloud = this.buildCloud(clients, this.numWords);
+
+						this.pi.stop();
 					}, mainUser))
 				}
 			}))
@@ -153,6 +166,10 @@ define(['dojo/_base/declare',
 			if(this.errorMsg){
 				this.errorMsg.destroyRecursive();
 				this.errorMsg = null;
+			}
+			if(this.pi){
+				this.pi.destroyRecursive();
+				this.pi = null;
 			}
 		}
 	})
