@@ -115,6 +115,10 @@ define(['dojo/_base/declare',
 			this.div = domConstruct.create("div", {id: "oneTwo"});
 			this.domNode.appendChild(this.div);
 
+			var div = d3.select(this.div).append("div")   
+				.attr("class", "tooltipDiv")               
+				.style("opacity", 0);
+
 			this.svg = d3.select(this.div).append("svg")
 			    .attr("width", width + margin.left + margin.right)
 			    .attr("height", height + margin.top + margin.bottom)
@@ -168,7 +172,24 @@ define(['dojo/_base/declare',
 			      .attr("x", function(d) { return x(d['userName']); })
 			      .attr("width", x.rangeBand())
 			      .attr("y", function(d) { return y(d['postNum']); })
-			      .attr("height", function(d) { return height - y(d['postNum']); });
+			      .attr("height", function(d) { return height - y(d['postNum']); })
+			      .on("mouseover", function(d) {
+			      	var coords = d3.mouse(this);
+			      	var x = coords[0];
+			      	var y = coords[1];
+
+			      	div.transition()        
+	                	.duration(200)      
+	                	.style("opacity", .9);      
+			        div.html(d.userName)  
+			            .style("left", (x + 20) + "px")     
+			            .style("top", (y - 10) + "px");
+			      })
+			      .on("mouseout", function(d) {       
+		            div.transition()        
+		                .duration(500)      
+		                .style("opacity", 0);   
+		          });
 
 		//	});
 

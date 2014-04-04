@@ -319,45 +319,6 @@ define(['dojo/_base/declare',
 			});
 			this.addChild(this.list);
 
-			var item = domConstruct.create("div", {innerHTML: "Top 200 Posters", "class": "divListItemExtraPadding"});
-			this.list.domNode.appendChild(item);
-			item.onclick = lang.hitch(this, function(){
-				this.getTopContacts(200).then(lang.hitch(this, function(obj){
-					this.userLineChartView.users = obj;
-					if(this.userLineChartView.users.length > 0){
-						this.router.go("/userLineChartView");
-					}else{
-						console.log("Must have at least one user selected to view");
-					}
-				}));
-			});
-
-			var item = domConstruct.create("div", {innerHTML: "Top 100 Posters", "class": "divListItemExtraPadding"});
-			this.list.domNode.appendChild(item);
-			item.onclick = lang.hitch(this, function(){
-				this.getTopContacts(100).then(lang.hitch(this, function(obj){
-					this.userLineChartView.users = obj;
-					if(this.userLineChartView.users.length > 0){
-						this.router.go("/userLineChartView");
-					}else{
-						console.log("Must have at least one user selected to view");
-					}
-				}));
-			});
-
-			var item = domConstruct.create("div", {innerHTML: "Top 50 Posters", "class": "divListItemExtraPadding"});
-			this.list.domNode.appendChild(item);
-			item.onclick = lang.hitch(this, function(){
-				this.getTopContacts(50).then(lang.hitch(this, function(obj){
-					this.userLineChartView.users = obj;
-					if(this.userLineChartView.users.length > 0){
-						this.router.go("/userLineChartView");
-					}else{
-						console.log("Must have at least one user selected to view");
-					}
-				}));
-			});
-
 			var item = domConstruct.create("div", {innerHTML: "Top 20 Posters", "class": "divListItemExtraPadding"});
 			this.list.domNode.appendChild(item);
 			item.onclick = lang.hitch(this, function(){
@@ -371,10 +332,36 @@ define(['dojo/_base/declare',
 				}));
 			});
 
+			var item = domConstruct.create("div", {innerHTML: "Top 15 Posters", "class": "divListItemExtraPadding"});
+			this.list.domNode.appendChild(item);
+			item.onclick = lang.hitch(this, function(){
+				this.getTopContacts(15).then(lang.hitch(this, function(obj){
+					this.userLineChartView.users = obj;
+					if(this.userLineChartView.users.length > 0){
+						this.router.go("/userLineChartView");
+					}else{
+						console.log("Must have at least one user selected to view");
+					}
+				}));
+			});
+
 			var item = domConstruct.create("div", {innerHTML: "Top 10 Posters", "class": "divListItemExtraPadding"});
 			this.list.domNode.appendChild(item);
 			item.onclick = lang.hitch(this, function(){
 				this.getTopContacts(10).then(lang.hitch(this, function(obj){
+					this.userLineChartView.users = obj;
+					if(this.userLineChartView.users.length > 0){
+						this.router.go("/userLineChartView");
+					}else{
+						console.log("Must have at least one user selected to view");
+					}
+				}));
+			});
+
+			var item = domConstruct.create("div", {innerHTML: "Top 5 Posters", "class": "divListItemExtraPadding"});
+			this.list.domNode.appendChild(item);
+			item.onclick = lang.hitch(this, function(){
+				this.getTopContacts(5).then(lang.hitch(this, function(obj){
 					this.userLineChartView.users = obj;
 					if(this.userLineChartView.users.length > 0){
 						this.router.go("/userLineChartView");

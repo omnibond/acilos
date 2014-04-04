@@ -318,19 +318,6 @@ define(['dojo/_base/declare',
 			});
 			this.addChild(this.list);
 
-			var item = domConstruct.create("div", {innerHTML: "Top 200 Posters", "class": "divListItemExtraPadding"});
-			this.list.domNode.appendChild(item);
-			item.onclick = lang.hitch(this, function(){
-				this.getTopContacts(200).then(lang.hitch(this, function(obj){
-					this.userGraph.users = obj;
-					if(this.userGraph.users.length > 0){
-						this.router.go("/userGraph");
-					}else{
-						console.log("Must have at least one user selected to view");
-					}
-				}));
-			});
-
 			var item = domConstruct.create("div", {innerHTML: "Top 100 Posters", "class": "divListItemExtraPadding"});
 			this.list.domNode.appendChild(item);
 			item.onclick = lang.hitch(this, function(){
