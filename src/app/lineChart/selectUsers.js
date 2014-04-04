@@ -324,6 +324,7 @@ define(['dojo/_base/declare',
 			item.onclick = lang.hitch(this, function(){
 				this.getTopContacts(20).then(lang.hitch(this, function(obj){
 					this.userLineChartView.users = obj;
+					this.userLineChartView.names = "false";
 					if(this.userLineChartView.users.length > 0){
 						this.router.go("/userLineChartView");
 					}else{
@@ -337,6 +338,7 @@ define(['dojo/_base/declare',
 			item.onclick = lang.hitch(this, function(){
 				this.getTopContacts(15).then(lang.hitch(this, function(obj){
 					this.userLineChartView.users = obj;
+					this.userLineChartView.names = "false";
 					if(this.userLineChartView.users.length > 0){
 						this.router.go("/userLineChartView");
 					}else{
@@ -350,6 +352,7 @@ define(['dojo/_base/declare',
 			item.onclick = lang.hitch(this, function(){
 				this.getTopContacts(10).then(lang.hitch(this, function(obj){
 					this.userLineChartView.users = obj;
+					this.userLineChartView.names = "true";
 					if(this.userLineChartView.users.length > 0){
 						this.router.go("/userLineChartView");
 					}else{
@@ -363,6 +366,7 @@ define(['dojo/_base/declare',
 			item.onclick = lang.hitch(this, function(){
 				this.getTopContacts(5).then(lang.hitch(this, function(obj){
 					this.userLineChartView.users = obj;
+					this.userLineChartView.names = "true";
 					if(this.userLineChartView.users.length > 0){
 						this.router.go("/userLineChartView");
 					}else{

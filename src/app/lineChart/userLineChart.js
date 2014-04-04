@@ -175,9 +175,11 @@ define(['dojo/_base/declare',
 
 			console.log("our modified data is: ", data);
 
-			var margin = {top: 20, right: 80, bottom: 90, left: 50},
-			    width = 960 - margin.left - margin.right,
-			    height = 500 - margin.top - margin.bottom;
+			var margin = {top: 20, right: 90, bottom: 90, left: 50},
+			    //width = 960 - margin.left - margin.right,
+			    //height = 500 - margin.top - margin.bottom;
+			    width = this.domNode.offsetWidth - margin.left - margin.right;
+			    height = this.domNode.offsetHeight - margin.top - margin.bottom;
 
 			var x = d3.time.scale()
 			    .range([0, width]);

@@ -91,9 +91,11 @@ define(['dojo/_base/declare',
 
 			console.log(data);
 
-			var margin = {top: 20, right: 5, bottom: 150, left: 50},
-			    width = 850 - margin.left - margin.right,
-			    height = 500 - margin.top - margin.bottom;
+			var margin = {top: 20, right: 10, bottom: 150, left: 50},
+			    //width = 850 - margin.left - margin.right,
+			    //height = 500 - margin.top - margin.bottom;
+			    width = this.domNode.offsetWidth - margin.left - margin.right;
+			    height = this.domNode.offsetHeight - margin.top - margin.bottom;
 
 			var formatPercent = d3.format("0");
 
@@ -153,7 +155,7 @@ define(['dojo/_base/declare',
 
 			      this.svg.append("text")
 			      .attr("x", width / 2 )
-			      .attr("y",  height + margin.bottom)
+			      .attr("y",  height + 120)
 			      .style("text-anchor", "middle")
 			      .text("Name of user");
 
