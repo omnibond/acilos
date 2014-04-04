@@ -154,8 +154,10 @@ define(['dojo/_base/declare',
 	                   .duration(200)      
 	                   .style("opacity", .9);      
 			        div.html(d.data.Service + " - " + d.data.NumUsers + " users")  
-			           .style("left", (x + 100) + "px")     
-			           .style("top", (y + 150) + "px"); 
+			           .style("left", 75 + "px")   
+			           .style("top", 75 + "px") 
+			           .style("position", "absolute"); 
+			           
 			      })
 					.on("mouseout", function(d) {       
 		            div.transition()        
