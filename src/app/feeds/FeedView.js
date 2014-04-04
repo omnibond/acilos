@@ -91,7 +91,6 @@ define(['dojo/_base/declare',
 				feedName: feedObj,
 				blastView: this.blastView,
 				getFeedData: lang.hitch(this, this.checkSpecificFeedList),
-				getNextGroup: lang.hitch(this, this.getNextGroup),
 				setStarred: lang.hitch(this, this.setStarred),
 				setStarredClient: lang.hitch(this, this.setStarredClient),
 				fromVar: this.fromVar,
@@ -133,7 +132,9 @@ define(['dojo/_base/declare',
 		},
 		
 		getNextGroup: function(){
-			this.list.postAddToList(this.fromVar+=20);
+			if(this.list.ListEnded === false && this.list.loading == false){
+				this.list.postAddToList(this.fromVar+=20);
+			}
 		},
 		
 		activate: function(e){

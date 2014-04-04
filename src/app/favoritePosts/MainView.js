@@ -152,8 +152,7 @@ define([
 				this.list = new SearchScroller({
 					feedName: 'all',
 					getFeedData: lang.hitch(this, this.searchStarred),
-					getNextGroup: lang.hitch(this, this.getNextGroup),
-					//setStarred: lang.hitch(this, this.setStarred),
+					setStarred: lang.hitch(this, this.setStarred),
 					setStarredClient: this.setStarredClient,
 					fromVar: this.fromVar,
 					FeedViewID: this.id,
@@ -174,7 +173,9 @@ define([
 			},
 			
 			getNextGroup: function(){
-				this.list.postAddToList(this.list.fromVar+=20);
+				if(this.list.ListEnded === false && this.list.loading == false){
+					this.list.postAddToList(this.list.fromVar+=20);
+				}
 			},
 			
 			deactivate: function(){

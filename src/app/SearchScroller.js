@@ -219,9 +219,11 @@ define([
 
 					this.resize();
 				}
+				this.loading = false;
 			},
 
 			postAddToList: function(from){	
+				this.loading = true;
 				if(from < 0){
 					from = 0;
 				}

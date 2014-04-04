@@ -233,9 +233,12 @@ define([
 						}
 					}
 				}
+				//set this variable when the list is done loading
+				this.loading = false;
 			},
 			
-			postAddToList: function(from){			
+			postAddToList: function(from){	
+				this.loading = true;
 				if(from < 0){
 					from = 0;
 				}
@@ -262,7 +265,6 @@ define([
 				
 				var defList = new DeferredList(this.arrayList);
 				defList.then(lang.hitch(this, this.buildView));
-
 			},
 			
 			getDate: function(epoch){

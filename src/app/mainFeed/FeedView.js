@@ -314,10 +314,8 @@ define([
 			},
 			
 			getNextGroup: function(){
-				if(this.list.ListEnded === false){
-					this.loading = true;
+				if(this.list.ListEnded === false && this.list.loading == false){
 					this.list.postAddToList(this.list.fromVar+=20);
-					this.loading = false;
 				}
 			},
 			

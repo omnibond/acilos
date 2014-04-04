@@ -169,7 +169,6 @@ define([
 				
 				this.list = new SearchScroller({
 					feedName: idStr,
-					getNextGroup: lang.hitch(this, this.getNextGroup),
 					getFeedData: lang.hitch(this, this.searchUser),
 					setStarred: lang.hitch(this, this.setStarred),
 					setStarredClient: lang.hitch(this, this.setStarredClient),
@@ -192,7 +191,9 @@ define([
 			},
 			
 			getNextGroup: function(){
-				this.list.postAddToList(this.list.fromVar+=20);
+				if(this.list.ListEnded === false && this.list.loading == false){
+					this.list.postAddToList(this.list.fromVar+=20);
+				}
 			},
 			
 			deactivate: function(){

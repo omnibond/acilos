@@ -25,7 +25,12 @@
 ** $QT_END_LICENSE$
 */
 
-exec('sudo reboot');
+$var = exec("wget -q -O - http://169.254.169.254/latest/meta-data/instance-id");
+if($var != ""){
+	exec("ec2-reboot-instances" . $var)
+}else{
+	//exec("sudo reboot");
+}
 
 
 ?>
