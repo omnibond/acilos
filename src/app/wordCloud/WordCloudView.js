@@ -131,14 +131,6 @@ define(['dojo/_base/declare',
 			}))
 		},
 		
-		deactivate: function(){
-			this.inherited(arguments);
-			if(this.selectorItem){
-				this.selectorItem.destroyRecursive();
-				this.selectorItem = null;
-			}
-		},
-		
 		activate: function(e){
 			topic.publish("/dojo-mama/updateSubNav", {back: '/wordCloud', title: this.name} );
 
@@ -147,7 +139,6 @@ define(['dojo/_base/declare',
 			this.pi.start();
 			
 			this.button = new Button({
-				label: "Reload",
 				"left": "true",
 				"name": "manualRefreshButton",
 				onClick: lang.hitch(this, function(){
@@ -187,6 +178,10 @@ define(['dojo/_base/declare',
 		},
 
 		deactivate: function(){
+			if(this.selectorItem){
+				this.selectorItem.destroyRecursive();
+				this.selectorItem = null;
+			}
 			if(this.div){
 				this.domNode.removeChild(this.div);
 				this.div = null;
