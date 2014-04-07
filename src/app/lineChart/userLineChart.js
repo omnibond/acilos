@@ -33,6 +33,7 @@ define(['dojo/_base/declare',
 		
 		'app/util/xhrManager',
 		'app/TitleBar',
+		"app/SelectorBar",
 		
 		"app/SelRoundRectList",
 		"dojox/mobile/Button",
@@ -51,6 +52,7 @@ define(['dojo/_base/declare',
 		
 		xhrManager, 
 		TitleBar, 
+		SelectorBar,
 		
 		RoundRectList, 
 		Button, 
@@ -69,6 +71,24 @@ define(['dojo/_base/declare',
 				this.domNode.removeChild(this.div);
 				this.div = null;
 			}
+
+			this.button = new Button({
+				"left": "true",
+				"name": "manualRefreshButton",
+				onClick: lang.hitch(this, function(){
+					if(this.div){
+						this.domNode.removeChild(this.div);
+						this.div = null;
+					}
+			
+					this.getLineChartUsers(this.users).then(lang.hitch(this, this.buildLineChart));
+				})
+			});
+			this.selectorItem = new SelectorBar({
+				buttons: [this.button],
+				style: "text-align: center"
+			});
+			this.selectorItem.placeAt(this.domNode.parentNode);
 
 			console.log("userLineChart: ", this.users);
 
@@ -202,7 +222,7 @@ define(['dojo/_base/declare',
 			    .x(function(d) { return x(d.date); })
 			    .y(function(d) { return y(d.count); });
 
-			this.div = domConstruct.create("div", {id: "oneTwo"});
+			this.div = domConstruct.create("div", {id: "oneTwo", style: "margin-top: 40px"});
 			this.domNode.appendChild(this.div);
 
 			var div = d3.select(this.div).append("div")   
@@ -301,6 +321,13 @@ define(['dojo/_base/declare',
 			      .attr("dy", ".35em")
 			      .text(function(d) { return d.name; });
 			//}));
+		},
+
+		deactivate: function(){
+			if(this.selectorItem){
+				this.selectorItem.destroyRecursive();
+				this.selectorItem = null;
+			}
 		}	
 	})
 });

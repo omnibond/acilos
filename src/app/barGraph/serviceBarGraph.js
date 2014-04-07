@@ -33,6 +33,7 @@ define(['dojo/_base/declare',
 		
 		'app/util/xhrManager',
 		'app/TitleBar',
+		"app/SelectorBar",
 		
 		"app/SelRoundRectList",
 		"dojox/mobile/Button",
@@ -52,6 +53,7 @@ define(['dojo/_base/declare',
 		
 		xhrManager, 
 		TitleBar, 
+		SelectorBar,
 		
 		RoundRectList, 
 		Button, 
@@ -70,9 +72,26 @@ define(['dojo/_base/declare',
 				this.domNode.removeChild(this.div);
 				this.div = null;
 			}
+
+			this.button = new Button({
+				"left": "true",
+				"name": "manualRefreshButton",
+				onClick: lang.hitch(this, function(){
+					if(this.div){
+						this.domNode.removeChild(this.div);
+						this.div = null;
+					}
+			
+					this.getAllBarGraphClients().then(lang.hitch(this, this.buildServiceBarGraph));
+				})
+			});
+			this.selectorItem = new SelectorBar({
+				buttons: [this.button],
+				style: "text-align: center"
+			});
+			this.selectorItem.placeAt(this.domNode.parentNode);
 			
 			this.getAllBarGraphClients().then(lang.hitch(this, this.buildServiceBarGraph));
-
 		},
 
 		buildServiceBarGraph: function(obj){
@@ -138,7 +157,7 @@ define(['dojo/_base/declare',
 			    .orient("left")
 			    .tickFormat(formatPercent);
 
-			this.div = domConstruct.create("div", {id: "oneTwo"});
+			this.div = domConstruct.create("div", {id: "oneTwo", style: "margin-top: 40px"});
 			this.domNode.appendChild(this.div);
 
 			this.svg = d3.select(this.div).append("svg")
@@ -201,6 +220,13 @@ define(['dojo/_base/declare',
 			function type(d) {
 			  d.frequency = +d.frequency;
 			  return d;
+			}
+		},
+
+		deactivate: function(){
+			if(this.selectorItem){
+				this.selectorItem.destroyRecursive();
+				this.selectorItem = null;
 			}
 		}
 	})

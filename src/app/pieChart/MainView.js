@@ -33,6 +33,7 @@ define(['dojo/_base/declare',
 		
 		'app/util/xhrManager',
 		'app/TitleBar',
+		"app/SelectorBar",
 		
 		"app/SelRoundRectList",
 		"dojox/mobile/Button",
@@ -51,6 +52,7 @@ define(['dojo/_base/declare',
 		
 		xhrManager, 
 		TitleBar, 
+		SelectorBar,
 		
 		RoundRectList, 
 		Button, 
@@ -74,6 +76,29 @@ define(['dojo/_base/declare',
 				this.domNode.removeChild(this.helpDiv);
 				this.helpDiv = null;
 			}
+
+			this.button = new Button({
+				"left": "true",
+				"name": "manualRefreshButton",
+				onClick: lang.hitch(this, function(){
+					if(this.div){
+						this.domNode.removeChild(this.div);
+						this.div = null;
+					}
+
+					if(this.helpDiv){
+						this.domNode.removeChild(this.helpDiv);
+						this.helpDiv = null;
+					}
+			
+					this.getPieChartUsers().then(lang.hitch(this, this.buildPieChart));
+				})
+			});
+			this.selectorItem = new SelectorBar({
+				buttons: [this.button],
+				style: "text-align: center"
+			});
+			this.selectorItem.placeAt(this.domNode.parentNode);
 
 			this.getPieChartUsers().then(lang.hitch(this, this.buildPieChart));
 		},
@@ -112,10 +137,10 @@ define(['dojo/_base/declare',
 			    .sort(null)
 			    .value(function(d) { return d.NumUsers; });
 
-			this.helpDiv = domConstruct.create("div", {innerHTML: "Mouse over or tap and hold on a service to see the number of users", style: "font-weight: bold; color: #000000; text-align: center"});
+			this.helpDiv = domConstruct.create("div", {innerHTML: "Mouse over or tap and hold on a service to see the number of users", style: "font-weight: bold; color: #000000; text-align: center; margin-top: 40px"});
 			this.domNode.appendChild(this.helpDiv);
 
-			this.div = domConstruct.create("div", {id: "blah", style: "text-align: center"});
+			this.div = domConstruct.create("div", {id: "blah"});
 			this.domNode.appendChild(this.div);
 
 			var div = d3.select(this.div).append("div")   
@@ -172,6 +197,13 @@ define(['dojo/_base/declare',
 			      //.text(function(d) { return d.data.Service; });
 
 			//});
+		},
+
+		deactivate: function(){
+			if(this.selectorItem){
+				this.selectorItem.destroyRecursive();
+				this.selectorItem = null;
+			}
 		}	
 	})
 });

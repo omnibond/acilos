@@ -37,9 +37,12 @@ define(['dojo/_base/declare',
 		
 		"dojox/mobile/ScrollableView",
 		"app/SelRoundRectList",
+		"app/SelectorBar",
+		
 		"dojox/mobile/ListItem",
 		"dojox/mobile/ToolBarButton",
 		"dojox/mobile/EdgeToEdgeCategory",
+		"dojox/mobile/Button",
 		"dojox/mobile/RadioButton"
 ], function(
 	declare,
@@ -56,9 +59,12 @@ define(['dojo/_base/declare',
 	
 	ScrollableView,
 	RoundRectList,
+	SelectorBar,
+	
 	ListItem,
 	ToolBarButton,
 	EdgeToEdgeCategory,
+	Button,
 	RadioButton
 ) {
 	return declare([ModuleScrollableView], {		
@@ -82,7 +88,7 @@ define(['dojo/_base/declare',
 					});
 					this.addChild(this.errorMsg);
 				}else{
-					this.div = domConstruct.create("div", {id: "oneTwo"});
+					this.div = domConstruct.create("div", {id: "oneTwo", style: "margin-top: 40px"});
 					this.domNode.appendChild(this.div);
 					
 					var fill = d3.scale.category20();
@@ -125,12 +131,33 @@ define(['dojo/_base/declare',
 			}))
 		},
 		
+		deactivate: function(){
+			this.inherited(arguments);
+			if(this.selectorItem){
+				this.selectorItem.destroyRecursive();
+				this.selectorItem = null;
+			}
+		},
+		
 		activate: function(e){
 			topic.publish("/dojo-mama/updateSubNav", {back: '/wordCloud', title: this.name} );
 
 			this.pi = new ProgressIndicator();
 			this.pi.placeAt(document.body);
 			this.pi.start();
+			
+			this.button = new Button({
+				"left": "true",
+				"name": "manualRefreshButton",
+				onClick: lang.hitch(this, function(){
+					this.buildCloud(this.clients, this.numWords);
+				})
+			});
+			this.selectorItem = new SelectorBar({
+				buttons: [this.button],
+				style: "text-align: center"
+			});
+			this.selectorItem.placeAt(this.domNode.parentNode);
 			
 			this.getSpecificClients(this.users).then(lang.hitch(this, function(obj){
 				for(y = 0; y < obj.length; y++){
@@ -144,12 +171,12 @@ define(['dojo/_base/declare',
 					this.getSpecificClients(ownsArray).then(lang.hitch(this, function(mainUser, obj){
 						var mainUser = mainUser;
 						//set the ownedUsers for each MainView user
-						var clients = obj;
-						clients.push(mainUser);
-						console.log("CLIENTS: ", clients);
+						this.clients = obj;
+						this.clients.push(mainUser);
+						console.log("CLIENTS: ", this.clients);
 
 						//build and return a list for each user/ownedGroup
-						this.cloud = this.buildCloud(clients, this.numWords);
+						this.buildCloud(this.clients, this.numWords);
 
 						this.pi.stop();
 					}, mainUser))
