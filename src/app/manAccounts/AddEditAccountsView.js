@@ -109,6 +109,10 @@ define([
 				}));
 			},
 			
+			capitalizeFirstLetter: function(string){
+				return string.charAt(0).toUpperCase() + string.slice(1);
+			},
+			
 			buildList: function(obj){
 				console.log(obj);
 				this.mainList = new EdgeToEdgeList({
@@ -116,13 +120,21 @@ define([
 				});
 				
 				var item = new ListItem({
-					label: "Edit or delete your current accounts",
-					style: "border:none;height:35px;font-size;font-family:arial;font-size:20px"
+					variableHeight: true,
+					label: "Edit or delete your app keys and accounts",
+					style: "border:none;font-size;font-family:arial;font-size:20px"
+				})
+				this.mainList.addChild(item);
+				var item = new ListItem({
+					variableHeight: true,
+					label: "First add an app key for any service and then you can create different accounts for that service",
+					style: "border:none;font-size;font-family:arial;font-size:20px"
 				})
 				this.mainList.addChild(item);
 				this.errorItem = new ListItem({
 					label: "",
-					style: "border:none;height:35px;font-size;font-family:arial;font-size:20px"
+					variableHeight:true,
+					style: "border:none;font-size;font-family:arial;font-size:20px"
 				})
 				this.mainList.addChild(this.errorItem);				
 				
@@ -137,19 +149,21 @@ define([
 				if(param == "login"){
 					return;
 				}
-			//	var paramName = new ListItem({
-			//		label: param
-			//	});
-			//	this.mainList.addChild(paramName);
+				var paramName = new ListItem({
+					label: this.capitalizeFirstLetter(param),
+					style: "background-color: #eeeeee;border:none"
+				});
+				this.mainList.addChild(paramName);
 				if(obj[param].length > 0){
 					obj = obj[param][0];
 					
 					
 					if(obj['accounts'].length == 0){
 						var deleteAuther = new ListItem({
+							style: "border: none",
 							variableHeight:true
 						})
-						var del = domConstruct.create("div", {innerHTML: "Remove " + param + " authenticator", "class": "twitterOrangeDiv"});
+						var del = domConstruct.create("div", {innerHTML: "Remove " + param + " app key", "class": "twitterOrangeDiv"});
 						del.onclick = lang.hitch(this, function(){						
 								var list = new EdgeToEdgeList({style:"margin-top:30px;border:none"})			
 								obj.param = param;
@@ -163,6 +177,7 @@ define([
 					}
 					
 					var addAccount = new ListItem({
+						style: "border:none",
 						variableHeight:true
 					})
 					var add = domConstruct.create("div", {innerHTML: "Add a new " + param + " account", "class": "twitterOrangeDiv"});
@@ -178,7 +193,7 @@ define([
 										
 					for(w = 0; w < obj['accounts'].length; w++){
 						var item = new ListItem({
-							style: "height:auto;border-top:none;border-bottom:1;border-left:5px solid " +obj['accounts'][w].color+ ";right:none"
+							style: "height:auto;border-top:none;border-bottom:none;border-left:5px solid " +obj['accounts'][w].color+ ";right:none"
 						});
 						
 						if(param == "instagram"){
@@ -288,9 +303,10 @@ define([
 					}					
 				}else{
 					var addAccount = new ListItem({
+						style: "border:none",
 						variableHeight:true
 					})
-					var add = domConstruct.create("div", {innerHTML: "Add a " + param + " authenticator", "class": "twitterOrangeDiv"});
+					var add = domConstruct.create("div", {innerHTML: "Add a new " + param + " app key", "class": "twitterOrangeDiv"});
 					add.onclick = lang.hitch(this, function(){
 						this.getDomain().then(lang.hitch(this, function(obj){
 							this.domain = obj['domain'];
@@ -433,23 +449,20 @@ define([
 				holderDiv.appendChild(redirect.domNode);
 				textBoxDiv.appendChild(holderDiv);
 				var add = new Button({
-					label: "Add Authenticator",
+					label: "Add key",
 					onClick: lang.hitch(this, function(key, secret, redirect, param){
-						
-						this.errorItem.set("label", "Saving...");
-						
 						if(	key.get("value") == "" ||
 							secret.get("value")== "" ||
-							redirect.get("value")== "" ||
-							redirect.get("value")== ""){
-							console.log("Please enter a value for all fields");
+							redirect.get("value")== "")
+						{
+							this.errorItem.set("label", "Please enter a value for all fields");
 						}else{
-						
+							
 							var appKey = key.get("value");
 							var appSecret = secret.get("value");
 							var appRedir = redirect.get("value");
-							var appRedir = redirect.get("value");
 							
+							this.errorItem.set("label", "Saving...");						
 							this.saveServiceCreds(appKey, appSecret, appRedir, param).then(lang.hitch(this, function(obj){
 								console.log(obj);
 								if(obj['error']){
@@ -459,10 +472,6 @@ define([
 								}
 								this.activate();
 							}));
-							
-							/*key.set("value", "");
-							secret.set("value", "");
-							domStyle.set(color.domNode, "background-image", "linear-gradient(to bottom, #ffffff 0%, #e2e2e2 100%)");*/
 						}
 					},key, secret, redirect, param)
 				})

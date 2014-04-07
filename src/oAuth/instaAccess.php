@@ -49,7 +49,7 @@ if(isset($_GET['code'])){
 		"code" => $code,
 		"grant_type" => $grant,
 	);
-	$tempApp = $credObj['instagram'][0]['accounts'];
+	$tempApp = $credObj['instagram'][0];
 
 	$url = "https://api.instagram.com/oauth/access_token";
 	$ch = curl_init($url);
@@ -101,7 +101,9 @@ if(isset($_GET['code'])){
 		$temp['image'] = $obj['user']['profile_picture'];
 		$temp['name'] =  $obj['user']['username'];
 		$temp['authenticated'] = "true";
-		$temp['loginDisallow'] = "false";
+		if(!isset($temp['loginDisallow'])){
+			$temp['loginDisallow'] = "false";
+		}
 		if(!isset($temp['color'])){
 			$temp['color'] = "#F66733";
 		}

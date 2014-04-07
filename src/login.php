@@ -59,9 +59,9 @@
 	#print_r($_COOKIE);
 	$var = getData();
 	$fCount = (string)count($var['facebook']);
-	$lCount = (string)count($var['twitter']);
-	$iCount = (string)count($var['linkedin']);
-	$tCount = (string)count($var['instagram']);
+	$tCount = (string)count($var['twitter']);
+	$lCount = (string)count($var['linkedin']);
+	$iCount = (string)count($var['instagram']);
 	
 	if(isset($_GET['facebook']) && $_GET['facebook'] == "true"){
 		setcookie("facebookCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', $cookieDom, false, false);
@@ -143,22 +143,22 @@
 	}else{
 		$login = "second";
 	}
-	if(count($var['facebook']) > 0){
+	if(count($var['facebook'][0]['accounts']) > 0){
 		$fCook = "true";
 	}else{
 		$fCook = "false";
 	}
-	if(count($var['linkedin']) > 0){
+	if(count($var['linkedin'][0]['accounts']) > 0){
 		$lCook = "true";
 	}else{
 		$lCook = "false";
 	}
-	if(count($var['instagram']) > 0){
+	if(count($var['instagram'][0]['accounts']) > 0){
 		$iCook = "true";
 	}else{
 		$iCook = "false";
 	}
-	if(count($var['twitter']) > 0){
+	if(count($var['twitter'][0]['accounts']) > 0){
 		$tCook = "true";
 	}else{
 		$tCook = "false";
@@ -427,27 +427,24 @@
 				if(	'<?php echo $fCook; ?>' != "true" &&
 					'<?php echo $tCook; ?>' != "true" &&
 					'<?php echo $lCook; ?>' != "true" &&
-					'<?php echo $iCook; ?>' != "true" 
+					'<?php echo $iCook; ?>' != "true" &&
+					'<?php echo $login; ?>' != "first"
 				){
-					var item = new ListItem({
-						label: "You have not authorized any apps yet",
-						style: "border:none"
-					});
-					leftPane.addChild(item);
+					window.location = "login.php?login=first";
 				}else{
-					if('<?php echo $tCook; ?>' == "true"){
+					if('<?php echo $tCount; ?>' != 0){
 						var div1 = domConstruct.create("span", {});
 						loginButtonsNitems("twitter", div1, serviceCreds, mainDiv);
 					}
-					if('<?php echo $fCook; ?>' == "true"){
+					if('<?php echo $fCount; ?>' != 0){
 						var div2 = domConstruct.create("span", {});
 						loginButtonsNitems("facebook", div2, serviceCreds, mainDiv);
 					}
-					if('<?php echo $lCook; ?>' == "true"){
+					if('<?php echo $lCount; ?>' != 0){
 						var div3 = domConstruct.create("span", {});
 						loginButtonsNitems("linkedin", div3, serviceCreds, mainDiv);
 					}
-					if('<?php echo $iCook; ?>' == "true"){
+					if('<?php echo $iCount; ?>' != 0){
 						var div4 = domConstruct.create("span", {});
 						loginButtonsNitems("instagram", div4, serviceCreds, mainDiv);
 					}

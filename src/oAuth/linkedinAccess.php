@@ -162,7 +162,9 @@ function getAccessToken() {
 	$temp['image'] = $user->pictureUrl;
 	$temp['name'] = $user->firstName . " " . $user->lastName;
 	$temp['authenticated'] = "true";
-	$temp['loginDisallow'] = "false";
+	if(!isset($temp['loginDisallow'])){
+		$temp['loginDisallow'] = "false";
+	}
 	if(!isset($temp['color'])){
 		$temp['color'] = "#B33DA5";
 	}

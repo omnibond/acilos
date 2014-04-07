@@ -153,7 +153,9 @@ if(isset($_REQUEST['oauth_verifier'])){
 		$temp['image'] = $account->profile_image_url;
 		$temp['name'] = $account->screen_name;
 		$temp['authenticated'] = "true";
-		$temp['loginDisallow'] = "false";
+		if(!isset($temp['loginDisallow'])){
+			$temp['loginDisallow'] = "false";
+		}
 		if(!isset($temp['color'])){
 			$temp['color'] = "#E32252";
 		}

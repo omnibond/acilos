@@ -92,6 +92,7 @@ cp -v $SRCDIR/*.js* $DISTDIR
 cp -v $SRCDIR/*.js $DISTDIR
 cp -v $SRCDIR/*.sh $DISTDIR
 
+rsync -av --exclude .svn $SRCDIR/lockFiles/ $DISTDIR/lockFiles/
 rsync -av --exclude .svn $SRCDIR/cron/ $DISTDIR/cron/
 rsync -av --exclude .svn $SRCDIR/elasticSearch/ $DISTDIR/elasticSearch/
 rsync -av --exclude .svn $SRCDIR/oAuth/ $DISTDIR/oAuth/

@@ -49,7 +49,7 @@ session_start();
 			"client_secret" => $app['secret'],
 			"redirect_uri" => $app['redir']
 		);
-		$tempApp = $credObj['facebook'][0]['accounts'];
+		$tempApp = $credObj['facebook'][0];
 		
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_POST, 1);
@@ -120,7 +120,9 @@ session_start();
 			$temp['image'] = $user->id;
 			$temp['name'] = $user->name;
 			$temp['authenticated'] = "true";
-			$temp['loginDisallow'] = "false";
+			if(!isset($temp['loginDisallow'])){
+				$temp['loginDisallow'] = "false";
+			}
 			if(!isset($temp['color'])){
 				$temp['color'] = "#0066FF";
 			}
