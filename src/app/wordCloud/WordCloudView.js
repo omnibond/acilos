@@ -147,12 +147,9 @@ define(['dojo/_base/declare',
 			this.pi.start();
 			
 			this.button = new Button({
-<<<<<<< HEAD
 				label: "Reload",
-=======
 				"left": "true",
 				"name": "manualRefreshButton",
->>>>>>> fixingCommentLayout
 				onClick: lang.hitch(this, function(){
 					this.buildCloud(this.clients, this.numWords);
 				})
