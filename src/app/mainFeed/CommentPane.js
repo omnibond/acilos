@@ -43,6 +43,7 @@ define([
 	"app/SelRoundRectList",
 	"app/SelEdgeToEdgeList",
 	"dojox/mobile/ListItem",
+	"dojox/mobile/ContentPane",
 
 	'app/util/xhrManager'
 
@@ -66,6 +67,7 @@ define([
 	RoundRectList,
 	EdgeToEdgeList,
 	ListItem,
+	Pane,
 
 	xhrManager
 
@@ -175,9 +177,38 @@ define([
 						var string = this.parseSpecialChars(x[m].text.text);
 						var item = new ListItem({
 							variableHeight: true,
-							label: '<img src="https://graph.facebook.com/'+x[m].userId+'/picture" width="60px" height="60px" />' + " " + x[m].name  + "<br/>" + string,
+							//label: '<img src="https://graph.facebook.com/'+x[m].userId+'/picture" width="60px" height="60px" />' + " " + x[m].name  + "<br/>" + string,
+							//label: '<img src="https://graph.facebook.com/'+x[m].userId+'/picture" width="60px" height="60px" />',
 							"class": "commentLikeAccordionItemClass"
 						});
+
+						var picDiv = domConstruct.create("div", {innerHTML: '<img src="https://graph.facebook.com/'+x[m].userId+'/picture" width="60px" height="60px" />'});
+
+						var itemText = new ListItem({
+							variableHeight: true,
+							label: x[m].name + "<br/>" + "<br/>" + string,
+							"class": "reworkedCommentClass"
+						});
+						
+						var paneLeft = new Pane({
+							"class": "paneLeftClass"
+						});
+						var paneRight = new Pane({
+							"class": "paneRightClass"
+						});
+						var roundLeft = new RoundRectList({
+							"class": "roundRectLeftClass"
+						});
+						var roundRight = new RoundRectList({
+							"class": "roundRectRightClass"
+						});
+						paneLeft.addChild(roundLeft);
+						paneRight.addChild(roundRight);
+						roundLeft.domNode.appendChild(picDiv);
+						roundRight.addChild(itemText);
+						item.addChild(paneLeft);
+						item.addChild(paneRight);
+
 						this.list.addChild(item);
 					}
 					this.addChild(this.list);	
@@ -308,9 +339,37 @@ define([
 						var string = this.parseSpecialChars(x[m].text.text);
 						var item = new ListItem({
 							variableHeight: true,
-							label: '<img src="'+pic+'" width="60px" height="60px" />' + " " + x[m].name  + "<br/>" + string,
+							//label: '<img src="'+pic+'" width="60px" height="60px" />' + " " + x[m].name  + "<br/>" + string,
 							"class": "commentLikeAccordionItemClass"
 						});
+
+						var picDiv = domConstruct.create("div", {innerHTML: '<img src="'+pic+'" width="60px" height="60px" />'});
+
+						var itemText = new ListItem({
+							variableHeight: true,
+							label: x[m].name + "<br/>" + "<br/>" + string,
+							"class": "reworkedCommentClass"
+						});
+						
+						var paneLeft = new Pane({
+							"class": "paneLeftClass"
+						});
+						var paneRight = new Pane({
+							"class": "paneRightClass"
+						});
+						var roundLeft = new RoundRectList({
+							"class": "roundRectLeftClass"
+						});
+						var roundRight = new RoundRectList({
+							"class": "roundRectRightClass"
+						});
+						paneLeft.addChild(roundLeft);
+						paneRight.addChild(roundRight);
+						roundLeft.domNode.appendChild(picDiv);
+						roundRight.addChild(itemText);
+						item.addChild(paneLeft);
+						item.addChild(paneRight);
+
 						this.list.addChild(item);
 					}
 					this.addChild(this.list);					
@@ -381,9 +440,37 @@ define([
 						var string = this.parseSpecialChars(x[m].text.text);
 						var item = new ListItem({
 							variableHeight: true,
-							innerHTML: '<img src="'+pic+'" width="60px" height="60px" />' + " " + x[m].firstName + " " + x[m].lastName  + "<br/>" + string,
+							//innerHTML: '<img src="'+pic+'" width="60px" height="60px" />' + " " + x[m].firstName + " " + x[m].lastName  + "<br/>" + string,
 							"class": "commentLikeAccordionItemClass"
 						});
+
+						var picDiv = domConstruct.create("div", {innerHTML: '<img src="'+pic+'" width="60px" height="60px" />'});
+
+						var itemText = new ListItem({
+							variableHeight: true,
+							label: x[m].firstName + " " + x[m].lastName + "<br/>" + "<br/>" + string,
+							"class": "reworkedCommentClass"
+						});
+						
+						var paneLeft = new Pane({
+							"class": "paneLeftClass"
+						});
+						var paneRight = new Pane({
+							"class": "paneRightClass"
+						});
+						var roundLeft = new RoundRectList({
+							"class": "roundRectLeftClass"
+						});
+						var roundRight = new RoundRectList({
+							"class": "roundRectRightClass"
+						});
+						paneLeft.addChild(roundLeft);
+						paneRight.addChild(roundRight);
+						roundLeft.domNode.appendChild(picDiv);
+						roundRight.addChild(itemText);
+						item.addChild(paneLeft);
+						item.addChild(paneRight);
+
 						this.list.addChild(item);
 					}
 					this.addChild(this.list);					
