@@ -95,9 +95,11 @@ define(['dojo/_base/declare',
 				}
 			}
 
-			var margin = {top: 20, right: 80, bottom: 90, left: 70},
-			    width = 960 - margin.left - margin.right,
-			    height = 500 - margin.top - margin.bottom;
+			var margin = {top: 20, right: 70, bottom: 70, left: 70},
+			    //width = 960 - margin.left - margin.right,
+			    //height = 500 - margin.top - margin.bottom;
+			    width = this.domNode.offsetWidth - margin.left - margin.right;
+			    height = this.domNode.offsetHeight - margin.top - margin.bottom;
 
 			var parseDate = d3.time.format("%Y%m%d").parse;
 
