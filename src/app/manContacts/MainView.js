@@ -81,6 +81,7 @@ define(['dojo/_base/declare',
 					this.addDelButtons(k[i]);
 				}
 			}
+			this.getNextGroup();
 		},
 
 		getSize: function(obj) {

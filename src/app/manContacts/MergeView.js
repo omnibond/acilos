@@ -68,22 +68,6 @@ define(['dojo/_base/declare',
 	return declare([ModuleScrollableView], {	
 		style: "overflow:scroll",
 		
-		buildView: function(obj){
-			console.log(obj);
-			this.objects = obj;
-			this.list = new RoundRectList({
-				
-			});
-			this.addChild(this.list);
-			
-			var k = Object.keys(this.objects);
-			for(var i=0; i<k.length; i++){
-				if(k[i] != ""){
-					this.addDelButtons(k[i]);
-				}
-			}
-		},
-		
 		dataPoints: function(){
 			var pos= domGeom.position(this.list.domNode,true);
 			
@@ -119,6 +103,7 @@ define(['dojo/_base/declare',
 					this.addDelButtons(k[i]);
 				}
 			}
+			this.getNextGroup();
 		},
 		
 		addDelButtons: function(name){

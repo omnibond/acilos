@@ -91,29 +91,6 @@ define(['dojo/_base/declare',
 					})
 				});
 
-				/*this.selectButton = new Button({
-					"name": "goButton",
-					onClick: lang.hitch(this, function(selectorItem){
-						if(this.counter > 0){
-							this.UserView.users = [];
-							var kids = this.list.domNode.children;
-
-							console.log("REAL KIDS IS: ", kids);
-						
-							for(var g = 0; g < kids.length; g++){
-								if(kids[g].checked == true){
-									this.UserView.users.push(kids[g].objID);
-								}				
-							}
-							this.selectorItem.destroyRecursive();
-							this.selectorItem = null;
-							this.router.go("/UserView");
-						}else{
-							console.log("Must have at least one user selected to view");
-						}
-					})
-				});*/
-
 				this.selectButton = new Button({
 					"name": "goButton",
 					onClick: lang.hitch(this, function(selectorItem){
@@ -209,6 +186,8 @@ define(['dojo/_base/declare',
 			for(var i=0; i<k.length; i++){
 				this.addDelButtons(k[i]);
 			}
+			
+			this.getNextGroup();
 		},
 		
 		postAddDelButtons: function(obj){
