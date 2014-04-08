@@ -225,8 +225,10 @@ Class Post{
 		$response = json_decode($response, true);
 		curl_close($ch);
 
-		if(isset($response['success'])){
-			return json_encode(array("success" => "Your 'like' was successful."));
+		if(isset($response)){
+			if($response == "true" || $response == true){
+				return json_encode(array("success" => "Your 'like' was successful."));
+			}
 		}else{
 			return json_encode(array("failure" => "An error has occurred"));
 		}	
@@ -243,13 +245,17 @@ Class Post{
 	
 		$ch = curl_init($likeURL);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+
 		$response = curl_exec($ch);
-		print_r($response);
+
+		//print_r($response);
+		$response = json_decode($response, true);
 		curl_close($ch);
 		
-		$response = json_decode($response, true);
-		if($response['success']){
-			return json_encode(array("success" => "Your 'unlike' was successful."));
+		if(isset($response)){
+			if($response == "true" || $response == true){
+				return json_encode(array("success" => "Your 'unlike' was successful."));
+			}
 		}else{
 			return json_encode(array("failure" => "An error occurred"));
 		}
