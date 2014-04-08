@@ -110,9 +110,6 @@ session_start();
 			if($credObj['login'] == "first"){
 				$credObj['login'] = "second";
 			}
-			if($credObj['login'] == ""){
-				$credObj['login'] = "first";
-			}
 						
 			$temp['accessToken'] = $arr['access_token'];
 			$temp['expiresAt'] = $arr['expires'] + `date +%s`;

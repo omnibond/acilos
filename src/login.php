@@ -41,7 +41,7 @@
 				"twitter" => array(),
 				"linkedin" => array(),
 				"instagram" => array(),
-				"login" => ""
+				"login" => "first"
 			);
 			file_put_contents("serviceCreds.json", json_encode($credObj));
 		}
@@ -62,6 +62,34 @@
 	$tCount = (string)count($var['twitter']);
 	$lCount = (string)count($var['linkedin']);
 	$iCount = (string)count($var['instagram']);
+	$login = $var['login'];
+	
+	if(isset($_GET['error'])){
+		$errorCode = $_GET['error'];
+		$errorService = $_GET['service'];
+	}else{
+		$errorCode = "";
+	}	
+	if(count($var['facebook'][0]['accounts']) > 0){
+		$fCook = "true";
+	}else{
+		$fCook = "false";
+	}
+	if(count($var['linkedin'][0]['accounts']) > 0){
+		$lCook = "true";
+	}else{
+		$lCook = "false";
+	}
+	if(count($var['instagram'][0]['accounts']) > 0){
+		$iCook = "true";
+	}else{
+		$iCook = "false";
+	}
+	if(count($var['twitter'][0]['accounts']) > 0){
+		$tCook = "true";
+	}else{
+		$tCook = "false";
+	}
 	
 	if(isset($_GET['facebook']) && $_GET['facebook'] == "true"){
 		setcookie("facebookCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', $cookieDom, false, false);
@@ -130,38 +158,6 @@
 				
 			header('Location: /#/mainFeed');
 		}
-	}
-	
-	if(isset($_GET['error'])){
-		$errorCode = $_GET['error'];
-		$errorService = $_GET['service'];
-	}else{
-		$errorCode = "";
-	}
-	if(isset($_GET['login']) && $_GET['login'] !== "second"){
-		$login = "first";
-	}else{
-		$login = "second";
-	}
-	if(count($var['facebook'][0]['accounts']) > 0){
-		$fCook = "true";
-	}else{
-		$fCook = "false";
-	}
-	if(count($var['linkedin'][0]['accounts']) > 0){
-		$lCook = "true";
-	}else{
-		$lCook = "false";
-	}
-	if(count($var['instagram'][0]['accounts']) > 0){
-		$iCook = "true";
-	}else{
-		$iCook = "false";
-	}
-	if(count($var['twitter'][0]['accounts']) > 0){
-		$tCook = "true";
-	}else{
-		$tCook = "false";
 	}
 ?>
 <!DOCTYPE html>

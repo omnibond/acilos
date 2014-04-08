@@ -140,9 +140,6 @@ if(isset($_REQUEST['oauth_verifier'])){
 		if($credObj['login'] == "first"){
 			$credObj['login'] = "second";
 		}
-		if($credObj['login'] == ""){
-			$credObj['login'] = "first";
-		}
 					
 		$temp['accessToken'] = $access_token['oauth_token'];
 		$temp['accessSecret'] = $access_token['oauth_token_secret'];
