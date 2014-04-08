@@ -98,7 +98,7 @@ session_start();
 				}
 				//if we loop through everyone and done find the user
 				if($found == "false"){
-					if($state == "outside"){
+					if($state == "outside" && $credObj['login'] !== "first"){
 						header('Location: ../login.php?error=1&service=facebook');
 						return;
 					}

@@ -140,7 +140,7 @@ function getAccessToken() {
 		}
 		//if we loop through everyone and done find the user
 		if($found == "false"){
-			if($json['state'] == "outside"){
+			if($json['state'] == "outside" && $credObj['login'] !== "first"){
 				header('Location: ../login.php?error=1&service=linkedin');
 				return;
 			}

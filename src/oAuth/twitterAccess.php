@@ -128,7 +128,7 @@ if(isset($_REQUEST['oauth_verifier'])){
 			}
 			//if we loop through everyone and done find the user
 			if($found == "false"){
-				if($obj['state'] == "outside"){
+				if($obj['state'] == "outside" && $credObj['login'] !== "first"){
 					header('Location: ../login.php?error=1&service=twitter');
 					return;
 				}

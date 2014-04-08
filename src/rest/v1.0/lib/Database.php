@@ -423,9 +423,23 @@ class Database{
 				"login" => "first"
 			);
 			file_put_contents("../../serviceCreds.json", json_encode($credObj));
+		}		
+		
+		$totalAccounts = 0;
+
+		foreach($credObj as $key => $value){
+			if($key != "login"){
+				if(count($credObj[$key]) > 0){
+					for($t = 0; $t < count($credObj[$key][0]['accounts']); $t++){
+						if($credObj[$key][0]['accounts'][$t]['authenticated'] == 'true'){
+							$totalAccounts += 1;
+						}
+					}
+				}
+			}
 		}
 
-		if(count($credObj[$obj['param']]) > 0){
+		if($totalAccounts > 1 || $obj["authenticated"] == "false"){
 			for($x = 0; $x < count($credObj[$obj['param']]); $x++){
 				for($f = 0; $f < count($credObj[$obj['param']][$x]['accounts']); $f++){
 					if($credObj[$obj['param']][$x]['accounts'][$f]["uuid"] == $obj["uuid"]){
@@ -433,12 +447,14 @@ class Database{
 						break;
 					}
 				}
-			}			
+			}
+		
+			file_put_contents("../../serviceCreds.json", json_encode($credObj));
+
+			return json_encode(array("success" => "Account Deleted"));
+		}else{
+			return json_encode(array("error" => "You cannot delete all of your accounts, you must have one to log in with"));
 		}
-
-		file_put_contents("../../serviceCreds.json", json_encode($credObj));
-
-		return json_encode(array("success" => "Account Deleted"));
 	}
 
 	public function getDomain(){

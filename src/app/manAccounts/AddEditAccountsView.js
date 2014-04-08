@@ -232,9 +232,18 @@ define([
 							label: "Delete",
 							onClick: lang.hitch(this, function(item, obj, param, w){
 		
-								this.deleteAccountCred(obj['accounts'][w]);
-								item.destroyRecursive();
-								this.activate();
+								this.deleteAccountCred(obj['accounts'][w]).then(lang.hitch(this, function(obj){
+									if(obj['success']){
+										item.destroyRecursive();
+										this.activate();
+									}else{
+										if(obj['error']){
+											this.errorItem.set("label", obj['error']);
+										}else{
+											this.errorItem.set("label", "An error has occurred trying to modfiy this account");
+										}
+									}
+								}))
 							}, item, obj, param, w)
 						})
 						
