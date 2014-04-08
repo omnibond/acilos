@@ -646,13 +646,23 @@ function postFilesHandler($obj){
 		$minutes = $hoursTimeArr[1];
 		$seconds = $hoursTimeArr[2];
 
-		if(intval($preHours) > 12){
-			$hours = intval($preHours) - 12;
-			$suffix = "pm";
-		}else{
-			$hours = intval($preHours);
-			$suffix = "am";
-		}
+		if(intval($preHours) > 12 || intval($preHours) == 12){
+            $hours = intval($preHours) - 12;
+
+            if($hours == 0){
+                    $hours = 12;
+            }
+
+            $suffix = "pm";
+	    }else{
+            $hours = intval($preHours);
+
+            if($hours == 0){
+                    $hours = 12;
+            }
+            
+            $suffix = "am";
+	    }
 
 		$time = $hours . ":" . $minutes . " " . $suffix;
 		$date = $month . "/" . $day . "/" . $year;
