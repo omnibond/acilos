@@ -284,7 +284,9 @@ class Credentials{
 								"name" => $obj['name'],
 								"image" => $obj['image'],
 								"color" => $obj['color'],
-								'expiresAt' => $obj['expiresAt']
+								'expiresAt' => $obj['expiresAt'],
+								"loginDisallow" => $obj['loginDisallow'],
+								"authenticated" => $obj['authenticated']
 							);
 						}else{
 							$account = array(
@@ -294,7 +296,9 @@ class Credentials{
 								"name" => $obj['name'],
 								"image" => $obj['image'],
 								"color" => $obj['color'],
-								'expiresAt' => $obj['expiresAt']
+								'expiresAt' => $obj['expiresAt'],
+								"loginDisallow" => $obj['loginDisallow'],
+								"authenticated" => $obj['authenticated']
 							);
 						}
 						array_push($returnArr['linkedin'], $account);

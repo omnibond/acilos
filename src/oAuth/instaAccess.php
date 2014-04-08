@@ -99,14 +99,13 @@ if(isset($_GET['code'])){
 		$temp['name'] =  $obj['user']['username'];
 		$temp['authenticated'] = "true";
 		if(!isset($temp['loginDisallow'])){
-			$temp['loginDisallow'] = "false";
+			$temp['loginDisallow'] = $tempApp['accounts'][$open]['loginDisallow'];
 		}
 		if(!isset($temp['color'])){
-			//$temp['color'] = "#F66733";
-			$temp['color'] = $tempApp['color'];
+			$temp['color'] = $tempApp['accounts'][$open]['color'];
 		}
 		if(!isset($temp['uuid'])){
-			$temp['uuid'] = uniqid();
+			$temp['uuid'] = $tempApp['accounts'][$open]['uuid'];
 		}
 		
 		if($found == "false"){

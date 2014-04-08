@@ -534,14 +534,15 @@ function getDiscussionObjects(){
 	}
 	
 	for($h=0; $h < count($accts); $h++){	
+		print_r($accts); ?><br/><?php
 		$user = linkedInFetch('GET', '/v1/people/~/group-memberships', $accts[$h]['accessToken']);
-		#print_r($token);
+		print_r($user);
 		$user = objectToArray($user);
 
 		$groupArr = array();
 		$counter = 0;
 		for($z = 0; $z < count($user['values']); $z++){
-			$groupPost = linkedInFetch('GET', '/v1/groups/'.$user['values'][$z]['group']['id'].'/posts:(creator:(first-name,last-name,picture-url,id,headline),title,summary,creation-timestamp,id,likes,comments,attachment:(image-url,content-domain,content-url,title,summary))', $obj['accessToken']);
+			$groupPost = linkedInFetch('GET', '/v1/groups/'.$user['values'][$z]['group']['id'].'/posts:(creator:(first-name,last-name,picture-url,id,headline),title,summary,creation-timestamp,id,likes,comments,attachment:(image-url,content-domain,content-url,title,summary))', $accts[$h]['accessToken']);
 			$thing = objectToArray($groupPost);
 
 			for($t = 0; $t < count($thing['values']); $t++){

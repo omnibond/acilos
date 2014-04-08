@@ -521,9 +521,12 @@ class Database{
 			for($x = 0; $x < count($credObj[$loginObj['param']][0]['accounts']); $x++){
 				if(isset($credObj[$loginObj['param']][0]['accounts'][$x]['user'])){
 					if($credObj[$loginObj['param']][0]['accounts'][$x]['user'] == $loginObj['user']){
+						print "here";
 						if($credObj[$loginObj['param']][0]['accounts'][$x]['loginDisallow'] == "true"){
+							print "false";
 							$credObj[$loginObj['param']][0]['accounts'][$x]['loginDisallow'] = "false";
 						}else{
+							print "login";
 							$credObj[$loginObj['param']][0]['accounts'][$x]['loginDisallow'] = "true";
 						}
 						break;

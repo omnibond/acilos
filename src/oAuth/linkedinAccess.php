@@ -160,14 +160,13 @@ function getAccessToken() {
 	$temp['name'] = $user->firstName . " " . $user->lastName;
 	$temp['authenticated'] = "true";
 	if(!isset($temp['loginDisallow'])){
-		$temp['loginDisallow'] = "false";
+		$temp['loginDisallow'] = $tempApp['accounts'][$open]['loginDisallow'];
 	}
 	if(!isset($temp['color'])){
-		$temp['color'] = $tempApp['color'];
-		$temp['color'] = "#B33DA5";
+		$temp['color'] = $tempApp['accounts'][$open]['color'];
 	}
 	if(!isset($temp['uuid'])){
-		$temp['uuid'] = uniqid();
+		$temp['uuid'] = $tempApp['accounts'][$open]['uuid'];
 	}
 		
 	if($found == "false"){
