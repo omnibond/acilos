@@ -40,7 +40,7 @@
 				"twitter" => array(),
 				"linkedin" => array(),
 				"instagram" => array(),
-				"login" => ""
+				"login" => "first"
 			);
 			file_put_contents("serviceCreds.json", json_encode($credObj));
 		}
@@ -389,7 +389,7 @@
 								if(obj['error']){
 									errorItem.set("label", obj['error']);
 								}else{
-									window.location = "login.php?login=first";
+									window.location = "login.php";
 								}
 							}, errorItem));
 						}

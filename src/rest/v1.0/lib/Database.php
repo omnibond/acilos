@@ -531,17 +531,41 @@ class Database{
 			if($key == "linkedin"){
 				$scope = "rw_groups r_fullprofile r_contactinfo r_network r_basicprofile rw_nus w_messages";
 				$authLink = $obj[$key]['redir']."?apiKey=".$obj[$key]['key']."&secretKey=".$obj[$key]['secret']."&lredirect_uri=".$obj[$key]['redir']."&scope=".$scope;
+				$account = array(
+					"color" => "#B33DA5",
+					"loginDisallow" => "false",
+					"authenticated" => "false",
+					"uuid" => uniqid()
+				);
 			}
 			if($key == "twitter"){
 				$authLink = $obj[$key]['redir']."?appKey=".$obj[$key]['key']."&appSecret=".$obj[$key]['secret']."&twitterRedirect=".$obj[$key]['redir'];
+				$account = array(
+					"color" => "#E32252",
+					"loginDisallow" => "false",
+					"authenticated" => "false",
+					"uuid" => uniqid()
+				);
 			}
 			if($key == "facebook"){
 				$scope = "friends_location,friends_hometown,user_hometown,user_location,publish_stream,read_stream,read_friendlists,friends_birthday,friends_religion_politics,email,user_likes,friends_likes,manage_notifications";
 				$authLink = "https://www.facebook.com/dialog/oauth?client_id=".$obj[$key]['key']."&redirect_uri=".$obj[$key]['redir']."&scope=".$scope;
+				$account = array(
+					"color" => "#0066FF",
+					"loginDisallow" => "false",
+					"authenticated" => "false",
+					"uuid" => uniqid()
+				);
 			}
 			if($key == "instagram"){
 				$scope = "relationships likes comments";
 				$authLink = "https://api.instagram.com/oauth/authorize/?client_id=".$obj[$key]['key']."&redirect_uri=".$obj[$key]['redir']."&response_type=code&scope=".$scope;
+				$account = array(
+					"color" => "#F66733",
+					"loginDisallow" => "false",
+					"authenticated" => "false",
+					"uuid" => uniqid()
+				);
 			}
 			$credObj[$key]['auth'] = $authLink;
 
@@ -553,10 +577,11 @@ class Database{
 				"accounts" => array(),
 				"redir" => $obj[$key]['redir']	
 			);
+			array_push($temp['accounts'], $account);
 			array_push($finalObj[$key], $temp);
 		}
 
-		$finalObj['login'] = "";
+		$finalObj['login'] = "first";
 		
 		if(!isset($finalObj['twitter'])){
 			$finalObj['twitter'] = array();

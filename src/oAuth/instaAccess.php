@@ -91,9 +91,6 @@ if(isset($_GET['code'])){
 		if($credObj['login'] == "first"){
 			$credObj['login'] = "second";
 		}
-		if($credObj['login'] == ""){
-			$credObj['login'] = "first";
-		}
 					
 		$temp['accessToken'] = $obj['access_token'];
 		$temp['expiresAt'] = `date +%s`;
