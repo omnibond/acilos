@@ -408,28 +408,33 @@ define([
 					
 					retweetDiv.onclick = lang.hitch(this, function(retweetDiv, id){
 						for(var key in this.authObj){
-							for(var d = 0; d < this.authObj[key].length; d++){
-								if(this.authObj[key][d].accessToken != undefined){
-									if(source.mainAccountID == this.authObj[key][d].user){
+							if(key !== "login"){
+								if(this.authObj[key].length > 0){
+									var accountArr = this.authObj[key][0]['accounts'];
+									for(var d = 0; d < accountArr.length; d++){
+										if(accountArr[d].accessToken != undefined){
+											if(source.mainAccountID == accountArr[d].user){
 
-										var accessToken = this.authObj[key][d].accessToken;
-										var accessSecret = this.authObj[key][d].accessSecret;
-										var appKey = this.authObj[key][d].key;
-										var appSecret = this.authObj[key][d].secret;
+												var accessToken = accountArr[d].accessToken;
+												var accessSecret = accountArr[d].accessSecret;
+												var appKey = accountArr[d].key;
+												var appSecret = accountArr[d].secret;
 
-										if(domClass.contains(retweetDiv, "twitterOrangeDiv")){
-											this.retweet++;
-											domClass.remove(retweetDiv, "twitterOrangeDiv");
-											domClass.add(retweetDiv, "twitterBlueDiv");
-											retweetDiv.innerHTML = "Retweeted(" + (this.retweet) + ")";
-											this.setIsCommented("twitter-----"+id, "true");
-											
-											var tweetID = dataObj.id.split("-----");
-											tweetID = tweetID[1];
+												if(domClass.contains(retweetDiv, "twitterOrangeDiv")){
+													this.retweet++;
+													domClass.remove(retweetDiv, "twitterOrangeDiv");
+													domClass.add(retweetDiv, "twitterBlueDiv");
+													retweetDiv.innerHTML = "Retweeted(" + (this.retweet) + ")";
+													this.setIsCommented("twitter-----"+id, "true");
+													
+													var tweetID = dataObj.id.split("-----");
+													tweetID = tweetID[1];
 
-											this.sendTwitRetweet(tweetID, accessToken, accessSecret, appKey, appSecret).then(lang.hitch(this, function(obj){
-												console.log("obj is", obj);
-											}));
+													this.sendTwitRetweet(tweetID, accessToken, accessSecret, appKey, appSecret).then(lang.hitch(this, function(obj){
+														console.log("obj is", obj);
+													}));
+												}
+											}
 										}
 									}
 								}
@@ -439,41 +444,46 @@ define([
 					
 					favoriteDiv.onclick = lang.hitch(this, function(favoriteDiv, id){
 						for(var key in this.authObj){
-							for(var d = 0; d < this.authObj[key].length; d++){
-								if(this.authObj[key][d].accessToken != undefined){
-									if(source.mainAccountID == this.authObj[key][d].user){
+							if(key !== "login"){
+								if(this.authObj[key].length > 0){
+									var accountArr = this.authObj[key][0]['accounts'];
+									for(var d = 0; d < accountArr.length; d++){
+										if(accountArr[d].accessToken != undefined){
+											if(source.mainAccountID == accountArr[d].user){
 
-										var accessToken = this.authObj[key][d].accessToken;
-										var accessSecret = this.authObj[key][d].accessSecret;
-										var appKey = this.authObj[key][d].key;
-										var appSecret = this.authObj[key][d].secret;
+												var accessToken = accountArr[d].accessToken;
+												var accessSecret = accountArr[d].accessSecret;
+												var appKey = accountArr[d].key;
+												var appSecret = accountArr[d].secret;
 
-										if(domClass.contains(favoriteDiv, "twitterOrangeDiv")){
-											this.favorite++
-											domClass.remove(favoriteDiv, "twitterOrangeDiv");
-											domClass.add(favoriteDiv, "twitterBlueDiv");
-											favoriteDiv.innerHTML = "Favorited(" + (this.favorite) + ")";
-											this.setIsFavorited("twitter-----"+id, "true");
-											
-											var tweetID = dataObj.id.split("-----");
-											tweetID = tweetID[1];
+												if(domClass.contains(favoriteDiv, "twitterOrangeDiv")){
+													this.favorite++
+													domClass.remove(favoriteDiv, "twitterOrangeDiv");
+													domClass.add(favoriteDiv, "twitterBlueDiv");
+													favoriteDiv.innerHTML = "Favorited(" + (this.favorite) + ")";
+													this.setIsFavorited("twitter-----"+id, "true");
+													
+													var tweetID = dataObj.id.split("-----");
+													tweetID = tweetID[1];
 
-											this.sendTwitterFav(tweetID, accessToken, accessSecret, appKey, appSecret).then(lang.hitch(this, function(obj){
-												console.log("obj is", obj);
-											}));
-										}else{
-											this.favorite--;
-											domClass.remove(favoriteDiv, "twitterBlueDiv");
-											domClass.add(favoriteDiv, "twitterOrangeDiv");
-											favoriteDiv.innerHTML = "Favorite(" + (this.favorite) + ")";
-											this.setIsFavorited("twitter-----"+id, "false");
-											
-											var tweetID = dataObj.id.split("-----");
-											tweetID = tweetID[1];
+													this.sendTwitterFav(tweetID, accessToken, accessSecret, appKey, appSecret).then(lang.hitch(this, function(obj){
+														console.log("obj is", obj);
+													}));
+												}else{
+													this.favorite--;
+													domClass.remove(favoriteDiv, "twitterBlueDiv");
+													domClass.add(favoriteDiv, "twitterOrangeDiv");
+													favoriteDiv.innerHTML = "Favorite(" + (this.favorite) + ")";
+													this.setIsFavorited("twitter-----"+id, "false");
+													
+													var tweetID = dataObj.id.split("-----");
+													tweetID = tweetID[1];
 
-											this.sendTwitterUnFav(tweetID, accessToken, accessSecret, appKey, appSecret).then(lang.hitch(this, function(obj){
-												console.log("obj is", obj);
-											}));
+													this.sendTwitterUnFav(tweetID, accessToken, accessSecret, appKey, appSecret).then(lang.hitch(this, function(obj){
+														console.log("obj is", obj);
+													}));
+												}
+											}
 										}
 									}
 								}

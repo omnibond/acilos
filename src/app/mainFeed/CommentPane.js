@@ -148,19 +148,27 @@ define([
 						label: "Post!",
 						"class": "postButton",
 						onClick: lang.hitch(this, function(content, source){
+
 							for(var key in this.authObj){
-								for(var d = 0; d < this.authObj[key].length; d++){
-									if(source.mainAccountID == this.authObj[key][d].user){
-										var accessToken = this.authObj[key][d].accessToken;
+								if(key !== "login"){
+									if(this.authObj[key].length > 0){
+										var accountArr = this.authObj[key][0]['accounts'];
+										for(var d = 0; d < accountArr.length; d++){
+											if(accountArr[d].accessToken != undefined){
+												if(source.mainAccountID == accountArr[d].user){
+													var accessToken = accountArr[d].accessToken;
 
-										id = content.id;
+													id = content.id;
 
-										var comment = this.commentFacebookBox.get("value");
+													var comment = this.commentFacebookBox.get("value");
 
-										this.sendFaceComment(id, comment, accessToken).then(lang.hitch(this, function(obj){
-											console.log("obj is: ", obj);
-										}));	
-										this.commentFacebookBox.set("value", "");
+													this.sendFaceComment(id, comment, accessToken).then(lang.hitch(this, function(obj){
+														console.log("obj is: ", obj);
+													}));	
+													this.commentFacebookBox.set("value", "");
+												}
+											}
+										}
 									}
 								}
 							}
@@ -237,26 +245,31 @@ define([
 								this.authObj = obj;
 
 								for(var key in this.authObj){
-									for(var d = 0; d < this.authObj[key].length; d++){
-										if(this.authObj[key][d].accessToken != undefined){
-											if(source.mainAccountID == this.authObj[key][d].user){
+									if(key !== "login"){
+										if(this.authObj[key].length > 0){
+											var accountArr = this.authObj[key][0]['accounts'];
+											for(var d = 0; d < accountArr.length; d++){
+												if(accountArr[d].accessToken != undefined){
+													if(source.mainAccountID == accountArr[d].user){
 
-												var accessToken = this.authObj[key][d].accessToken;
-												var accessSecret = this.authObj[key][d].accessSecret;
-												var appKey = this.authObj[key][d].key;
-												var appSecret = this.authObj[key][d].secret;
+														var accessToken = accountArr[d].accessToken;
+														var accessSecret = accountArr[d].accessSecret;
+														var appKey = accountArr[d].key;
+														var appSecret = accountArr[d].secret;
 
-												console.log("data is: ", data);
-												console.log("@" + actor.displayName + " message" + " ==in_reply_to_status_id");
+														console.log("data is: ", data);
+														console.log("@" + actor.displayName + " message" + " ==in_reply_to_status_id");
 
-												var tweetID = data.hits.hits[counter]._id.split("-----");
-												tweetID = tweetID[1];
-												var message = this.commentTwitterBox.get("value");
+														var tweetID = data.hits.hits[counter]._id.split("-----");
+														tweetID = tweetID[1];
+														var message = this.commentTwitterBox.get("value");
 
-												this.sendTwitReply(actor.displayName, tweetID, message, accessToken, accessSecret, appKey, appSecret).then(lang.hitch(this, function(obj){
-													console.log("obj is: ", obj);
-												}));		
-												this.commentTwitterBox.set("value", "");
+														this.sendTwitReply(actor.displayName, tweetID, message, accessToken, accessSecret, appKey, appSecret).then(lang.hitch(this, function(obj){
+															console.log("obj is: ", obj);
+														}));		
+														this.commentTwitterBox.set("value", "");
+													}
+												}
 											}
 										}
 									}
@@ -293,23 +306,30 @@ define([
 						"class": "postButton",
 						onClick: lang.hitch(this, function(id, source){
 							for(var key in this.authObj){
-								for(var d = 0; d < this.authObj[key].length; d++){
-									if(source.mainAccountID == this.authObj[key][d].user){
-										
-										if(this.commentInstaBox.get("value") === ""){
-											console.log("Please type a comment in the box");
-										}else{
-											var string = this.commentInstaBox.get("value");
-											this.sendInstaComment(id, this.commentInstaBox.get("value"), this.authObj[key][d].accessToken);
-											var item = new ListItem({
-												variableHeight: true,
-												label: string + " - Posted By - You",
-												"class": "commentLikeAccordionItemClass"
-											});
-											item.placeAt(this.list, 1);
-											this.resize();
-											this.expand(this.pane, true);
-											this.commentInstaBox.set("value", "");
+								if(key !== "login"){
+									if(this.authObj[key].length > 0){
+										var accountArr = this.authObj[key][0]['accounts'];
+										for(var d = 0; d < accountArr.length; d++){
+											if(accountArr[d].accessToken != undefined){
+												if(source.mainAccountID == accountArr[d].user){
+													
+													if(this.commentInstaBox.get("value") === ""){
+														console.log("Please type a comment in the box");
+													}else{
+														var string = this.commentInstaBox.get("value");
+														this.sendInstaComment(id, this.commentInstaBox.get("value"), this.authObj[key][d].accessToken);
+														var item = new ListItem({
+															variableHeight: true,
+															label: string + " - Posted By - You",
+															"class": "commentLikeAccordionItemClass"
+														});
+														item.placeAt(this.list, 1);
+														this.resize();
+														this.expand(this.pane, true);
+														this.commentInstaBox.set("value", "");
+													}
+												}
+											}
 										}
 									}
 								}
@@ -392,22 +412,29 @@ define([
 						"class": "postButton",
 						onClick: lang.hitch(this, function(id){
 							for(var key in this.authObj){
-								for(var d = 0; d < this.authObj[key].length; d++){
-									if(obj.mainAccountID == this.authObj[key][d].user){
-										if(this.commentLinkBox.get("value") === ""){
-											console.log("Please type a comment in the box");
-										}else{
-											var string = this.commentLinkBox.get("value");
-											this.sendLinkedinComments(id, this.commentLinkBox.get("value"), this.authObj[key][d].accessToken);
-											var item = new ListItem({
-												label: string + " - Posted By - You",
-												"class": "commentLikeAccordionItemClass"
-											});
-											item.placeAt(this.list, 1);
-											this.resize();
-											this.expand(this.pane, true);
-											this.commentLinkBox.set("value", "");
-										}	
+								if(key !== "login"){
+									if(this.authObj[key].length > 0){
+										var accountArr = this.authObj[key][0]['accounts'];
+										for(var d = 0; d < accountArr.length; d++){
+											if(accountArr[d].accessToken != undefined){
+												if(obj.mainAccountID == accountArr[d].user){
+													if(this.commentLinkBox.get("value") === ""){
+														console.log("Please type a comment in the box");
+													}else{
+														var string = this.commentLinkBox.get("value");
+														this.sendLinkedinComments(id, this.commentLinkBox.get("value"), accountArr[d].accessToken);
+														var item = new ListItem({
+															label: string + " - Posted By - You",
+															"class": "commentLikeAccordionItemClass"
+														});
+														item.placeAt(this.list, 1);
+														this.resize();
+														this.expand(this.pane, true);
+														this.commentLinkBox.set("value", "");
+													}	
+												}
+											}
+										}
 									}
 								}
 							}

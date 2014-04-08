@@ -358,32 +358,37 @@ define([
 
 				likeDiv.onclick = lang.hitch(this, function(likeDiv, id){
 					for(var key in this.authObj){
-						for(var d = 0; d < this.authObj[key].length; d++){
-							if(this.authObj[key][d].accessToken != undefined){
-								if(source.mainAccountID == this.authObj[key][d].user){
+						if(key !== "login"){
+							if(this.authObj[key].length > 0){
+								var accountArr = this.authObj[key][0]['accounts'];
+								for(var d = 0; d < accountArr.length; d++){
+									if(accountArr[d].accessToken != undefined){
+										if(source.mainAccountID == accountArr[d].user){
 
-									var accessToken = this.authObj[key][d].accessToken;
+											var accessToken = accountArr[d].accessToken;
 
-									if(domClass.contains(likeDiv, "twitterOrangeDiv")){
-										this.likeNum++;
-										domClass.remove(likeDiv, "twitterOrangeDiv");
-										domClass.add(likeDiv, "twitterBlueDiv");
-										likeDiv.innerHTML = "Liked(" + (this.likeNum) + ")";
-										this.setIsLiked("instagram-----"+id, "true");
-										
-										this.sendInstaLike(id, accessToken).then(lang.hitch(this, function(obj){
-											console.log("obj is: ", obj);
-										}));
-									}else{
-										this.likeNum--;
-										domClass.remove(likeDiv, "twitterBlueDiv");
-										domClass.add(likeDiv, "twitterOrangeDiv");
-										likeDiv.innerHTML = "Like(" + (this.likeNum) + ")";
-										this.setIsLiked("instagram-----"+id, "false");
-										
-										this.sendInstaUnLike(id, accessToken).then(lang.hitch(this, function(obj){
-											console.log("obj is: ", obj);
-										}));
+											if(domClass.contains(likeDiv, "twitterOrangeDiv")){
+												this.likeNum++;
+												domClass.remove(likeDiv, "twitterOrangeDiv");
+												domClass.add(likeDiv, "twitterBlueDiv");
+												likeDiv.innerHTML = "Liked(" + (this.likeNum) + ")";
+												this.setIsLiked("instagram-----"+id, "true");
+												
+												this.sendInstaLike(id, accessToken).then(lang.hitch(this, function(obj){
+													console.log("obj is: ", obj);
+												}));
+											}else{
+												this.likeNum--;
+												domClass.remove(likeDiv, "twitterBlueDiv");
+												domClass.add(likeDiv, "twitterOrangeDiv");
+												likeDiv.innerHTML = "Like(" + (this.likeNum) + ")";
+												this.setIsLiked("instagram-----"+id, "false");
+												
+												this.sendInstaUnLike(id, accessToken).then(lang.hitch(this, function(obj){
+													console.log("obj is: ", obj);
+												}));
+											}
+										}
 									}
 								}
 							}
