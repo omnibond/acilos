@@ -154,7 +154,8 @@ if(isset($_REQUEST['oauth_verifier'])){
 			$temp['loginDisallow'] = "false";
 		}
 		if(!isset($temp['color'])){
-			$temp['color'] = "#E32252";
+			//$temp['color'] = "#E32252";
+			$temp['color'] = $tempApp['color'];
 		}
 		if(!isset($temp['uuid'])){
 			$temp['uuid'] = uniqid();

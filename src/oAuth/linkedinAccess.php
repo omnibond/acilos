@@ -163,6 +163,7 @@ function getAccessToken() {
 		$temp['loginDisallow'] = "false";
 	}
 	if(!isset($temp['color'])){
+		$temp['color'] = $tempApp['color'];
 		$temp['color'] = "#B33DA5";
 	}
 	if(!isset($temp['uuid'])){

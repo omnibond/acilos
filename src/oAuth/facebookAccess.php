@@ -121,7 +121,8 @@ session_start();
 				$temp['loginDisallow'] = "false";
 			}
 			if(!isset($temp['color'])){
-				$temp['color'] = "#0066FF";
+				//$temp['color'] = "#0066FF";
+				$temp['color'] = $tempApp['color'];
 			}
 			if(!isset($temp['uuid'])){
 				$temp['uuid'] = uniqid();

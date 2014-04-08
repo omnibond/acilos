@@ -102,7 +102,8 @@ if(isset($_GET['code'])){
 			$temp['loginDisallow'] = "false";
 		}
 		if(!isset($temp['color'])){
-			$temp['color'] = "#F66733";
+			//$temp['color'] = "#F66733";
+			$temp['color'] = $tempApp['color'];
 		}
 		if(!isset($temp['uuid'])){
 			$temp['uuid'] = uniqid();
