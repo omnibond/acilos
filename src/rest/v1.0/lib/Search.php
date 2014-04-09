@@ -267,7 +267,7 @@ class Search{
 		//print_r($status -> statuses);
 
 		for($x = 0; $x < count($status -> statuses); $x++){
-			print_r($status -> statuses[$x]); ?><br/><?php
+			print_r($status -> statuses[$x]); ?><br/><br/><br/><br/><?php
 		}
 
 		return json_encode(array(
