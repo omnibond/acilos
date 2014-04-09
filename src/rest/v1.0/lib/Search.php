@@ -250,6 +250,31 @@ class Search{
 		
 		return json_encode($var);
 	}
+
+	public function queryTwitter(){
+		$var = file_get_contents("php://input");
+		$varObj = json_decode($var, true);
+		$query = $varObj['query'];
+		$oauth_Token = $varObj['accessToken'];
+		$consumer_key = $varObj['appKey'];
+		$consumer_secret = $varObj['appSecret'];
+		$access_secret = $varObj['accessSecret'];
+
+		$connection = new TwitterOAuth($consumer_key, $consumer_secret, $oauth_Token, $access_secret);
+
+		$status = $connection->get('search/tweets', array('q' => $query));
+
+		//print_r($status -> statuses);
+
+		for($x = 0; $x < count($status -> statuses); $x++){
+			print_r($status -> statuses[$x]); ?><br/><?php
+		}
+
+		return json_encode(array(
+				"Success" => "It worked!"
+			)
+		);
+	}
 	
 	public function getUser(){
 		if(isset($_GET['name'])){

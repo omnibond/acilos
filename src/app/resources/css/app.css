@@ -1243,100 +1243,100 @@ html.mobile,
 .dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_favorites .dmPrimaryNavItemColor:active ~ .dmPrimaryNavItemLabel {
   color: #299898;
 }
-.dmNavBackgroundColor_search {
+.dmNavBackgroundColor_query {
   background-color: #8f5929;
   background-image: none;
   border: none;
   color: white;
   font-weight: bold;
 }
-.dmActiveModule_search .dmModuleContent {
+.dmActiveModule_query .dmModuleContent {
   border-left: 2px solid #8f5929;
 }
-.dmSelectedPrimaryNavItem_search .dmModuleContent {
+.dmSelectedPrimaryNavItem_query .dmModuleContent {
   border-left: 2px solid #8f5929;
 }
-.dmActiveModule_search .selectorBar {
+.dmActiveModule_query .selectorBar {
   background-color: #543418;
 }
-.dmSelectedPrimaryNavItem_search .selectorBar {
+.dmSelectedPrimaryNavItem_query .selectorBar {
   background-color: #543418;
 }
-.dmActiveModule_search .selectorButton {
+.dmActiveModule_query .selectorButton {
   background: #8f5929;
 }
-.dmSelectedPrimaryNavItem_search .selectorButton {
+.dmSelectedPrimaryNavItem_query .selectorButton {
   background: #8f5929;
 }
-.dmPrimaryNavItem_search .dmPrimaryNavItemColor {
+.dmPrimaryNavItem_query .dmPrimaryNavItemColor {
   background-color: #8f5929;
 }
-.dmPrimaryNavItem_search .dmPrimaryNavItemContent {
+.dmPrimaryNavItem_query .dmPrimaryNavItemContent {
   background-color: #543418;
 }
-.dmPrimaryNavItem_search a {
+.dmPrimaryNavItem_query a {
   text-decoration: none;
 }
-.dmSelectedPrimaryNavItem_search .dmSubNav {
+.dmSelectedPrimaryNavItem_query .dmSubNav {
   background-color: #8f5929;
 }
-.dmSelectedPrimaryNavItem_search .dmSubNav .dmSubNavBackButton div,
-.dmSelectedPrimaryNavItem_search .dmSubNav .dmFullscreenButton {
+.dmSelectedPrimaryNavItem_query .dmSubNav .dmSubNavBackButton div,
+.dmSelectedPrimaryNavItem_query .dmSubNav .dmFullscreenButton {
   background-color: #543418;
 }
-.no_touch .dmSelectedPrimaryNavItem_search .dmSubNavBackButton div:hover,
-.no_touch .dmSelectedPrimaryNavItem_search .dmFullscreenButton:hover {
+.no_touch .dmSelectedPrimaryNavItem_query .dmSubNavBackButton div:hover,
+.no_touch .dmSelectedPrimaryNavItem_query .dmFullscreenButton:hover {
   background-color: #180f07;
 }
-.dmSelectedPrimaryNavItem_search .dmSubNavBackButton:active div,
-.dmSelectedPrimaryNavItem_search .dmFullscreenButton:active {
+.dmSelectedPrimaryNavItem_query .dmSubNavBackButton:active div,
+.dmSelectedPrimaryNavItem_query .dmFullscreenButton:active {
   background-color: #180f07;
 }
-.dj_phone .dmSelectedPrimaryNavItem_search .dmSubNav {
+.dj_phone .dmSelectedPrimaryNavItem_query .dmSubNav {
   border-bottom: none;
 }
-.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_search.dmPrimaryNavItemSelected {
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_query.dmPrimaryNavItemSelected {
   background-color: #543418;
 }
-.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_search.dmPrimaryNavItemSelected .dmPrimaryNavItemIcon {
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_query.dmPrimaryNavItemSelected .dmPrimaryNavItemIcon {
   border-right: none;
   color: white;
 }
-.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_search.dmPrimaryNavItemSelected .dmPrimaryNavItemLabel {
+.dj_tablet .dmPrimaryNav .dmPrimaryNavItem_query.dmPrimaryNavItemSelected .dmPrimaryNavItemLabel {
   color: white;
 }
-.dj_phone .dmPrimaryNav .dmPrimaryNavItem_search a,
-.dmRootView .dmPrimaryNav .dmPrimaryNavItem_search a {
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_query a,
+.dmRootView .dmPrimaryNav .dmPrimaryNavItem_query a {
   background-color: #543418;
 }
-.dj_phone .dmPrimaryNav .dmPrimaryNavItem_search a {
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_query a {
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
 }
-.dj_phone .dmPrimaryNav .dmPrimaryNavItem_search a .dmPrimaryNavItemColor {
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_query a .dmPrimaryNavItemColor {
   bottom: 5px;
 }
-.dj_phone .dmPrimaryNav .dmPrimaryNavItem_search a:active {
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_query a:active {
   outline: none;
   position: relative;
   top: 5px;
 }
-.dj_phone .dmPrimaryNav .dmPrimaryNavItem_search a:active .dmPrimaryNavItemColor {
+.dj_phone .dmPrimaryNav .dmPrimaryNavItem_query a:active .dmPrimaryNavItemColor {
   bottom: 0;
 }
-.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_search .dmPrimaryNavItemColor:hover {
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_query .dmPrimaryNavItemColor:hover {
   background-color: #af6d32;
 }
-.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_search .dmPrimaryNavItemColor:hover ~ .dmPrimaryNavItemIcon,
-.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_search .dmPrimaryNavItemColor:hover ~ .dmPrimaryNavItemLabel {
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_query .dmPrimaryNavItemColor:hover ~ .dmPrimaryNavItemIcon,
+.dj_tablet.no_touch .dmRootView .dmPrimaryNav .dmPrimaryNavItem_query .dmPrimaryNavItemColor:hover ~ .dmPrimaryNavItemLabel {
   color: #543418;
 }
-.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_search .dmPrimaryNavItemColor:active {
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_query .dmPrimaryNavItemColor:active {
   background-color: #af6d32;
 }
-.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_search .dmPrimaryNavItemColor:active ~ .dmPrimaryNavItemIcon,
-.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_search .dmPrimaryNavItemColor:active ~ .dmPrimaryNavItemLabel {
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_query .dmPrimaryNavItemColor:active ~ .dmPrimaryNavItemIcon,
+.dj_tablet .dmRootView .dmPrimaryNav .dmPrimaryNavItem_query .dmPrimaryNavItemColor:active ~ .dmPrimaryNavItemLabel {
   color: #543418;
 }
 .dmNavBackgroundColor_analytics {
@@ -1740,8 +1740,8 @@ html.mobile,
   content: 'Your favorite posts';
   margin-left: 10px;
 }
-.dmPrimaryNavItem_search .dmPrimaryNavItemContent:before {
-  content: 'Search through your feeds';
+.dmPrimaryNavItem_query .dmPrimaryNavItemContent:before {
+  content: 'Search services for data';
   margin-left: 10px;
 }
 .dmPrimaryNavItem_analytics .dmPrimaryNavItemContent:before {
@@ -1809,7 +1809,7 @@ html.mobile,
 .dmPrimaryNavItem_favorites .dmPrimaryNavItemIcon:before {
   content: "\e60c";
 }
-.dmPrimaryNavItem_search .dmPrimaryNavItemIcon {
+.dmPrimaryNavItem_query .dmPrimaryNavItemIcon {
   font-family: 'acilos-Fonts';
   speak: none;
   font-style: normal;
@@ -1818,7 +1818,7 @@ html.mobile,
   text-transform: none;
   -webkit-font-smoothing: antialiased;
 }
-.dmPrimaryNavItem_search .dmPrimaryNavItemIcon:before {
+.dmPrimaryNavItem_query .dmPrimaryNavItemIcon:before {
   content: "\e627";
 }
 .dmPrimaryNavItem_analytics .dmPrimaryNavItemIcon {

@@ -36,6 +36,7 @@ define({
 			'favorites',
 			'analytics',
 			'post',
+			'query',
 			'settings',
 			'help'
 		],
@@ -85,6 +86,11 @@ define({
 		post: {
 			title: 'Post',
 			moduleId: 'app/post/Module'
+		},
+		query: {
+			title: 'Query',
+			moduleId: 'dojo-mama/util/ModuleGroup',
+			modules: ['twitterQuery', 'facebookQuery']
 		},
 		settings: {
 			title: 'Settings',
@@ -167,6 +173,18 @@ define({
 			title: 'Select Users',
 			moduleId: 'app/userList/Module',
 			selectedPrimaryNavItem: "people"
+		},
+
+		/*query modules*/
+		twitterQuery: {
+			title: 'Search twitter',
+			moduleId: 'app/twitterQuery/Module',
+			selectedPrimaryNavItem: "query"
+		},
+		facebookQuery: {
+			title: 'Search facebook',
+			moduleId: 'app/facebookQuery/Module',
+			selectedPrimaryNavItem: "query"
 		},
 		
 		/*settings modules*/
