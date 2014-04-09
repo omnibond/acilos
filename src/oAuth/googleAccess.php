@@ -31,7 +31,8 @@ ini_set("display_errors", 1);
 
 $client_id = '1091545547604.apps.googleusercontent.com';
 $client_secret = '68uk8nqoNzmcwveRTqs-ucmH';
-$redirect_uri = 'http://richardgpc.clemson.edu/socialreader/Trunk/src/oAuth/googleAccess.php';
+$redirect_uri = 'http://richardgpc.clemson.edu/oAuth/googleAccess.php';
+
 $scope = 'https://sites.google.com/feeds/';
 $state = '';
 $response_type = 'code';
