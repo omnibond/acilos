@@ -118,19 +118,18 @@ define([
 
 							for(var key in this.authObj){
 								if(key !== "login"){
-									if(this.authObj[key].length > 0){
+									if(this.authObj[key].length > 0 && key == "twitter"){
 										var accountArr = this.authObj[key][0]['accounts'];
-										for(var d = 0; d < accountArr.length; d++){
-											if(accountArr[d].accessToken != undefined && key == "twitter"){
-												var accessToken = accountArr[d].accessToken;
-												var accessSecret = accountArr[d].accessSecret;
-												var appKey = accountArr[d].key;
-												var appSecret = accountArr[d].secret;
+										if(accountArr[0].accessToken != undefined){
 
-												this.queryTwitter(this.queryBox.get("value"), accessToken, accessSecret, appKey, appSecret).then(lang.hitch(this, function(obj){
-													console.log("returned object is: ", obj);
-												}))
-											}
+
+											//for facebook
+											//accountArr[d].key = this.authObj[key].key;
+											//accountArr[d].secret = this.authObj[key].secret;
+
+											this.queryTwitter(this.queryBox.get("value"), this.authObj[key]).then(lang.hitch(this, function(obj){
+												console.log("returned object is: ", obj);
+											}))
 										}
 									}
 								}

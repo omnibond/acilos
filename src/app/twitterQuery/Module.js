@@ -71,8 +71,8 @@ define(['dojo/_base/declare',
 			return xhrManager.send('GET', 'rest/v1.0/Database/getDomain', params);
 		},
 
-		queryTwitter: function(query, accessToken, accessSecret, appKey, appSecret){
-			var params = {query: query, accessToken: accessToken, accessSecret: accessSecret, appKey: appKey, appSecret: appSecret};
+		queryTwitter: function(query, authStuff){
+			var params = {query: query, authStuff: authStuff};
 			return xhrManager.send('POST', 'rest/v1.0/Search/queryTwitter', params);
 		},
 

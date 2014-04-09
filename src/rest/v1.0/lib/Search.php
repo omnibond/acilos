@@ -29,6 +29,9 @@
 require_once('matchHelpers.php');
 require_once('ObjectToArray.php');
 require_once('../../oAuth/twitteroauth/twitteroauth.php');
+require_once('../../cron/objects/activityObject.php');
+require_once('../../cron/objects/userBaseObject.php');
+require_once('../../cron/objects/clientBaseObject.php');
 
 use \ElasticSearch\Client;
 
@@ -254,26 +257,184 @@ class Search{
 	public function queryTwitter(){
 		$var = file_get_contents("php://input");
 		$varObj = json_decode($var, true);
+		//print_r($varObj);
+		//query string
 		$query = $varObj['query'];
-		$oauth_Token = $varObj['accessToken'];
-		$consumer_key = $varObj['appKey'];
-		$consumer_secret = $varObj['appSecret'];
-		$access_secret = $varObj['accessSecret'];
-
+		//auth junk
+		$oauth_Token = $varObj['authStuff'][0]['accounts'][0]['accessToken'];
+		$consumer_key = $varObj['authStuff'][0]['accounts'][0]['key'];
+		$consumer_secret = $varObj['authStuff'][0]['accounts'][0]['secret'];
+		$access_secret = $varObj['authStuff'][0]['accounts'][0]['accessSecret'];
+		//connMan
 		$connection = new TwitterOAuth($consumer_key, $consumer_secret, $oauth_Token, $access_secret);
+		//make the twitte request
+		$status = $connection->get('search/tweets', array('q' => $query, 'count' => 100));
+		$status = $status -> statuses;
+		$array = objectToArray($status);
 
-		$status = $connection->get('search/tweets', array('q' => $query));
-
-		//print_r($status -> statuses);
-
-		for($x = 0; $x < count($status -> statuses); $x++){
-			print_r($status -> statuses[$x]); ?><br/><br/><br/><br/><?php
+		//print_r($array);
+		//response
+		if(isset($array['errors'])){
+			print_r($array['errors'][0]['message']);
+			print_r($array['errors'][0]['code']);
+			//refresh token or call get new token again
+			//file_get_contents("../../oAuth/twitterAccess.php?appKey=" + $obj['appKey'] + "&appSecret=" + $obj['appSecret']);
+		}else{
+			$this->normalizeTwitterObject($array, $varObj['authStuff'][0]['accounts'][0]);	    
 		}
 
 		return json_encode(array(
 				"Success" => "It worked!"
 			)
 		);
+	}
+
+	public function normalizeTwitterObject($objArray, $account){
+		echo "normal twitter stuff";
+		for($k = 0; $k < count($objArray); $k++){
+			$obj = $objArray[$k];
+
+			//print_r($obj);
+
+			$manager = new Manager();
+			$builder = new twitterObjectBuilder();
+			$manager->setBuilder($builder);
+			$manager->parseActivityObj($obj, $account);
+
+			$item = $manager->getActivityObj();
+
+			$this->writeObject((array)$item);
+			global $credentialObject;
+			$credentialObject['Twitter']['status'] = 'good';
+		}
+	}
+
+	public function writeObject($obj){
+		#echo "write object"; 
+
+		$index = "app";
+		$host = "localhost";
+		$port = "9200";
+
+		$es = Client::connection("http://$host:$port/$index/$index/");
+
+		$obj['id'] = strtolower($obj['id']);
+		$exists = $this->getObject($obj['id']);
+		if(isset($exists['starred'])){
+			$obj['starred'] = $exists['starred'];
+			$obj['isLiked'] = $exists['isLiked'];
+			$obj['isCommented'] = $exists['isCommented'];
+			$obj['isFavorited'] = $exists['isFavorited'];
+		}
+
+		$grr = $es->index($obj, $obj['id']);
+		#print_r($grr);
+		
+		$this->updateRecentPost($obj);
+	}
+
+	public function getObject($id){
+		#echo "getting object"; 
+
+		$index = "app";
+		$host = "localhost";
+		$port = "9200";
+
+		$es = Client::connection("http://$host:$port/$index/$index");
+		$res = $es->get($id);
+
+		return $res;
+	}
+
+	public function writeClient($obj){
+		"writing to client"; 
+
+		$index = "client";
+		$host = "localhost";
+		$port = "9200";
+
+		$es = Client::connection("http://$host:$port/$index/$index/");
+
+		$grr = $es->index($obj, $obj['data']['id']);
+		return $grr;
+	}
+
+	public function updateRecentPost($post){
+		global $clientObject;
+		//Dont count CONN objects as posts
+		if($post['title'] != "CONN"){
+			//if that poster is a client then update most recent
+			if(isset($clientObject[$post['actor']->id])){
+				$tempClientObj = $clientObject[$post['actor']->id];
+				$tempClientObj['data']['service'] = $post['service'];
+				if($tempClientObj['data']['post']['recentPostTime'] < $post['published'] || $tempClientObj['data']['post']['recentPostTime'] = ''){
+					$tempClientObj['data']['post']['recentPostTime'] = $post['published'];
+					$tempClientObj['data']['post']['recentPost'] = $post['id'];
+					$tempClientObj['data']['post']['totalPosts'] = $tempClientObj['data']['post']['totalPosts'] + 1;
+					if($post['actor']->location != '' || $post['actor']->location != null){
+						$arr = explode("#", $post['actor']->location);
+						if(count($arr) == 2){
+							$tempClientObj['data']['currentTown'] = $post['actor']->location;
+						}else{
+							$geo = getGeoLocation($post['actor']->location);
+							$tempClientObj['data']['currentTown'] = $geo;
+						}
+					}
+					$tempClientObj['data']['friendDegree'] = "first";
+
+					//$log->logInfo($logPrefix.'updateRecentPost() calling writeClient to update recentPost');
+					writeClient($tempClientObj);
+				}
+			}else{
+				//else add them as a client and set their most recent
+				$client = new clientObject(); 
+				$client->setDisplayName($post['actor']->displayName);
+				$client->setID($post['service'].'-----'.$post['actor']->id);
+				$client->setRecentPost($post['id']);
+				$client->setRecentPostTime($post['published']);
+				$client->setTotalPosts(1);
+				$client->setService($post['service']);
+				$client->setFriendDegree("second");
+
+				if($post['actor']->location != '' || $post['actor']->location != null){
+					$geo = $this->getGeoLocation($post['actor']->location);
+					$client->setCurrentTown($geo);
+				}		
+
+				$type = $post['service'];
+				$credential = array('id' => $post['actor']->id, 'givenName' => $post['actor']->displayName, 'displayName' => $post['actor']->displayName);
+				$client->setCredential($type, $credential);
+
+				$var = $this->writeClient((array)$client);
+
+			}
+		}
+	}
+
+	public function getGeoLocation($loc){
+		if($loc == ""){
+			return $loc;
+		}else{
+			$cityclean = str_replace(" ", "+", $loc);
+			$url = "https://maps.googleapis.com/maps/api/geocode/json?address=" . $cityclean . "&sensor=false";
+			$ch = curl_init($url);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			$response = curl_exec($ch);
+			curl_close($ch);
+
+			$var = json_decode($response, true);
+
+			$latLong = "";
+			if($var['status'] == "ZERO_RESULTS"){
+				$latLong = "";
+			}else{
+				if(isset($var['results'][0])){
+					print_r($var);
+	                $latLong = $var['results'][0]['geometry']['location']['lat'] . "#" . $var['results'][0]['geometry']['location']['lng'];
+	            }
+			}
+			return $latLong;
+		}
 	}
 	
 	public function getUser(){
