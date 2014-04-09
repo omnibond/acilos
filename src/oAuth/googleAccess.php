@@ -25,19 +25,114 @@
 **
 ** $QT_END_LICENSE$
 */
+require_once 'Google/Client.php';
 
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
+$client_id = '1';
+$client_secret = '1';
+$redirect_uri = '1';
 
-$client_id = '1091545547604.apps.googleusercontent.com';
-$client_secret = '68uk8nqoNzmcwveRTqs-ucmH';
-$redirect_uri = 'http://richardgpc.clemson.edu/oAuth/googleAccess.php';
+$client = new Google_Client();
+$client->setClientId($client_id);
+$client->setClientSecret($client_secret);
+$client->setRedirectUri($redirect_uri);
+
+$client->addScope('https://www.googleapis.com/auth/plus.stream.read');
+$client->addScope('https://www.googleapis.com/auth/plus.stream.write');
+$client->addScope('https://www.googleapis.com/auth/plus.media.upload');
+$client->addScope('https://www.googleapis.com/auth/plus.me');
+$client->addScope('https://www.googleapis.com/auth/plus.circles.read');
+$client->addScope('https://www.googleapis.com/auth/plus.circles.write');
+
+$authUrl = $client->createAuthUrl();
+print_r($authUrl);
 
 $scope = 'https://sites.google.com/feeds/';
-$state = '';
 $response_type = 'code';
 $access_type = 'offline';
 $approval_prompt = 'auto';
+
+if(isset($_GET['code'])) {
+	$client->authenticate($_GET['code']);
+	$token = '';
+	$token = $client->getAccessToken();
+	$state = $_GET['state'];
+	
+	$credObj = file_get_contents("../serviceCreds.json");
+	$credObj = json_decode($credObj, true);
+	$tempApp = $credObj['google'][0];
+	
+	$me = $plus->people->get('me');
+	$url = filter_var($me['url'], FILTER_VALIDATE_URL);
+	$img = filter_var($me['image']['url'], FILTER_VALIDATE_URL);
+	$name = filter_var($me['displayName'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
+	
+	/*
+	if($token != ''){
+		$found = "false";
+		$open = 0;
+		//check all accounts for this user if there are accounts
+		if(isset($tempApp['accounts']) && count($tempApp['accounts']) > 0){
+			for($j=0; $j<count($tempApp['accounts']); $j++){
+				if($tempApp['accounts'][$j]['user'] == $obj['user']['id'] && $tempApp['accounts'][$j]['loginDisallow'] == "false"){
+					//if we find the user $temp is now that user
+					$temp = $tempApp['accounts'][$j];
+					$found = "true";
+					break;
+				}
+				if($tempApp['accounts'][$j]['authenticated'] == "false"){
+					$open = $j;
+				}
+			}
+			//if we loop through everyone and done find the user
+			if($found == "false"){
+				if($state == "outside" && $credObj['login'] !== "first"){
+					header('Location: ../login.php?error=1&service=google');
+					return;
+				}
+			}
+		}else{
+			$j = 0;
+		}
+		
+		if($credObj['login'] == "first"){
+			$credObj['login'] = "second";
+		}
+					
+		$temp['accessToken'] = $obj['access_token'];
+		$temp['expiresAt'] = `date +%s`;
+		$temp['user'] = $obj['user']['id'];
+		$temp['image'] = $obj['user']['profile_picture'];
+		$temp['name'] =  $obj['user']['username'];
+		$temp['authenticated'] = "true";
+		if(!isset($temp['loginDisallow'])){
+			$temp['loginDisallow'] = $tempApp['accounts'][$open]['loginDisallow'];
+		}
+		if(!isset($temp['color'])){
+			$temp['color'] = $tempApp['accounts'][$open]['color'];
+		}
+		if(!isset($temp['uuid'])){
+			$temp['uuid'] = $tempApp['accounts'][$open]['uuid'];
+		}
+		
+		if($found == "false"){
+			$credObj['google'][0]['accounts'][$open] = $temp;
+		}else{
+			$credObj['google'][0]['accounts'][$j] = $temp;
+		}
+		file_put_contents("../serviceCreds.json", json_encode($credObj));
+		
+		header('Location: ../login.php?google=true');
+	}else{
+		setcookie ("googleCook", "", time() - 3600, $_SERVER['HTTP_HOST'], 'clemson.edu', false, false);
+		
+		header('Location: ../login.php?error=2&service=google');
+	}
+	*/
+}else{
+	echo "ERROR: No code was sent to this script"; ?><br/><?php
+}
+
+
 
 function refresh_token($token, $client_id, $client_secret){
 	$params = array(
@@ -68,79 +163,6 @@ function refresh_token($token, $client_id, $client_secret){
 	$fp = fopen($filename, 'w') or die("Cannot open file " . $filename);
 	fwrite($fp, $json);
 	fclose($fp);
-}
-
-#this function gets the access_token and the refresh_token it is the callback for fakeCentral.php
-if(isset($_GET['code'])){
-	#code is what we get abck from fakeCentral calling google for the first quth step
-	$code = $_GET["code"];
-
-	#echo "The code is: " . $code; ?><br/><br/><?php
-	
-	$url = "https://accounts.google.com/o/oauth2/token";
-	
-	#with the new code we set up the post to get the refreshToken and accessToken from google
-	$params = array(
-		"code" => $code,
-		"client_id" => $client_id,
-		"client_secret" => $client_secret,
-		"redirect_uri" => $redirect_uri,
-		"grant_type" => 'authorization_code'
-	);
-	
-	$ch = curl_init($url);
-	
-	curl_setopt($ch, CURLOPT_POST, 1);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	
-	#response should now be a json with the accessToken and refreshToken as a json string
-	$response = curl_exec($ch);
-	curl_close($ch);
-	
-	#decode that string and now u have a json that you can play with
-	#the decode true param turns them into assoc arrays
-	$obj = json_decode($response, true);
-	$userURL = "https://www.googleapis.com/plus/v1/people/me?access_token=".$obj['access_token'];
-	$answer = file_get_contents($userURL);
-	$object = json_decode($answer, true);
-	
-	#set the timestamp and the userID
-	$obj['time'] = `date +%s`;
-	$obj['userID'] = $object['id'];
-	
-	$ds = ldap_connect('ccedirdev.clemson.edu');
-	$login = ldap_bind($ds, 'cn=nimda,o=cuvault', 'd0j0h3ads');
-	
-	$param = json_encode($obj);
-	
-#	$info['vaultdataauthority'] = $param;
-
-	#MODIFY
-#	$result = ldap_modify($ds, "Vaultzid=27247e25-9b4c-ff48-b15d-25871ced,ou=Identities,o=cuvault-gen", $info);
-
-#	ldap_close($ds);
-	
-        if($obj['refresh_token']){
-		$filename = "googleToken.txt";
-		#write out $response to the file because then we can read the whole file later and json_encode it for use
-		$fp = fopen($filename, 'w') or die("Cannot open file " . $filename);
-		fwrite($fp, $param);
-		fclose($fp);
-	}else{
-		echo "ERROR: No refresh token was returned" . $response; ?><br/><?php
-	}
-	
-	echo "<html><head></head><body><div>You have successfully authenticated with Google, please close this window</div><script type=\"text/javascript\">window.close()</script></body></html>";
-	
-	#call refreshToken with token, clientID, and clientSecret to get a new access token when old one expires
-#	refresh_token( $obj['refresh_token'], $client_id, $client_secret);
-	
-	#FOR Google sites API add v=1.4 as a query parameter to specify GdataVersion 1.4 if it cant be done with headers
-	
-	
-}else{
-	echo "ERROR: No code was sent to this script"; ?><br/><?php
 }
 
 ?>
