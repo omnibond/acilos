@@ -285,6 +285,7 @@ class Database{
 				"twitter" => array(),
 				"linkedin" => array(),
 				"instagram" => array(),
+				"google" => array(),
 				"login" => "first"
 			);
 			file_put_contents("../../serviceCreds.json", json_encode($credObj));
@@ -323,6 +324,7 @@ class Database{
 				"twitter" => array(),
 				"linkedin" => array(),
 				"instagram" => array(),
+				"google" => array(),
 				"login" => "first"
 			);
 			file_put_contents("../../serviceCreds.json", json_encode($credObj));
@@ -338,7 +340,6 @@ class Database{
 				}
 			}			
 		}
-
 
 		$authLink = '';
 		if($obj['param'] == "linkedin"){
@@ -356,6 +357,11 @@ class Database{
 			$scope = "relationships likes comments";
 			$authLink = "https://api.instagram.com/oauth/authorize/?client_id=".$obj['key']."&redirect_uri=".$obj['redir']."&response_type=code&scope=".$scope."&state=".$obj['key'];
 		}
+		if($obj['param'] == "google"){
+			$scope = "https://www.googleapis.com/auth/plus.stream.read,https://www.googleapis.com/auth/plus.stream.write,https://www.googleapis.com/auth/plus.media.upload,https://www.googleapis.com/auth/plus.me,https://www.googleapis.com/auth/plus.circles.read,https://www.googleapis.com/auth/plus.circles.write";
+			$authLink = $obj[$key]['redir']."?apiKey=".$obj[$key]['key']."&secretKey=".$obj[$key]['secret']."&lredirect_uri=".$obj[$key]['redir']."&scope=".$scope;
+		}
+		
 		$temp = array(
 			"key" => $obj['key'],
 			"secret" => $obj['secret'],
@@ -386,6 +392,7 @@ class Database{
 				"twitter" => array(),
 				"linkedin" => array(),
 				"instagram" => array(),
+				"google" => array(),
 				"login" => "first"
 			);
 			file_put_contents("../../serviceCreds.json", json_encode($credObj));
@@ -420,6 +427,7 @@ class Database{
 				"twitter" => array(),
 				"linkedin" => array(),
 				"instagram" => array(),
+				"google" => array(),
 				"login" => "first"
 			);
 			file_put_contents("../../serviceCreds.json", json_encode($credObj));
@@ -476,6 +484,7 @@ class Database{
 				"twitter" => array(),
 				"linkedin" => array(),
 				"instagram" => array(),
+				"google" => array(),
 				"login" => "first"
 			);
 			file_put_contents("../../serviceCreds.json", json_encode($credObj));
@@ -511,6 +520,7 @@ class Database{
 				"twitter" => array(),
 				"linkedin" => array(),
 				"instagram" => array(),
+				"google" => array(),
 				"login" => "first"
 			);
 			file_put_contents("../../serviceCreds.json", json_encode($credObj));
@@ -586,6 +596,16 @@ class Database{
 					"uuid" => uniqid()
 				);
 			}
+			if($key == "google"){
+				$scope = "https://www.googleapis.com/auth/plus.stream.read,https://www.googleapis.com/auth/plus.stream.write,https://www.googleapis.com/auth/plus.media.upload,https://www.googleapis.com/auth/plus.me,https://www.googleapis.com/auth/plus.circles.read,https://www.googleapis.com/auth/plus.circles.write";
+				$authLink = $obj[$key]['redir']."?apiKey=".$obj[$key]['key']."&secretKey=".$obj[$key]['secret']."&lredirect_uri=".$obj[$key]['redir']."&scope=".$scope;
+				$account = array(
+					"color" => "#41CCCC",
+					"loginDisallow" => "false",
+					"authenticated" => "false",
+					"uuid" => uniqid()
+				);
+			}
 			$credObj[$key]['auth'] = $authLink;
 
 			$finalObj[$key] = array();
@@ -613,6 +633,9 @@ class Database{
 		}
 		if(!isset($finalObj['instagram'])){
 			$finalObj['instagram'] = array();
+		}
+		if(!isset($finalObj['google'])){
+			$finalObj['google'] = array();
 		}
 		
 		file_put_contents("../../serviceCreds.json", json_encode($finalObj));

@@ -82,7 +82,8 @@ class Credentials{
 			"instagram" => array(),
 			"facebook" => array(),
 			"linkedin" => array(),
-			"twitter" => array()
+			"twitter" => array(),
+			"google" => array()
 		);
 
 		$file = "../../serviceCreds.json";
@@ -142,7 +143,61 @@ class Credentials{
 			);
 			array_push($returnArr['instagram'], $account);
 		}
+		
+		if(isset($serviceCreds['google'])){
+			for($a=0; $a < count($serviceCreds['google']); $a++){
+				for($d=0; $d < count($serviceCreds['google'][$a]['accounts']); $d++){
+					if(isset($serviceCreds['google'][$a]['accounts'][$d]['accessToken'])){
+						$obj = $serviceCreds['google'][$a]['accounts'][$d];
 
+						$url = 'https://api.instagram.com/v1/users/self/?&access_token=' . $obj['accessToken'];
+						$ch = curl_init($url);
+						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+						$response = curl_exec($ch);
+						curl_close($ch);
+
+						$account;
+						$responseObj = json_decode($response, true);
+						if(isset($responseObj['data']['username'])){
+							$account = array(
+								"user" => $obj['user'],
+								"status" => "good",
+								"auth" => $serviceCreds['google'][$a]['auth'],
+								"name" => $obj['name'],
+								"image" => $obj['image'],
+								"color" => $obj['color'],
+								"loginDisallow" => $obj['loginDisallow'],
+								"authenticated" => $obj['authenticated']
+							);
+						}else{
+							$account = array(
+								"user" => $obj['user'],
+								"status" => "bad",
+								"auth" => $serviceCreds['google'][$a]['auth'],
+								"name" => $obj['name'],
+								"image" => $obj['image'],
+								"color" => $obj['color'],
+								"loginDisallow" => $obj['loginDisallow'],
+								"authenticated" => $obj['authenticated']
+							);
+						}
+						array_push($returnArr['instagram'], $account);
+					}else{
+						$account = array(
+							"status" => "unauthorized",
+							"auth" => $serviceCreds['google'][$a]['auth']
+						);
+						array_push($returnArr['google'], $account);
+					}
+				}
+			}
+		}else{
+			$account = array(
+				"status" => "null"
+			);
+			array_push($returnArr['google'], $account);
+		}
+		
 		if(isset($serviceCreds['facebook'])){
 			for($a=0; $a < count($serviceCreds['facebook']); $a++){
 				for($d=0; $d < count($serviceCreds['facebook'][$a]['accounts']); $d++){

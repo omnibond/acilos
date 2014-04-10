@@ -27,29 +27,34 @@
 */
 require_once 'Google/Client.php';
 
-$client_id = '1';
-$client_secret = '1';
-$redirect_uri = '1';
+if(isset($_GET['key']) && isset($_GET['key']) && isset($_GET['key'])){
 
 $client = new Google_Client();
-$client->setClientId($client_id);
-$client->setClientSecret($client_secret);
-$client->setRedirectUri($redirect_uri);
+$client->setClientId($_GET['key']);
+$client->setClientSecret($_GET['secret']);
+$client->setRedirectUri($_GET['redir']);
+$scope = $_GET['scope'];
 
+$scopeArr = explode(",", $scope);
+for($u=0; $u<count($scopeArr); $u++){
+	$client->addScope($scopeArr[$u]);
+}
+
+/*
 $client->addScope('https://www.googleapis.com/auth/plus.stream.read');
 $client->addScope('https://www.googleapis.com/auth/plus.stream.write');
 $client->addScope('https://www.googleapis.com/auth/plus.media.upload');
 $client->addScope('https://www.googleapis.com/auth/plus.me');
 $client->addScope('https://www.googleapis.com/auth/plus.circles.read');
 $client->addScope('https://www.googleapis.com/auth/plus.circles.write');
+*/
 
 $authUrl = $client->createAuthUrl();
 print_r($authUrl);
 
-$scope = 'https://sites.google.com/feeds/';
-$response_type = 'code';
-$access_type = 'offline';
-$approval_prompt = 'auto';
+}else{
+	echo "ERROR: No key/secret/redir was sent to this script"; ?><br/><?php
+}
 
 if(isset($_GET['code'])) {
 	$client->authenticate($_GET['code']);
@@ -66,7 +71,6 @@ if(isset($_GET['code'])) {
 	$img = filter_var($me['image']['url'], FILTER_VALIDATE_URL);
 	$name = filter_var($me['displayName'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
 	
-	/*
 	if($token != ''){
 		$found = "false";
 		$open = 0;
@@ -127,7 +131,7 @@ if(isset($_GET['code'])) {
 		
 		header('Location: ../login.php?error=2&service=google');
 	}
-	*/
+	
 }else{
 	echo "ERROR: No code was sent to this script"; ?><br/><?php
 }

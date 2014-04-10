@@ -40,6 +40,7 @@
 				"twitter" => array(),
 				"linkedin" => array(),
 				"instagram" => array(),
+				"google" => array(),
 				"login" => "first"
 			);
 			file_put_contents("serviceCreds.json", json_encode($credObj));
@@ -52,6 +53,7 @@
 	$lCount = (string)count($var['twitter']);
 	$iCount = (string)count($var['linkedin']);
 	$tCount = (string)count($var['instagram']);
+	$gCount = (string)count($var['google']);
 	
 	if(isset($_GET['error'])){
 		$errorCode = $_GET['error'];
@@ -131,7 +133,8 @@
 				if('<?php echo $fCount; ?>' == 0 &&
 					'<?php echo $iCount; ?>' == 0 &&
 					'<?php echo $lCount; ?>' == 0 &&
-					'<?php echo $tCount; ?>' == 0
+					'<?php echo $tCount; ?>' == 0 &&
+					'<?php echo $gCount; ?>' == 0
 				){
 					var leftPane = new Container({
 						style: "text-align: center"
@@ -339,6 +342,45 @@
 				leftPane.domNode.appendChild(siteLink);
 				leftPane.domNode.appendChild(spacer);
 				
+				//-------------------------------------------------------------------------
+				var googleKey = new TextBox({
+					placeHolder: "App Id/Key",
+					"class": "credentialTextBox, roundTextBoxClass",
+					style: "width:250px"
+				});
+				var googleSecret = new TextBox({
+					placeHolder: "App Secret",
+					"class": "credentialTextBox, roundTextBoxClass",
+					style: "width:250px"
+				});
+				var googleRedirect = new TextBox({
+					value: "http://" + '<?php echo $redirect; ?>' + "googleAccess.php",
+					"class": "credentialTextBox, roundTextBoxClass",
+					style: "width:250px"
+				});
+				//var linkedRedirect = domConstruct.create("div", {style: "font-family:arial;text-align: center", innerHTML: "http://" + '<?php echo $redirect; ?>' + "linkedinAccess.php"});
+				var googleLogoDiv = domConstruct.create("span", {style: "margin-top:25px;width:100px;height:100px", "class":"loginLogo", innerHTML: "<img src=app/resources/img/googlePlusLogin.png>"});
+				var textBoxDiv = domConstruct.create("span", {});
+				var holderDiv = domConstruct.create("div", {});
+				holderDiv.appendChild(googleKey.domNode);
+				textBoxDiv.appendChild(holderDiv);
+				
+				holderDiv = domConstruct.create("div", {});
+				holderDiv.appendChild(googleSecret.domNode);
+				textBoxDiv.appendChild(holderDiv);
+				
+				holderDiv = domConstruct.create("div", {});
+				holderDiv.appendChild(googleRedirect.domNode);
+				textBoxDiv.appendChild(holderDiv);
+				
+				var siteLink = domConstruct.create("div", {innerHTML: '<span><a href="https://console.developers.google.com/" target="_blank">Open google\'s developer site</a></span>'});
+				var spacer = domConstruct.create("div", {style: "visibility:hidden", innerHTML: 'acilos'});
+				
+				leftPane.domNode.appendChild(googleLogoDiv);
+				leftPane.domNode.appendChild(textBoxDiv);
+				leftPane.domNode.appendChild(siteLink);
+				leftPane.domNode.appendChild(spacer);
+				
 				var save = new Button({
 					label: "Save",
 					style: "width: 60px; margin-left: auto; margin-right: auto",
@@ -351,7 +393,9 @@
 							(twitterKey.get("value") != "" && twitterSecret.get("value") == "" ||
 							twitterKey.get("value") == "" && twitterSecret.get("value") != "") ||
 							(instaKey.get("value") != "" && instaSecret.get("value") == "" ||
-							instaKey.get("value") == "" && instaSecret.get("value") != "")
+							instaKey.get("value") == "" && instaSecret.get("value") != "") ||
+							(googleKey.get("value") != "" && googleSecret.get("value") == "" ||
+							googleKey.get("value") == "" && googleSecret.get("value") != "")
 						){
 							errorItem.set("label", "Please be sure to enter both a key and secret for the apps you choose");
 						}else{
@@ -382,6 +426,13 @@
 								obj['instagram']['key'] = instaKey.get("value");
 								obj['instagram']['secret'] = instaSecret.get("value");
 								obj['instagram']['redir'] = instaRedirect.get("value");	
+							}
+							
+							if(googleKey.get("value") != "" && googleSecret.get("value") != ""){
+								obj['google'] = {};
+								obj['google']['key'] = googleKey.get("value");
+								obj['google']['secret'] = googleSecret.get("value");
+								obj['google']['redir'] = googleRedirect.get("value");	
 							}
 							
 							saveServiceCreds(obj).then(lang.hitch(null, function(errorItem, obj){

@@ -41,6 +41,7 @@
 				"twitter" => array(),
 				"linkedin" => array(),
 				"instagram" => array(),
+				"google" => array(),
 				"login" => "first"
 			);
 			file_put_contents("serviceCreds.json", json_encode($credObj));
@@ -53,6 +54,7 @@
 		setcookie("linkedinCook", $_COOKIE['PHPSESSID'], time()-3600, '/', $cookieDom, false, false);
 		setcookie("twitterCook", $_COOKIE['PHPSESSID'], time()-3600, '/', $cookieDom, false, false);
 		setcookie("instagramCook", $_COOKIE['PHPSESSID'], time()-3600, '/', $cookieDom, false, false);
+		setcookie("googleCook", $_COOKIE['PHPSESSID'], time()-3600, '/', $cookieDom, false, false);
 		header('Location: /auth.php');
 	}
 	
@@ -62,6 +64,7 @@
 	$tCount = (string)count($var['twitter']);
 	$lCount = (string)count($var['linkedin']);
 	$iCount = (string)count($var['instagram']);
+	$gCount = (string)count($var['google']);
 	$login = $var['login'];
 	
 	if(isset($_GET['error'])){
@@ -89,6 +92,11 @@
 		$tCook = "true";
 	}else{
 		$tCook = "false";
+	}
+	if(count($var['google'][0]['accounts']) > 0){
+		$gCook = "true";
+	}else{
+		$gCook = "false";
 	}
 	
 	if(isset($_GET['facebook']) && $_GET['facebook'] == "true"){
@@ -144,6 +152,23 @@
 	}
 	if(isset($_GET['instagram']) && $_GET['instagram'] == "true"){
 		setcookie("instagramCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', $cookieDom, false, false);
+		if(isset($_GET['login']) && $_GET['login'] !== "second"){
+			header('Location: /#/ManAccounts');
+		}else{
+			$ctx = stream_context_create(array(
+			    'http' => array(
+				'timeout' => 1
+				)
+			    )
+			);
+			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
+			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
+				
+			header('Location: /#/mainFeed');
+		}
+	}
+	if(isset($_GET['google']) && $_GET['google'] == "true"){
+		setcookie("googleCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', $cookieDom, false, false);
 		if(isset($_GET['login']) && $_GET['login'] !== "second"){
 			header('Location: /#/ManAccounts');
 		}else{
@@ -222,7 +247,8 @@
 				if('<?php echo $fCount; ?>' == 0 &&
 					'<?php echo $iCount; ?>' == 0 &&
 					'<?php echo $lCount; ?>' == 0 &&
-					'<?php echo $tCount; ?>' == 0
+					'<?php echo $tCount; ?>' == 0 &&
+					'<?php echo $gCount; ?>' == 0
 				){
 					window.location = "credentials.php";
 				}else{
@@ -414,6 +440,34 @@
 						}
 					}
 				}
+				if(param == "google"){
+					if('<?php echo $login; ?>' == "first"){
+						var button = new Button({
+							"class": "loginLogoButton",
+							onClick: lang.hitch(null, function(){
+								window.location = serviceCreds[param][0]["auth"] + "&state=outside";
+							},serviceCreds, param)
+						});
+						var googDiv = domConstruct.create("div", {"class":"loginLogo", innerHTML: "<img src=app/resources/img/googlePlusLogin.png>"});
+						button.domNode.appendChild(googDiv);
+						div.appendChild(button.domNode);	
+					}else{
+						for(var o = 0; o < serviceCreds[param][0]["accounts"].length; o++){
+							if(serviceCreds[param][0]["accounts"][o].authenticated == "true"){
+								var button = new Button({
+									"class": "loginLogoButton",
+									onClick: lang.hitch(null, function(){
+										window.location = serviceCreds[param][0]["auth"] + "&state=outside";
+									},serviceCreds, param)
+								});
+								var googDiv = domConstruct.create("div", {"class":"loginLogo", innerHTML: "<img src=app/resources/img/googlePlusLogin.png>"});
+								button.domNode.appendChild(googDiv);
+								div.appendChild(button.domNode);
+								break;
+							}
+						}
+					}
+				}
 				mainDiv.appendChild(div);
 			},
 			
@@ -424,6 +478,7 @@
 					'<?php echo $tCook; ?>' != "true" &&
 					'<?php echo $lCook; ?>' != "true" &&
 					'<?php echo $iCook; ?>' != "true" &&
+					'<?php echo $gCook; ?>' != "true" &&
 					'<?php echo $login; ?>' != "first"
 				){
 					window.location = "login.php?login=first";
@@ -443,6 +498,10 @@
 					if('<?php echo $iCount; ?>' != 0){
 						var div4 = domConstruct.create("span", {});
 						loginButtonsNitems("instagram", div4, serviceCreds, mainDiv);
+					}
+					if('<?php echo $gCount; ?>' != 0){
+						var div4 = domConstruct.create("span", {});
+						loginButtonsNitems("google", div4, serviceCreds, mainDiv);
 					}
 				}
 
