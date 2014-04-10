@@ -57,10 +57,20 @@ define(['dojo/_base/declare',
 		postCreate: function(){
 			this.inherited(arguments);
 			
+			//for all of the database feed counting items this var will keep track of
+			if(!kernel.global.feedCount){
+				kernel.global.feedCount = {};
+			}
+			//this var keeps track of all feed scroll positions
+			if(!kernel.global.feedPosition){
+				kernel.global.feedPosition = {};
+			}
+
 			this.rootView = new MainView({
 				route: '/',
 				queryTwitter: lang.hitch(this, this.queryTwitter),
-				getServiceCreds: lang.hitch(this, this.getServiceCreds)
+				getServiceCreds: lang.hitch(this, this.getServiceCreds),
+				getTwitterQueryObjects: lang.hitch(this, this.getTwitterQueryObjects)
 			});
 
 			this.registerView(this.rootView);
@@ -80,5 +90,10 @@ define(['dojo/_base/declare',
 			params = {};
 			return xhrManager.send('POST', 'rest/v1.0/Credentials/getServiceCreds', params);
 		},
+
+		getTwitterQueryObjects: function(query, from){
+			params = {from: from, query: query};
+			return xhrManager.send('POST', 'rest/v1.0/Search/getTwitterQueryObjects', params);
+		}
 	})
 });

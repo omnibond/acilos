@@ -87,28 +87,62 @@ define([
 		ready
 	){
 		return declare("DataObjFeedListView",[ModuleScrollableView], {			
+			startup: function(){
+				this.inherited(arguments);
+				
+				kernel.global.feedCount[this.id] = {};
+				kernel.global.feedCount[this.id].services = {"Twitter": "false", "Facebook": "false", "Instagram": "false", "LinkedIn": "false"};
+			},
+
 			activate: function() {				
 				topic.publish("/dojo-mama/updateSubNav", {back: '/query', title: "Search Twitter"} );
 
-				this.buildList();
+				this.fromVar = 0;
+				on(this.domNode, "scroll", lang.hitch(this, this.dataPoints));
+				
+				if(this.list){
+					this.list.destroyRecursive();
+					this.buildList();
+				}else{
+					this.buildList();
+				}
 			},
 
 			buildList: function(){
-				this.mainList = new RoundRectList({
-
-				});
-
-				this.queryListItem = new ListItem({
-					variableHeight: true,
-					"class": "borderlessListItemClass"
-				});
-
 				this.queryBox = new TextBox({
-					placeHolder: "Search here"
+					placeHolder: "Search here",
+					style: "height:19px; vertical-align: top; margin-right: 5px"
 				});
+
+				this.justQuery = new Button({
+					label: "just query",
+					left:"true",
+					onClick: lang.hitch(this, function(){
+						if(this.list){
+							this.list.destroyRecursive();
+							this.list = null;
+						}
+						if(this.queryBox.get("value") == ""){
+							console.log("enter stuff");
+						}else{
+							this.list = new SearchScroller({
+								feedName: this.queryBox.get("value"),
+								getFeedData: lang.hitch(this, this.getTwitterQueryObjects),
+								getNextGroup: lang.hitch(this, this.getNextGroup),
+								setStarred: lang.hitch(this, this.setStarred),
+								setStarredClient: lang.hitch(this, this.setStarredClient),
+								fromVar: this.fromVar,
+								FeedViewID: this.id,
+								view: this
+							});			
+							this.addChild(this.list);
+							this.resize();
+						}
+					})
+				})
 
 				this.queryButton = new Button({
-					label: "Search",
+					"name": "searchButton",
 					onClick: lang.hitch(this, function(){
 						console.log("you searched for: ", this.queryBox.get("value"));
 
@@ -129,6 +163,21 @@ define([
 
 											this.queryTwitter(this.queryBox.get("value"), this.authObj[key]).then(lang.hitch(this, function(obj){
 												console.log("returned object is: ", obj);
+
+												var ourStuff = obj['Our_stuff'];
+
+												this.list = new SearchScroller({
+													feedName: this.queryBox.get("value"),
+													getFeedData: lang.hitch(this, this.getTwitterQueryObjects),
+													getNextGroup: lang.hitch(this, this.getNextGroup),
+													setStarred: lang.hitch(this, this.setStarred),
+													setStarredClient: lang.hitch(this, this.setStarredClient),
+													fromVar: this.fromVar,
+													FeedViewID: this.id,
+													view: this
+												});			
+												this.addChild(this.list);
+												this.resize();
 											}))
 										}
 									}
@@ -138,16 +187,53 @@ define([
 					})
 				});
 
-				this.queryListItem.addChild(this.queryBox);
-				this.queryListItem.addChild(this.queryButton);
-				this.mainList.addChild(this.queryListItem);
-				this.addChild(this.mainList);
+				this.selectorItem = new SelectorBar({
+					textBoxes: [this.queryBox],
+					buttons: [this.queryButton, this.justQuery],
+					style: "text-align: center"
+				});
+				this.selectorItem.placeAt(this.domNode.parentNode);
+
+				document.body.onkeydown = lang.hitch(this, function(event){
+					switch(event.keyCode){
+						case 13: 
+							this.queryButton.onClick();
+						break;
+						
+						default: 
+					}
+				});	
+			},
+
+			dataPoints: function(){
+				if(this.list){
+					var pos= domGeom.position(this.list.domNode,true);
+				       
+					if(Math.abs(pos.y) > Math.abs(pos.h) - 1500){
+						this.getNextGroup();
+					}
+				}
+			},
+
+			getNextGroup: function(){
+				if(this.list.ListEnded == false){
+					this.loading = true;
+					this.list.postAddToList(this.fromVar+=20);
+					this.loading = false;
+				}
 			},
 			
 			deactivate: function(){
+				document.body.onkeydown = '';
+
 				if(this.mainList){
 					this.mainList.destroyRecursive();
 					this.mainList = null;
+				}
+
+				if(this.selectorItem){
+					this.selectorItem.destroyRecursive();
+					this.selectorItem = null;
 				}
 			}
 		});

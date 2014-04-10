@@ -255,6 +255,7 @@ class Search{
 	}
 
 	public function queryTwitter(){
+		//echo "queryTwitter ";
 		$var = file_get_contents("php://input");
 		$varObj = json_decode($var, true);
 		//print_r($varObj);
@@ -268,7 +269,7 @@ class Search{
 		//connMan
 		$connection = new TwitterOAuth($consumer_key, $consumer_secret, $oauth_Token, $access_secret);
 		//make the twitte request
-		$status = $connection->get('search/tweets', array('q' => $query, 'count' => 100));
+		$status = $connection->get('search/tweets', array('q' => $query, 'count' => 15));
 		$status = $status -> statuses;
 		$array = objectToArray($status);
 
@@ -280,17 +281,17 @@ class Search{
 			//refresh token or call get new token again
 			//file_get_contents("../../oAuth/twitterAccess.php?appKey=" + $obj['appKey'] + "&appSecret=" + $obj['appSecret']);
 		}else{
-			$this->normalizeTwitterObject($array, $varObj['authStuff'][0]['accounts'][0]);	    
+			$this->normalizeTwitterObject($array, $varObj['authStuff'][0]['accounts'][0], $query);	    
 		}
 
 		return json_encode(array(
-				"Success" => "It worked!"
+				"Success" => "It worked"
 			)
 		);
 	}
 
-	public function normalizeTwitterObject($objArray, $account){
-		echo "normal twitter stuff";
+	public function normalizeTwitterObject($objArray, $account, $query){
+		//echo "normal twitter stuff ";
 		for($k = 0; $k < count($objArray); $k++){
 			$obj = $objArray[$k];
 
@@ -303,14 +304,14 @@ class Search{
 
 			$item = $manager->getActivityObj();
 
-			$this->writeObject((array)$item);
-			global $credentialObject;
-			$credentialObject['Twitter']['status'] = 'good';
+			//print_r($item);
+
+			$this->writeObject((array)$item, $query);
 		}
 	}
 
-	public function writeObject($obj){
-		#echo "write object"; 
+	public function writeObject($obj, $query){
+		//echo "write object "; 
 
 		$index = "app";
 		$host = "localhost";
@@ -327,14 +328,13 @@ class Search{
 			$obj['isFavorited'] = $exists['isFavorited'];
 		}
 
+		$obj['twitterQuery'] = $query;
 		$grr = $es->index($obj, $obj['id']);
-		#print_r($grr);
-		
-		$this->updateRecentPost($obj);
+
 	}
 
 	public function getObject($id){
-		#echo "getting object"; 
+		//echo "getting object"; 
 
 		$index = "app";
 		$host = "localhost";
@@ -346,8 +346,8 @@ class Search{
 		return $res;
 	}
 
-	public function writeClient($obj){
-		"writing to client"; 
+	/*public function writeClient($obj){
+		echo "writing to client "; 
 
 		$index = "client";
 		$host = "localhost";
@@ -357,9 +357,40 @@ class Search{
 
 		$grr = $es->index($obj, $obj['data']['id']);
 		return $grr;
+	}*/
+
+	public function getTwitterQueryObjects(){
+		$var = file_get_contents("php://input");
+		$varObj = json_decode($var, true);
+		$queryString = $varObj['query'];
+		$from = $varObj['from'];
+
+		$size = 20;
+
+		$index = "app";
+		$host = "localhost";
+		$port = "9200";
+
+		$es = Client::connection("http://$host:$port/$index/$index");
+
+		$searchArr = array(
+			"from" => $from,
+			"size" => $size,
+			"query" => array(
+				'bool' => array(
+					"must" => array(
+						'term' => array("twitterQuery" => $queryString)
+					)
+				)
+		    )
+		);
+
+		$res = $es->search($searchArr);
+	
+		return json_encode($res);
 	}
 
-	public function updateRecentPost($post){
+	/*public function updateRecentPost($post){
 		global $clientObject;
 		//Dont count CONN objects as posts
 		if($post['title'] != "CONN"){
@@ -409,7 +440,7 @@ class Search{
 
 			}
 		}
-	}
+	}*/
 
 	public function getGeoLocation($loc){
 		if($loc == ""){
@@ -429,7 +460,7 @@ class Search{
 				$latLong = "";
 			}else{
 				if(isset($var['results'][0])){
-					print_r($var);
+					//print_r($var);
 	                $latLong = $var['results'][0]['geometry']['location']['lat'] . "#" . $var['results'][0]['geometry']['location']['lng'];
 	            }
 			}

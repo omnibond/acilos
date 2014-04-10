@@ -115,7 +115,9 @@ define([
 			},
 
 			buildView: function(data){
+				console.log("OMG 1", this.feedDataObj);
 				var data = this.feedDataObj;
+				console.log("OMG 2", data);
 				if(data.error){
 					if(this.ListEnded == false){
 						this.errorItem = new ListItem({
