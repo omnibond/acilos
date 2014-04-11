@@ -102,12 +102,12 @@ define(['dojo/_base/declare',
 	var notificationUtil = declare([], {
 		
 		makeItHappen: function(){
-			check().then(lang.hitch(this, updateNotifications));
+		//	check().then(lang.hitch(this, updateNotifications));
 			//still need to lang.hitch this where this is the function scope
-			window.setInterval(lang.hitch(this, function(){
-				check().then(lang.hitch(this, updateNotifications));
+		//	window.setInterval(lang.hitch(this, function(){
+		//		check().then(lang.hitch(this, updateNotifications));
 			//check every 5 minutes (cron is 5 minutes)
-			}), 300000);	
+		//	}), 300000);	
 		}
 	
 	});

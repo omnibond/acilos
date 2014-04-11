@@ -26,19 +26,35 @@
 ** $QT_END_LICENSE$
 */
 require_once 'Google/Client.php';
+require_once 'Google/Service/Plus.php';
 
-if(isset($_GET['key']) && isset($_GET['key']) && isset($_GET['key'])){
+if(isset($_GET['apiKey']) && isset($_GET['secretKey']) && isset($_GET['redirect_uri'])){
 
 $client = new Google_Client();
-$client->setClientId($_GET['key']);
-$client->setClientSecret($_GET['secret']);
-$client->setRedirectUri($_GET['redir']);
-$scope = $_GET['scope'];
+$client->setClientId($_GET['apiKey']);
+$client->setClientSecret($_GET['secretKey']);
+$client->setRedirectUri($_GET['redirect_uri']);
 
-$scopeArr = explode(",", $scope);
-for($u=0; $u<count($scopeArr); $u++){
-	$client->addScope($scopeArr[$u]);
-}
+$scopeArr = explode(",", $_GET['scope']);
+//for($u=0; $u<count($scopeArr); $u++){
+//	$client->setScopes($scopeArr[$u]);
+//}
+$client->setScopes($scopeArr);
+
+$param = array(
+	"apiKey" => $_GET['apiKey'],
+	"secretKey" => $_GET['secretKey'],
+	"redirect_uri" => $_GET['redirect_uri'],
+	'scope' => $_GET['scope'],
+	'state' => $_GET['state']
+);
+
+$obj = json_encode($param);
+
+$filename = "googleStep1.txt";
+$fp = fopen($filename, 'w') or die("Cannot open file " . $filename);
+fwrite($fp, $obj);
+fclose($fp);
 
 /*
 $client->addScope('https://www.googleapis.com/auth/plus.stream.read');
@@ -50,34 +66,51 @@ $client->addScope('https://www.googleapis.com/auth/plus.circles.write');
 */
 
 $authUrl = $client->createAuthUrl();
-print_r($authUrl);
+header('Location: ' . $authUrl);
 
-}else{
-	echo "ERROR: No key/secret/redir was sent to this script"; ?><br/><?php
 }
 
 if(isset($_GET['code'])) {
+	$file = file_get_contents("googleStep1.txt");
+	$json =json_decode($file, true);
+	
+	$client = new Google_Client();
+	$client->setClientId($json['apiKey']);
+	$client->setClientSecret($json['secretKey']);
+	$client->setRedirectUri($json['redirect_uri']);
+	
+	
+	$scopeArr = explode(",", $json['scope']);
+	//for($u=0; $u<count($scopeArr); $u++){
+	//	$client->setScopes($scopeArr[$u]);
+	//}
+	$client->setScopes($scopeArr);
+	
+	$plus = new Google_Service_Plus($client);
+	
 	$client->authenticate($_GET['code']);
 	$token = '';
-	$token = $client->getAccessToken();
-	$state = $_GET['state'];
+	$tok = $client->getAccessToken();
+	$token = json_decode($tok, true);
+	$state = $json['state'];
 	
 	$credObj = file_get_contents("../serviceCreds.json");
 	$credObj = json_decode($credObj, true);
 	$tempApp = $credObj['google'][0];
 	
 	$me = $plus->people->get('me');
-	$url = filter_var($me['url'], FILTER_VALIDATE_URL);
+	
+	$id = $me['id'];
 	$img = filter_var($me['image']['url'], FILTER_VALIDATE_URL);
 	$name = filter_var($me['displayName'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
 	
-	if($token != ''){
+	if(isset($token['access_token'])){
 		$found = "false";
 		$open = 0;
 		//check all accounts for this user if there are accounts
 		if(isset($tempApp['accounts']) && count($tempApp['accounts']) > 0){
 			for($j=0; $j<count($tempApp['accounts']); $j++){
-				if($tempApp['accounts'][$j]['user'] == $obj['user']['id'] && $tempApp['accounts'][$j]['loginDisallow'] == "false"){
+				if($tempApp['accounts'][$j]['user'] == $id && $tempApp['accounts'][$j]['loginDisallow'] == "false"){
 					//if we find the user $temp is now that user
 					$temp = $tempApp['accounts'][$j];
 					$found = "true";
@@ -102,11 +135,11 @@ if(isset($_GET['code'])) {
 			$credObj['login'] = "second";
 		}
 					
-		$temp['accessToken'] = $obj['access_token'];
-		$temp['expiresAt'] = `date +%s`;
-		$temp['user'] = $obj['user']['id'];
-		$temp['image'] = $obj['user']['profile_picture'];
-		$temp['name'] =  $obj['user']['username'];
+		$temp['accessToken'] = $token['access_token'];
+		$temp['expiresAt'] = $token['created'] + $token['expires_in'];
+		$temp['user'] = $id;
+		$temp['image'] = $img;
+		$temp['name'] =  $name;
 		$temp['authenticated'] = "true";
 		if(!isset($temp['loginDisallow'])){
 			$temp['loginDisallow'] = $tempApp['accounts'][$open]['loginDisallow'];
@@ -132,11 +165,7 @@ if(isset($_GET['code'])) {
 		header('Location: ../login.php?error=2&service=google');
 	}
 	
-}else{
-	echo "ERROR: No code was sent to this script"; ?><br/><?php
 }
-
-
 
 function refresh_token($token, $client_id, $client_secret){
 	$params = array(

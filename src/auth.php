@@ -33,7 +33,8 @@
 		(isset($_COOKIE["facebookCook"]) && ($_COOKIE["facebookCook"] == $_COOKIE['PHPSESSID'])) ||
 		(isset($_COOKIE["linkedinCook"]) && ($_COOKIE["linkedinCook"] == $_COOKIE['PHPSESSID'])) || 
 		(isset($_COOKIE["twitterCook"]) && ($_COOKIE["twitterCook"] == $_COOKIE['PHPSESSID'])) ||
-		(isset($_COOKIE["instagramCook"]) && ($_COOKIE["instagramCook"] == $_COOKIE['PHPSESSID'])) 
+		(isset($_COOKIE["instagramCook"]) && ($_COOKIE["instagramCook"] == $_COOKIE['PHPSESSID'])) ||
+		(isset($_COOKIE["googleCook"]) && ($_COOKIE["googleCook"] == $_COOKIE['PHPSESSID'])) 
 	) {
 		
 		//if logged in..

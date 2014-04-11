@@ -208,6 +208,9 @@ define([
 						if(param == "linkedin"){
 							var logoDiv = domConstruct.create("span", {style: "margin-top:25px;float:left;width:100px;height:100px", "class":"loginLogo", innerHTML: "<img src=app/resources/img/linkedinLogin.png>"});
 						}
+						if(param == "google"){
+							var logoDiv = domConstruct.create("span", {style: "margin-top:25px;float:left;width:100px;height:100px", "class":"loginLogo", innerHTML: "<img src=app/resources/img/googlePlusLogin.png>"});
+						}
 						
 						var holderDiv = domConstruct.create("div", {style: "margin-top:15px"});
 						
@@ -352,6 +355,10 @@ define([
 				if(param == "linkedin"){
 					var authFile = "/oAuth/linkedinAccess.php"
 					var logoDiv = domConstruct.create("span", {style: "margin-top:25px;float:left;width:100px;height:100px", "class":"loginLogo", innerHTML: "<img src=app/resources/img/linkedinLogin.png>"});
+				}
+				if(param == "google"){
+					var authFile = "/oAuth/googleAccess.php"
+					var logoDiv = domConstruct.create("span", {style: "margin-top:25px;float:left;width:100px;height:100px", "class":"loginLogo", innerHTML: "<img src=app/resources/img/googlePlusLogin.png>"});
 				}
 				
 				var textBoxDiv = domConstruct.create("span", {style:"float:left"});

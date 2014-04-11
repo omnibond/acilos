@@ -33,7 +33,8 @@ if(!preg_match("/saveServiceCredsFirstTime/i", ($_SERVER['REQUEST_URI']))){
 		(!isset($_COOKIE["facebookCook"]) || ($_COOKIE["facebookCook"] != $_COOKIE['PHPSESSID']) ) && 
 		(!isset($_COOKIE["linkedinCook"]) || ($_COOKIE["linkedinCook"] != $_COOKIE['PHPSESSID']) ) && 
 		(!isset($_COOKIE["twitterCook"]) || ($_COOKIE["twitterCook"] != $_COOKIE['PHPSESSID']) ) && 
-		(!isset($_COOKIE["instagramCook"]) || ($_COOKIE["instagramCook"] != $_COOKIE['PHPSESSID']) )
+		(!isset($_COOKIE["instagramCook"]) || ($_COOKIE["instagramCook"] != $_COOKIE['PHPSESSID']) ) &&
+		(!isset($_COOKIE["googleCook"]) || ($_COOKIE["googleCook"] != $_COOKIE['PHPSESSID']) )
 	) {	
 		print_r(json_encode(array("Error" => "your cookies are expired or do not match")));
 	}

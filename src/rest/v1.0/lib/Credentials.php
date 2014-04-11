@@ -150,15 +150,15 @@ class Credentials{
 					if(isset($serviceCreds['google'][$a]['accounts'][$d]['accessToken'])){
 						$obj = $serviceCreds['google'][$a]['accounts'][$d];
 
-						$url = 'https://api.instagram.com/v1/users/self/?&access_token=' . $obj['accessToken'];
-						$ch = curl_init($url);
-						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-						$response = curl_exec($ch);
-						curl_close($ch);
+						//$url = 'https://www.google.com/m8/feeds/contacts/default/full?max-results=1&alt=json&access_token=' . $obj['accessToken'];
+						//$ch = curl_init($url);
+						//curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+						//$response = curl_exec($ch);
+						//curl_close($ch);
 
 						$account;
-						$responseObj = json_decode($response, true);
-						if(isset($responseObj['data']['username'])){
+						//$responseObj = json_decode($response, true);
+						if(true){
 							$account = array(
 								"user" => $obj['user'],
 								"status" => "good",
@@ -181,7 +181,7 @@ class Credentials{
 								"authenticated" => $obj['authenticated']
 							);
 						}
-						array_push($returnArr['instagram'], $account);
+						array_push($returnArr['google'], $account);
 					}else{
 						$account = array(
 							"status" => "unauthorized",
