@@ -44,6 +44,7 @@ define([
 
 		"app/SearchScroller",
 		"app/SelectorBar",
+		'dojox/mobile/ProgressIndicator',
 		
 		"dojox/mobile/ToolBarButton",
 		"dojox/mobile/TextBox",
@@ -51,6 +52,7 @@ define([
 		"app/SelEdgeToEdgeList",	
 		"dojox/mobile/ListItem",	
 		"dojox/mobile/Button",	
+		"dijit/Dialog",
 		
 		"dojo/ready"
 
@@ -76,6 +78,7 @@ define([
 
 		SearchScroller,
 		SelectorBar,
+		ProgressIndicator,
 		
 		ToolBarButton,
 		TextBox,
@@ -83,6 +86,7 @@ define([
 		EdgeToEdgeList,
 		ListItem,
 		Button,
+		Dialog,
 		
 		ready
 	){
@@ -94,14 +98,24 @@ define([
 				kernel.global.feedCount[this.id].services = {"Twitter": "false", "Facebook": "false", "Instagram": "false", "LinkedIn": "false"};
 			},
 
+			constructor: function(args){
+				this.postAddArray = [];				
+			},
+
 			activate: function() {				
 				topic.publish("/dojo-mama/updateSubNav", {back: '/query', title: "Search Twitter"} );
 
 				this.fromVar = 0;
 				on(this.domNode, "scroll", lang.hitch(this, this.dataPoints));
 				
+				if(this.infoList){
+					this.infoList.destroyRecursive();
+					this.infoList = null;
+				}
+
 				if(this.list){
 					this.list.destroyRecursive();
+					this.postAddArray = [];
 					this.buildList();
 				}else{
 					this.buildList();
@@ -109,24 +123,46 @@ define([
 			},
 
 			buildList: function(){
+				this.infoList = new RoundRectList({
+					"style": "margin-top: 40px"
+				});
+
+				this.infoListItem = new ListItem({
+					variableHeight: true,
+					"class": "borderlessListItemClass"
+				});
+
+				var infoDiv = domConstruct.create("div", {innerHTML: "Clicking the button on the left will display search results from previous twitter queries that are stored in your database. Clicking the \"go\" button will search live data from twitter. Click the button with the question mark for more info."});
+
+				this.infoListItem.domNode.appendChild(infoDiv);
+				this.infoList.addChild(this.infoListItem);
+				this.addChild(this.infoList);
+
 				this.queryBox = new TextBox({
 					placeHolder: "Search here",
 					style: "height:19px; vertical-align: top; margin-right: 5px"
 				});
 
 				this.justQuery = new Button({
-					label: "just query",
+					"name": "searchButton",
 					left:"true",
 					onClick: lang.hitch(this, function(){
+						this.fromVar = 0;
 						if(this.list){
 							this.list.destroyRecursive();
+							this.postAddArray = [];
 							this.list = null;
+						}
+						if(this.infoList){
+							this.infoList.destroyRecursive();
+							this.infoList = null;
 						}
 						if(this.queryBox.get("value") == ""){
 							console.log("enter stuff");
 						}else{
 							this.list = new SearchScroller({
 								feedName: this.queryBox.get("value"),
+								postAddArray: this.postAddArray,
 								getFeedData: lang.hitch(this, this.getTwitterQueryObjects),
 								getNextGroup: lang.hitch(this, this.getNextGroup),
 								setStarred: lang.hitch(this, this.setStarred),
@@ -139,11 +175,74 @@ define([
 							this.resize();
 						}
 					})
-				})
+				});
+
+				this.helpButton = new Button({
+					"name": "helpButton",
+					onClick: lang.hitch(this, function(){
+						this.dialog = new Dialog({
+							title: "Help",
+							draggable: false,
+							"class": "helpDijitDialog",
+							"style": "height: 290px !important; overflow: scroll !important",
+							onHide: lang.hitch(this, function(){
+								if(this.whiteoutDiv){
+									document.body.removeChild(this.whiteoutDiv);
+									this.whiteoutDiv = null;
+								}
+							})
+						});
+
+						var dialogDiv = domConstruct.create("div", {innerHTML: "<span class='helpTitle'>Normal Search</span><br>Example: red hat<br><br><span class='helpTitle'>Exact Search</span><br>Put \"quotes\" around what you would like to search for. Example: \"the red hat\"<br><br><span class='helpTitle'>How it works</span><br>Clicking the button on the left will query your database for stored search results from twitter. Clicking the \"go\" button will search live data from twitter"});
+
+						this.whiteoutDiv = domConstruct.create("div", {"class": "whiteoutDiv"});
+
+						this.dialog.set("content", dialogDiv);
+						this.dialog.show();
+
+						document.body.appendChild(this.whiteoutDiv);
+					})
+				});
+
+				this.scrollButton = new Button({
+					"name": "scrollButton",
+					"right": "true",
+					onClick: lang.hitch(this, function(){
+						var scroller = lang.hitch(this, function(){
+							if(this.domNode.scrollTop <= 0){
+								this.domNode.scrollTop = 0;
+							}else{
+								this.domNode.scrollTop = this.domNode.scrollTop - (this.domNode.scrollTop*0.08);
+								if(this.domNode.scrollTop !== 0){
+									setTimeout(scroller, 20);
+								}
+							}
+						});
+						setTimeout(scroller, 20);
+					})
+				});
 
 				this.queryButton = new Button({
-					"name": "searchButton",
+					"name": "goButton",
 					onClick: lang.hitch(this, function(){
+						this.fromVar = 0;
+						if(this.list){
+							this.list.destroyRecursive();
+							this.postAddArray = [];
+							this.list = null;
+						}
+
+						if(this.infoList){
+							this.infoList.destroyRecursive();
+							this.infoList = null;
+						}
+
+						this.pi = new ProgressIndicator();
+						this.pi.placeAt(document.body);
+						this.pi.start();
+
+						console.log("this.pi is: ", this.pi);
+
 						console.log("you searched for: ", this.queryBox.get("value"));
 
 						this.getServiceCreds().then(lang.hitch(this, function(obj){
@@ -155,19 +254,12 @@ define([
 									if(this.authObj[key].length > 0 && key == "twitter"){
 										var accountArr = this.authObj[key][0]['accounts'];
 										if(accountArr[0].accessToken != undefined){
-
-
-											//for facebook
-											//accountArr[d].key = this.authObj[key].key;
-											//accountArr[d].secret = this.authObj[key].secret;
-
 											this.queryTwitter(this.queryBox.get("value"), this.authObj[key]).then(lang.hitch(this, function(obj){
 												console.log("returned object is: ", obj);
 
-												var ourStuff = obj['Our_stuff'];
-
 												this.list = new SearchScroller({
 													feedName: this.queryBox.get("value"),
+													postAddArray: this.postAddArray,
 													getFeedData: lang.hitch(this, this.getTwitterQueryObjects),
 													getNextGroup: lang.hitch(this, this.getNextGroup),
 													setStarred: lang.hitch(this, this.setStarred),
@@ -178,6 +270,8 @@ define([
 												});			
 												this.addChild(this.list);
 												this.resize();
+
+												this.pi.stop();
 											}))
 										}
 									}
@@ -189,7 +283,8 @@ define([
 
 				this.selectorItem = new SelectorBar({
 					textBoxes: [this.queryBox],
-					buttons: [this.queryButton, this.justQuery],
+					buttons: [this.queryButton, this.justQuery, this.scrollButton],
+					toolTips: [this.helpButton],
 					style: "text-align: center"
 				});
 				this.selectorItem.placeAt(this.domNode.parentNode);
@@ -231,9 +326,24 @@ define([
 					this.mainList = null;
 				}
 
+				if(this.infoList){
+					this.infoList.destroyRecursive();
+					this.infoList = null;
+				}
+
 				if(this.selectorItem){
 					this.selectorItem.destroyRecursive();
 					this.selectorItem = null;
+				}
+
+				if(this.pi){
+					this.pi.destroyRecursive();
+					this.pi = null;
+				}
+
+				if(this.whiteoutDiv){
+					document.body.removeChild(this.whiteoutDiv);
+					this.whiteoutDiv = null;
 				}
 			}
 		});

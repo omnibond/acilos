@@ -57,8 +57,20 @@ define(['dojo/_base/declare',
 		postCreate: function(){
 			this.inherited(arguments);
 			
+			//for all of the database feed counting items this var will keep track of
+			if(!kernel.global.feedCount){
+				kernel.global.feedCount = {};
+			}
+			//this var keeps track of all feed scroll positions
+			if(!kernel.global.feedPosition){
+				kernel.global.feedPosition = {};
+			}
+
 			this.rootView = new MainView({
-				route: '/'
+				route: '/',
+				queryFacebook: lang.hitch(this, this.queryFacebook),
+				getServiceCreds: lang.hitch(this, this.getServiceCreds),
+				getFacebookQueryObjects: lang.hitch(this, this.getFacebookQueryObjects)
 			});
 
 			this.registerView(this.rootView);
@@ -67,6 +79,22 @@ define(['dojo/_base/declare',
 		getDomain: function(){
 			var params = {};
 			return xhrManager.send('GET', 'rest/v1.0/Database/getDomain', params);
+		},
+
+		queryFacebook: function(query, authStuff){
+			var params = {query: query, authStuff: authStuff};
+			return xhrManager.send('POST', 'rest/v1.0/Search/queryFacebook', params);
+		},
+
+		getServiceCreds: function(){
+			params = {};
+			return xhrManager.send('POST', 'rest/v1.0/Credentials/getServiceCreds', params);
+		},
+
+		getFacebookQueryObjects: function(query, from){
+			params = {from: from, query: query};
+			console.log("getFacebookQueryObjects in Module.js: params are: ", params);
+			return xhrManager.send('POST', 'rest/v1.0/Search/getFacebookQueryObjects', params);
 		}
 	})
 });

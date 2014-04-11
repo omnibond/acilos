@@ -261,6 +261,7 @@ class Search{
 		//print_r($varObj);
 		//query string
 		$query = $varObj['query'];
+		print_r($query);
 		//auth junk
 		$oauth_Token = $varObj['authStuff'][0]['accounts'][0]['accessToken'];
 		$consumer_key = $varObj['authStuff'][0]['accounts'][0]['key'];
@@ -269,7 +270,7 @@ class Search{
 		//connMan
 		$connection = new TwitterOAuth($consumer_key, $consumer_secret, $oauth_Token, $access_secret);
 		//make the twitte request
-		$status = $connection->get('search/tweets', array('q' => $query, 'count' => 15));
+		$status = $connection->get('search/tweets', array('q' => urlencode($query), 'count' => 100));
 		$status = $status -> statuses;
 		$array = objectToArray($status);
 
@@ -306,14 +307,14 @@ class Search{
 
 			//print_r($item);
 
-			$this->writeObject((array)$item, $query);
+			$this->writeObject((array)$item, $query, "twitter");
 		}
 	}
 
-	public function writeObject($obj, $query){
+	public function writeObject($obj, $query, $service){
 		//echo "write object "; 
 
-		$index = "app";
+		$index = "public";
 		$host = "localhost";
 		$port = "9200";
 
@@ -328,7 +329,13 @@ class Search{
 			$obj['isFavorited'] = $exists['isFavorited'];
 		}
 
-		$obj['twitterQuery'] = $query;
+		if($service == "twitter"){
+			$obj['twitterQuery'] = $query;
+		}else if($service == "facebook"){
+			$obj['facebookQuery'] = $query;
+		}
+
+		print_R($obj);
 		$grr = $es->index($obj, $obj['id']);
 
 	}
@@ -336,7 +343,7 @@ class Search{
 	public function getObject($id){
 		//echo "getting object"; 
 
-		$index = "app";
+		$index = "public";
 		$host = "localhost";
 		$port = "9200";
 
@@ -363,15 +370,26 @@ class Search{
 		$var = file_get_contents("php://input");
 		$varObj = json_decode($var, true);
 		$queryString = $varObj['query'];
+
+		//print_r($queryString . "      ");
+
 		$from = $varObj['from'];
 
 		$size = 20;
 
-		$index = "app";
+		$index = "public";
 		$host = "localhost";
 		$port = "9200";
 
 		$es = Client::connection("http://$host:$port/$index/$index");
+
+		if(count(explode("\"", $queryString)) > 2){
+			$searchType = "quotes";
+			$queryString = ltrim($queryString, "\"");
+			$queryString = rtrim($queryString, "\"");
+		}else{
+			$searchType = "normal";
+		}
 
 		$searchArr = array(
 			"from" => $from,
@@ -379,11 +397,32 @@ class Search{
 			"query" => array(
 				'bool' => array(
 					"must" => array(
-						'term' => array("twitterQuery" => $queryString)
+						//push stuff here
 					)
 				)
 		    )
 		);
+
+		if($searchType == "normal"){
+			$queryString = explode(" ", $queryString);
+			//print_r($queryString);
+			for($x = 0; $x < count($queryString); $x++){
+				$temp = array('term' => array('twitterQuery' => $queryString[$x]));
+				array_push($searchArr['query']['bool']['must'], $temp);
+			}
+		}else{
+			$temp = array("match" => 
+				array("twitterQuery" => 
+					array(
+						"query" => $queryString,
+						"type" => "phrase"
+					)
+				)
+			);
+			array_push($searchArr['query']['bool']['must'], $temp);
+		}
+
+		//print_R($searchArr);
 
 		$res = $es->search($searchArr);
 	
@@ -441,6 +480,106 @@ class Search{
 			}
 		}
 	}*/
+
+	public function queryFacebook(){
+		//echo "queryFacebook ";
+		$var = file_get_contents("php://input");
+		$varObj = json_decode($var, true);
+		//print_r($varObj);
+		//query string
+		$query = $varObj['query'];
+		//print_r($query);
+		//auth junk
+		$access_token = $varObj['authStuff'][0]['accounts'][0]['accessToken'];
+		//make the facebook request
+		$url = 'https://graph.facebook.com/search?q=' . $query . '&type=post&access_token=' . $access_token;
+
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$response = curl_exec($ch);
+		curl_close($ch);
+
+		$response = json_decode($response, true);
+
+		$response = $response['data'];
+
+		//print_r($response);
+
+		//response
+		if(isset($array['errors'])){
+			print_r($array['errors'][0]['message']);
+			print_r($array['errors'][0]['code']);
+			//refresh token or call get new token again
+			//file_get_contents("../../oAuth/twitterAccess.php?appKey=" + $obj['appKey'] + "&appSecret=" + $obj['appSecret']);
+		}else{
+			$this->normalizeNewsFeedObj($response, $varObj['authStuff'][0]['accounts'][0], $query);	    
+		}
+
+		return json_encode(array(
+				"Success" => "It worked"
+			)
+		);
+	}
+
+	function normalizeNewsFeedObj($objArray, $account, $query){
+		echo "normal face stuff"; 
+		//print_R($objArray);
+		for($k = 0; $k < count($objArray); $k++){
+			$obj = $objArray[$k];
+
+			//print_r($obj); 
+
+			$manager = new Manager();
+			$builder = new facebookNewsFeedObjectBuilder();
+			$manager->setBuilder($builder);
+
+			$manager->parseActivityObj($obj, $account);
+
+			$item = $manager->getActivityObj();
+
+			//print_r($item); 
+
+			$this->writeObject((array)$item, $query, "facebook");
+		}
+	}
+
+	public function getFacebookQueryObjects(){
+		$var = file_get_contents("php://input");
+		$varObj = json_decode($var, true);
+		$queryString = $varObj['query'];
+
+		//print_r($queryString . "      ");
+
+		$from = $varObj['from'];
+
+		$size = 20;
+
+		$index = "public";
+		$host = "localhost";
+		$port = "9200";
+
+		$es = Client::connection("http://$host:$port/$index/$index");
+
+		$searchArr = array(
+			"from" => $from,
+			"size" => $size,
+			"query" => array(
+				'bool' => array(
+					"must" => array(
+						"term" => array(
+							"facebookQuery" => $queryString
+						)
+					)
+				)
+		    )
+		);
+
+		//print_R($searchArr);
+
+		$res = $es->search($searchArr);
+	
+		return json_encode($res);
+	}
 
 	public function getGeoLocation($loc){
 		if($loc == ""){

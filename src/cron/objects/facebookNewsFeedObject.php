@@ -366,52 +366,52 @@ class facebookNewsFeedObjectBuilder extends activityObjectBuilder{
         }
     }
     public function buildService($obj){
-	$this->activityObject->setService('Facebook');
+		$this->activityObject->setService('Facebook');
     }
     public function buildDateAdded($obj){
-	$this->activityObject->setDateAdded(time());
+		$this->activityObject->setDateAdded(time());
     }
     public function buildStarred($obj){
-	$this->activityObject->setStarred("false");
+		$this->activityObject->setStarred("false");
     }
     public function buildPostLink($obj, $account){
-	$filename = "../../serviceCreds.json";
-	$file = file_get_contents($filename) or die("Cannot open the file: " . $filename);
-	$tok = json_decode($file, true);
+		$filename = "../../serviceCreds.json";
+		$file = file_get_contents($filename) or die("Cannot open the file: " . $filename);
+		$tok = json_decode($file, true);
 
-	for($x = 0; $x < count($tok['facebook']); $x++){
-		if($tok['facebook'][$x]['user'] == $account['user']){
-			$temp = $tok['facebook'][$x];
+		for($x = 0; $x < count($tok['facebook']); $x++){
+			if($tok['facebook'][$x]['user'] == $account['user']){
+				$temp = $tok['facebook'][$x];
+			}
 		}
-	}
 
-	$link = '';
+		$link = '';
 
-	$url = 'https://graph.facebook.com/'
-	. 'fql?q=SELECT+permalink+FROM+stream+WHERE+post_id="'.$obj['id'].'"'
-	. '&access_token=' . $temp['accessToken'];
-	$response = file_get_contents($url);
-	$var = json_decode($response, true);
-
-	if($var['data'][0]['permalink'] == null){
 		$url = 'https://graph.facebook.com/'
-		. 'fql?q=SELECT+attachment+FROM+stream+WHERE+post_id="'.$obj['id'].'"'
+		. 'fql?q=SELECT+permalink+FROM+stream+WHERE+post_id="'.$obj['id'].'"'
 		. '&access_token=' . $temp['accessToken'];
 		$response = file_get_contents($url);
 		$var = json_decode($response, true);
 
-		if($var['data'][0]['attachment']['media'][0]['href'] == null){
-			if(isset($obj['link'])){
-				$link = $obj['link'];
+		if($var['data'][0]['permalink'] == null){
+			$url = 'https://graph.facebook.com/'
+			. 'fql?q=SELECT+attachment+FROM+stream+WHERE+post_id="'.$obj['id'].'"'
+			. '&access_token=' . $temp['accessToken'];
+			$response = file_get_contents($url);
+			$var = json_decode($response, true);
+
+			if($var['data'][0]['attachment']['media'][0]['href'] == null){
+				if(isset($obj['link'])){
+					$link = $obj['link'];
+				}
+			}else{
+				$link = $var['data'][0]['attachment']['media'][0]['href'];
 			}
 		}else{
-			$link = $var['data'][0]['attachment']['media'][0]['href'];
+			$link = $var['data'][0]['permalink'];
 		}
-	}else{
-		$link = $var['data'][0]['permalink'];
-	}
 
-	$this->activityObject->setPostLink($link);
+		$this->activityObject->setPostLink($link);
     }
 	public function buildIsLiked($obj){
 		$this->activityObject->setIsLiked("false");

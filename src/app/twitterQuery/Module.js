@@ -93,6 +93,7 @@ define(['dojo/_base/declare',
 
 		getTwitterQueryObjects: function(query, from){
 			params = {from: from, query: query};
+			console.log("getTwitterQueryObjects in Module.js: params are: ", params);
 			return xhrManager.send('POST', 'rest/v1.0/Search/getTwitterQueryObjects', params);
 		}
 	})
