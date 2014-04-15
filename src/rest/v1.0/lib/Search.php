@@ -492,7 +492,9 @@ class Search{
 		//auth junk
 		$access_token = $varObj['authStuff'][0]['accounts'][0]['accessToken'];
 		//make the facebook request
-		$url = 'https://graph.facebook.com/search?q=' . $query . '&type=post&access_token=' . $access_token;
+		$url = 'https://graph.facebook.com/search?q=' . urlencode($query) . '&type=post&access_token=' . $access_token;
+
+		//print_R($url);
 
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -560,19 +562,44 @@ class Search{
 
 		$es = Client::connection("http://$host:$port/$index/$index");
 
+		if(count(explode("\"", $queryString)) > 2){
+			$searchType = "quotes";
+			$queryString = ltrim($queryString, "\"");
+			$queryString = rtrim($queryString, "\"");
+		}else{
+			$searchType = "normal";
+		}
+
 		$searchArr = array(
 			"from" => $from,
 			"size" => $size,
 			"query" => array(
 				'bool' => array(
 					"must" => array(
-						"term" => array(
-							"facebookQuery" => $queryString
-						)
+						//push stuff here
 					)
 				)
 		    )
 		);
+
+		if($searchType == "normal"){
+			$queryString = explode(" ", $queryString);
+			//print_r($queryString);
+			for($x = 0; $x < count($queryString); $x++){
+				$temp = array('term' => array('facebookQuery' => $queryString[$x]));
+				array_push($searchArr['query']['bool']['must'], $temp);
+			}
+		}else{
+			$temp = array("match" => 
+				array("facebookQuery" => 
+					array(
+						"query" => $queryString,
+						"type" => "phrase"
+					)
+				)
+			);
+			array_push($searchArr['query']['bool']['must'], $temp);
+		}
 
 		//print_R($searchArr);
 

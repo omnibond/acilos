@@ -226,15 +226,17 @@ class facebookNewsFeedObjectBuilder extends activityObjectBuilder{
 		if(isset($obj['story_tags'])){
 			$objS = $obj['story_tags'];
 			for($d = 0; $d < count($objS); $d++){
-				for($f = 0; $f < count($objS[$d]); $f++){
-					$thung = $objS[$d][$f];
+				if(isset($objS[$d])){
+					for($f = 0; $f < count($objS[$d]); $f++){
+						$thung = $objS[$d][$f];
 
-					$storyTag = new FacebookStoryTags();
-					$storyTag->setId($thung['id']);
-					$storyTag->setName($thung['name']);
-					$storyTag->setType($thung['type']);
+						$storyTag = new FacebookStoryTags();
+						$storyTag->setId($thung['id']);
+						$storyTag->setName($thung['name']);
+						$storyTag->setType($thung['type']);
 
-					array_push($storyTagArray, $storyTag);
+						array_push($storyTagArray, $storyTag);
+					}
 				}
 			}
 		}
@@ -248,7 +250,7 @@ class facebookNewsFeedObjectBuilder extends activityObjectBuilder{
 
 					$to = new FacebookTo();
 					$to->setName($thong['name']);
-					$to->setId($thing['id']);
+					$to->setId($thong['id']);
 
 					array_push($toArray, $to);
 				}
@@ -322,7 +324,9 @@ class facebookNewsFeedObjectBuilder extends activityObjectBuilder{
 					$content->setPicture($res['source']);
 				}	
            }else{
-           		$content->setPicture($obj['picture']);
+	           	if(isset($obj['picture'])){
+	           		$content->setPicture($obj['picture']);
+	           	}
            }
        }else{
        		$content->setPicture($obj['picture']);
@@ -375,13 +379,16 @@ class facebookNewsFeedObjectBuilder extends activityObjectBuilder{
 		$this->activityObject->setStarred("false");
     }
     public function buildPostLink($obj, $account){
+    	//print_R($account);
 		$filename = "../../serviceCreds.json";
 		$file = file_get_contents($filename) or die("Cannot open the file: " . $filename);
 		$tok = json_decode($file, true);
 
+		//print_r($tok);
+
 		for($x = 0; $x < count($tok['facebook']); $x++){
-			if($tok['facebook'][$x]['user'] == $account['user']){
-				$temp = $tok['facebook'][$x];
+			if($tok['facebook'][0]['accounts'][$x]['user'] == $account['user']){
+				$temp = $tok['facebook'][0]['accounts'][$x];
 			}
 		}
 
