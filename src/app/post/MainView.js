@@ -127,19 +127,21 @@ define(['dojo/_base/declare',
 										style:"width:20px;height:20px"
 									});
 									//var picUrl = "https://graph.facebook.com/"+accountArr[d].image+"/picture";
-									serviceUrl = "app/resources/img/Facebook_logo.png";
+									var serviceUrl = "app/resources/img/Facebook_logo.png";
 								}if(key == "linkedin"){
 									var checkBox = new CheckBox({
 										leToken: accountArr[d]['accessToken'],
 										leKey: key,
 										style:"width:20px;height:20px"
 									});
-									if(key == "linkedin"){
-										serviceUrl = "app/resources/img/LinkedIn_logo.png";
-									}
-									if(key == "instagram"){
-										serviceUrl = "app/resources/img/Instagram_logo.png";
-									}
+									var serviceUrl = "app/resources/img/LinkedIn_logo.png";
+								}if(key == "google"){
+									var checkBox = new CheckBox({
+										leToken: accountArr[d]['accessToken'],
+										leKey: key,
+										style:"width:20px;height:20px"
+									});
+									var serviceUrl = "app/resources/img/googlePlus_icon.png";
 								}if(key == "instagram"){
 									break;
 								}	

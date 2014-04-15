@@ -165,6 +165,7 @@ class Credentials{
 								"auth" => $serviceCreds['google'][$a]['auth'],
 								"name" => $obj['name'],
 								"image" => $obj['image'],
+								'expiresAt' => $obj['expiresAt'],
 								"color" => $obj['color'],
 								"loginDisallow" => $obj['loginDisallow'],
 								"authenticated" => $obj['authenticated']
@@ -176,6 +177,7 @@ class Credentials{
 								"auth" => $serviceCreds['google'][$a]['auth'],
 								"name" => $obj['name'],
 								"image" => $obj['image'],
+								'expiresAt' => $obj['expiresAt'],
 								"color" => $obj['color'],
 								"loginDisallow" => $obj['loginDisallow'],
 								"authenticated" => $obj['authenticated']
