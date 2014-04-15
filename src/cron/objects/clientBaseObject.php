@@ -46,6 +46,7 @@ class clientObject{
 		'circles' => array(),
 		'displayName' => '',
 		'shh' => 0,
+		'image' => "",
 		'givenName' => '',
 		'searchIndex' => '',
 		'alphaIndex' => '',
@@ -94,6 +95,10 @@ class clientObject{
 	
 	public function setShh($shh){
 		$this->data['shh'] = $shh;
+	}
+	
+	public function setImage($img){
+		$this->data['image'] = $img;
 	}
 	
 	public function addCircle($circle){

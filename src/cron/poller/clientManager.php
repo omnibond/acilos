@@ -367,6 +367,52 @@ function getFriendsList($service){
 					}
 				}
 			}
+		case "Google":
+		echo "case \"Google\""; ?><br/><?php
+			$filename = "../../serviceCreds.json";
+			if(($file = file_get_contents($filename)) == false){
+				echo("Cannot open the file: " . $filename);
+			}else{
+				$tokenObject = json_decode($file, true);
+				$linkedinTokens = $tokenObject['google'];
+				
+				if(count($tokenObject['google']) > 0){
+					if(isset($tokenObject['google'][0]['accounts'])){
+						$accts = $tokenObject['google'][0]['accounts'];
+					}else{
+						$accts = array();
+					}
+				}
+	
+				for($h=0; $h < count($accts); $h++){
+					$url = "https://www.googleapis.com/plus/v1/people/me/people/visible?access_token=".$accts[$h]['accessToken'];
+					$ch = curl_init($url);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+					$res = curl_exec($ch);
+					curl_close($ch);
+					$var = json_decode($res, true);
+					
+					if(isset($var['error'])){
+						$returnArr = array("false" => array());
+					}else{
+						$returnArr = array();
+						for($x = 0; $x < count($var['items']); $x++){
+							$client = array(
+								'id' => $var['items'][$x]['id'],
+								'givenName' => $var['items'][$x]['displayName'],
+								'displayName' => $var['items'][$x]['displayName'],
+								'image' => $var['items'][$x]['image']['url'],
+								'service' => 'Google',
+								'about' => array(
+									'link' => $var['items'][$x]['url']
+								)
+							);
+							array_push($returnArr, $client);
+						}
+
+					}
+				}
+			}
 		break;
 		default:
 			$returnArr['Default'] = array("success" => "false", "msg" => "Default switch option");

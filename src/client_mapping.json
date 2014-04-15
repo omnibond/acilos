@@ -47,6 +47,10 @@
                         "displayName": {
                             "type": "string"
                         },
+			"image": {
+                            "type": "string",
+			    "index": "not_analyzed"
+                        },
 			"circles": {
                             "type": "string",
 			     "index": "not_analyzed"

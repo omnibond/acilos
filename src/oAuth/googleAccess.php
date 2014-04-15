@@ -34,11 +34,10 @@ $client = new Google_Client();
 $client->setClientId($_GET['apiKey']);
 $client->setClientSecret($_GET['secretKey']);
 $client->setRedirectUri($_GET['redirect_uri']);
-
+$client->setAccessType('offline');
+//need this line to get a new refresh token
+//$client->setApprovalPrompt('force');
 $scopeArr = explode(",", $_GET['scope']);
-//for($u=0; $u<count($scopeArr); $u++){
-//	$client->setScopes($scopeArr[$u]);
-//}
 $client->setScopes($scopeArr);
 
 $param = array(
@@ -78,12 +77,8 @@ if(isset($_GET['code'])) {
 	$client->setClientId($json['apiKey']);
 	$client->setClientSecret($json['secretKey']);
 	$client->setRedirectUri($json['redirect_uri']);
-	
-	
+	$client->setAccessType('offline');	
 	$scopeArr = explode(",", $json['scope']);
-	//for($u=0; $u<count($scopeArr); $u++){
-	//	$client->setScopes($scopeArr[$u]);
-	//}
 	$client->setScopes($scopeArr);
 	
 	$plus = new Google_Service_Plus($client);
@@ -93,6 +88,8 @@ if(isset($_GET['code'])) {
 	$tok = $client->getAccessToken();
 	$token = json_decode($tok, true);
 	$state = $json['state'];
+	
+	print_r($token);
 	
 	$credObj = file_get_contents("../serviceCreds.json");
 	$credObj = json_decode($credObj, true);
@@ -135,6 +132,9 @@ if(isset($_GET['code'])) {
 			$credObj['login'] = "second";
 		}
 					
+		if(isset($token['refresh_token'])){
+			$temp['refreshToken'] = $token['refresh_token'];
+		}
 		$temp['accessToken'] = $token['access_token'];
 		$temp['expiresAt'] = $token['created'] + $token['expires_in'];
 		$temp['user'] = $id;
@@ -167,11 +167,29 @@ if(isset($_GET['code'])) {
 	
 }
 
-function refresh_token($token, $client_id, $client_secret){
+function refreshGoogToken($uuid){
+	$credObj = file_get_contents("../serviceCreds.json");
+	$credObj = json_decode($credObj, true);
+	
+	$obj = $credObj['google'][0]['accounts'];
+	
+	$found = "false";
+	for($d = 0; $d < count($obj); $d++){
+		if($uuid = $obj[$d]['uuid']){
+			$acct = $obj[$d];
+			$found = "true";
+			break;
+		}
+	}
+	
+	if($found == "false"){
+		return "User account was not found";
+	}
+	
 	$params = array(
-		"refresh_token" => $token,
-		"client_id" => $client_id,
-		"client_secret" => $client_secret,
+		"refresh_token" => $acct['refreshToken'],
+		"client_id" => $credObj['google'][0]['key'],
+		"client_secret" => $credObj['google'][0]['secret'],
 		"grant_type" => 'refresh_token'
 	);
 	
@@ -187,15 +205,38 @@ function refresh_token($token, $client_id, $client_secret){
 	#the decode true param turns them into assoc arrays, 
 	#decode to add the refresh token to the object
 	$obj = json_decode($response, true);
-	$obj['refresh_token'] = $token;
-
-	#encode to make a string to write to file with
-	$json = json_encode($obj);
 	
-	$filename = "googleToken.txt";
-	$fp = fopen($filename, 'w') or die("Cannot open file " . $filename);
-	fwrite($fp, $json);
-	fclose($fp);
+	$credObj['google'][0]['accounts'][$d]['accessToken'] = $obj['access_token'];
+	
+	file_put_contents("../serviceCreds.json", json_encode($credObj));
+}
+
+function getTokenStatus($uuid){
+	$credObj = file_get_contents("../serviceCreds.json");
+	$credObj = json_decode($credObj, true);
+	
+	$obj = $credObj['google'][0]['accounts'];
+	
+	$found = "false";
+	for($d = 0; $d < count($obj); $d++){
+		if($uuid = $obj[$d]['uuid']){
+			$acct = $obj[$d];
+			$found = "true";
+			break;
+		}
+	}
+	
+	if($found == "false"){
+		return "User account was not found";
+	}
+
+	$url = 'https://www.googleapis.com/oauth2/v1/tokeninfo?access_token='.$acct['accessToken'];
+	$ch = curl_init($url);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	$res = curl_exec($ch);
+	curl_close($ch);
+	
+	print_r("Token Status: " . $res); ?><br/><?php
 }
 
 ?>
