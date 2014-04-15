@@ -42,6 +42,7 @@ define([
 		
 		'dojo-mama/views/ModuleScrollableView',
 
+		"app/PublicScroller",
 		"app/SearchScroller",
 		"app/SelectorBar",
 		'dojox/mobile/ProgressIndicator',
@@ -76,6 +77,7 @@ define([
 		
 		ModuleScrollableView,
 
+		PublicScroller,
 		SearchScroller,
 		SelectorBar,
 		ProgressIndicator,
@@ -226,6 +228,11 @@ define([
 					"name": "goButton",
 					onClick: lang.hitch(this, function(){
 						this.fromVar = 0;
+						if(this.pi){
+							this.pi.destroyRecursive();
+							this.pi = null;
+						}
+
 						if(this.list){
 							this.list.destroyRecursive();
 							this.postAddArray = [];
@@ -257,10 +264,12 @@ define([
 											this.queryFacebook(this.queryBox.get("value"), this.authObj[key]).then(lang.hitch(this, function(obj){
 												console.log("returned object is: ", obj);
 
-												this.list = new SearchScroller({
+												this.list = new PublicScroller({
 													feedName: this.queryBox.get("value"),
 													postAddArray: this.postAddArray,
 													getFeedData: lang.hitch(this, this.getFacebookQueryObjects),
+													paginateService: lang.hitch(this, this.paginateFacebook),
+													nextToken: obj['next'],
 													getNextGroup: lang.hitch(this, this.getNextGroup),
 													setStarred: lang.hitch(this, this.setStarred),
 													setStarredClient: lang.hitch(this, this.setStarredClient),
@@ -311,10 +320,8 @@ define([
 			},
 
 			getNextGroup: function(){
-				if(this.list.ListEnded == false){
-					this.loading = true;
+				if(this.list.ListEnded === false && this.list.loading == false){
 					this.list.postAddToList(this.fromVar+=20);
-					this.loading = false;
 				}
 			},
 			

@@ -70,7 +70,8 @@ define(['dojo/_base/declare',
 				route: '/',
 				queryFacebook: lang.hitch(this, this.queryFacebook),
 				getServiceCreds: lang.hitch(this, this.getServiceCreds),
-				getFacebookQueryObjects: lang.hitch(this, this.getFacebookQueryObjects)
+				getFacebookQueryObjects: lang.hitch(this, this.getFacebookQueryObjects),
+				paginateFacebook: lang.hitch(this, this.paginateFacebook)
 			});
 
 			this.registerView(this.rootView);
@@ -95,6 +96,11 @@ define(['dojo/_base/declare',
 			params = {from: from, query: query};
 			console.log("getFacebookQueryObjects in Module.js: params are: ", params);
 			return xhrManager.send('POST', 'rest/v1.0/Search/getFacebookQueryObjects', params);
+		},
+
+		paginateFacebook: function(cursor, authStuff){
+			params = {cursor: cursor, authStuff: authStuff};
+			return xhrManager.send('POST', 'rest/v1.0/Search/paginateFacebook', params);
 		}
 	})
 });

@@ -400,22 +400,26 @@ class facebookNewsFeedObjectBuilder extends activityObjectBuilder{
 		$response = file_get_contents($url);
 		$var = json_decode($response, true);
 
-		if($var['data'][0]['permalink'] == null){
-			$url = 'https://graph.facebook.com/'
-			. 'fql?q=SELECT+attachment+FROM+stream+WHERE+post_id="'.$obj['id'].'"'
-			. '&access_token=' . $temp['accessToken'];
-			$response = file_get_contents($url);
-			$var = json_decode($response, true);
+		if(isset($var['data'])){
+			if(isset($var['data'][0])){
+				if($var['data'][0]['permalink'] == null){
+					$url = 'https://graph.facebook.com/'
+					. 'fql?q=SELECT+attachment+FROM+stream+WHERE+post_id="'.$obj['id'].'"'
+					. '&access_token=' . $temp['accessToken'];
+					$response = file_get_contents($url);
+					$var = json_decode($response, true);
 
-			if($var['data'][0]['attachment']['media'][0]['href'] == null){
-				if(isset($obj['link'])){
-					$link = $obj['link'];
+					if($var['data'][0]['attachment']['media'][0]['href'] == null){
+						if(isset($obj['link'])){
+							$link = $obj['link'];
+						}
+					}else{
+						$link = $var['data'][0]['attachment']['media'][0]['href'];
+					}
+				}else{
+					$link = $var['data'][0]['permalink'];
 				}
-			}else{
-				$link = $var['data'][0]['attachment']['media'][0]['href'];
 			}
-		}else{
-			$link = $var['data'][0]['permalink'];
 		}
 
 		$this->activityObject->setPostLink($link);

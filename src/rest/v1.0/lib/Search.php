@@ -335,7 +335,7 @@ class Search{
 			$obj['facebookQuery'] = $query;
 		}
 
-		print_R($obj);
+		//print_R($obj);
 		$grr = $es->index($obj, $obj['id']);
 
 	}
@@ -492,7 +492,7 @@ class Search{
 		//auth junk
 		$access_token = $varObj['authStuff'][0]['accounts'][0]['accessToken'];
 		//make the facebook request
-		$url = 'https://graph.facebook.com/search?q=' . urlencode($query) . '&type=post&access_token=' . $access_token;
+		$url = 'https://graph.facebook.com/search?limit=20&q=' . urlencode($query) . '&type=post&access_token=' . $access_token;
 
 		//print_R($url);
 
@@ -503,9 +503,13 @@ class Search{
 
 		$response = json_decode($response, true);
 
-		$response = $response['data'];
-
 		//print_r($response);
+
+		if(isset($response['paging']['next'])){
+			$next = $response['paging']['next'];	
+		}
+
+		$response = $response['data'];
 
 		//response
 		if(isset($array['errors'])){
@@ -517,14 +521,72 @@ class Search{
 			$this->normalizeNewsFeedObj($response, $varObj['authStuff'][0]['accounts'][0], $query);	    
 		}
 
-		return json_encode(array(
-				"Success" => "It worked"
-			)
-		);
+		if(isset($next)){
+			return json_encode(array(
+					"Success" => "It worked",
+					"next" => $next
+				)
+			);
+		}else{
+			return json_encode(array(
+					"Success" => "It worked",
+					"next" => ""
+				)
+			);
+		}	
+	}
+
+	public function paginateFacebook(){
+		$var = file_get_contents("php://input");
+		$varObj = json_decode($var, true);
+
+		//make the facebook request
+		$url = $varObj['cursor'];
+
+		//print_R($url);
+
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$response = curl_exec($ch);
+		curl_close($ch);
+
+		$response = json_decode($response, true);
+
+		//print_r($response);
+
+		if(isset($response['paging']['next'])){
+			$next = $response['paging']['next'];	
+		}
+
+		$response = $response['data'];
+
+		//response
+		if(isset($array['errors'])){
+			print_r($array['errors'][0]['message']);
+			print_r($array['errors'][0]['code']);
+			//refresh token or call get new token again
+			//file_get_contents("../../oAuth/twitterAccess.php?appKey=" + $obj['appKey'] + "&appSecret=" + $obj['appSecret']);
+		}else{
+			$this->normalizeNewsFeedObj($response, $varObj['authStuff'][0]['accounts'][0], $query);	    
+		}
+
+		if(isset($next)){
+			return json_encode(array(
+					"Success" => "It worked",
+					"next" => $next
+				)
+			);
+		}else{
+			return json_encode(array(
+					"Success" => "It worked",
+					"next" => ""
+				)
+			);
+		}	
 	}
 
 	function normalizeNewsFeedObj($objArray, $account, $query){
-		echo "normal face stuff"; 
+		//echo "normal face stuff"; 
 		//print_R($objArray);
 		for($k = 0; $k < count($objArray); $k++){
 			$obj = $objArray[$k];
