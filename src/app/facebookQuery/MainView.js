@@ -270,6 +270,7 @@ define([
 													getFeedData: lang.hitch(this, this.getFacebookQueryObjects),
 													paginateService: lang.hitch(this, this.paginateFacebook),
 													nextToken: obj['next'],
+													authStuff: this.authObj[key],
 													getNextGroup: lang.hitch(this, this.getNextGroup),
 													setStarred: lang.hitch(this, this.setStarred),
 													setStarredClient: lang.hitch(this, this.setStarredClient),

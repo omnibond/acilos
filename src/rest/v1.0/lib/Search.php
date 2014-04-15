@@ -542,6 +542,7 @@ class Search{
 
 		//make the facebook request
 		$url = $varObj['cursor'];
+		$query = $varObj['query'];
 
 		//print_R($url);
 

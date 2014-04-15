@@ -229,7 +229,13 @@ define([
 
 				//make sure this one function works for twitter and facebook
 				if(this.nextToken != ""){
-					this.paginateService(this.nextToken);
+					this.paginateService(this.nextToken, this.authStuff, this.feedName).then(lang.hitch, this, function(obj){
+						console.log("obj from PublicScroller is: ", obj);
+
+						if(obj['next']){
+							this.nextToken = obj['next'];	
+						}
+					});
 				}
 				
 				if(from < 0){
