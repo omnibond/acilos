@@ -114,10 +114,8 @@ define([
 				defList.then(lang.hitch(this, this.buildView));		
 			},
 
-			buildView: function(data){
-				console.log("OMG 1", this.feedDataObj);
+			buildView: function(){
 				var data = this.feedDataObj;
-				console.log("OMG 2", data);
 				if(data.error){
 					if(this.ListEnded == false){
 						this.errorItem = new ListItem({
@@ -225,43 +223,27 @@ define([
 			},
 
 			postAddToList: function(from){	
+				console.log("THE NEW FROM: ", from);
 				this.loading = true;
-
-				console.log("this.authStuff is: ", this.authStuff);
 
 				//make sure this one function works for twitter and facebook
 				if(this.nextToken != ""){
-					console.log("from inside PublicScroller's postAddToList is: ", from);
 					this.paginateService(this.nextToken, this.authStuff, this.feedName).then(lang.hitch(this, function(obj){
-						console.log("obj from PublicScroller is: ", obj);
 
 						if(obj['next']){
 							this.nextToken = obj['next'];	
 						}
-					}));
-				}
-				
-				if(from < 0){
-					from = 0;
-				}
-				this.arrayList = [];
-				this.arrayList.push(this.searchStarredClients().then(lang.hitch(this, function(obj){
-					this.starClientObj = [];
-					for(var t = 0; t < obj.hits.hits.length; t++){
-						var tempArr = obj.hits.hits[t]._source.data.id.split("-----");
-						this.starClientObj.push(tempArr[1]);
-						for(var h = 0; h < obj.hits.hits[t]._source.data.owns.length; h++){
-							var tempArray = obj.hits.hits[t]._source.data.owns[h].split("-----");
-							this.starClientObj.push(tempArray[1]);
-						}
-					}
-				})));
-				this.arrayList.push(this.getFeedData(this.feedName, from).then(lang.hitch(this, function(obj){
-					this.feedDataObj = obj;
-				})));
 
-				var defList = new DeferredList(this.arrayList);
-				defList.then(lang.hitch(this, this.buildView));
+						if(from < 0){
+							from = 0;
+						}
+						console.log("THE NEW FROM2: ", from);
+						this.getFeedData(this.feedName, from).then(lang.hitch(this, function(obj){
+							this.feedDataObj = obj;
+							this.buildView();
+						}));
+					}));
+				}	
 			},
 
 			getDate: function(epoch){

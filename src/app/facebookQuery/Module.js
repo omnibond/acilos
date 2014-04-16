@@ -94,13 +94,11 @@ define(['dojo/_base/declare',
 
 		getFacebookQueryObjects: function(query, from){
 			params = {from: from, query: query};
-			console.log("getFacebookQueryObjects in Module.js: params are: ", params);
 			return xhrManager.send('POST', 'rest/v1.0/Search/getFacebookQueryObjects', params);
 		},
 
 		paginateFacebook: function(cursor, authStuff, query){
 			params = {cursor: cursor, authStuff: authStuff, query: query};
-			console.log("paginateFacebook in Module.js: params are: ", params);
 			return xhrManager.send('POST', 'rest/v1.0/Search/paginateFacebook', params);
 		}
 	})

@@ -70,7 +70,8 @@ define(['dojo/_base/declare',
 				route: '/',
 				queryTwitter: lang.hitch(this, this.queryTwitter),
 				getServiceCreds: lang.hitch(this, this.getServiceCreds),
-				getTwitterQueryObjects: lang.hitch(this, this.getTwitterQueryObjects)
+				getTwitterQueryObjects: lang.hitch(this, this.getTwitterQueryObjects),
+				paginateTwitter: lang.hitch(this, this.paginateTwitter)
 			});
 
 			this.registerView(this.rootView);
@@ -84,6 +85,11 @@ define(['dojo/_base/declare',
 		queryTwitter: function(query, authStuff){
 			var params = {query: query, authStuff: authStuff};
 			return xhrManager.send('POST', 'rest/v1.0/Search/queryTwitter', params);
+		},
+
+		paginateTwitter: function(cursor, authStuff, query){
+			params = {cursor: cursor, authStuff: authStuff, query: query};
+			return xhrManager.send('POST', 'rest/v1.0/Search/paginateTwitter', params);
 		},
 
 		getServiceCreds: function(){

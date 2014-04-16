@@ -45,6 +45,7 @@ define([
 		"app/PublicScroller",
 		"app/SearchScroller",
 		"app/SelectorBar",
+		'app/ServiceSelector',
 		'dojox/mobile/ProgressIndicator',
 		
 		"dojox/mobile/ToolBarButton",
@@ -80,6 +81,7 @@ define([
 		PublicScroller,
 		SearchScroller,
 		SelectorBar,
+		ServiceSelector,
 		ProgressIndicator,
 		
 		ToolBarButton,
@@ -160,7 +162,7 @@ define([
 							this.infoList = null;
 						}
 						if(this.queryBox.get("value") == ""){
-							console.log("enter stuff");
+
 						}else{
 							this.list = new SearchScroller({
 								feedName: this.queryBox.get("value"),
@@ -256,8 +258,6 @@ define([
 								var accountArr = this.authObj[key][0]['accounts'];
 								if(accountArr[0].accessToken != undefined){
 									this.queryFacebook(this.queryBox.get("value"), this.authObj[key]).then(lang.hitch(this, function(obj){
-										console.log("returned object MainView is: ", obj);
-
 										this.list = new PublicScroller({
 											feedName: this.queryBox.get("value"),
 											postAddArray: this.postAddArray,
@@ -283,10 +283,17 @@ define([
 					})
 				});
 
+				this.services = new ServiceSelector({
+					checkBoxes: {"Facebook" : true, "Twitter" : true},
+					style: "display: inline"
+					//vertical: "true"
+				})
+
 				this.selectorItem = new SelectorBar({
 					textBoxes: [this.queryBox],
 					buttons: [this.queryButton, this.justQuery, this.scrollButton],
 					toolTips: [this.helpButton],
+					serviceSelectors: [this.services],
 					style: "text-align: center"
 				});
 				this.selectorItem.placeAt(this.domNode.parentNode);
@@ -313,7 +320,9 @@ define([
 			},
 
 			getNextGroup: function(){
+				console.log(this.list.ListEnded, " ", this.list.loading);
 				if(this.list.ListEnded === false && this.list.loading == false){
+					console.log("going to get 20 more from mainView");
 					this.list.postAddToList(this.fromVar+=20);
 				}
 			},

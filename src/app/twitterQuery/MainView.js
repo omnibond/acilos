@@ -43,6 +43,7 @@ define([
 		'dojo-mama/views/ModuleScrollableView',
 
 		"app/SearchScroller",
+		"app/PublicScroller",
 		"app/SelectorBar",
 		'dojox/mobile/ProgressIndicator',
 		
@@ -77,6 +78,7 @@ define([
 		ModuleScrollableView,
 
 		SearchScroller,
+		PublicScroller,
 		SelectorBar,
 		ProgressIndicator,
 		
@@ -226,6 +228,11 @@ define([
 					"name": "goButton",
 					onClick: lang.hitch(this, function(){
 						this.fromVar = 0;
+						if(this.pi){
+							this.pi.destroyRecursive();
+							this.pi = null;
+						}
+
 						if(this.list){
 							this.list.destroyRecursive();
 							this.postAddArray = [];
@@ -247,34 +254,33 @@ define([
 
 						this.getServiceCreds().then(lang.hitch(this, function(obj){
 							this.authObj = obj;
-							console.log("this.authObj is: ", this.authObj);
 
-							for(var key in this.authObj){
-								if(key !== "login"){
-									if(this.authObj[key].length > 0 && key == "twitter"){
-										var accountArr = this.authObj[key][0]['accounts'];
-										if(accountArr[0].accessToken != undefined){
-											this.queryTwitter(this.queryBox.get("value"), this.authObj[key]).then(lang.hitch(this, function(obj){
-												console.log("returned object is: ", obj);
+							var key = "twitter";
+							if(this.authObj[key] && this.authObj[key].length > 0){
+								var accountArr = this.authObj[key][0]['accounts'];
+								if(accountArr[0].accessToken != undefined){
+									this.queryTwitter(this.queryBox.get("value"), this.authObj[key]).then(lang.hitch(this, function(obj){
+										console.log("returned object in MainView is: ", obj);
 
-												this.list = new SearchScroller({
-													feedName: this.queryBox.get("value"),
-													postAddArray: this.postAddArray,
-													getFeedData: lang.hitch(this, this.getTwitterQueryObjects),
-													getNextGroup: lang.hitch(this, this.getNextGroup),
-													setStarred: lang.hitch(this, this.setStarred),
-													setStarredClient: lang.hitch(this, this.setStarredClient),
-													fromVar: this.fromVar,
-													FeedViewID: this.id,
-													view: this
-												});			
-												this.addChild(this.list);
-												this.resize();
+										this.list = new PublicScroller({
+											feedName: this.queryBox.get("value"),
+											postAddArray: this.postAddArray,
+											getFeedData: lang.hitch(this, this.getTwitterQueryObjects),
+											paginateService: lang.hitch(this, this.paginateTwitter),
+											nextToken: obj['next'],
+											authStuff: this.authObj[key],
+											getNextGroup: lang.hitch(this, this.getNextGroup),
+											setStarred: lang.hitch(this, this.setStarred),
+											setStarredClient: lang.hitch(this, this.setStarredClient),
+											fromVar: this.fromVar,
+											FeedViewID: this.id,
+											view: this
+										});			
+										this.addChild(this.list);
+										this.resize();
 
-												this.pi.stop();
-											}))
-										}
-									}
+										this.pi.stop();
+									}))
 								}
 							}
 						}));

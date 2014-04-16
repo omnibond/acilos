@@ -129,7 +129,6 @@ define(['dojo/_base/declare',
 
 		paginateFacebook: function(cursor, authStuff){
 			params = {cursor: cursor, authStuff: authStuff};
-			console.log("console: params for paginateFacebook", params);
 			return xhrManager.send('POST', 'rest/v1.0/Search/paginateFacebook', params);
 		},
 		

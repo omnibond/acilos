@@ -261,7 +261,71 @@ class Search{
 		//print_r($varObj);
 		//query string
 		$query = $varObj['query'];
-		print_r($query);
+		//print_r($query);
+		//auth junk
+		$oauth_Token = $varObj['authStuff'][0]['accounts'][0]['accessToken'];
+		$consumer_key = $varObj['authStuff'][0]['accounts'][0]['key'];
+		$consumer_secret = $varObj['authStuff'][0]['accounts'][0]['secret'];
+		$access_secret = $varObj['authStuff'][0]['accounts'][0]['accessSecret'];
+		//connMan
+		$connection = new TwitterOAuth($consumer_key, $consumer_secret, $oauth_Token, $access_secret);
+		//make the twitter request
+		$status = $connection->get('search/tweets', array('q' => urlencode($query), 'count' => 20));
+		$status = objectToArray($status);
+
+		if(isset($status['search_metadata'])){
+			if(isset($status['search_metadata']['max_id_str'])){
+				$since_id = $status['search_metadata']['max_id_str'];
+			}
+		}
+
+		for($x = 0; $x < count($status['statuses']); $x++){
+			$id = $status['statuses'][$x]['id'];
+		}
+
+		$max_id = $id - 1;		
+
+		$array = $status['statuses'];
+
+		//print_r($array);
+		//response
+		if(isset($array['errors'])){
+			print_r($array['errors'][0]['message']);
+			print_r($array['errors'][0]['code']);
+			
+			return json_encode(array("Error" => $array['errors'][0]['message']));
+		}else{
+			$this->normalizeTwitterObject($array, $varObj['authStuff'][0]['accounts'][0], $query);	    
+		}
+
+		if(isset($since_id)){
+			return json_encode(array(
+					"Success" => "It worked",
+					"next" => array(
+						"since_id" => $since_id,
+						"max_id" => $max_id
+					)
+				)
+			);
+		}else{
+			return json_encode(array(
+					"Success" => "It worked",
+					"next" => ""
+				)
+			);
+		}
+	}
+
+	public function paginateTwitter(){
+		//echo "queryTwitter ";
+		$var = file_get_contents("php://input");
+		$varObj = json_decode($var, true);
+		//print_r($varObj);
+		//query string
+		$query = $varObj['query'];
+		$since_id = $varObj['cursor']['since_id'];
+		$max_id = $varObj['cursor']['max_id'];
+		//print_r($query);
 		//auth junk
 		$oauth_Token = $varObj['authStuff'][0]['accounts'][0]['accessToken'];
 		$consumer_key = $varObj['authStuff'][0]['accounts'][0]['key'];
@@ -270,25 +334,55 @@ class Search{
 		//connMan
 		$connection = new TwitterOAuth($consumer_key, $consumer_secret, $oauth_Token, $access_secret);
 		//make the twitte request
-		$status = $connection->get('search/tweets', array('q' => urlencode($query), 'count' => 100));
-		$status = $status -> statuses;
-		$array = objectToArray($status);
+		$status = $connection->get('search/tweets', array('q' => urlencode($query), 'count' => 20, 'max_id' => $max_id, 'since_id' => $since_id));
+		$status = objectToArray($status);
+
+		print_r($status);
+
+		// We do this here because what we return depends on whether or not this variable is set. We don't want to return the $since_id from the top of the function. We only want to return a $since_id if we get one back from twitter this time.
+		unset($since_id);
+		
+		if(isset($status['search_metadata'])){
+			if(isset($status['search_metadata']['max_id_str'])){
+				$since_id = $status['search_metadata']['max_id_str'];
+			}
+		}
+
+		for($x = 0; $x < count($status['statuses']); $x++){
+			$id = $status['statuses'][$x]['id'];
+		}
+
+		$max_id = $id - 1;
+
+		$array = $status['statuses'];
 
 		//print_r($array);
 		//response
 		if(isset($array['errors'])){
 			print_r($array['errors'][0]['message']);
 			print_r($array['errors'][0]['code']);
-			//refresh token or call get new token again
-			//file_get_contents("../../oAuth/twitterAccess.php?appKey=" + $obj['appKey'] + "&appSecret=" + $obj['appSecret']);
+			
+			return json_encode(array("Error" => $array['errors'][0]['message']));
 		}else{
 			$this->normalizeTwitterObject($array, $varObj['authStuff'][0]['accounts'][0], $query);	    
 		}
 
-		return json_encode(array(
-				"Success" => "It worked"
-			)
-		);
+		if(isset($since_id)){
+			return json_encode(array(
+					"Success" => "It worked",
+					"next" => array(
+						"since_id" => $since_id,
+						"max_id" => $max_id
+					)
+				)
+			);
+		}else{
+			return json_encode(array(
+					"Success" => "It worked",
+					"next" => ""
+				)
+			);
+		}
 	}
 
 	public function normalizeTwitterObject($objArray, $account, $query){
@@ -565,7 +659,7 @@ class Search{
 		if(isset($array['errors'])){
 			print_r($array['errors'][0]['message']);
 			print_r($array['errors'][0]['code']);
-			
+
 			return json_encode(array("Error" => $array['errors'][0]['message']));
 		}else{
 			$this->normalizeNewsFeedObj($response, $varObj['authStuff'][0]['accounts'][0], $query);	    
@@ -667,6 +761,8 @@ class Search{
 		//print_R($searchArr);
 
 		$res = $es->search($searchArr);
+
+		$res['from'] = $from;
 	
 		return json_encode($res);
 	}
