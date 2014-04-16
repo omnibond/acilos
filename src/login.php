@@ -30,7 +30,8 @@
 	$one = array_pop($domArr);
 	$two = array_pop($domArr);
 	$cookieDom = $two . "." . $one;
-
+	$cookieDom = null;
+	
 	function getData(){
 		try{
 			$credObj = file_get_contents("serviceCreds.json");

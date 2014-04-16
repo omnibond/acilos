@@ -62,17 +62,17 @@ function getGoogleFeed(){
 	}
 	
 	for($h=0; $h < count($accts); $h++){
-		$url = "https://api.instagram.com/v1/users/self/feed?access_token=".$accts[$h]['accessToken'];
+		$url = "https://www.googleapis.com/plus/v1/people/me/activities/public?access_token=".$accts[$h]['accessToken'];
 
 		$ch = curl_init($url);
 
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$res = curl_exec($ch);
 		curl_close($ch);
-
+		print_r($res);
 		$var = json_decode($res, true);
-
-		normalizeGoogObject($var['data'], $accts[$h]);
+		
+		#normalizeGoogObject($var['items'], $accts[$h]);
 	}
 }
 
@@ -96,41 +96,7 @@ function normalizeGoogObject($objArray, $account){
 	}
 }
 	
-function getSome(){
-	$filename = "../../serviceCreds.json";
-	$file = file_get_contents($filename);
-	
-	$tokenObject = json_decode($file, true);
-	
-	if(count($tokenObject['google']) > 0){
-		if(isset($tokenObject['google'][0]['accounts'])){
-			$accts = $tokenObject['google'][0]['accounts'];
-		}else{
-			$accts = array();
-		}
-	}
-	
-	for($h=0; $h < count($accts); $h++){
-		$userID = $accts[$h]['user'];
-		$token = $accts[$h]['accessToken'];
-		$refresh = $accts[$h]['refreshToken'];
-		$conn = "visible";
-		
-		print_r("User: " . $userID); ?><br/><?php
-		print_r("Token: " . $token); ?><br/><?php
-		print_r("Refresh: " . $refresh); ?><br/><?php
-
-		$url = "https://www.googleapis.com/plus/v1/people/me/people/".$conn."?access_token=".$token;
-		$ch = curl_init($url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$res = curl_exec($ch);
-		curl_close($ch);
-		
-		print_r($res);
-	}
-}
-	
-echo "start"; ?><br/><?php
-getSome();
+echo "google objs"; ?><br/><?php
+getGoogleFeed();
 
 ?>

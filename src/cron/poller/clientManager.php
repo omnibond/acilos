@@ -423,8 +423,6 @@ function getFriendsList($service){
 
 function saveFriendsList($friendArr){
 	echo "saveFriendsList"; ?><br/><?php
-	//global //$log;
-	//global //$logPrefix;
 	$arr = json_decode($friendArr, true);
 
 	for($x = 0; $x < count($arr); $x++){
@@ -477,7 +475,10 @@ if(!file_exists("../../lockFiles/clientManager.lock") || (time() > filemtime("..
 
 	$var = getFriendsList("Instagram");
 	saveFriendsList($var);
-
+	
+	$var = getFriendsList("Google");
+	saveFriendsList($var);
+	
 	unlink("../../lockFiles/clientManager.lock");
 }
 
