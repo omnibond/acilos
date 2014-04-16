@@ -515,8 +515,8 @@ class Search{
 		if(isset($array['errors'])){
 			print_r($array['errors'][0]['message']);
 			print_r($array['errors'][0]['code']);
-			//refresh token or call get new token again
-			//file_get_contents("../../oAuth/twitterAccess.php?appKey=" + $obj['appKey'] + "&appSecret=" + $obj['appSecret']);
+
+			return json_encode(array("Error" => $array['errors'][0]['message']));
 		}else{
 			$this->normalizeNewsFeedObj($response, $varObj['authStuff'][0]['accounts'][0], $query);	    
 		}
@@ -565,8 +565,8 @@ class Search{
 		if(isset($array['errors'])){
 			print_r($array['errors'][0]['message']);
 			print_r($array['errors'][0]['code']);
-			//refresh token or call get new token again
-			//file_get_contents("../../oAuth/twitterAccess.php?appKey=" + $obj['appKey'] + "&appSecret=" + $obj['appSecret']);
+			
+			return json_encode(array("Error" => $array['errors'][0]['message']));
 		}else{
 			$this->normalizeNewsFeedObj($response, $varObj['authStuff'][0]['accounts'][0], $query);	    
 		}

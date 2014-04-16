@@ -248,43 +248,35 @@ define([
 						this.pi.placeAt(document.body);
 						this.pi.start();
 
-						console.log("this.pi is: ", this.pi);
-
-						console.log("you searched for: ", this.queryBox.get("value"));
-
 						this.getServiceCreds().then(lang.hitch(this, function(obj){
 							this.authObj = obj;
-							console.log("this.authObj is: ", this.authObj);
+							
+							var key = "facebook";
+							if(this.authObj[key] && this.authObj[key].length > 0){
+								var accountArr = this.authObj[key][0]['accounts'];
+								if(accountArr[0].accessToken != undefined){
+									this.queryFacebook(this.queryBox.get("value"), this.authObj[key]).then(lang.hitch(this, function(obj){
+										console.log("returned object MainView is: ", obj);
 
-							for(var key in this.authObj){
-								if(key !== "login"){
-									if(this.authObj[key].length > 0 && key == "facebook"){
-										var accountArr = this.authObj[key][0]['accounts'];
-										if(accountArr[0].accessToken != undefined){
-											this.queryFacebook(this.queryBox.get("value"), this.authObj[key]).then(lang.hitch(this, function(obj){
-												console.log("returned object is: ", obj);
+										this.list = new PublicScroller({
+											feedName: this.queryBox.get("value"),
+											postAddArray: this.postAddArray,
+											getFeedData: lang.hitch(this, this.getFacebookQueryObjects),
+											paginateService: lang.hitch(this, this.paginateFacebook),
+											nextToken: obj['next'],
+											authStuff: this.authObj[key],
+											getNextGroup: lang.hitch(this, this.getNextGroup),
+											setStarred: lang.hitch(this, this.setStarred),
+											setStarredClient: lang.hitch(this, this.setStarredClient),
+											fromVar: this.fromVar,
+											FeedViewID: this.id,
+											view: this
+										});			
+										this.addChild(this.list);
+										this.resize();
 
-												this.list = new PublicScroller({
-													feedName: this.queryBox.get("value"),
-													postAddArray: this.postAddArray,
-													getFeedData: lang.hitch(this, this.getFacebookQueryObjects),
-													paginateService: lang.hitch(this, this.paginateFacebook),
-													nextToken: obj['next'],
-													authStuff: this.authObj[key],
-													getNextGroup: lang.hitch(this, this.getNextGroup),
-													setStarred: lang.hitch(this, this.setStarred),
-													setStarredClient: lang.hitch(this, this.setStarredClient),
-													fromVar: this.fromVar,
-													FeedViewID: this.id,
-													view: this
-												});			
-												this.addChild(this.list);
-												this.resize();
-
-												this.pi.stop();
-											}))
-										}
-									}
+										this.pi.stop();
+									}))
 								}
 							}
 						}));

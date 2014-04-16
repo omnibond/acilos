@@ -386,13 +386,19 @@ class facebookNewsFeedObjectBuilder extends activityObjectBuilder{
 
 		//print_r($tok);
 
-		for($x = 0; $x < count($tok['facebook']); $x++){
+		//print_R($account);
+
+		for($x = 0; $x < count($tok['facebook'][0]['accounts']); $x++){
 			if($tok['facebook'][0]['accounts'][$x]['user'] == $account['user']){
+				//echo "bob";
 				$temp = $tok['facebook'][0]['accounts'][$x];
+				break;
 			}
 		}
 
 		$link = '';
+
+		//print_r($temp);
 
 		$url = 'https://graph.facebook.com/'
 		. 'fql?q=SELECT+permalink+FROM+stream+WHERE+post_id="'.$obj['id'].'"'

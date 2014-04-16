@@ -227,15 +227,18 @@ define([
 			postAddToList: function(from){	
 				this.loading = true;
 
+				console.log("this.authStuff is: ", this.authStuff);
+
 				//make sure this one function works for twitter and facebook
 				if(this.nextToken != ""){
-					this.paginateService(this.nextToken, this.authStuff, this.feedName).then(lang.hitch, this, function(obj){
+					console.log("from inside PublicScroller's postAddToList is: ", from);
+					this.paginateService(this.nextToken, this.authStuff, this.feedName).then(lang.hitch(this, function(obj){
 						console.log("obj from PublicScroller is: ", obj);
 
 						if(obj['next']){
 							this.nextToken = obj['next'];	
 						}
-					});
+					}));
 				}
 				
 				if(from < 0){
