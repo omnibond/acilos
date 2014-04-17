@@ -68,38 +68,34 @@ define(['dojo/_base/declare',
 
 			this.rootView = new MainView({
 				route: '/',
-				queryFacebook: lang.hitch(this, this.queryFacebook),
+				getPublicQueryObjects: lang.hitch(this, this.getPublicQueryObjects),
 				getServiceCreds: lang.hitch(this, this.getServiceCreds),
-				getFacebookQueryObjects: lang.hitch(this, this.getFacebookQueryObjects),
-				paginateFacebook: lang.hitch(this, this.paginateFacebook)
+				getPublicDBObjects: lang.hitch(this, this.getPublicDBObjects),
+				paginateService: lang.hitch(this, this.paginateService)
 			});
 
 			this.registerView(this.rootView);
 		},
-		
-		getDomain: function(){
-			var params = {};
-			return xhrManager.send('GET', 'rest/v1.0/Database/getDomain', params);
+
+		getPublicDBObjects: function(query, from){
+			params = {from: from, query: query};
+			return xhrManager.send('POST', 'rest/v1.0/Search/getPublicDBObjects', params);
 		},
 
-		queryFacebook: function(query, authStuff){
-			var params = {query: query, authStuff: authStuff};
-			return xhrManager.send('POST', 'rest/v1.0/Search/queryFacebook', params);
+		paginateService: function(nextToken, authStuff, query, checked){
+			params = {nextToken: nextToken, authStuff: authStuff, query: query, checked: checked};
+			console.log("paginateService params are: ", params);
+			return xhrManager.send('POST', 'rest/v1.0/Search/paginateService', params);
+		},
+
+		getPublicQueryObjects: function(query, authStuff, checked){
+			params = {query: query, authStuff: authStuff, checked: checked};
+			return xhrManager.send('POST', 'rest/v1.0/Search/getPublicQueryObjects', params);
 		},
 
 		getServiceCreds: function(){
 			params = {};
 			return xhrManager.send('POST', 'rest/v1.0/Credentials/getServiceCreds', params);
-		},
-
-		getFacebookQueryObjects: function(query, from){
-			params = {from: from, query: query};
-			return xhrManager.send('POST', 'rest/v1.0/Search/getFacebookQueryObjects', params);
-		},
-
-		paginateFacebook: function(cursor, authStuff, query){
-			params = {cursor: cursor, authStuff: authStuff, query: query};
-			return xhrManager.send('POST', 'rest/v1.0/Search/paginateFacebook', params);
 		}
 	})
 });

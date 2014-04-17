@@ -83,7 +83,7 @@ define([
 				var params = {star : star};
 				return xhrManager.send('GET', 'rest/v1.0/Search/starred', params);
 			},
-
+			
 			searchStarredClients: function(){
 				var params = [];
 				return xhrManager.send('GET', 'rest/v1.0/Search/starredClients', params);
@@ -228,10 +228,11 @@ define([
 
 				//make sure this one function works for twitter and facebook
 				if(this.nextToken != ""){
-					this.paginateService(this.nextToken, this.authStuff, this.feedName).then(lang.hitch(this, function(obj){
+					//console.log(this.nextToken);
+					this.paginateService(this.nextToken, this.authStuff, this.feedName, this.checkedServices).then(lang.hitch(this, function(obj){
 
-						if(obj['next']){
-							this.nextToken = obj['next'];	
+						if(obj){
+							this.nextToken = obj;	
 						}
 
 						if(from < 0){

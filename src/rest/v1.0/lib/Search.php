@@ -254,19 +254,15 @@ class Search{
 		return json_encode($var);
 	}
 
-	public function queryTwitter(){
-		//echo "queryTwitter ";
-		$var = file_get_contents("php://input");
-		$varObj = json_decode($var, true);
-		//print_r($varObj);
+	public function queryTwitter($varObj){
 		//query string
 		$query = $varObj['query'];
 		//print_r($query);
 		//auth junk
-		$oauth_Token = $varObj['authStuff'][0]['accounts'][0]['accessToken'];
-		$consumer_key = $varObj['authStuff'][0]['accounts'][0]['key'];
-		$consumer_secret = $varObj['authStuff'][0]['accounts'][0]['secret'];
-		$access_secret = $varObj['authStuff'][0]['accounts'][0]['accessSecret'];
+		$oauth_Token = $varObj['authStuff']['twitter'][0]['accounts'][0]['accessToken'];
+		$consumer_key = $varObj['authStuff']['twitter'][0]['accounts'][0]['key'];
+		$consumer_secret = $varObj['authStuff']['twitter'][0]['accounts'][0]['secret'];
+		$access_secret = $varObj['authStuff']['twitter'][0]['accounts'][0]['accessSecret'];
 		//connMan
 		$connection = new TwitterOAuth($consumer_key, $consumer_secret, $oauth_Token, $access_secret);
 		//make the twitter request
@@ -295,44 +291,38 @@ class Search{
 			
 			return json_encode(array("Error" => $array['errors'][0]['message']));
 		}else{
-			$this->normalizeTwitterObject($array, $varObj['authStuff'][0]['accounts'][0], $query);	    
+			$this->normalizeTwitterObject($array, $varObj['authStuff']['twitter'][0]['accounts'][0], $query);	    
 		}
 
 		if(isset($since_id)){
-			return json_encode(array(
-					"Success" => "It worked",
-					"next" => array(
-						"since_id" => $since_id,
-						"max_id" => $max_id
-					),
-					"response_from_twitter" => $status
-				)
+			return array(
+				"next" => array(
+					"since_id" => $since_id,
+					"max_id" => $max_id
+				),
+				"response_from_twitter" => $status
 			);
 		}else{
-			return json_encode(array(
-					"Success" => "It worked",
-					"next" => "",
-					"response_from_twitter" => $status
-				)
+			return array(
+				"next" => "",
+				"response_from_twitter" => $status
 			);
 		}
 	}
 
-	public function paginateTwitter(){
+	public function paginateTwitter($varObj){
 		//echo "queryTwitter ";
-		$var = file_get_contents("php://input");
-		$varObj = json_decode($var, true);
 		//print_r($varObj);
 		//query string
 		$query = $varObj['query'];
-		$since_id = $varObj['cursor']['since_id'];
-		$max_id = $varObj['cursor']['max_id'];
+		$since_id = $varObj['nextToken']['twitter']['next']['since_id'];
+		$max_id = $varObj['nextToken']['twitter']['next']['max_id'];
 		//print_r($query);
 		//auth junk
-		$oauth_Token = $varObj['authStuff'][0]['accounts'][0]['accessToken'];
-		$consumer_key = $varObj['authStuff'][0]['accounts'][0]['key'];
-		$consumer_secret = $varObj['authStuff'][0]['accounts'][0]['secret'];
-		$access_secret = $varObj['authStuff'][0]['accounts'][0]['accessSecret'];
+		$oauth_Token = $varObj['authStuff']['twitter'][0]['accounts'][0]['accessToken'];
+		$consumer_key = $varObj['authStuff']['twitter'][0]['accounts'][0]['key'];
+		$consumer_secret = $varObj['authStuff']['twitter'][0]['accounts'][0]['secret'];
+		$access_secret = $varObj['authStuff']['twitter'][0]['accounts'][0]['accessSecret'];
 		//connMan
 		$connection = new TwitterOAuth($consumer_key, $consumer_secret, $oauth_Token, $access_secret);
 		//make the twitte request
@@ -366,25 +356,21 @@ class Search{
 			
 			return json_encode(array("Error" => $array['errors'][0]['message']));
 		}else{
-			$this->normalizeTwitterObject($array, $varObj['authStuff'][0]['accounts'][0], $query);	    
+			$this->normalizeTwitterObject($array, $varObj['authStuff']['twitter'][0]['accounts'][0], $query);	    
 		}
 
 		if(isset($since_id)){
-			return json_encode(array(
-					"Success" => "It worked",
-					"next" => array(
-						"since_id" => $since_id,
-						"max_id" => $max_id
-					),
-					"response_from_twitter" => $status
-				)
+			return array(
+				"next" => array(
+					"since_id" => $since_id,
+					"max_id" => $max_id
+				),
+				"response_from_twitter" => $status
 			);
 		}else{
-			return json_encode(array(
-					"Success" => "It worked",
-					"next" => "",
-					"response_from_twitter" => $status
-				)
+			return array(
+				"next" => "",
+				"response_from_twitter" => $status
 			);
 		}
 	}
@@ -427,11 +413,7 @@ class Search{
 			$obj['isFavorited'] = $exists['isFavorited'];
 		}
 
-		if($service == "twitter"){
-			$obj['twitterQuery'] = $query;
-		}else if($service == "facebook"){
-			$obj['facebookQuery'] = $query;
-		}
+		$obj['serviceQuery'] = $query;
 
 		//print_R($obj);
 		$grr = $es->index($obj, $obj['id']);
@@ -464,7 +446,30 @@ class Search{
 		return $grr;
 	}*/
 
-	public function getTwitterQueryObjects(){
+	public function getPublicQueryObjects(){
+		$var = file_get_contents("php://input");
+		$varObj = json_decode($var, true);
+		
+		//get checked and call thew two functions for what is checked
+		//print_r($varObj);
+
+		$returnObj = array();
+		foreach($varObj['checked'] as $key => $value){
+			if($key == "Facebook"){
+				if($varObj['checked'][$key] == true){
+					$returnObj['facebook'] = $this->queryFacebook($varObj);
+				}
+			}
+			if($key == "Twitter"){
+				if($varObj['checked'][$key] == true){
+					$returnObj['twitter'] = $this->queryTwitter($varObj);
+				}
+			}
+		}
+		return json_encode($returnObj);
+	}
+
+	public function getPublicDBObjects(){
 		$var = file_get_contents("php://input");
 		$varObj = json_decode($var, true);
 		$queryString = $varObj['query'];
@@ -498,19 +503,24 @@ class Search{
 						//push stuff here
 					)
 				)
-		    )
+		    ),
+		    'sort' => array(
+				'published' => array(
+					"order" => "desc"
+				)
+			)
 		);
 
 		if($searchType == "normal"){
 			$queryString = explode(" ", $queryString);
 			//print_r($queryString);
 			for($x = 0; $x < count($queryString); $x++){
-				$temp = array('term' => array('twitterQuery' => $queryString[$x]));
+				$temp = array('term' => array('serviceQuery' => $queryString[$x]));
 				array_push($searchArr['query']['bool']['must'], $temp);
 			}
 		}else{
 			$temp = array("match" => 
-				array("twitterQuery" => 
+				array("serviceQuery" => 
 					array(
 						"query" => $queryString,
 						"type" => "phrase"
@@ -523,72 +533,22 @@ class Search{
 		//print_R($searchArr);
 
 		$res = $es->search($searchArr);
-	
+		
+		#$res['from'] = $from;
+
 		return json_encode($res);
 	}
 
-	/*public function updateRecentPost($post){
-		global $clientObject;
-		//Dont count CONN objects as posts
-		if($post['title'] != "CONN"){
-			//if that poster is a client then update most recent
-			if(isset($clientObject[$post['actor']->id])){
-				$tempClientObj = $clientObject[$post['actor']->id];
-				$tempClientObj['data']['service'] = $post['service'];
-				if($tempClientObj['data']['post']['recentPostTime'] < $post['published'] || $tempClientObj['data']['post']['recentPostTime'] = ''){
-					$tempClientObj['data']['post']['recentPostTime'] = $post['published'];
-					$tempClientObj['data']['post']['recentPost'] = $post['id'];
-					$tempClientObj['data']['post']['totalPosts'] = $tempClientObj['data']['post']['totalPosts'] + 1;
-					if($post['actor']->location != '' || $post['actor']->location != null){
-						$arr = explode("#", $post['actor']->location);
-						if(count($arr) == 2){
-							$tempClientObj['data']['currentTown'] = $post['actor']->location;
-						}else{
-							$geo = getGeoLocation($post['actor']->location);
-							$tempClientObj['data']['currentTown'] = $geo;
-						}
-					}
-					$tempClientObj['data']['friendDegree'] = "first";
-
-					//$log->logInfo($logPrefix.'updateRecentPost() calling writeClient to update recentPost');
-					writeClient($tempClientObj);
-				}
-			}else{
-				//else add them as a client and set their most recent
-				$client = new clientObject(); 
-				$client->setDisplayName($post['actor']->displayName);
-				$client->setID($post['service'].'-----'.$post['actor']->id);
-				$client->setRecentPost($post['id']);
-				$client->setRecentPostTime($post['published']);
-				$client->setTotalPosts(1);
-				$client->setService($post['service']);
-				$client->setFriendDegree("second");
-
-				if($post['actor']->location != '' || $post['actor']->location != null){
-					$geo = $this->getGeoLocation($post['actor']->location);
-					$client->setCurrentTown($geo);
-				}		
-
-				$type = $post['service'];
-				$credential = array('id' => $post['actor']->id, 'givenName' => $post['actor']->displayName, 'displayName' => $post['actor']->displayName);
-				$client->setCredential($type, $credential);
-
-				$var = $this->writeClient((array)$client);
-
-			}
-		}
-	}*/
-
-	public function queryFacebook(){
+	public function queryFacebook($varObj){
 		//echo "queryFacebook ";
-		$var = file_get_contents("php://input");
-		$varObj = json_decode($var, true);
+	//	$var = file_get_contents("php://input");
+	//	$varObj = json_decode($var, true);
 		//print_r($varObj);
 		//query string
 		$query = $varObj['query'];
 		//print_r($query);
 		//auth junk
-		$access_token = $varObj['authStuff'][0]['accounts'][0]['accessToken'];
+		$access_token = $varObj['authStuff']['facebook'][0]['accounts'][0]['accessToken'];
 		//make the facebook request
 		$url = 'https://graph.facebook.com/search?limit=20&q=' . urlencode($query) . '&type=post&access_token=' . $access_token;
 
@@ -616,42 +576,61 @@ class Search{
 
 			return json_encode(array("Error" => $array['errors'][0]['message']));
 		}else{
-			$this->normalizeNewsFeedObj($response, $varObj['authStuff'][0]['accounts'][0], $query);	    
+			$this->normalizeNewsFeedObj($response, $varObj['authStuff']['facebook'][0]['accounts'][0], $query);	    
 		}
 
 		if(isset($next)){
-			return json_encode(array(
-					"Success" => "It worked",
+			return array(
 					"next" => $next
-				)
 			);
 		}else{
-			return json_encode(array(
-					"Success" => "It worked",
+			return array(
 					"next" => ""
-				)
 			);
 		}	
 	}
 
-	public function paginateFacebook(){
+	public function paginateService(){
 		$var = file_get_contents("php://input");
 		$varObj = json_decode($var, true);
 
+		//print_r($varObj);
+
+		$returnObj = array();
+		foreach($varObj['checked'] as $key => $value){
+			if($key == "Facebook"){
+				if($varObj['checked'][$key] == true){
+					if(isset($varObj['nextToken']['facebook'])){
+						$returnObj['facebook'] = $this->paginateFacebook($varObj);
+					}
+				}
+			}
+			if($key == "Twitter"){
+				if($varObj['checked'][$key] == true){
+					$returnObj['twitter'] = $this->paginateTwitter($varObj);
+				}
+			}
+		}
+
+		return json_encode($returnObj);
+	}
+
+	public function paginateFacebook($varObj){
+		print_r($varObj);
 		//make the facebook request
-		$url = $varObj['cursor'];
+		$url = $varObj['nextToken']['facebook']['next'];
 		$query = $varObj['query'];
 
-		//print_R($url);
+		//var_dump($url);
 
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$response = curl_exec($ch);
 		curl_close($ch);
 
-		$response = json_decode($response, true);
+		//var_dump($response);
 
-		//print_r($response);
+		$response = json_decode($response, true);
 
 		if(isset($response['paging']['next'])){
 			$next = $response['paging']['next'];	
@@ -666,22 +645,18 @@ class Search{
 
 			return json_encode(array("Error" => $array['errors'][0]['message']));
 		}else{
-			$this->normalizeNewsFeedObj($response, $varObj['authStuff'][0]['accounts'][0], $query);	    
+			$this->normalizeNewsFeedObj($response, $varObj['authStuff']['facebook'][0]['accounts'][0], $query);	    
 		}
 
 		if(isset($next)){
-			return json_encode(array(
-					"Success" => "It worked",
-					"next" => $next
-				)
+			return array(
+				"next" => $next
 			);
 		}else{
-			return json_encode(array(
-					"Success" => "It worked",
-					"next" => ""
-				)
+			return array(
+				"next" => ""
 			);
-		}	
+		}
 	}
 
 	function normalizeNewsFeedObj($objArray, $account, $query){
@@ -704,71 +679,6 @@ class Search{
 
 			$this->writeObject((array)$item, $query, "facebook");
 		}
-	}
-
-	public function getFacebookQueryObjects(){
-		$var = file_get_contents("php://input");
-		$varObj = json_decode($var, true);
-		$queryString = $varObj['query'];
-
-		//print_r($queryString . "      ");
-
-		$from = $varObj['from'];
-
-		$size = 20;
-
-		$index = "public";
-		$host = "localhost";
-		$port = "9200";
-
-		$es = Client::connection("http://$host:$port/$index/$index");
-
-		if(count(explode("\"", $queryString)) > 2){
-			$searchType = "quotes";
-			$queryString = ltrim($queryString, "\"");
-			$queryString = rtrim($queryString, "\"");
-		}else{
-			$searchType = "normal";
-		}
-
-		$searchArr = array(
-			"from" => $from,
-			"size" => $size,
-			"query" => array(
-				'bool' => array(
-					"must" => array(
-						//push stuff here
-					)
-				)
-		    )
-		);
-
-		if($searchType == "normal"){
-			$queryString = explode(" ", $queryString);
-			//print_r($queryString);
-			for($x = 0; $x < count($queryString); $x++){
-				$temp = array('term' => array('facebookQuery' => $queryString[$x]));
-				array_push($searchArr['query']['bool']['must'], $temp);
-			}
-		}else{
-			$temp = array("match" => 
-				array("facebookQuery" => 
-					array(
-						"query" => $queryString,
-						"type" => "phrase"
-					)
-				)
-			);
-			array_push($searchArr['query']['bool']['must'], $temp);
-		}
-
-		//print_R($searchArr);
-
-		$res = $es->search($searchArr);
-
-		$res['from'] = $from;
-	
-		return json_encode($res);
 	}
 
 	public function getGeoLocation($loc){

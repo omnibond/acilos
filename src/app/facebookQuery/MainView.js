@@ -112,18 +112,53 @@ define([
 				this.fromVar = 0;
 				on(this.domNode, "scroll", lang.hitch(this, this.dataPoints));
 				
-				if(this.infoList){
-					this.infoList.destroyRecursive();
-					this.infoList = null;
-				}
+				this.getServiceCreds().then(lang.hitch(this, function(obj){
+					this.authObj = obj;
 
-				if(this.list){
-					this.list.destroyRecursive();
-					this.postAddArray = [];
-					this.buildList();
-				}else{
-					this.buildList();
-				}
+					this.exists = {};
+					for(var key in this.authObj){	
+						if(key == "facebook" && this.authObj[key][0]['accounts'].length > 0){
+							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
+								this.exists['Facebook'] = true;
+							}
+						}
+						if(key == "twitter" && this.authObj[key][0]['accounts'].length > 0){
+							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
+								this.exists['Twitter'] = true;
+							}
+						}
+						/*
+						if(key == "instagram" && this.authObj[key][0]['accounts'].length > 0){
+							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
+								this.exists['Instagram'] = true;
+							}
+						}
+						if(key == "linkedin" && this.authObj[key][0]['accounts'].length > 0){
+							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
+								this.exists['Linkedin'] = true;
+							}
+						}
+						if(key == "google" && this.authObj[key][0]['accounts'].length > 0){
+							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
+								this.exists['Google'] = true;
+							}
+						}
+						*/
+					}
+
+					if(this.infoList){
+						this.infoList.destroyRecursive();
+						this.infoList = null;
+					}
+
+					if(this.list){
+						this.list.destroyRecursive();
+						this.postAddArray = [];
+						this.buildList();
+					}else{
+						this.buildList();
+					}
+				}))
 			},
 
 			buildList: function(){
@@ -167,7 +202,7 @@ define([
 							this.list = new SearchScroller({
 								feedName: this.queryBox.get("value"),
 								postAddArray: this.postAddArray,
-								getFeedData: lang.hitch(this, this.getFacebookQueryObjects),
+								getFeedData: lang.hitch(this, this.getPublicDBObjects),
 								getNextGroup: lang.hitch(this, this.getNextGroup),
 								setStarred: lang.hitch(this, this.setStarred),
 								setStarredClient: lang.hitch(this, this.setStarredClient),
@@ -231,8 +266,6 @@ define([
 					onClick: lang.hitch(this, function(){
 						this.fromVar = 0;
 
-						console.log("this.services is: ", this.services);
-
 						if(this.pi){
 							this.pi.destroyRecursive();
 							this.pi = null;
@@ -253,44 +286,57 @@ define([
 						this.pi.placeAt(document.body);
 						this.pi.start();
 
-						this.getServiceCreds().then(lang.hitch(this, function(obj){
-							this.authObj = obj;
-							
-							var key = "facebook";
-							if(this.authObj[key] && this.authObj[key].length > 0){
-								var accountArr = this.authObj[key][0]['accounts'];
-								if(accountArr[0].accessToken != undefined){
-									this.queryFacebook(this.queryBox.get("value"), this.authObj[key]).then(lang.hitch(this, function(obj){
-										this.list = new PublicScroller({
-											feedName: this.queryBox.get("value"),
-											postAddArray: this.postAddArray,
-											getFeedData: lang.hitch(this, this.getFacebookQueryObjects),
-											paginateService: lang.hitch(this, this.paginateFacebook),
-											nextToken: obj['next'],
-											authStuff: this.authObj[key],
-											getNextGroup: lang.hitch(this, this.getNextGroup),
-											setStarred: lang.hitch(this, this.setStarred),
-											setStarredClient: lang.hitch(this, this.setStarredClient),
-											fromVar: this.fromVar,
-											FeedViewID: this.id,
-											view: this
-										});			
-										this.addChild(this.list);
-										this.resize();
+						this.checked = {};
+						for(var d=0; d < this.services.currentCheckBoxes.length; d++){
+							this.checked[this.services.currentCheckBoxes[d].label] = this.services.currentCheckBoxes[d].checked;
+						}
 
-										this.pi.stop();
-									}))
-								}
-							}
-						}));
+						console.log("checked outside", this.checked);
+
+						this.getPublicQueryObjects(this.queryBox.get("value"), this.authObj, this.checked).then(lang.hitch(this, function(obj, checked){
+
+							console.log("obj ", obj);
+							console.log("checked inside", this.checked);
+
+							this.list = new PublicScroller({
+								feedName: this.queryBox.get("value"),
+								postAddArray: this.postAddArray,
+								getFeedData: lang.hitch(this, this.getPublicDBObjects),
+								paginateService: lang.hitch(this, this.paginateService),
+								nextToken: obj,
+								checkedServices: this.checked,
+								authStuff: this.authObj,
+								getNextGroup: lang.hitch(this, this.getNextGroup),
+								setStarred: lang.hitch(this, this.setStarred),
+								setStarredClient: lang.hitch(this, this.setStarredClient),
+								fromVar: this.fromVar,
+								FeedViewID: this.id,
+								view: this
+							});			
+							this.addChild(this.list);
+							this.resize();
+
+							this.pi.stop();
+
+						}))
 					})
 				});
-
+				
 				this.services = new ServiceSelector({
-					checkBoxes: {"Facebook" : true, "Twitter" : true},
+					checkBoxes: this.exists,
 					style: "display: inline"
 					//vertical: "true"
-				})
+				});
+
+				console.log("the facebook check box is: ", this.services.currentCheckBoxes[0].checked);
+
+				this.services.currentCheckBoxes[0].domNode.onclick = lang.hitch(this, function(){
+					console.log("the facebook checkbox: ", this.services.currentCheckBoxes[0].checked);
+				});
+
+				this.services.currentCheckBoxes[1].domNode.onclick = lang.hitch(this, function(){
+					console.log("the twitter checkbox: ", this.services.currentCheckBoxes[1].checked);
+				});
 
 				this.selectorItem = new SelectorBar({
 					textBoxes: [this.queryBox],
