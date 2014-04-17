@@ -304,13 +304,15 @@ class Search{
 					"next" => array(
 						"since_id" => $since_id,
 						"max_id" => $max_id
-					)
+					),
+					"response_from_twitter" => $status
 				)
 			);
 		}else{
 			return json_encode(array(
 					"Success" => "It worked",
-					"next" => ""
+					"next" => "",
+					"response_from_twitter" => $status
 				)
 			);
 		}
@@ -334,10 +336,10 @@ class Search{
 		//connMan
 		$connection = new TwitterOAuth($consumer_key, $consumer_secret, $oauth_Token, $access_secret);
 		//make the twitte request
-		$status = $connection->get('search/tweets', array('q' => urlencode($query), 'count' => 20, 'max_id' => $max_id, 'since_id' => $since_id));
+		$status = $connection->get('search/tweets', array('q' => urlencode($query), 'count' => 20, 'max_id' => $max_id/*, 'since_id' => $since_id*/));
 		$status = objectToArray($status);
 
-		print_r($status);
+		//print_r($status);
 
 		// We do this here because what we return depends on whether or not this variable is set. We don't want to return the $since_id from the top of the function. We only want to return a $since_id if we get one back from twitter this time.
 		unset($since_id);
@@ -373,13 +375,15 @@ class Search{
 					"next" => array(
 						"since_id" => $since_id,
 						"max_id" => $max_id
-					)
+					),
+					"response_from_twitter" => $status
 				)
 			);
 		}else{
 			return json_encode(array(
 					"Success" => "It worked",
-					"next" => ""
+					"next" => "",
+					"response_from_twitter" => $status
 				)
 			);
 		}

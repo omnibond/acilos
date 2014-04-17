@@ -317,10 +317,10 @@ define([
 			},
 
 			getNextGroup: function(){
-				if(this.list.ListEnded == false){
-					this.loading = true;
+				console.log(this.list.ListEnded, " ", this.list.loading);
+				if(this.list.ListEnded === false && this.list.loading == false){
+					console.log("going to get 20 more from mainView");
 					this.list.postAddToList(this.fromVar+=20);
-					this.loading = false;
 				}
 			},
 			

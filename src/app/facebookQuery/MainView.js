@@ -230,6 +230,9 @@ define([
 					"name": "goButton",
 					onClick: lang.hitch(this, function(){
 						this.fromVar = 0;
+
+						console.log("this.services is: ", this.services);
+
 						if(this.pi){
 							this.pi.destroyRecursive();
 							this.pi = null;
