@@ -26,13 +26,11 @@
 */
 
 require_once('../objects/activityObject.php');
-require_once('../objects/userBaseObject.php');
-require_once('../../cron/objects/clientBaseObject.php');
+require_once('../objects/clientBaseObject.php');
 require_once('../../oAuth/twitteroauth/twitteroauth.php');
 require_once('../../vendor/autoload.php');
 
 require_once('../../rest/v1.0/lib/counts.php');
-require_once('../../rest/v1.0/lib/S3Functions.php');
 
 use \ElasticSearch\Client;
 use \Aws\S3\S3Client;
@@ -108,7 +106,7 @@ function writeObject($obj){
 	}
 
 	$grr = $es->index($obj, $obj['id']);
-	#print_r($grr);
+	print_r($grr);
 	
 	updateRecentPost($obj);
 }
@@ -387,6 +385,103 @@ function getUserTimeline(){
 }
 //TWITTER STOP ---------------------------------------------------------------
 
+//GOOGLE GOOOOOOOOOOO--------------------------------------------
+function getGoogleFeed(){
+	echo "get google stuff"; ?><br/><?php
+
+	//get the token from the file
+	$filename = "../../serviceCreds.json";
+	$file = file_get_contents($filename);
+	
+	$tokenObject = json_decode($file, true);
+	
+	if(count($tokenObject['google']) > 0){
+		if(isset($tokenObject['google'][0]['accounts'])){
+			$accts = $tokenObject['google'][0]['accounts'];
+		}else{
+			$accts = array();
+		}
+	}
+	
+	for($h=0; $h < count($accts); $h++){
+		$url = "https://www.googleapis.com/plus/v1/people/me/people/visible?access_token=".$accts[$h]['accessToken'];
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$res = curl_exec($ch);
+		curl_close($ch);
+		$var = json_decode($res, true);
+		
+		$idArr = array();
+		if(isset($var['error'])){
+			if($error = $var['error']['errors'][0]['message'] == "Invalid Credentials"){
+				$token =  refreshGoogToken($accts[$h]['uuid']);
+				$url = "https://www.googleapis.com/plus/v1/people/me/people/visible?access_token=".$accts[$h]['accessToken'];
+				$ch = curl_init($url);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$res = curl_exec($ch);
+				curl_close($ch);
+				$var = json_decode($res, true);
+				$returnArr = array();
+				if(isset($var['error'])){
+					return "error";
+				}else{
+					for($x = 0; $x < count($var['items']); $x++){
+						array_push($idArr, $var['items'][$x]['id']);
+					}
+				}
+			}else{
+				return "error";
+			}
+		}else{
+			$returnArr = array();
+			for($x = 0; $x < count($var['items']); $x++){
+				array_push($idArr, $var['items'][$x]['id']);
+			}
+		}
+		print "items in idArr" . count($idArr); ?><br/><?php
+		
+		$dataArr = array();
+		for($t=0; $t < count($idArr); $t++){
+			$url = "https://www.googleapis.com/plus/v1/people/".$idArr[$t]."/activities/public?access_token=".$accts[$h]['accessToken'];
+			$ch = curl_init($url);
+
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			$res = curl_exec($ch);
+			curl_close($ch);
+			$var = json_decode($res, true);
+			
+			for($k=0; $k < count($var['items']); $k++){
+				array_push($dataArr, $var['items'][$k]);
+			}
+		}
+		print "items in dataArr" . count($dataArr); ?><br/><?php
+		normalizeGoogObject($dataArr, $accts[$h]);
+	}
+}
+
+function normalizeGoogObject($objArray, $account){
+	echo "normal goog";
+
+	$mediaArray = array();
+	for($k = 0; $k < count($objArray); $k++){
+		$obj = $objArray[$k];
+
+		print_r($obj); ?><br/><?php
+
+		$manager = new Manager();
+		$builder = new googleObjectBuilder();
+		$manager->setBuilder($builder);
+		$manager->parseActivityObj($obj, $account);
+	
+		$item = $manager->getActivityObj();
+		
+		print_r($item); ?><br/><?php
+		
+		writeObject((array)$item);
+	}
+}
+//GOOGLE STOP----------------------------------------------------
+
 //LINKEDIN GOOOOOOOOOOOOOO -----------------------------------------------------
 function linkedInFetch($method, $resource, $token) {
 	echo "linkedin fetch"; ?><br/><?php
@@ -597,6 +692,53 @@ function getDiscussionObjects(){
 	}
 }
 
+function refreshGoogToken($uuid){
+	print_r("refreshing google token");
+	$credObj = file_get_contents("../../serviceCreds.json");
+	$credObj = json_decode($credObj, true);
+	
+	$obj = $credObj['google'][0]['accounts'];
+	
+	$found = "false";
+	for($d = 0; $d < count($obj); $d++){
+		if($uuid = $obj[$d]['uuid']){
+			$acct = $obj[$d];
+			$found = "true";
+			break;
+		}
+	}
+	
+	if($found == "false"){
+		return "User account was not found";
+	}
+	
+	$params = array(
+		"refresh_token" => $acct['refreshToken'],
+		"client_id" => $credObj['google'][0]['key'],
+		"client_secret" => $credObj['google'][0]['secret'],
+		"grant_type" => 'refresh_token'
+	);
+	
+	$url = "https://accounts.google.com/o/oauth2/token";
+	$ch = curl_init($url);
+	curl_setopt($ch, CURLOPT_POST, 1);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	#here is a new access_token object minues the refresh_token, so add it and then write to the file
+	$response = curl_exec($ch);		
+	curl_close($ch);
+	
+	#the decode true param turns them into assoc arrays, 
+	#decode to add the refresh token to the object
+	$obj = json_decode($response, true);
+	
+	$credObj['google'][0]['accounts'][$d]['accessToken'] = $obj['access_token'];
+	
+	file_put_contents("../../serviceCreds.json", json_encode($credObj));
+	
+	return $obj['access_token'];
+}
+
 //300 = 5 mins
 if(!file_exists("../../lockFiles/cronManager.lock") || (time() > filemtime("../../lockFiles/cronManager.lock") + 300)){
 	touch("../../lockFiles/cronManager.lock");
@@ -696,24 +838,28 @@ if(!file_exists("../../lockFiles/cronManager.lock") || (time() > filemtime("../.
 			$total = json_decode($totes, true);	
 
 		}		
-		echo "linkedin feed"; ?><br/><?php
-		getPersonalFeed();
+	//	echo "linkedin feed"; ?><br/><?php
+	//	getPersonalFeed();
 
-		echo "facebook feed"; ?><br/><?php
-		getUserNewsFeed();
+	//	echo "facebook feed"; ?><br/><?php
+	//	getUserNewsFeed();
 
-		echo "calling twitter stuff";?><br/><?php
-		getUserTimeline();
+	//	echo "calling twitter stuff";?><br/><?php
+	//	getUserTimeline();
 
-		echo "instagram feed"; ?><br/><?php
-		getUserFeed();
+	//	echo "instagram feed"; ?><br/><?php
+	//	getUserFeed();
 
-		echo "linkedin feed"; ?><br/><?php
-		getDiscussionObjects();
-
+	//	echo "linkedin feed"; ?><br/><?php
+	//	getDiscussionObjects();
+		
+		echo "google feed"; ?><br/><?php
+		getGoogleFeed();
 
 	}
 	unlink("../../lockFiles/cronManager.lock");
 }
+
+
 
 ?>

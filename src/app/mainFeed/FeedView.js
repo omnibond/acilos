@@ -50,6 +50,7 @@ define([
 		"app/mainFeed/twitterFeedItem",
 		"app/mainFeed/linkedinFeedItem",
 		"app/mainFeed/instagramFeedItem",
+		"app/mainFeed/googleFeedItem",
 		"app/mainFeed/FeedScroller",
 		"app/SearchScroller",
 		"app/TitleBar",
@@ -97,6 +98,7 @@ define([
 		twitterFeedItem,
 		linkedinFeedItem,
 		instagramFeedItem,
+		googleFeedItem,
 		FeedScroller,
 		SearchScroller,
 		TitleBar,
@@ -415,6 +417,20 @@ define([
 								break;
 								case "Facebook":
 									var item = new facebookFeedItem({
+										data: data,
+										counter: j,
+										authObj: this.authObj,
+										blastView: this.blastView,
+										getDate: this.list.getDate,
+										parseSpecialChars: this.list.parseSpecialChars,
+										isURL: this.list.isURL,
+										setStarred: this.setStarred,
+										setStarredClient: lang.hitch(this, this.setStarredClient)
+									});
+									pane.addChild(item);
+								break;
+								case "Google":
+									var item = new googleFeedItem({
 										data: data,
 										counter: j,
 										authObj: this.authObj,

@@ -31,9 +31,37 @@ require_once('activityObject.php');
 #PRODUCT
 class GoogleContent{
 	public $queryString = '';
+	public $text = '';
+	public $url = '';
+	public $picture = '';
+	public $album = '';
+	public $header = '';
 
 	public function setQueryString($queryString){
 		$this->queryString = $queryString;
+	}
+	public function setText($text){
+		$this->text = $text;
+	}
+	public function setURL($url){
+		$this->url = $url;
+	}
+	public function setPicture($picture){
+		$this->picture = $picture;
+	}
+	public function setAlbum($album){
+		$this->album = $album;
+	}
+	public function setHeader($header){
+		$this->header = $header;
+	}
+}
+
+class GoogleAlbum{
+	public $url = array();
+	
+	public function setURL($url){
+		array_push($this->url, $url);
 	}
 }
 
@@ -56,68 +84,80 @@ class GoogleComment{
 #CONCRETE BUILDER
 class googleObjectBuilder extends activityObjectBuilder{
 
-   public function buildActor($obj){
-        $actor = new Actor();
+	public function buildActor($obj){
+		$actor = new Actor();
 
-        $actor->setName("");
-        $actor->setId("");
-	$actor->setSearchable("");
-        $actor->setdisplayName("");
-        $actor->setImage("");
-        $actor->setURL("");
-        $actor->setLocation("");
-        $actor->setGeoLocation("");
-        $actor->setDescription("");
-       
-        $this->activityObject->setActor($actor);
-    }
+		$actor->setName($obj['actor']['displayName']);
+		$actor->setId($obj['actor']['id']);
+		$actor->setSearchable($obj['actor']['displayName']);
+		$actor->setdisplayName($obj['actor']['displayName']);
+		$actor->setImage($obj['actor']['image']['url']);
+		$actor->setURL($obj['actor']['url']);
+		$actor->setLocation("");
+		$actor->setGeoLocation("");
+		$actor->setDescription("");
 
-    public function buildContent($obj){
+		$this->activityObject->setActor($actor);
+	}
+
+	public function buildContent($obj){
 		$content = new GoogleContent();
+		$queryString = '';
 		
-		$content->setQueryString("");
+		$text = new textBlockWithURLS();
+		if(isset($obj['object']['attachments'][0]['content'])){
+			$text->setText($obj['object']['attachments'][0]['content']);
+			$text->setLinks($obj['object']['attachments'][0]['content']);
+			$queryString = $queryString . " " . $obj['object']['attachments'][0]['content'];
+		}
+		$content->setText($text);
+		$content->setURL($obj['object']['attachments'][0]['url']);
+		if(isset($obj['object']['attachments'][0]['thumbnails'])){
+			$picArr = new GoogleAlbum();
+			for($x = 0; $x < count($obj['object']['attachments'][0]['thumbnails']); $x++){
+				$picArr->setURL($obj['object']['attachments'][0]['thumbnails'][$x]['url']);
+			}
+			$content->setAlbum($picArr);
+		}
+		if(isset($obj['object']['attachments'][0]['image'])){
+			$content->setPicture($obj['object']['attachments'][0]['image']['url']);
+		}
+		$content->setHeader($obj['object']['attachments'][0]['displayName']);
+		$queryString = $queryString . " " . $obj['object']['attachments'][0]['displayName'];
+		$content->setQueryString($queryString);
 		
 		$this->activityObject->setContent($content);
 	}
-    public function buildPublished($obj){
-        	$this->activityObject->setPublished("");
-    }
-    public function buildGenerator($obj){
-        $this->activityObject->setGenerator('Google');
-    }
-    public function buildTitle($obj){
-        	$this->activityObject->setTitle("");
-    }
-    public function buildVerb($obj){
-        $this->activityObject->setVerb("");
-    }
-    public function buildId($obj){
-        if(isset($obj['id'])){
-        	$this->activityObject->setId("google-----".$obj['id']);
-        }
-    }
-    public function buildService($obj){
-	$this->activityObject->setService('Google');
-    }
-    public function buildDateAdded($obj){
-	$this->activityObject->setDateAdded(time());
-    }
-    public function buildStarred($obj){
-	$this->activityObject->setStarred("false");
-    }
-    public function buildPostLink($obj, $account){
-	$filename = "../../serviceCreds.json";
-	$file = file_get_contents($filename) or die("Cannot open the file: " . $filename);
-	$tok = json_decode($file, true);
-
-	for($x = 0; $x < count($tok['google']); $x++){
-		if($tok['google'][$x]['user'] == $account['user']){
-			$temp = $tok['google'][$x];
+	
+	public function buildPublished($obj){
+		$this->activityObject->setPublished(intval(substr($obj['timestamp'], 0, 10)));
+	}
+	public function buildGenerator($obj){
+		$this->activityObject->setGenerator('Google');
+	}
+	public function buildTitle($obj){
+		$this->activityObject->setTitle($obj['title']);
+	}
+	public function buildVerb($obj){
+		$this->activityObject->setVerb($obj['verb']);
+	}
+	public function buildId($obj){
+		if(isset($obj['id'])){
+			$this->activityObject->setId("google-----".$obj['id']);
 		}
 	}
-
-	$this->activityObject->setPostLink("");
-    }
+	public function buildService($obj){
+		$this->activityObject->setService('Google');
+	}
+	public function buildDateAdded($obj){
+		$this->activityObject->setDateAdded(time());
+	}
+	public function buildStarred($obj){
+		$this->activityObject->setStarred("false");
+	}
+	public function buildPostLink($obj, $account){
+		$this->activityObject->setPostLink($obj['url']);
+	}
 	public function buildIsLiked($obj){
 		$this->activityObject->setIsLiked("false");
 	}

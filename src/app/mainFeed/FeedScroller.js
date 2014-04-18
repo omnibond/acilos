@@ -39,6 +39,7 @@ define([
 		"app/mainFeed/twitterFeedItem",
 		"app/mainFeed/linkedinFeedItem",
 		"app/mainFeed/instagramFeedItem",
+		"app/mainFeed/googleFeedItem",
 		'app/util/xhrManager',
 		
 		"app/SelEdgeToEdgeList",
@@ -64,6 +65,7 @@ define([
 		twitterFeedItem,
 		linkedinFeedItem,
 		instagramFeedItem,
+		googleFeedItem,
 		xhrManager,
 		
 		EdgeToEdgeList,
@@ -191,6 +193,23 @@ define([
 								break;
 								case "Facebook":
 									var item = new facebookFeedItem({
+										data: data,
+										counter: j,
+										starClientObj: this.starClientObj,
+										getDate: this.getDate,
+										authObj: this.authObj,
+										blastView: this.blastView,
+										parseSpecialChars: this.parseSpecialChars,
+										isURL: this.isURL,
+										setStarred: this.setStarred,
+										setStarredClient: this.setStarredClient
+									});
+									pane.addChild(item);		
+									//add this to the services global var so we know which cron to refresh
+									kernel.global.feedCount[this.FeedViewID].services["Facebook"] = "true";									
+								break;
+								case "Google":
+									var item = new googleFeedItem({
 										data: data,
 										counter: j,
 										starClientObj: this.starClientObj,

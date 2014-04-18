@@ -30,6 +30,7 @@ require_once('twitterObject.php');
 require_once('facebookNewsFeedObject.php');
 require_once('instagramObject.php');
 require_once('linkedInNetworkObject.php');
+require_once('googleFeedObject.php');
 
 #PRODUCT
 class Actor{

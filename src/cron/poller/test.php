@@ -62,17 +62,38 @@ function getGoogleFeed(){
 	}
 	
 	for($h=0; $h < count($accts); $h++){
-		$url = "https://www.googleapis.com/plus/v1/people/me/activities/public?access_token=".$accts[$h]['accessToken'];
-
+		$url = "https://www.googleapis.com/plus/v1/people/me/people/visible?access_token=".$accts[$h]['accessToken'];
 		$ch = curl_init($url);
-
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$res = curl_exec($ch);
 		curl_close($ch);
-		print_r($res);
 		$var = json_decode($res, true);
+
+		$idArr = array();
+		if(isset($var['error'])){
+			return;
+		}else{
+			$returnArr = array();
+			for($x = 0; $x < count($var['items']); $x++){
+				array_push($idArr, $var['items'][$x]['id']);
+			}
+		}
 		
-		#normalizeGoogObject($var['items'], $accts[$h]);
+		$dataArr = array();
+		for($t=0; $t < count($idArr); $t++){
+			$url = "https://www.googleapis.com/plus/v1/people/".$idArr[17]."/activities/public?access_token=".$accts[$h]['accessToken'];
+			$ch = curl_init($url);
+
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			$res = curl_exec($ch);
+			curl_close($ch);
+			$var = json_decode($res, true);
+			for($h=0; $h < count($var['items']); $h++){
+				array_push($dataArr, $var['items'][$h]);
+			}
+		}
+		#print_r($dataArr);
+		normalizeGoogObject($var['items'], $accts[$h]);
 	}
 }
 
