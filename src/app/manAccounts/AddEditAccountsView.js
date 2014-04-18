@@ -441,6 +441,10 @@ define([
 					var authFile = "/oAuth/linkedinAccess.php"
 					var logoDiv = domConstruct.create("span", {style: "margin-top:25px;float:left;width:100px;height:100px", "class":"loginLogo", innerHTML: "<img src=app/resources/img/linkedinLogin.png>"});
 				}
+				if(param == "google"){
+					var authFile = "/oAuth/googleAccess.php"
+					var logoDiv = domConstruct.create("span", {style: "margin-top:25px;float:left;width:100px;height:100px", "class":"loginLogo", innerHTML: "<img src=app/resources/img/googlePlusLogin.png>"});
+				}
 				
 				var key = new TextBox({
 					placeHolder: "App Id/Key"
