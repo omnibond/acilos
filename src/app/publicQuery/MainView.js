@@ -107,7 +107,7 @@ define([
 			},
 
 			activate: function() {				
-				topic.publish("/dojo-mama/updateSubNav", {back: '/query', title: "Search Facebook"} );
+				topic.publish("/dojo-mama/updateSubNav", {back: '/', title: "Search Public Data"} );
 
 				this.fromVar = 0;
 				on(this.domNode, "scroll", lang.hitch(this, this.dataPoints));

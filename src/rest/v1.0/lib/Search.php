@@ -534,7 +534,7 @@ class Search{
 
 		$res = $es->search($searchArr);
 		
-		#$res['from'] = $from;
+		$res['from'] = $from;
 
 		return json_encode($res);
 	}
@@ -581,11 +581,13 @@ class Search{
 
 		if(isset($next)){
 			return array(
-					"next" => $next
+					"next" => $next,
+					"response_from_facebook" => $response
 			);
 		}else{
 			return array(
-					"next" => ""
+					"next" => "",
+					"response_from_facebook" => $response
 			);
 		}	
 	}
@@ -600,14 +602,16 @@ class Search{
 		foreach($varObj['checked'] as $key => $value){
 			if($key == "Facebook"){
 				if($varObj['checked'][$key] == true){
-					if(isset($varObj['nextToken']['facebook'])){
+					if(isset($varObj['nextToken']['facebook']['next'])){
 						$returnObj['facebook'] = $this->paginateFacebook($varObj);
 					}
 				}
 			}
 			if($key == "Twitter"){
 				if($varObj['checked'][$key] == true){
-					$returnObj['twitter'] = $this->paginateTwitter($varObj);
+					if(isset($varObj['nextToken']['twitter']['next']['max_id'])){
+						$returnObj['twitter'] = $this->paginateTwitter($varObj);
+					}
 				}
 			}
 		}
@@ -616,7 +620,7 @@ class Search{
 	}
 
 	public function paginateFacebook($varObj){
-		print_r($varObj);
+		//print_r($varObj);
 		//make the facebook request
 		$url = $varObj['nextToken']['facebook']['next'];
 		$query = $varObj['query'];
@@ -650,11 +654,13 @@ class Search{
 
 		if(isset($next)){
 			return array(
-				"next" => $next
+				"next" => $next,
+				"response_from_facebook" => $response
 			);
 		}else{
 			return array(
-				"next" => ""
+				"next" => "",
+				"response_from_facebook" => $response
 			);
 		}
 	}

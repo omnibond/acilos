@@ -152,7 +152,6 @@ define([
 									blastView: this.blastView,
 									starClientObj: this.starClientObj,
 									getDate: this.getDate,
-									parseSpecialChars: this.parseSpecialChars,
 									isURL: this.isURL,
 									setStarred: this.setStarred,
 									setStarredClient: this.setStarredClient
@@ -169,7 +168,6 @@ define([
 									blastView: this.blastView,
 									starClientObj: this.starClientObj,
 									getDate: this.getDate,
-									parseSpecialChars: this.parseSpecialChars,
 									removeEmoji: this.removeEmoji,
 									isURL: this.isURL,							
 									setStarred: this.setStarred,
@@ -187,7 +185,6 @@ define([
 									blastView: this.blastView,
 									starClientObj: this.starClientObj,
 									getDate: this.getDate,
-									parseSpecialChars: this.parseSpecialChars,
 									isURL: this.isURL,
 									setStarred: this.setStarred,
 									setStarredClient: this.setStarredClient
@@ -204,7 +201,6 @@ define([
 									blastView: this.blastView,
 									starClientObj: this.starClientObj,
 									getDate: this.getDate,
-									parseSpecialChars: this.parseSpecialChars,
 									isURL: this.isURL,
 									setStarred: this.setStarred,
 									setStarredClient: this.setStarredClient
@@ -289,121 +285,6 @@ define([
 				}
 
 				return str;
-			},
-
-			parseSpecialChars: function(str) {
-				//var stringArr = str.split(" ");
-				var regex = /([ \n])/;
-				var stringArr = str.split(regex);
-				var finalStr = '';
-
-				var patternURL = new RegExp(/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/);
-				var patternHashTag = new RegExp(/\B#\w*[a-zA-Z]+\w*/);
-				var patternAt = new RegExp(/\B@\w*[a-zA-Z]+\w*/);
-
-				for(var u = 0; u < stringArr.length; u++){
-					if(patternURL.test(stringArr[u])) {
-						if(str.indexOf('...') === -1 && str.indexOf('..') === -1){
-							finalStr += '<a href="'+stringArr[u]+'" target="_blank">'+stringArr[u]+'</a>' + " ";
-						}else{
-							finalStr += stringArr[u] + " ";
-						}
-					}else if(patternHashTag.test(stringArr[u])){
-						//#HASTAGS
-						var pre = '';
-						var post = '';
-						var word = stringArr[u];
-						//pre - if the word begins with " ' (
-						for(var e = 0; e < stringArr[u].length; e++){
-							if(stringArr[u].charAt(e) == ":" || 
-							stringArr[u].charAt(e) == "?" || 
-							stringArr[u].charAt(e) == '"' || 
-							stringArr[u].charAt(e) == "'" ||
-							stringArr[u].charAt(e) == "." || 
-							stringArr[u].charAt(e) == "," || 
-							stringArr[u].charAt(e) == ")" || 
-							stringArr[u].charAt(e) == "!" || 
-							stringArr[u].charAt(e) == "(" || 
-							stringArr[u].charAt(e) == ";"){
-								pre = stringArr[u].slice(0, e + 1);
-								word = stringArr[u].slice(e + 1, stringArr[u].length);
-							}else{
-								break;
-							}
-						}
-						//post - if the word ends with : " ' ? ; , . )
-						for(var e = 0; e < word.length; e++){
-							if(word.charAt(word.length - 1) == ":" || 
-							word.charAt(word.length - 1) == "?" || 
-							word.charAt(word.length - 1) == '"' || 
-							word.charAt(word.length - 1) == "'" ||
-							word.charAt(word.length - 1) == "." || 
-							word.charAt(word.length - 1) == "," || 
-							word.charAt(word.length - 1) == ")" || 
-							word.charAt(word.length - 1) == "!" || 
-							word.charAt(word.length - 1) == ";"){
-								post += word.slice(-1);
-								word = word.slice(0, -1);
-							}else{
-								post = post.split("").reverse().join("");
-								break;
-							}
-						}
-
-						finalStr += pre + '<a style="color:#048bf4">'+word+'</a>' + post + " ";
-					}else if(patternAt.test(stringArr[u])){						
-						//@PEOPLE
-						var pre = '';
-						var post = '';
-						var word = stringArr[u];
-						//console.log("before@: " + word);
-						//pre - if the word begins with " ' (
-						for(var e = 0; e < stringArr[u].length; e++){
-							if(stringArr[u].charAt(e) == ":" || 
-							stringArr[u].charAt(e) == "?" || 
-							stringArr[u].charAt(e) == '"' || 
-							stringArr[u].charAt(e) == "'" ||
-							stringArr[u].charAt(e) == "." || 
-							stringArr[u].charAt(e) == "," || 
-							stringArr[u].charAt(e) == "&" || 
-							stringArr[u].charAt(e) == ")" || 
-							stringArr[u].charAt(e) == "!" || 
-							stringArr[u].charAt(e) == "(" || 
-							stringArr[u].charAt(e) == ";"){
-								pre = stringArr[u].slice(0, e + 1);
-								word = stringArr[u].slice(e + 1, stringArr[u].length);
-							}else{
-								break;
-							}
-						}
-						//console.log("middle@: " + word);	
-						//post - if the word ends with : " ' ? ; , . ) !
-						for(var e = 0; e < word.length; e++){
-							if(word.charAt(word.length - 1) == ":" || 
-							word.charAt(word.length - 1) == "?" || 
-							word.charAt(word.length - 1) == '"' || 
-							word.charAt(word.length - 1) == "'" ||
-							word.charAt(word.length - 1) == "." || 
-							word.charAt(word.length - 1) == "," || 
-							word.charAt(word.length - 1) == "&" || 
-							word.charAt(word.length - 1) == ")" || 
-							word.charAt(word.length - 1) == "!" || 
-							word.charAt(word.length - 1) == ";"){
-								post += word.slice(-1);
-								word = word.slice(0, -1);
-							}else{
-								post = post.split("").reverse().join("");
-								break;
-							}
-						}
-						//console.log("after@: " + word);
-						finalStr += pre + '<a style="color:#ee4115">'+word+'</a>' + post + " ";
-					}else{
-						finalStr += stringArr[u] + " ";
-					}
-				}
-
-				return finalStr;
 			},
 
 			removeEmoji: function(text) {

@@ -391,7 +391,6 @@ define([
 										authObj: this.authObj,
 										blastView: this.blastView,
 										getDate: this.list.getDate,
-										parseSpecialChars: this.list.parseSpecialChars,
 										isURL: this.list.isURL,
 										setStarred: this.setStarred,
 										setStarredClient: lang.hitch(this, this.setStarredClient)
@@ -406,7 +405,6 @@ define([
 										authObj: this.authObj,
 										blastView: this.blastView,
 										getDate: this.list.getDate,
-										parseSpecialChars: this.list.parseSpecialChars,
 										isURL: this.list.isURL,
 										setStarred: this.setStarred,
 										setStarredClient: lang.hitch(this, this.setStarredClient)
@@ -420,7 +418,6 @@ define([
 										authObj: this.authObj,
 										blastView: this.blastView,
 										getDate: this.list.getDate,
-										parseSpecialChars: this.list.parseSpecialChars,
 										isURL: this.list.isURL,
 										setStarred: this.setStarred,
 										setStarredClient: lang.hitch(this, this.setStarredClient)
@@ -434,7 +431,6 @@ define([
 										authObj: this.authObj,
 										blastView: this.blastView,
 										getDate: this.list.getDate,
-										parseSpecialChars: this.list.parseSpecialChars,
 										isURL: this.list.isURL,
 										setStarred: this.setStarred,
 										setStarredClient: lang.hitch(this, this.setStarredClient)

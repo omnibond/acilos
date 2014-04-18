@@ -89,8 +89,7 @@ define({
 		},
 		query: {
 			title: 'Query',
-			moduleId: 'dojo-mama/util/ModuleGroup',
-			modules: ['twitterQuery', 'facebookQuery']
+			moduleId: 'app/publicQuery/Module'
 		},
 		settings: {
 			title: 'Settings',
@@ -176,14 +175,9 @@ define({
 		},
 
 		/*query modules*/
-		twitterQuery: {
-			title: 'Search twitter',
-			moduleId: 'app/twitterQuery/Module',
-			selectedPrimaryNavItem: "query"
-		},
-		facebookQuery: {
-			title: 'Search facebook',
-			moduleId: 'app/facebookQuery/Module',
+		publicQuery: {
+			title: 'Search public data',
+			moduleId: 'app/publicQuery/Module',
 			selectedPrimaryNavItem: "query"
 		},
 		

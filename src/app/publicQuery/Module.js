@@ -32,7 +32,7 @@ define(['dojo/_base/declare',
 	
 	'app/SelEdgeToEdgeList',
 	
-	'app/facebookQuery/MainView',
+	'app/publicQuery/MainView',
 	
 	'app/util/error-utils',
 	'app/util/xhrManager'
