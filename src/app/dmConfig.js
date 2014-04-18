@@ -36,6 +36,7 @@ define({
 			'favorites',
 			'analytics',
 			'post',
+			'query',
 			'settings',
 			'help'
 		],
@@ -85,6 +86,10 @@ define({
 		post: {
 			title: 'Post',
 			moduleId: 'app/post/Module'
+		},
+		query: {
+			title: 'Query',
+			moduleId: 'app/publicQuery/Module'
 		},
 		settings: {
 			title: 'Settings',
@@ -167,6 +172,13 @@ define({
 			title: 'Select Users',
 			moduleId: 'app/userList/Module',
 			selectedPrimaryNavItem: "people"
+		},
+
+		/*query modules*/
+		publicQuery: {
+			title: 'Search public data',
+			moduleId: 'app/publicQuery/Module',
+			selectedPrimaryNavItem: "query"
 		},
 		
 		/*settings modules*/

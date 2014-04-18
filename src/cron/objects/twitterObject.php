@@ -97,24 +97,33 @@ class twitterObjectBuilder extends activityObjectBuilder{
         $content = new TwitterContent();
         $queryString = '';
 
-	$content->setId($obj['id_str']);
+	    $content->setId($obj['id_str']);
         $content->setObjectType('tweet');
 		$text = new textBlockWithURLS();
 		$text->setText($obj['text']);
 		$text->setLinks($obj['text']);
 		$queryString = $queryString . " " . $obj['text'];
-	$content->setText($text);
+	    $content->setText($text);
         $content->setURL($obj['source']);
         $content->setRetweet($obj['retweet_count']);
-        $content->setFavorite($obj['favourite_count']);
-        $content->setLocation($obj['coordinates'][0]['coordinates']);
+
+        if(isset($obj['favourite_count'])){
+            $content->setFavorite($obj['favourite_count']);
+        }else{
+            $content->setFavorite($obj['favorite_count']);
+        }
+
+        if(isset($obj['coordinates'][0]['coordinates'])){
+            $content->setLocation($obj['coordinates'][0]['coordinates']);
+        }
+
         $content->setReplyTo($obj['in_reply_to_status_id']);
 
         if(isset($obj['entities']['media'][0]['media_url'])){
             $content->setMediaUrl($obj['entities']['media'][0]['media_url']);
         }
        
-	$content->setQueryString($queryString);
+	    $content->setQueryString($queryString);
         $this->activityObject->setContent($content);
     }
     public function buildPublished($obj){

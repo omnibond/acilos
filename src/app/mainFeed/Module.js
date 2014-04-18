@@ -90,7 +90,8 @@ define(['dojo/_base/declare',
 				setStarredClient: lang.hitch(this, this.setStarredClient),
 				searchFilters: lang.hitch(this, this.searchFilters),
 				manualRefresh: lang.hitch(this, this.manualRefresh),
-				sendSearchString: lang.hitch(this, this.sendSearchString)
+				sendSearchString: lang.hitch(this, this.sendSearchString),
+				paginateFacebook: lang.hitch(this, this.paginateFacebook)
 			});	
 
 			this.rootView = new FeedView({
@@ -124,6 +125,11 @@ define(['dojo/_base/declare',
 		getFeedData: function(feed, from){
 			var params = {feed: feed, from: from};
 			return xhrManager.send('GET', 'rest/v1.0/FeedData/getFeedData', params);
+		},
+
+		paginateFacebook: function(cursor, authStuff){
+			params = {cursor: cursor, authStuff: authStuff};
+			return xhrManager.send('POST', 'rest/v1.0/Search/paginateFacebook', params);
 		},
 		
 		updateFeedData: function(feed, size){

@@ -5,7 +5,7 @@
 @feedsColor: #F66733;
 @peopleColor: #E32252;
 @favoritesColor: #41CCCC;
-@searchColor: #8F5929;
+@queryColor: #8F5929;
 @analyticsColor: #8868E8;
 @postColor: #0066FF;
 @settingsColor: #FFCC00;
@@ -158,7 +158,7 @@
 #genPrimaryNavColor(feeds, @feedsColor);
 #genPrimaryNavColor(people, @peopleColor);
 #genPrimaryNavColor(favorites, @favoritesColor);
-#genPrimaryNavColor(search, @searchColor);
+#genPrimaryNavColor(query, @queryColor);
 #genPrimaryNavColor(analytics, @analyticsColor);
 #genPrimaryNavColor(post, @postColor);
 #genPrimaryNavColor(settings, @settingsColor);
@@ -179,7 +179,7 @@
 #genModuleContent(feeds, 'View saved feeds');
 #genModuleContent(people, 'View by contact');
 #genModuleContent(favorites, 'Your favorite posts');
-#genModuleContent(search, 'Search through your feeds');
+#genModuleContent(query, 'Search services for data');
 #genModuleContent(analytics, 'Analyze your friends');
 #genModuleContent(post, 'Post, Tweet, Blog');
 #genModuleContent(settings, 'Edit the app settings');
@@ -199,7 +199,7 @@
 .dmPrimaryNavItem_favorites {
 	.dmPrimaryNavItemIcon { .icon-favorite; }
 }
-.dmPrimaryNavItem_search {
+.dmPrimaryNavItem_query {
 	.dmPrimaryNavItemIcon { .icon-search; }
 }
 .dmPrimaryNavItem_analytics {

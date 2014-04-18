@@ -29,62 +29,12 @@
 require_once('vendor/autoload.php');
 use \ElasticSearch\Client;
 
-#$index = $_GET['index']; 
-#$host = $_GET['host'];
-#$port = $_GET['port'];
-#$mapping = $_GET['mapping'];
-$counter = 0;
 $host = "localhost";
 $port = "9200";
-$index1 = "app";
-
-#WIPE OLD ES
-function wipe($counter){
-	$host = "localhost";
-	$port = "9200";
-	$index1 = "app";
-	echo $counter;
-	$counter++;
-	//$es = null;
-	
-	try{
-		$es = Client::connection("http://$host:$port/$index1/$index1");
-		$es->delete();
-	}catch (Exception $e){
-		//if($es) { $es->delete(); $es = null; }
-		if($counter < 20){
-			sleep(1);
-			wipe($counter);
-		}
-	}
-	
-	//if($es) { $es->delete(); }
-}
-wipe(0);
-
-#$index = $_GET['index'];
-#$host = $_GET['host'];
-#$port = $_GET['port'];
-#$mapping = $_GET['mapping'];
-
-$host = "localhost";
-$port = "9200";
-$index1 = "app";
-$index2 = "client";
 $index3 = "public";
 
-$es = Client::connection("http://$host:$port/$index1/$index1");
-$es->delete();
-$es = Client::connection("http://$host:$port/$index2/$index2");
-$es->delete();
 $es = Client::connection("http://$host:$port/$index3/$index3");
 $es->delete();
-
-$mapCommand = "curl -XPUT 'http://$host:$port/$index1' -d @app_mapping.json";
-$output = shell_exec($mapCommand);
-
-$mapCommand = "curl -XPUT 'http://$host:$port/$index2' -d @client_mapping.json";
-$output = shell_exec($mapCommand);
 
 $mapCommand = "curl -XPUT 'http://$host:$port/$index3' -d @public_mapping.json";
 $output = shell_exec($mapCommand);

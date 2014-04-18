@@ -3,7 +3,7 @@
 ES_CLASSPATH=$ES_CLASSPATH:$ES_HOME/lib/elasticsearch-0.20.5.jar:$ES_HOME/lib/*:$ES_HOME/lib/sigar/*
 
 if [ "x$ES_MIN_MEM" = "x" ]; then
-    ES_MIN_MEM=128m
+    ES_MIN_MEM=256m
 fi
 if [ "x$ES_MAX_MEM" = "x" ]; then
     ES_MAX_MEM=256m

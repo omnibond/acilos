@@ -61,7 +61,9 @@ class Actor{
 		if($var['status'] == "ZERO_RESULTS"){
 			$latLong = "";
 		}else{
-			$latLong = $var['results'][0]['geometry']['location']['lat'] . "#" . $var['results'][0]['geometry']['location']['lng'];
+            if(isset($var['results'][0])){
+                $latLong = $var['results'][0]['geometry']['location']['lat'] . "#" . $var['results'][0]['geometry']['location']['lng'];
+            }
 		}
 		return $latLong;
 	}
@@ -105,31 +107,34 @@ class textBlockWithURLS{
 	}
 	public function getHeaders($url){
 		//$thing = file_get_contents($url);
-		$numLines = count($http_response_header);
-		for ( $i = 0; $i < $numLines; $i++ ) {
-			$line = $http_response_header[$i];
-			$lineArr = explode(" ", $line);
 
-			for($g = 0; $g < count($lineArr); $g++){
-				if((string)$lineArr[$g] == "301"){			
-					break;
-				}elseif((string)$lineArr[$g] == "200"){				
-					$retArr = array(
-						"website" => $url,
-						"headers" => $http_response_header
-					);
-					return $retArr;
-				}
-			}
-			if ( substr_compare( $line, 'Location', 0, 8, true ) == 0 ) {
-				$location = explode(": ", $line);				
-				$retArr = array(
-					"website" => $location[1],
-					"headers" => $http_response_header
-				);
-				return $retArr;
-			}
-		}
+        if(isset($http_response_header)){
+            $numLines = count($http_response_header);
+            for ( $i = 0; $i < $numLines; $i++ ) {
+                $line = $http_response_header[$i];
+                $lineArr = explode(" ", $line);
+
+                for($g = 0; $g < count($lineArr); $g++){
+                    if((string)$lineArr[$g] == "301"){          
+                        break;
+                    }elseif((string)$lineArr[$g] == "200"){             
+                        $retArr = array(
+                            "website" => $url,
+                            "headers" => $http_response_header
+                        );
+                        return $retArr;
+                    }
+                }
+                if ( substr_compare( $line, 'Location', 0, 8, true ) == 0 ) {
+                    $location = explode(": ", $line);               
+                    $retArr = array(
+                        "website" => $location[1],
+                        "headers" => $http_response_header
+                    );
+                    return $retArr;
+                }
+            }
+        }
 	}
 
 	public function setLinks($sentence){
@@ -148,7 +153,10 @@ class textBlockWithURLS{
 			}
 
 			/* Get the MIME type and character set */
-			preg_match( '@Content-Type:\s+([\w/+]+)(;\s+charset=(\S+))?@i', $content_type, $matches );
+            if(isset($content_type)){
+                preg_match( '@Content-Type:\s+([\w/+]+)(;\s+charset=(\S+))?@i', $content_type, $matches );
+            }
+			
 			if ( isset( $matches[1] ) )
 				$mime = $matches[1];
 
@@ -171,29 +179,31 @@ class textBlockWithURLS{
 				$obj['url'] = $res[$k];
 				$obj['youtube'] = $text;
 
-			}elseif( preg_match("/\b$website\b/i", $mime) ){
-				$search = '#(.*?)(?:href="https?://)?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch?.*?v=))([\w\-]{10,12}).*#x';
-				$replace = "http://www.youtube.com/embed/$2";
-				$text = preg_replace($search, $replace, $response["website"]);
-				if(preg_match("/\b$youtube\b/i", $text)){
-					$obj["type"] = "youtube";
-					$obj["youtube"] = $text;
-				}else{
-					$obj["type"] = "website";
-					$obj["website"] = $text;
-				}
+			}elseif(isset($mime)){
+                if( preg_match("/\b$website\b/i", $mime) ){
+    				$search = '#(.*?)(?:href="https?://)?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch?.*?v=))([\w\-]{10,12}).*#x';
+    				$replace = "http://www.youtube.com/embed/$2";
+    				$text = preg_replace($search, $replace, $response["website"]);
+    				if(preg_match("/\b$youtube\b/i", $text)){
+    					$obj["type"] = "youtube";
+    					$obj["youtube"] = $text;
+    				}else{
+    					$obj["type"] = "website";
+    					$obj["website"] = $text;
+    				}
 
-				$obj['url'] = $res[$k];
-			}elseif( preg_match("/\b$video\b/i", $mime) ){
-				$obj["type"] = "video";
-				$obj["video"] = $response["website"];
+    				$obj['url'] = $res[$k];
+                }elseif( preg_match("/\b$video\b/i", $mime) ){
+                    $obj["type"] = "video";
+                    $obj["video"] = $response["website"];
 
-				$obj['url'] = $res[$k];
-			}elseif( preg_match("/\b$image\b/i", $mime) ){
-				$obj["type"] = "image";
-				$obj["image"] = $response["website"];
+                    $obj['url'] = $res[$k];
+                }elseif( preg_match("/\b$image\b/i", $mime) ){
+                    $obj["type"] = "image";
+                    $obj["image"] = $response["website"];
 
-				$obj['url'] = $res[$k];
+                    $obj['url'] = $res[$k];
+                }
 			}
 
 			$urlArr[]=$obj;

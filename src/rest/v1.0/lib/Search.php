@@ -29,6 +29,9 @@
 require_once('matchHelpers.php');
 require_once('ObjectToArray.php');
 require_once('../../oAuth/twitteroauth/twitteroauth.php');
+require_once('../../cron/objects/activityObject.php');
+require_once('../../cron/objects/userBaseObject.php');
+require_once('../../cron/objects/clientBaseObject.php');
 
 use \ElasticSearch\Client;
 
@@ -249,6 +252,465 @@ class Search{
 		$var = matchSpecificContent($termList, $from);
 		
 		return json_encode($var);
+	}
+
+	public function queryTwitter($varObj){
+		//query string
+		$query = $varObj['query'];
+		//print_r($query);
+		//auth junk
+		$oauth_Token = $varObj['authStuff']['twitter'][0]['accounts'][0]['accessToken'];
+		$consumer_key = $varObj['authStuff']['twitter'][0]['accounts'][0]['key'];
+		$consumer_secret = $varObj['authStuff']['twitter'][0]['accounts'][0]['secret'];
+		$access_secret = $varObj['authStuff']['twitter'][0]['accounts'][0]['accessSecret'];
+		//connMan
+		$connection = new TwitterOAuth($consumer_key, $consumer_secret, $oauth_Token, $access_secret);
+		//make the twitter request
+		$status = $connection->get('search/tweets', array('q' => urlencode($query), 'count' => 20));
+		$status = objectToArray($status);
+
+		if(isset($status['search_metadata'])){
+			if(isset($status['search_metadata']['max_id_str'])){
+				$since_id = $status['search_metadata']['max_id_str'];
+			}
+		}
+
+		for($x = 0; $x < count($status['statuses']); $x++){
+			$id = $status['statuses'][$x]['id'];
+		}
+
+		$max_id = $id - 1;		
+
+		$array = $status['statuses'];
+
+		//print_r($array);
+		//response
+		if(isset($array['errors'])){
+			print_r($array['errors'][0]['message']);
+			print_r($array['errors'][0]['code']);
+			
+			return json_encode(array("Error" => $array['errors'][0]['message']));
+		}else{
+			$this->normalizeTwitterObject($array, $varObj['authStuff']['twitter'][0]['accounts'][0], $query);	    
+		}
+
+		if(isset($since_id)){
+			return array(
+				"next" => array(
+					"since_id" => $since_id,
+					"max_id" => $max_id
+				),
+				"response_from_twitter" => $status
+			);
+		}else{
+			return array(
+				"next" => "",
+				"response_from_twitter" => $status
+			);
+		}
+	}
+
+	public function paginateTwitter($varObj){
+		//echo "queryTwitter ";
+		//print_r($varObj);
+		//query string
+		$query = $varObj['query'];
+		$since_id = $varObj['nextToken']['twitter']['next']['since_id'];
+		$max_id = $varObj['nextToken']['twitter']['next']['max_id'];
+		//print_r($query);
+		//auth junk
+		$oauth_Token = $varObj['authStuff']['twitter'][0]['accounts'][0]['accessToken'];
+		$consumer_key = $varObj['authStuff']['twitter'][0]['accounts'][0]['key'];
+		$consumer_secret = $varObj['authStuff']['twitter'][0]['accounts'][0]['secret'];
+		$access_secret = $varObj['authStuff']['twitter'][0]['accounts'][0]['accessSecret'];
+		//connMan
+		$connection = new TwitterOAuth($consumer_key, $consumer_secret, $oauth_Token, $access_secret);
+		//make the twitte request
+		$status = $connection->get('search/tweets', array('q' => urlencode($query), 'count' => 20, 'max_id' => $max_id/*, 'since_id' => $since_id*/));
+		$status = objectToArray($status);
+
+		//print_r($status);
+
+		// We do this here because what we return depends on whether or not this variable is set. We don't want to return the $since_id from the top of the function. We only want to return a $since_id if we get one back from twitter this time.
+		unset($since_id);
+		
+		if(isset($status['search_metadata'])){
+			if(isset($status['search_metadata']['max_id_str'])){
+				$since_id = $status['search_metadata']['max_id_str'];
+			}
+		}
+
+		for($x = 0; $x < count($status['statuses']); $x++){
+			$id = $status['statuses'][$x]['id'];
+		}
+
+		$max_id = $id - 1;
+
+		$array = $status['statuses'];
+
+		//print_r($array);
+		//response
+		if(isset($array['errors'])){
+			print_r($array['errors'][0]['message']);
+			print_r($array['errors'][0]['code']);
+			
+			return json_encode(array("Error" => $array['errors'][0]['message']));
+		}else{
+			$this->normalizeTwitterObject($array, $varObj['authStuff']['twitter'][0]['accounts'][0], $query);	    
+		}
+
+		if(isset($since_id)){
+			return array(
+				"next" => array(
+					"since_id" => $since_id,
+					"max_id" => $max_id
+				),
+				"response_from_twitter" => $status
+			);
+		}else{
+			return array(
+				"next" => "",
+				"response_from_twitter" => $status
+			);
+		}
+	}
+
+	public function normalizeTwitterObject($objArray, $account, $query){
+		//echo "normal twitter stuff ";
+		for($k = 0; $k < count($objArray); $k++){
+			$obj = $objArray[$k];
+
+			//print_r($obj);
+
+			$manager = new Manager();
+			$builder = new twitterObjectBuilder();
+			$manager->setBuilder($builder);
+			$manager->parseActivityObj($obj, $account);
+
+			$item = $manager->getActivityObj();
+
+			//print_r($item);
+
+			$this->writeObject((array)$item, $query, "twitter");
+		}
+	}
+
+	public function writeObject($obj, $query, $service){
+		//echo "write object "; 
+
+		$index = "public";
+		$host = "localhost";
+		$port = "9200";
+
+		$es = Client::connection("http://$host:$port/$index/$index/");
+
+		$obj['id'] = strtolower($obj['id']);
+		$exists = $this->getObject($obj['id']);
+		if(isset($exists['starred'])){
+			$obj['starred'] = $exists['starred'];
+			$obj['isLiked'] = $exists['isLiked'];
+			$obj['isCommented'] = $exists['isCommented'];
+			$obj['isFavorited'] = $exists['isFavorited'];
+		}
+
+		$obj['serviceQuery'] = $query;
+
+		//print_R($obj);
+		$grr = $es->index($obj, $obj['id']);
+
+	}
+
+	public function getObject($id){
+		//echo "getting object"; 
+
+		$index = "public";
+		$host = "localhost";
+		$port = "9200";
+
+		$es = Client::connection("http://$host:$port/$index/$index");
+		$res = $es->get($id);
+
+		return $res;
+	}
+
+	/*public function writeClient($obj){
+		echo "writing to client "; 
+
+		$index = "client";
+		$host = "localhost";
+		$port = "9200";
+
+		$es = Client::connection("http://$host:$port/$index/$index/");
+
+		$grr = $es->index($obj, $obj['data']['id']);
+		return $grr;
+	}*/
+
+	public function getPublicQueryObjects(){
+		$var = file_get_contents("php://input");
+		$varObj = json_decode($var, true);
+		
+		//get checked and call thew two functions for what is checked
+		//print_r($varObj);
+
+		$returnObj = array();
+		foreach($varObj['checked'] as $key => $value){
+			if($key == "Facebook"){
+				if($varObj['checked'][$key] == true){
+					$returnObj['facebook'] = $this->queryFacebook($varObj);
+				}
+			}
+			if($key == "Twitter"){
+				if($varObj['checked'][$key] == true){
+					$returnObj['twitter'] = $this->queryTwitter($varObj);
+				}
+			}
+		}
+		return json_encode($returnObj);
+	}
+
+	public function getPublicDBObjects(){
+		$var = file_get_contents("php://input");
+		$varObj = json_decode($var, true);
+		$queryString = $varObj['query'];
+
+		//print_r($queryString . "      ");
+
+		$from = $varObj['from'];
+
+		$size = 20;
+
+		$index = "public";
+		$host = "localhost";
+		$port = "9200";
+
+		$es = Client::connection("http://$host:$port/$index/$index");
+
+		if(count(explode("\"", $queryString)) > 2){
+			$searchType = "quotes";
+			$queryString = ltrim($queryString, "\"");
+			$queryString = rtrim($queryString, "\"");
+		}else{
+			$searchType = "normal";
+		}
+
+		$searchArr = array(
+			"from" => $from,
+			"size" => $size,
+			"query" => array(
+				'bool' => array(
+					"must" => array(
+						//push stuff here
+					)
+				)
+		    ),
+		    'sort' => array(
+				'published' => array(
+					"order" => "desc"
+				)
+			)
+		);
+
+		if($searchType == "normal"){
+			$queryString = explode(" ", $queryString);
+			//print_r($queryString);
+			for($x = 0; $x < count($queryString); $x++){
+				$temp = array('term' => array('serviceQuery' => $queryString[$x]));
+				array_push($searchArr['query']['bool']['must'], $temp);
+			}
+		}else{
+			$temp = array("match" => 
+				array("serviceQuery" => 
+					array(
+						"query" => $queryString,
+						"type" => "phrase"
+					)
+				)
+			);
+			array_push($searchArr['query']['bool']['must'], $temp);
+		}
+
+		//print_R($searchArr);
+
+		$res = $es->search($searchArr);
+		
+		$res['from'] = $from;
+
+		return json_encode($res);
+	}
+
+	public function queryFacebook($varObj){
+		//echo "queryFacebook ";
+	//	$var = file_get_contents("php://input");
+	//	$varObj = json_decode($var, true);
+		//print_r($varObj);
+		//query string
+		$query = $varObj['query'];
+		//print_r($query);
+		//auth junk
+		$access_token = $varObj['authStuff']['facebook'][0]['accounts'][0]['accessToken'];
+		//make the facebook request
+		$url = 'https://graph.facebook.com/search?limit=20&q=' . urlencode($query) . '&type=post&access_token=' . $access_token;
+
+		//print_R($url);
+
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$response = curl_exec($ch);
+		curl_close($ch);
+
+		$response = json_decode($response, true);
+
+		//print_r($response);
+
+		if(isset($response['paging']['next'])){
+			$next = $response['paging']['next'];	
+		}
+
+		$response = $response['data'];
+
+		//response
+		if(isset($array['errors'])){
+			print_r($array['errors'][0]['message']);
+			print_r($array['errors'][0]['code']);
+
+			return json_encode(array("Error" => $array['errors'][0]['message']));
+		}else{
+			$this->normalizeNewsFeedObj($response, $varObj['authStuff']['facebook'][0]['accounts'][0], $query);	    
+		}
+
+		if(isset($next)){
+			return array(
+					"next" => $next,
+					"response_from_facebook" => $response
+			);
+		}else{
+			return array(
+					"next" => "",
+					"response_from_facebook" => $response
+			);
+		}	
+	}
+
+	public function paginateService(){
+		$var = file_get_contents("php://input");
+		$varObj = json_decode($var, true);
+
+		//print_r($varObj);
+
+		$returnObj = array();
+		foreach($varObj['checked'] as $key => $value){
+			if($key == "Facebook"){
+				if($varObj['checked'][$key] == true){
+					if(isset($varObj['nextToken']['facebook']['next'])){
+						$returnObj['facebook'] = $this->paginateFacebook($varObj);
+					}
+				}
+			}
+			if($key == "Twitter"){
+				if($varObj['checked'][$key] == true){
+					if(isset($varObj['nextToken']['twitter']['next']['max_id'])){
+						$returnObj['twitter'] = $this->paginateTwitter($varObj);
+					}
+				}
+			}
+		}
+
+		return json_encode($returnObj);
+	}
+
+	public function paginateFacebook($varObj){
+		//print_r($varObj);
+		//make the facebook request
+		$url = $varObj['nextToken']['facebook']['next'];
+		$query = $varObj['query'];
+
+		//var_dump($url);
+
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$response = curl_exec($ch);
+		curl_close($ch);
+
+		//var_dump($response);
+
+		$response = json_decode($response, true);
+
+		if(isset($response['paging']['next'])){
+			$next = $response['paging']['next'];	
+		}
+
+		$response = $response['data'];
+
+		//response
+		if(isset($array['errors'])){
+			print_r($array['errors'][0]['message']);
+			print_r($array['errors'][0]['code']);
+
+			return json_encode(array("Error" => $array['errors'][0]['message']));
+		}else{
+			$this->normalizeNewsFeedObj($response, $varObj['authStuff']['facebook'][0]['accounts'][0], $query);	    
+		}
+
+		if(isset($next)){
+			return array(
+				"next" => $next,
+				"response_from_facebook" => $response
+			);
+		}else{
+			return array(
+				"next" => "",
+				"response_from_facebook" => $response
+			);
+		}
+	}
+
+	function normalizeNewsFeedObj($objArray, $account, $query){
+		//echo "normal face stuff"; 
+		//print_R($objArray);
+		for($k = 0; $k < count($objArray); $k++){
+			$obj = $objArray[$k];
+
+			//print_r($obj); 
+
+			$manager = new Manager();
+			$builder = new facebookNewsFeedObjectBuilder();
+			$manager->setBuilder($builder);
+
+			$manager->parseActivityObj($obj, $account);
+
+			$item = $manager->getActivityObj();
+
+			//print_r($item); 
+
+			$this->writeObject((array)$item, $query, "facebook");
+		}
+	}
+
+	public function getGeoLocation($loc){
+		if($loc == ""){
+			return $loc;
+		}else{
+			$cityclean = str_replace(" ", "+", $loc);
+			$url = "https://maps.googleapis.com/maps/api/geocode/json?address=" . $cityclean . "&sensor=false";
+			$ch = curl_init($url);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			$response = curl_exec($ch);
+			curl_close($ch);
+
+			$var = json_decode($response, true);
+
+			$latLong = "";
+			if($var['status'] == "ZERO_RESULTS"){
+				$latLong = "";
+			}else{
+				if(isset($var['results'][0])){
+					//print_r($var);
+	                $latLong = $var['results'][0]['geometry']['location']['lat'] . "#" . $var['results'][0]['geometry']['location']['lng'];
+	            }
+			}
+			return $latLong;
+		}
 	}
 	
 	public function getUser(){

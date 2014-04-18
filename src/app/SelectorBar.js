@@ -42,10 +42,17 @@ define(['dojo/_base/declare',
 			this.buttons = [];
 			this.textBoxes = [];
 			this.toolTips = [];
+			this.serviceSelectors = [];
 		},
 		
 		buildRendering: function() {
 			this.inherited(arguments);
+
+			if(this.serviceSelectors.length > 0){
+				for(var x = 0; x < this.serviceSelectors.length; x++){
+					this.serviceSelectors[x].placeAt(this.domNode);
+				}
+			}
 			
 			if(this.toolTips.length > 0){
 				for(var x = 0; x < this.toolTips.length; x++){
