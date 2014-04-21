@@ -173,6 +173,9 @@ define([
 						if(key == "Linkedin"){
 							var myLabel = domConstruct.create("span", {innerHTML: "<img src=app/resources/img/LinkedIn_logo.png>", "class": "verticalIconClass"});
 						}
+						if(key == "Google"){
+							var myLabel = domConstruct.create("span", {innerHTML: "<img src=app/resources/img/googlePlus_icon.png>", "class": "verticalIconClass"});
+						}
 
 						var hold = domConstruct.create("div", {"class": "divHoldClass"});
 						hold.appendChild(checkHolder);
@@ -229,6 +232,9 @@ define([
 						}
 						if(key == "Linkedin"){
 							var myIcon = domConstruct.create("div", {"class": "serviceSelectorIconDivClass", innerHTML: "<img src=app/resources/img/LinkedIn_logo.png>"});
+						}
+						if(key == "Google"){
+							var myIcon = domConstruct.create("div", {"class": "serviceSelectorIconDivClass", innerHTML: "<img src=app/resources/img/googlePlus_icon.png>"});
 						}
 						
 						var div = domConstruct.create("span", {style: "float:left"});

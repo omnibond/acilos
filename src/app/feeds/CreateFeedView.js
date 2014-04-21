@@ -227,11 +227,11 @@ define(['dojo/_base/declare',
 
 			var listItem = new ListItem({
 				variableHeight: true,
-				style: "border:none; margin-bottom: -13px"
+				style: "border:none; margin-bottom: -9px"
 			});
 
 			this.services = new ServiceSelector({
-				checkBoxes: {"Instagram": true, "Facebook" : true, "Twitter" : true, "Linkedin": true},
+				checkBoxes: {"Instagram": true, "Facebook" : true, "Twitter" : true, "Linkedin": true, "Google": true},
 				//vertical: "true",
 				style: "margin-top: -2px; margin-bottom: -1px; margin-left: -11px"
 			})

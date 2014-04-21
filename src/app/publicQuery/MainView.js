@@ -127,6 +127,11 @@ define([
 								this.exists['Twitter'] = true;
 							}
 						}
+						if(key == "google" && this.authObj[key][0]['accounts'].length > 0){
+							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
+								this.exists['Google'] = true;
+							}
+						}
 						/*
 						if(key == "instagram" && this.authObj[key][0]['accounts'].length > 0){
 							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
@@ -136,11 +141,6 @@ define([
 						if(key == "linkedin" && this.authObj[key][0]['accounts'].length > 0){
 							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
 								this.exists['Linkedin'] = true;
-							}
-						}
-						if(key == "google" && this.authObj[key][0]['accounts'].length > 0){
-							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
-								this.exists['Google'] = true;
 							}
 						}
 						*/
