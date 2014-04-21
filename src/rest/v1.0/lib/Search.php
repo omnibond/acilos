@@ -465,6 +465,11 @@ class Search{
 					$returnObj['twitter'] = $this->queryTwitter($varObj);
 				}
 			}
+			if($key == "Google"){
+				if($varObj['checked'][$key] == true){
+					$returnObj['google'] = $this->queryGoogle($varObj);
+				}
+			}
 		}
 		return json_encode($returnObj);
 	}
@@ -590,6 +595,25 @@ class Search{
 					"response_from_facebook" => $response
 			);
 		}	
+	}
+
+	public function queryGoogle($varObj){
+		echo "get google stuff"; ?><br/><?php
+
+		$query = $varObj['query'];
+
+		$access_token = $varObj['authStuff']['google'][0]['accounts'][0]['accessToken'];
+		
+        $url = 'https://www.googleapis.com/plus/v1/activities?access_token='.$access_token.'&query='.$query;
+		$ch = curl_init($url);
+
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$res = curl_exec($ch);
+		curl_close($ch);
+		print_r($res);
+		$var = json_decode($res, true);
+		
+		#normalizeGoogObject($var['items'], $accts[$h]);
 	}
 
 	public function paginateService(){

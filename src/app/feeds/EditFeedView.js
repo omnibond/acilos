@@ -232,7 +232,7 @@ define(['dojo/_base/declare',
 				}
 			}));
 			
-			var def = {"Instagram": false, "Facebook" : false, "Twitter" : false, "Linkedin": false};
+			var def = {"Instagram": false, "Facebook" : false, "Twitter" : false, "Linkedin": false, "Google": true};
 			
 			var servArr = obj['services'].split("+");
 			for(var g = 0; g < servArr.length; g++){
@@ -243,7 +243,7 @@ define(['dojo/_base/declare',
 
 			var listItem = new ListItem({
 				variableHeight: true,
-				style: "border:none; margin-bottom: -13px"
+				style: "border:none; margin-bottom: -9px"
 			});
 			
 			this.services = new ServiceSelector({

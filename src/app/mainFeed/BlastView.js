@@ -105,7 +105,7 @@ define(['dojo/_base/declare',
 									var serviceUrl = "app/resources/img/Twitter_logo_blue_small.png";
 
 									checkBox.onClick = lang.hitch(this, function(){
-										if(checkBox.get("checked") == true){
+										if(checkBox.domNode.checked == false){
 											if(this.textArea.get('value').length > 140){
 												this.textAreaCountDiv.style.color = "red";
 											}else{
@@ -113,9 +113,13 @@ define(['dojo/_base/declare',
 											}
 
 											this.textAreaCountDiv.innerHTML = this.textArea.get("value").length + "/140 characters";
+
+											checkBox.domNode.checked = true;
 										}else{
 											this.textAreaCountDiv.style.color = "black";
 											this.textAreaCountDiv.innerHTML = this.textArea.get("value").length + " characters";
+
+											checkBox.domNode.checked = false;
 										}
 									});
 								}
@@ -139,6 +143,13 @@ define(['dojo/_base/declare',
 									if(key == "instagram"){
 										serviceUrl = "app/resources/img/Instagram_logo.png";
 									}
+								}if(key == "google"){
+									var checkBox = new CheckBox({
+										leToken: accountArr[d]['accesstoken'],
+										leKey: key,
+										style: "width:20px; height:20px"
+									});
+									var serviceUrl = "app/resources/img/googlePlus_icon.png";
 								}if(key == "instagram"){
 									break;
 								}	
@@ -234,9 +245,44 @@ define(['dojo/_base/declare',
 						
 					console.log("tokenArr is: ", tokenArr);
 
+					this.responseList = new RoundRectList({
+						style: "border:none; margin-left:9px"
+					});
 					
 					this.sendPostFile(this.blastObj.imgName, tokenArr, msg).then(lang.hitch(this, function(obj){
-						window.location = "#/mainFeed";
+						//window.location = "#/mainFeed";
+
+						console.log("obj is: ", obj);
+
+						var returnStuff = obj['returnArray'];
+
+						var responseListItem = new ListItem({
+							variableHeight: true,
+							style: "border:none"
+						});
+
+						var div = domConstruct.create("div", {});
+
+						for(var key in returnStuff){
+							for(var x = 0; x < returnStuff[key].length; x++){
+								responseListItem = new ListItem({
+									variableHeight: true,
+									style: "border:none"
+								});
+
+								div = domConstruct.create("div", {});
+
+								div.innerHTML = returnStuff[key][x]['msg'];
+
+								responseListItem.domNode.appendChild(div);
+
+								this.responseList.addChild(responseListItem);
+
+								console.log("the list item is: ", responseListItem);
+							}
+						}
+
+						this.addChild(this.responseList);
 					}));
 				})
 			});

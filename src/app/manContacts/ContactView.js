@@ -121,6 +121,10 @@ define(['dojo/_base/declare',
 				var divLinkedIn = domConstruct.create("div", {style:"float:right", innerHTML: "<img src=app/resources/img/LinkedIn_logo.png>"});
 				iconDiv.appendChild(divLinkedIn);
 			}
+			if('Google' in serviceObj){
+				var divGoogle = domConstruct.create("div", {style:"float:right", innerHTML: "<img src=app/resources/img/googlePlus_icon.png>"});
+				iconDiv.appendChild(divGoogle);
+			}
 
 			item.appendChild(iconDiv);
 
@@ -168,6 +172,10 @@ define(['dojo/_base/declare',
 				if('Linkedin' in serviceObj){
 					var divLinkedIn = domConstruct.create("div", {style:"float:right", innerHTML: "<img src=app/resources/img/LinkedIn_logo.png>"});
 					iconDiv.appendChild(divLinkedIn);
+				}
+				if('Google' in serviceObj){
+					var divGoogle = domConstruct.create("div", {style:"float:right", innerHTML: "<img src=app/resources/img/googlePlus_icon.png>"});
+					iconDiv.appendChild(divGoogle);
 				}
 
 				item.appendChild(iconDiv);

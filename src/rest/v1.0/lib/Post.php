@@ -432,6 +432,8 @@ Class Post{
 			}
 		}
 
+		global $returnArray;
+
 		//print_r($thing);
 
 		foreach($tokenArr as $key => $value){
@@ -464,8 +466,6 @@ Class Post{
 
 						$ch = curl_init($url);
 
-						$returnArr = array();
-
 						$params = array();
 
 						if(isset($fileName) && $fileName != ""){
@@ -492,9 +492,9 @@ Class Post{
 						$res = json_decode($response, true);
 
 						if(isset($res['error'])){
-							$returnArr['Facebook'] = array("success" => 'false', "msg" => $res['error']['message']);
+							$returnArray['Facebook'][$x] = array("success" => 'false', "msg" => "Your Facebook status could not be posted - " . $res['error']['message']);
 						}else{
-							$returnArr['Facebook'] = array("success" => 'true', "msg" => $res['id']);
+							$returnArray['Facebook'][$x] = array("success" => 'true', "msg" => "Your Facebook status was posted successfully");
 						}
 					}
 
@@ -536,11 +536,9 @@ Class Post{
 						//print_r($status);
 
 						if(isset($status->errors[0]->message)){
-							global $returnArray;
-							$returnArray['twitterFailure'] =  "Your message could not be posted. Twitter said: " . $status->errors[0]->message;
+							$returnArray['Twitter'][$x] =  array("failure" => "true", "msg" => "Your Twitter status could not be posted - " . $status->errors[0]->message);
 						}else{
-							global $returnArray;
-							$returnArray['twitterSuccess'] =  "Your Twitter message was posted successfully";
+							$returnArray['Twitter'][$x] =  array("success" => "true", "msg" => "Your Twitter status was posted successfully");
 						}
 					}
 
@@ -617,9 +615,9 @@ Class Post{
 						
 						if(isset($code)){
 							if($code == "201"){
-								$returnArray['linkedinSuccess'] = "Your LinkedIn message was posted successfully";
+								$returnArray['Linkedin'][$x] = array("success" => "true", "msg" => "Your LinkedIn status was posted successfully");
 							}else{
-								$returnArray['linkedinFailure'] = "Your LinkedIn message could not be posted";
+								$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "Your LinkedIn message could not be posted");
 							}
 						}
 					}
@@ -630,6 +628,8 @@ Class Post{
 					break;
 			}
 		}
+
+		return json_encode(array("returnArray" => $returnArray));
 	}
 }
 
