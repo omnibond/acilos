@@ -7,6 +7,7 @@ nodes/
 serviceCreds.json
 twitterClientInfo.txt
 linkedinStep1.txt
+googleStep1.txt
 callClientManager.sh
 callCronManager.sh
 feedList.json
