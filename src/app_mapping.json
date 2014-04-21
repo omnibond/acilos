@@ -58,6 +58,10 @@
 						"header": {
 							"type": "string"
 						},
+						"album": {
+							"type": "object",
+							"index": "not_analyzed"
+						},
 						"actionString": {
 							"type": "string",
 							"index": "not_analyzed"

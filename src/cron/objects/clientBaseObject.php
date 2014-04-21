@@ -33,7 +33,8 @@ class clientObject{
 			"Facebook" => array(),
 			"Twitter" => array(),
 			"Instagram" => array(),
-			"Linkedin" => array()			
+			"Linkedin" => array(),
+			"Google" => array()
 		),
 		'post' => array(
 			'recentPost' => '',

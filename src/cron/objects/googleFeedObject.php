@@ -109,16 +109,22 @@ class googleObjectBuilder extends activityObjectBuilder{
 			$text->setText($obj['object']['attachments'][0]['content']);
 			$text->setLinks($obj['object']['attachments'][0]['content']);
 			$queryString = $queryString . " " . $obj['object']['attachments'][0]['content'];
+		}else{
+			$text->setText($obj['object']['content']);
+			$text->setLinks($obj['object']['content']);
+			$queryString = $queryString . " " . $obj['object']['content'];
 		}
 		$content->setText($text);
 		$content->setURL($obj['object']['attachments'][0]['url']);
+		
+		$picArr = new GoogleAlbum();
 		if(isset($obj['object']['attachments'][0]['thumbnails'])){
-			$picArr = new GoogleAlbum();
 			for($x = 0; $x < count($obj['object']['attachments'][0]['thumbnails']); $x++){
-				$picArr->setURL($obj['object']['attachments'][0]['thumbnails'][$x]['url']);
+				$picArr->setURL($obj['object']['attachments'][0]['thumbnails'][$x]['image']['url']);
 			}
-			$content->setAlbum($picArr);
 		}
+		$content->setAlbum($picArr);
+		
 		if(isset($obj['object']['attachments'][0]['image'])){
 			$content->setPicture($obj['object']['attachments'][0]['image']['url']);
 		}
@@ -130,7 +136,7 @@ class googleObjectBuilder extends activityObjectBuilder{
 	}
 	
 	public function buildPublished($obj){
-		$this->activityObject->setPublished(intval(substr($obj['timestamp'], 0, 10)));
+		$this->activityObject->setPublished(strtotime($obj['published']));
 	}
 	public function buildGenerator($obj){
 		$this->activityObject->setGenerator('Google');

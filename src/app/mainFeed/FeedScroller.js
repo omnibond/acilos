@@ -213,7 +213,6 @@ define([
 										getDate: this.getDate,
 										authObj: this.authObj,
 										blastView: this.blastView,
-										parseSpecialChars: this.parseSpecialChars,
 										isURL: this.isURL,
 										setStarred: this.setStarred,
 										setStarredClient: this.setStarredClient

@@ -208,8 +208,8 @@ define([
 								break;
 							}
 						}
-						//console.log("after@: " + word);
-						finalStr += pre + '<a style="color:#ee4115">'+word+'</a>' + post + " ";
+						var nameArr = word.split("@");
+						finalStr += pre + '<a style="color:#ee4115" href="https://instagram.com/'+nameArr[1]+'" target="_blank">'+word+'</a>' + post + " ";
 					}else{
 						finalStr += stringArr[u] + " ";
 					}
@@ -344,19 +344,44 @@ define([
 				this.dateServItem.domNode.appendChild(this.dataPub);
 				
 				this.roundRight.addChild(this.dateServItem);
-/**				
+			
+				//TEXT ITEM -------------------------
+				if(obj.content.header != "" && obj.content.header != null){
+					var string = this.parseSpecialChars(obj.content.header);
+					this.textContent = new ListItem({
+						variableHeight: true,
+						"class": "feedTextContentItemClass",
+						label: string + " header"
+					});
+					this.roundRight.addChild(this.textContent);
+				}
+				if(obj.title != "" && obj.title != null && obj.title != obj.content.header){
+					var string = this.parseSpecialChars(obj.title);
+					this.textContent = new ListItem({
+						variableHeight: true,
+						"class": "feedTextContentItemClass",
+						label: string + " title"
+					});
+					this.roundRight.addChild(this.textContent);
+				}
+				if(obj.content.text.text != "" && obj.content.text.text != null && obj.content.text.text != obj.title && obj.content.text.text != obj.content.header){					
+					var string = this.parseSpecialChars(obj.content.text.text);
+					this.textContent = new ListItem({
+						variableHeight: true,
+						"class": "feedTextContentItemClass",
+						label: string + " text"
+					});
+					this.roundRight.addChild(this.textContent);				
+				}				
+				
 				//PIC ITEM ----------------------
-				if(obj.content.picture != null && obj.content.url != null){
+				if(obj.content.picture != "" && obj.content.picture != null){
 					this.picContent = new ListItem({
 						variableHeight: true,
 						"class": "feedPicContentItemClass"
 					});
 
-					if(obj.content.objectType == "photo"){
-						var div = domConstruct.create("div", {innerHTML: '<span><img src="'+obj.content.picture+'" style="max-width:90%;max-height:90%;" /></a></span>'});
-					}else{
-						var div = domConstruct.create("div", {innerHTML: '<span><a href="'+obj.content.url+'" target="_blank"><img src="'+obj.content.picture+'" style="max-width:90%;max-height:90%;" /></a></span>'});
-					}
+					var div = domConstruct.create("div", {innerHTML: '<span><img src="'+obj.content.picture+'" style="max-width:90%;max-height:90%;" /></a></span>'});
 
 					div.onclick = lang.hitch(this, function(){
 						var dialog = new Dialog({
@@ -369,7 +394,39 @@ define([
 							})
 						});
 
-						if(obj.content.objectType == "photo"){
+						var dialogDiv = domConstruct.create("div", {innerHTML: '<span><img src="'+obj.content.picture+'" style="" /></a></span>'});
+
+						var blackoutDiv = domConstruct.create("div", {"class": "blackoutDiv"});
+
+						dialog.set("content", dialogDiv);
+						dialog.show();
+
+						document.body.appendChild(blackoutDiv);
+					});
+
+					this.picContent.domNode.appendChild(div);
+					this.roundRight.addChild(this.picContent);
+				}
+				if(obj.content.album.url.length > 0){
+					for(var d = 0; d < obj.content.album.url.length; d++){
+						this.picContent = new ListItem({
+							variableHeight: true,
+							"class": "feedPicContentItemClass"
+						});
+
+						var div = domConstruct.create("div", {innerHTML: '<span><img src="'+obj.content.album.url[d]+'" style="max-width:90%;max-height:90%;" /></a></span>'});
+
+						div.onclick = lang.hitch(this, function(){
+							var dialog = new Dialog({
+								title: "Click to close ->",
+								"class": "blackBackDijitDialog",
+								onHide: lang.hitch(this, function(){
+									if(blackoutDiv){
+										document.body.removeChild(blackoutDiv);
+									}
+								})
+							});
+
 							var dialogDiv = domConstruct.create("div", {innerHTML: '<span><img src="'+obj.content.picture+'" style="" /></a></span>'});
 
 							var blackoutDiv = domConstruct.create("div", {"class": "blackoutDiv"});
@@ -378,163 +435,17 @@ define([
 							dialog.show();
 
 							document.body.appendChild(blackoutDiv);
-						}
-					});
-
-					this.picContent.domNode.appendChild(div);
-					this.roundRight.addChild(this.picContent);
-				}				
-				
-				//TEXT ITEM FOUR-------------------------
-				if(obj.content.text.text != null){
-					if(obj.content.to.length > 0){
-						var toLinkURL = obj.id;
-						
-						toLinkURL = toLinkURL.split("-----");
-						toLinkURL = toLinkURL[1].split("_");
-						toLinkURL = toLinkURL[0];
-
-						toLinkURL = "https://www.facebook.com/" + toLinkURL;
-
-						this.servPub.innerHTML = '<span><a href="' + obj.actor.url +'" target="_blank">'+obj.actor.displayName+'</a></span>' + " " + "posted to " + '<span><a href="' + toLinkURL +'" target="_blank">'+obj.content.to[0].name+'</a></span>' + "'s wall " + " via " + '<span><a href="' + obj.postLink +'" target="_blank">'+obj.service+'</a></span>';
-
-						var string =  this.parseSpecialChars(obj.content.text.text);
-						this.textContent = new ListItem({
-							variableHeight: true,
-							"class": "feedTextContentItemClass",
-							label: string
 						});
-					}else{
-						var string = this.parseSpecialChars(obj.content.text.text);
-						this.textContent = new ListItem({
-							variableHeight: true,
-							"class": "feedTextContentItemClass",
-							label: string
-						});
+
+						this.picContent.domNode.appendChild(div);
+						this.roundRight.addChild(this.picContent);
 					}
-					this.roundRight.addChild(this.textContent);
-				}else if(obj.content.story.text != null){
-					var string =  this.parseSpecialChars(obj.content.story.text);
-					this.textContent = new ListItem({
-						variableHeight: true,
-						"class": "feedTextContentItemClass",
-						label: string
-					});
-					this.roundRight.addChild(this.textContent);
-				}
-				if(type == "link" && !(obj.content.to.length > 0)){
-					this.link = new ListItem({
-						variableHeight: true,
-						"class": "feedTextContentItemClass"
-					});
-					var div = domConstruct.create("div", {innerHTML: '<span><a href="'+obj.content.url+'" target="_blank">'+obj.content.url+'</a></span>'});
-					this.link.domNode.appendChild(div);
-					this.roundRight.addChild(this.link);
-				}
-				
-				this.commentHolder = new ListItem({
-					variableHeight: true,
-					"class": "feedCommentItemClass"
-				});
+				}		
 				
 				var source = this.data.hits.hits[this.counter]._source;
 				var content = this.data.hits.hits[this.counter]._source.content;
-				var x = this.data.hits.hits[this.counter]._source.content.likes;
-				var comments = this.data.hits.hits[this.counter]._source.content.comments;
-				var id = this.data.hits.hits[this.counter]._source.content.id;
-				this.likeNum = x.length;
 				
-				var commentDiv = domConstruct.create("div", {innerHTML: "Comment(" + comments.length + ")", "class": "twitterOrangeDiv", style: "margin-right: 5px"});
-				if(source.isLiked == "true"){
-					var likeDiv = domConstruct.create("div", {innerHTML: "Liked(" + this.likeNum + ")", "class": "twitterBlueDiv"});
-				}else{
-					var likeDiv = domConstruct.create("div", {innerHTML: "Like(" + this.likeNum + ")", "class": "twitterOrangeDiv"});
-				}
 				var blastDiv = domConstruct.create("div", {style: "margin-left:5px", innerHTML: "Blast", "class": "twitterBlueDiv"});
-				
-				this.commentCounter = 0;
-				this.likeCounter = 0;
-				
-				commentDiv.onclick = lang.hitch(this, function(){
-					if(!this.pane){
-						this.pane = new DataObjPane({
-							data: this.data,
-							authObj: this.authObj,
-							type: 'faceComment',
-							counter: this.counter,
-							parseSpecialChars: this.parseSpecialChars,
-							isURL: this.isURL
-						});
-						this.addChild(this.pane);
-					}else{
-						if(this.commentCounter%2 === 0){
-							this.pane.destroyRecursive();
-							this.pane = null;
-							this.pane = new DataObjPane({
-								data: this.data,
-								authObj: this.authObj,
-								type: 'faceComment',
-								counter: this.counter,
-								parseSpecialChars: this.parseSpecialChars,
-								isURL: this.isURL
-							});
-							this.addChild(this.pane);
-							this.likeCounter = 0;
-						}else{
-							this.pane.destroyRecursive();
-							this.pane = null;
-						}
-					}
-					this.commentCounter++;
-				});
-
-				likeDiv.onclick = lang.hitch(this, function(likeDiv, content, id){
-					for(var key in this.authObj){
-						if(key !== "login"){
-							if(this.authObj[key].length > 0){
-								var accountArr = this.authObj[key][0]['accounts'];
-								for(var d = 0; d < accountArr.length; d++){
-									if(accountArr[d].accessToken != undefined){
-										if(source.mainAccountID == accountArr[d].user){
-
-											var accessToken = accountArr[d].accessToken;
-
-											if(domClass.contains(likeDiv, "twitterOrangeDiv")){
-												this.likeNum++;
-												domClass.remove(likeDiv, "twitterOrangeDiv");
-												domClass.add(likeDiv, "twitterBlueDiv");
-												likeDiv.innerHTML = "Liked(" + (this.likeNum) + ")";
-												this.setIsLiked("facebook-----"+id, "true");		
-
-												var id = content.id.split("_");
-												idFirstPart = id[0];
-												idSecondPart = id[1];
-												
-												this.sendFaceLike(idFirstPart, idSecondPart, accessToken).then(lang.hitch(this, function(obj){
-													console.log("obj is: ", obj);
-												}));
-											}else{
-												this.likeNum--;
-												domClass.remove(likeDiv, "twitterBlueDiv");
-												domClass.add(likeDiv, "twitterOrangeDiv");
-												likeDiv.innerHTML = "Like(" + (this.likeNum) + ")";
-												this.setIsLiked("facebook-----"+id, "false");
-												
-												var id = content.id.split("_");
-												idFirstPart = id[0];
-												idSecondPart = id[1];
-												
-												this.sendFaceUnLike(idFirstPart, idSecondPart, accessToken).then(lang.hitch(this, function(obj){
-													console.log("obj is: ", obj);
-												}));
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				},likeDiv, content, id);
 				
 				blastDiv.onclick = lang.hitch(this, function(blastDiv, source){
 					this.blastView.blastObj = {};
@@ -554,11 +465,13 @@ define([
 					}))
 				}, blastDiv, source);
 				
-				this.commentHolder.domNode.appendChild(commentDiv);
-				this.commentHolder.domNode.appendChild(likeDiv);
+				this.commentHolder = new ListItem({
+					variableHeight: true,
+					"class": "feedCommentItemClass"
+				});
 				this.commentHolder.domNode.appendChild(blastDiv);
 				this.roundRight.addChild(this.commentHolder);
-**/				
+			
 			//RightPane/RoundRect
 			},
 			

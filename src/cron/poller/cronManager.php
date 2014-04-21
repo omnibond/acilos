@@ -466,7 +466,7 @@ function normalizeGoogObject($objArray, $account){
 	for($k = 0; $k < count($objArray); $k++){
 		$obj = $objArray[$k];
 
-		print_r($obj); ?><br/><?php
+		#print_r($obj); ?><br/><?php
 
 		$manager = new Manager();
 		$builder = new googleObjectBuilder();
