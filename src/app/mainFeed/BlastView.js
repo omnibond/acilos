@@ -137,12 +137,9 @@ define(['dojo/_base/declare',
 										leKey: key,
 										style:"width:20px;height:20px"
 									});
-									if(key == "linkedin"){
-										serviceUrl = "app/resources/img/LinkedIn_logo.png";
-									}
-									if(key == "instagram"){
-										serviceUrl = "app/resources/img/Instagram_logo.png";
-									}
+									
+									serviceUrl = "app/resources/img/LinkedIn_logo.png";
+									
 								}if(key == "google"){
 									var checkBox = new CheckBox({
 										leToken: accountArr[d]['accesstoken'],
