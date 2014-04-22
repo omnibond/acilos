@@ -219,7 +219,7 @@ define([
 									});
 									pane.addChild(item);		
 									//add this to the services global var so we know which cron to refresh
-									kernel.global.feedCount[this.FeedViewID].services["Facebook"] = "true";									
+									kernel.global.feedCount[this.FeedViewID].services["Google"] = "true";									
 								break;
 								case "Linkedin":
 									var item = new linkedinFeedItem({

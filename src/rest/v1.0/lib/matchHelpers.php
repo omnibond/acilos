@@ -413,7 +413,8 @@ function matchQueryString($action, $searchObj, $from){
 			if($searchObj['colon'] == "twitter" || $searchObj['colon'] == "Twitter" ||
 			$searchObj['colon'] == "facebook" || $searchObj['colon'] == "Facebook" ||
 			$searchObj['colon'] == "instagram" || $searchObj['colon'] == "Instagram" ||
-			$searchObj['colon'] == "linkedin" || $searchObj['colon'] == "Linkedin" || $searchObj['colon'] == "google" || $searchObj['colon'] == "Google"){
+			$searchObj['colon'] == "linkedin" || $searchObj['colon'] == "Linkedin" || 
+			$searchObj['colon'] == "google" || $searchObj['colon'] == "Google"){
 				$temp = array("term" => array("service" => strtolower($searchObj['colon'])));
 				array_push($searchArr['query']['bool']['must'], $temp);
 			}else{
@@ -429,7 +430,8 @@ function matchQueryString($action, $searchObj, $from){
 			if($searchObj['colon'] == "twitter" || $searchObj['colon'] == "Twitter" ||
 			$searchObj['colon'] == "facebook" || $searchObj['colon'] == "Facebook" ||
 			$searchObj['colon'] == "instagram" || $searchObj['colon'] == "Instagram" ||
-			$searchObj['colon'] == "linkedin" || $searchObj['colon'] == "Linkedin" || $searchObj['colon'] == "google" || $searchObj['colon'] == "Google"){
+			$searchObj['colon'] == "linkedin" || $searchObj['colon'] == "Linkedin" || 
+			$searchObj['colon'] == "google" || $searchObj['colon'] == "Google"){
 				$temp = array("term" => array("service" => strtolower($searchObj['colon'])));
 				array_push($searchArr['query']['bool']['must'], $temp);
 			}else{
