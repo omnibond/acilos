@@ -164,6 +164,7 @@ define([
 										getDate: this.getDate,
 										authObj: this.authObj,
 										blastView: this.blastView,
+										pictureScroller: this.pictureScroller,
 										isURL: this.isURL,
 										setStarred: this.setStarred,
 										setStarredClient: this.setStarredClient
@@ -180,6 +181,7 @@ define([
 										getDate: this.getDate,
 										authObj: this.authObj,
 										blastView: this.blastView,
+										pictureScroller: this.pictureScroller,
 										removeEmoji: this.removeEmoji,
 										isURL: this.isURL,
 										setStarred: this.setStarred,
@@ -197,6 +199,7 @@ define([
 										getDate: this.getDate,
 										authObj: this.authObj,
 										blastView: this.blastView,
+										pictureScroller: this.pictureScroller,
 										isURL: this.isURL,
 										setStarred: this.setStarred,
 										setStarredClient: this.setStarredClient
@@ -213,6 +216,7 @@ define([
 										getDate: this.getDate,
 										authObj: this.authObj,
 										blastView: this.blastView,
+										pictureScroller: this.pictureScroller,
 										isURL: this.isURL,
 										setStarred: this.setStarred,
 										setStarredClient: this.setStarredClient
@@ -229,6 +233,7 @@ define([
 										getDate: this.getDate,
 										authObj: this.authObj,
 										blastView: this.blastView,
+										pictureScroller: this.pictureScroller,
 										isURL: this.isURL,
 										setStarred: this.setStarred,
 										setStarredClient: this.setStarredClient

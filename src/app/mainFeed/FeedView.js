@@ -294,6 +294,7 @@ define([
 				this.list = new SearchScroller({
 					feedName: searchString,
 					blastView: this.blastView,
+					pictureScroller: this.pictureScroller,
 					getFeedData: lang.hitch(this, this.sendSearchString),
 					getNextGroup: lang.hitch(this, this.getNextGroup),
 					setStarred: lang.hitch(this, this.setStarred),
@@ -325,6 +326,7 @@ define([
 				this.list = new FeedScroller({
 					feedName: this.feedName,
 					postAddArray: this.postAddArray,
+					pictureScroller: this.pictureScroller,
 					blastView: this.blastView,
 					getNextGroup: lang.hitch(this, this.getNextGroup),
 					getFeedData: lang.hitch(this, this.getFeedData),

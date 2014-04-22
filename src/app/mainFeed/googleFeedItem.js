@@ -351,25 +351,25 @@ define([
 					this.textContent = new ListItem({
 						variableHeight: true,
 						"class": "feedTextContentItemClass",
-						label: string + " header"
+						label: string
 					});
 					this.roundRight.addChild(this.textContent);
 				}
-				if(obj.title != "" && obj.title != null && obj.title != obj.content.header){
-					var string = this.parseSpecialChars(obj.title);
-					this.textContent = new ListItem({
-						variableHeight: true,
-						"class": "feedTextContentItemClass",
-						label: string + " title"
-					});
-					this.roundRight.addChild(this.textContent);
-				}
-				if(obj.content.text.text != "" && obj.content.text.text != null && obj.content.text.text != obj.title && obj.content.text.text != obj.content.header){					
+			//	if(obj.title != "" && obj.title != null){
+			//		var string = this.parseSpecialChars(obj.title);
+			//		this.textContent = new ListItem({
+			//			variableHeight: true,
+			//			"class": "feedTextContentItemClass",
+			//			label: string
+			//		});
+			//		this.roundRight.addChild(this.textContent);
+			//	}
+				if(obj.content.text.text != "" && obj.content.text.text != null && obj.content.text.text != obj.content.header){					
 					var string = this.parseSpecialChars(obj.content.text.text);
 					this.textContent = new ListItem({
 						variableHeight: true,
 						"class": "feedTextContentItemClass",
-						label: string + " text"
+						label: string
 					});
 					this.roundRight.addChild(this.textContent);				
 				}				
@@ -408,38 +408,21 @@ define([
 					this.roundRight.addChild(this.picContent);
 				}
 				if(obj.content.album.url.length > 0){
-					for(var d = 0; d < obj.content.album.url.length; d++){
-						this.picContent = new ListItem({
-							variableHeight: true,
-							"class": "feedPicContentItemClass"
-						});
-
-						var div = domConstruct.create("div", {innerHTML: '<span><img src="'+obj.content.album.url[d]+'" style="max-width:90%;max-height:90%;" /></a></span>'});
-
-						div.onclick = lang.hitch(this, function(){
-							var dialog = new Dialog({
-								title: "Click to close ->",
-								"class": "blackBackDijitDialog",
-								onHide: lang.hitch(this, function(){
-									if(blackoutDiv){
-										document.body.removeChild(blackoutDiv);
-									}
-								})
-							});
-
-							var dialogDiv = domConstruct.create("div", {innerHTML: '<span><img src="'+obj.content.picture+'" style="" /></a></span>'});
-
-							var blackoutDiv = domConstruct.create("div", {"class": "blackoutDiv"});
-
-							dialog.set("content", dialogDiv);
-							dialog.show();
-
-							document.body.appendChild(blackoutDiv);
-						});
-
-						this.picContent.domNode.appendChild(div);
-						this.roundRight.addChild(this.picContent);
-					}
+					this.picContent = new ListItem({
+						variableHeight: true,
+						"class": "feedPicContentItemClass"
+					});
+					var div = domConstruct.create("div", {innerHTML: 'View Album Photos', "class": "twitterOrangeDiv"});
+					div.onclick = lang.hitch(this, function(){
+						this.pictureScroller.albumLinks = obj.content.album.url;
+						this.pictureScroller.postText = obj.content.text.text;
+						this.pictureScroller.dataObj = obj;
+						this.pictureScroller.blastView = this.blastView;
+						this.pictureScroller.parseSpecialChars = this.parseSpecialChars;
+						window.location = '#/'+this.pictureScroller.mod+'/PictureFeedScroller';
+					});
+					this.picContent.domNode.appendChild(div);
+					this.roundRight.addChild(this.picContent);
 				}		
 				
 				var source = this.data.hits.hits[this.counter]._source;

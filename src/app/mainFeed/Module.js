@@ -36,6 +36,7 @@ define(['dojo/_base/declare',
 	'app/mainFeed/FeedView',
 	"app/mainFeed/SearchView",
 	"app/mainFeed/BlastView",
+	"app/mainFeed/PictureScrollerView",
 	
 	'app/util/error-utils',
 	'app/util/xhrManager'
@@ -53,6 +54,7 @@ define(['dojo/_base/declare',
 	FeedView, 
 	SearchView, 
 	BlastView,
+	PictureScrollerView,
 	
 	errorUtils, 
 	xhrManager
@@ -71,6 +73,11 @@ define(['dojo/_base/declare',
 				kernel.global.feedPosition = {};
 			}
 			
+			this.pictureScroller = new PictureScrollerView({
+				route: '/PictureFeedScroller',
+				mod: 'mainFeed'
+			});
+			
 			this.blastView = new BlastView({
 				route: '/BlastView',
 				mod: 'mainFeed',
@@ -83,6 +90,7 @@ define(['dojo/_base/declare',
 				route: '/searchView',
 				
 				blastView: this.blastView,
+				pictureScroller: this.pictureScroller,
 				updateFeedData: lang.hitch(this, this.updateFeedData),
 				getFeedData: lang.hitch(this, this.getFeedData),
 				checkForNewItems: lang.hitch(this, this.checkForNewItems),
@@ -101,6 +109,7 @@ define(['dojo/_base/declare',
 
 				searchView: this.searchView,
 				blastView: this.blastView,
+				pictureScroller: this.pictureScroller,
 				updateFeedData: lang.hitch(this, this.updateFeedData),
 				getServiceCreds: lang.hitch(this, this.getServiceCreds),
 				getFeedData: lang.hitch(this, this.getFeedData),
@@ -112,6 +121,7 @@ define(['dojo/_base/declare',
 				sendSearchString: lang.hitch(this, this.sendSearchString)
 			});
 			this.registerView(this.blastView);
+			this.registerView(this.pictureScroller);
 			this.registerView(this.searchView);
 			this.registerView(this.rootView);
 		},
