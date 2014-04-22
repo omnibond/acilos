@@ -295,7 +295,7 @@ define([
 
 						this.getPublicQueryObjects(this.queryBox.get("value"), this.authObj, this.checked).then(lang.hitch(this, function(obj, checked){
 
-							console.log("obj ", obj);
+							console.log("obj inside first getPublicQueryObjects is: ", obj);
 							console.log("checked inside", this.checked);
 
 							this.list = new PublicScroller({
