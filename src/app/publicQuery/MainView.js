@@ -163,7 +163,7 @@ define([
 
 			buildList: function(){
 				this.infoList = new RoundRectList({
-					"style": "margin-top: 40px"
+
 				});
 
 				this.infoListItem = new ListItem({
@@ -261,6 +261,11 @@ define([
 					})
 				});
 
+				this.saveButton = new Button({
+					"name": "saveButton",
+					"right": "true"
+				});
+
 				this.queryButton = new Button({
 					"name": "goButton",
 					onClick: lang.hitch(this, function(){
@@ -323,8 +328,9 @@ define([
 				});
 				
 				this.services = new ServiceSelector({
-					checkBoxes: this.exists,
-					style: "display: inline"
+					//checkBoxes: this.exists,
+					checkBoxes: {"Facebook": true, "Twitter": true, "Linkedin": true, "Google": true, "Instagram": true},
+					style: "display: inline-block"
 					//vertical: "true"
 				});
 
@@ -340,12 +346,14 @@ define([
 
 				this.selectorItem = new SelectorBar({
 					textBoxes: [this.queryBox],
-					buttons: [this.queryButton, this.justQuery, this.scrollButton],
-					toolTips: [this.helpButton],
+					buttons: [this.queryButton, this.saveButton, this.scrollButton],
 					serviceSelectors: [this.services],
 					style: "text-align: center"
 				});
 				this.selectorItem.placeAt(this.domNode.parentNode);
+
+				domStyle.set(this.infoList.domNode, "margin-top", this.selectorItem.domNode.offsetHeight+"px");
+
 
 				document.body.onkeydown = lang.hitch(this, function(event){
 					switch(event.keyCode){
