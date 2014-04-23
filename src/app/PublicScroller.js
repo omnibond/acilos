@@ -38,6 +38,7 @@ define([
 		"app/mainFeed/twitterFeedItem",
 		"app/mainFeed/linkedinFeedItem",
 		"app/mainFeed/instagramFeedItem",
+		"app/mainFeed/googleFeedItem",
 		'app/util/xhrManager',
 
 		"app/SelEdgeToEdgeList",
@@ -60,6 +61,7 @@ define([
 		twitterFeedItem,
 		linkedinFeedItem,
 		instagramFeedItem,
+		googleFeedItem,
 		xhrManager,
 
 		EdgeToEdgeList,
@@ -104,6 +106,7 @@ define([
 					}
 				})));
 				this.arrayList.push(this.getFeedData(this.feedName, this.fromVar).then(lang.hitch(this, function(obj){
+					console.log("obj inside the first getFeedData (postCreate) is: ", obj);
 					this.feedDataObj = obj;
 				})));
 				this.arrayList.push(this.getServiceCreds().then(lang.hitch(this, function(obj){
@@ -115,7 +118,9 @@ define([
 			},
 
 			buildView: function(){
+				console.log("made it to buildView");
 				var data = this.feedDataObj;
+				console.log("DATA INSIDE BUILDVIEW IS: ", data);
 				if(data.error){
 					if(this.ListEnded == false){
 						this.errorItem = new ListItem({
@@ -207,6 +212,22 @@ define([
 								//add this to the services global var so we know which cron to refresh
 								kernel.global.feedCount[this.FeedViewID].services["LinkedIn"] = "true";								
 							break;
+							case "Google":
+								var item = new googleFeedItem({
+									data: data,
+									counter: j,
+									starClientObj: this.starClientObj,
+									getDate: this.getDate,
+									authObj: this.authObj,
+									blastView: this.blastView,
+									isURL: this.isURL,
+									setStarred: this.setStarred,
+									setStarredClient: this.setStarredClient
+								});
+								this.addChild(item);		
+								//add this to the services global var so we know which cron to refresh
+								kernel.global.feedCount[this.FeedViewID].services["Google"] = "true";									
+							break;
 							default:
 								console.log("Default list item");
 							break;
@@ -221,6 +242,8 @@ define([
 			postAddToList: function(from){	
 				console.log("THE NEW FROM: ", from);
 				this.loading = true;
+
+				console.log("THIS.NEXTTOKEN IN PUBLICSCROLLER IS: ", this.nextToken);
 
 				//make sure this one function works for twitter and facebook
 				if(this.nextToken != ""){

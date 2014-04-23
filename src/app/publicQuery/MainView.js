@@ -53,7 +53,8 @@ define([
 		"app/SelRoundRectList",
 		"app/SelEdgeToEdgeList",	
 		"dojox/mobile/ListItem",	
-		"dojox/mobile/Button",	
+		"dojox/mobile/Button",
+		"dojox/mobile/CheckBox",	
 		"dijit/Dialog",
 		
 		"dojo/ready"
@@ -90,6 +91,7 @@ define([
 		EdgeToEdgeList,
 		ListItem,
 		Button,
+		CheckBox,
 		Dialog,
 		
 		ready
@@ -163,7 +165,7 @@ define([
 
 			buildList: function(){
 				this.infoList = new RoundRectList({
-					"style": "margin-top: 40px"
+
 				});
 
 				this.infoListItem = new ListItem({
@@ -171,7 +173,7 @@ define([
 					"class": "borderlessListItemClass"
 				});
 
-				var infoDiv = domConstruct.create("div", {innerHTML: "Clicking the button on the left will display search results from previous Facebook queries that are stored in your database. Clicking the \"go\" button will search live data from Facebook. Click the button with the question mark for more info."});
+				var infoDiv = domConstruct.create("div", {innerHTML: "Clicking the button on the left will display search results from previous public queries that are stored in your database. Clicking the \"go\" button will search live data from the services you have selected"});
 
 				this.infoListItem.domNode.appendChild(infoDiv);
 				this.infoList.addChild(this.infoListItem);
@@ -179,7 +181,7 @@ define([
 
 				this.queryBox = new TextBox({
 					placeHolder: "Search here",
-					style: "height:19px; vertical-align: top; margin-right: 5px"
+					"class": "selectorTextBox"
 				});
 
 				this.justQuery = new Button({
@@ -261,6 +263,39 @@ define([
 					})
 				});
 
+				this.saveButton = new Button({
+					"name": "saveButton",
+					"right": "true",
+					onClick: lang.hitch(this, function(){
+						var dialog = new Dialog({
+							title: "Save your query",
+							draggable: false,
+							"class": "saveDijitDialog"
+						});
+
+						var feedNameTextBox = new TextBox({
+							placeHolder: "Feed name"
+						});
+
+						var saveFeedButton = new Button({
+							label: "Save"
+						});
+
+						var mainFeedCheckBox = new CheckBox({
+							label: "Send this data to Main Feed"
+						});
+
+						var saveDiv = domConstruct.create("div", {});
+
+						saveDiv.appendChild(feedNameTextBox.domNode);
+						saveDiv.appendChild(mainFeedCheckBox.domNode);
+						saveDiv.appendChild(saveFeedButton.domNode);
+
+						dialog.set("content", saveDiv);
+						dialog.show();
+					})
+				});
+
 				this.queryButton = new Button({
 					"name": "goButton",
 					onClick: lang.hitch(this, function(){
@@ -295,7 +330,7 @@ define([
 
 						this.getPublicQueryObjects(this.queryBox.get("value"), this.authObj, this.checked).then(lang.hitch(this, function(obj, checked){
 
-							console.log("obj ", obj);
+							console.log("obj inside first getPublicQueryObjects is: ", obj);
 							console.log("checked inside", this.checked);
 
 							this.list = new PublicScroller({
@@ -323,19 +358,22 @@ define([
 				});
 				
 				this.services = new ServiceSelector({
-					checkBoxes: this.exists,
-					style: "display: inline"
+					//checkBoxes: this.exists,
+					checkBoxes: {"Facebook": true, "Twitter": true, "Linkedin": true, "Google": true, "Instagram": true},
+					style: "display: inline-block"
 					//vertical: "true"
 				});
 
 				this.selectorItem = new SelectorBar({
 					textBoxes: [this.queryBox],
-					buttons: [this.queryButton, this.justQuery, this.scrollButton],
-					toolTips: [this.helpButton],
+					buttons: [this.queryButton, this.scrollButton, this.saveButton],
 					serviceSelectors: [this.services],
 					style: "text-align: center"
 				});
 				this.selectorItem.placeAt(this.domNode.parentNode);
+
+				domStyle.set(this.infoList.domNode, "margin-top", this.selectorItem.domNode.offsetHeight+"px");
+
 
 				document.body.onkeydown = lang.hitch(this, function(event){
 					switch(event.keyCode){
