@@ -576,9 +576,9 @@ class Search{
 		$response = $response['data'];
 
 		//response
-		if(isset($array['errors'])){
-			print_r($array['errors'][0]['message']);
-			print_r($array['errors'][0]['code']);
+		if(isset($response['errors'])){
+			print_r($response['errors'][0]['message']);
+			print_r($response['errors'][0]['code']);
 
 			return json_encode(array("Error" => $array['errors'][0]['message']));
 		}else{

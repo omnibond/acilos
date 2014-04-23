@@ -274,22 +274,47 @@ define([
 						});
 
 						var feedNameTextBox = new TextBox({
-							placeHolder: "Feed name"
+							placeHolder: "Custom feed name"
 						});
 
 						var saveFeedButton = new Button({
-							label: "Save"
+							label: "Save",
+							style: "height: 21px; line-height: 20px",
+							onClick: lang.hitch(this, function(){
+								if(feedNameTextBox.get("value") != ""){
+									this.checked = {};
+									for(var d=0; d < this.services.currentCheckBoxes.length; d++){
+										this.checked[this.services.currentCheckBoxes[d].label] = this.services.currentCheckBoxes[d].checked;
+									}
+
+									var feedArr = ["public"];
+									if(mainFeedCheckBox.get("value") == "on"){
+										feedArr.push("app");
+									}
+	
+									this.writeQueryTerm(feedNameTextBox.get("value"), this.checked, this.queryBox.get("value"), feedArr);
+
+									dialog.hide();
+
+									//this.router.goToAbsoluteRoute("/mainFeed");
+								}else{
+									console.log("you must enter a name for your feed");
+								}	
+							})
 						});
 
 						var mainFeedCheckBox = new CheckBox({
-							label: "Send this data to Main Feed"
+							"class": "saveQueryCheckBox"
 						});
+
+						var checkBoxLabelDiv = domConstruct.create("div", {innerHTML: "Merge this data into Main Feed", style: "font-size: 12px; display: inline"});
 
 						var saveDiv = domConstruct.create("div", {});
 
 						saveDiv.appendChild(feedNameTextBox.domNode);
-						saveDiv.appendChild(mainFeedCheckBox.domNode);
 						saveDiv.appendChild(saveFeedButton.domNode);
+						saveDiv.appendChild(mainFeedCheckBox.domNode);
+						saveDiv.appendChild(checkBoxLabelDiv);
 
 						dialog.set("content", saveDiv);
 						dialog.show();
@@ -358,8 +383,8 @@ define([
 				});
 				
 				this.services = new ServiceSelector({
-					//checkBoxes: this.exists,
-					checkBoxes: {"Facebook": true, "Twitter": true, "Linkedin": true, "Google": true, "Instagram": true},
+					checkBoxes: this.exists,
+					//checkBoxes: {"Facebook": true, "Twitter": true, "Linkedin": true, "Google": true, "Instagram": true},
 					style: "display: inline-block"
 					//vertical: "true"
 				});

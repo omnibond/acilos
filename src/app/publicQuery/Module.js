@@ -71,7 +71,8 @@ define(['dojo/_base/declare',
 				getPublicQueryObjects: lang.hitch(this, this.getPublicQueryObjects),
 				getServiceCreds: lang.hitch(this, this.getServiceCreds),
 				getPublicDBObjects: lang.hitch(this, this.getPublicDBObjects),
-				paginateService: lang.hitch(this, this.paginateService)
+				paginateService: lang.hitch(this, this.paginateService),
+				writeQueryTerm: lang.hitch(this, this.writeQueryTerm)
 			});
 
 			this.registerView(this.rootView);
@@ -96,6 +97,12 @@ define(['dojo/_base/declare',
 		getServiceCreds: function(){
 			params = {};
 			return xhrManager.send('POST', 'rest/v1.0/Credentials/getServiceCreds', params);
+		},
+
+		writeQueryTerm: function(feedName, services, queryString, feeds){
+			params = {feedName: feedName, services: services, queryString: queryString, feeds: feeds};
+			console.log("writeQueryTerm params are: ", params);
+			return xhrManager.send('POST', 'rest/v1.0/PublicQuery/writeQueryTerm', params);
 		}
 	})
 });
