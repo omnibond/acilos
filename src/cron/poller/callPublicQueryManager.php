@@ -91,7 +91,8 @@ function minePublicQueryTerms($service){
 	
 	foreach($queryTermObj as $key => $value){
 		$services = $value['services'];
-		$query = $value['query'];
+		$query = $value['terms'];
+		$feeds = $value['feeds'];
 		
 		for($f = 0; $f < count($services); $f++){
 			switch($services[$f]){
