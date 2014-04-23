@@ -3308,7 +3308,7 @@ html.mobile,
   height: 20px !important;
   width: 20px !important;
 }
-.saveDijitDialog .dijitDialogCloseIcon {
+.saveDijitDialog .dijitDialogCloseIconHover {
   margin-left: -2px;
   margin-top: -1px;
   color: transparent;
@@ -3746,9 +3746,14 @@ select {
   overflow: hidden;
 }
 .saveDijitDialog {
-  right: 0px !important;
-  top: 0px !important;
-  width: 250px !important;
+  width: 230px !important;
+  top: 117px !important;
+  overflow: hidden !important;
+}
+.dj_iphone .saveDijitDialog {
+  width: 230px !important;
+  top: 120px !important;
+  overflow: hidden !important;
 }
 .calendarDialog {
   color: black;

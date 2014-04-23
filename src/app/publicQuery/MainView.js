@@ -278,18 +278,22 @@ define([
 						});
 
 						var saveFeedButton = new Button({
-							label: "Save"
+							label: "Save",
+							style: "height: 21px; line-height: 20px"
 						});
 
 						var mainFeedCheckBox = new CheckBox({
-							label: "Send this data to Main Feed"
+							style: "-webkit-transform: scale(1.5); -moz-transform: scale(1.5); -ms-transform: scale(1.5); -o-transform: scale(1.5); margin-top: 5px; margin-right: 5px"
 						});
+
+						var checkBoxLabelDiv = domConstruct.create("div", {innerHTML: "Merge this data into Main Feed", style: "font-size: 12px; display: inline"});
 
 						var saveDiv = domConstruct.create("div", {});
 
 						saveDiv.appendChild(feedNameTextBox.domNode);
-						saveDiv.appendChild(mainFeedCheckBox.domNode);
 						saveDiv.appendChild(saveFeedButton.domNode);
+						saveDiv.appendChild(mainFeedCheckBox.domNode);
+						saveDiv.appendChild(checkBoxLabelDiv);
 
 						dialog.set("content", saveDiv);
 						dialog.show();
