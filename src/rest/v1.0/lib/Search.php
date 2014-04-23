@@ -25,7 +25,7 @@
 **
 ** $QT_END_LICENSE$
 */
-
+require_once('RefreshGoogleToken.php');
 require_once('matchHelpers.php');
 require_once('ObjectToArray.php');
 require_once('../../oAuth/twitteroauth/twitteroauth.php');
@@ -576,9 +576,9 @@ class Search{
 		$response = $response['data'];
 
 		//response
-		if(isset($response['errors'])){
-			print_r($response['errors'][0]['message']);
-			print_r($response['errors'][0]['code']);
+		if(isset($array['errors'])){
+			print_r($array['errors'][0]['message']);
+			print_r($array['errors'][0]['code']);
 
 			return json_encode(array("Error" => $array['errors'][0]['message']));
 		}else{
@@ -603,7 +603,7 @@ class Search{
 
 		$access_token = $varObj['authStuff']['google'][0]['accounts'][0]['accessToken'];
 		
-        $url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&access_token='.$access_token.'&query='.$query;
+		$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&access_token='.$access_token.'&query='.$query;
 		$ch = curl_init($url);
 
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -611,28 +611,32 @@ class Search{
 		curl_close($ch);
 		//print_r($res);
 		$var = json_decode($res, true);
+		
+		if(isset($var['error'])){
+			$token = refreshGoogToken($varObj['authStuff']['google'][0]['accounts'][0]['uuid']);
+			$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&access_token='.$token.'&query='.$query;
+			$ch = curl_init($url);
 
-		if(isset($var['errors'])){
-			print_r($var['errors'][0]['message']);
-			print_r($var['errors'][0]['code']);
-
-			return json_encode(array("Error" => $var['errors'][0]['message']));
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			$res = curl_exec($ch);
+			curl_close($ch);
+			//print_r($res);
+			$var = json_decode($res, true);
+			
+			if(isset($var['error'])){
+				return array(
+					"next" => "",
+					"response_from_google" => $var
+				);
+			}
 		}else{
 			if(isset($var['items'])){
 				$this->normalizeGoogObject($var['items'], $varObj['authStuff']['google'][0]['accounts'][0], $query);
+				return array(
+					"next" => $var['nextPageToken'],
+					"response_from_google" => $var
+				);
 			}
-		}
-
-		if(isset($var['nextPageToken'])){
-			return array(
-				"next" => $var['nextPageToken'],
-				"response_from_google" => $var
-			);
-		}else{
-			return array(
-				"next" => "",
-				"response_from_google" => $var
-			);
 		}
 	}
 
@@ -710,27 +714,31 @@ class Search{
 		//print_r($res);
 		$var = json_decode($res, true);
 
-		if(isset($var['errors'])){
-			print_r($var['errors'][0]['message']);
-			print_r($var['errors'][0]['code']);
+		if(isset($var['error'])){
+			$token = refreshGoogToken($varObj['authStuff']['google'][0]['accounts'][0]['uuid']);
+			$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&access_token='.$token.'&query='.$query;
+			$ch = curl_init($url);
 
-			return json_encode(array("Error" => $var['errors'][0]['message']));
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			$res = curl_exec($ch);
+			curl_close($ch);
+			//print_r($res);
+			$var = json_decode($res, true);
+			
+			if(isset($var['error'])){
+				return array(
+					"next" => "",
+					"response_from_google" => $var
+				);
+			}
 		}else{
 			if(isset($var['items'])){
 				$this->normalizeGoogObject($var['items'], $varObj['authStuff']['google'][0]['accounts'][0], $query);
+				return array(
+					"next" => $var['nextPageToken'],
+					"response_from_google" => $var
+				);
 			}
-		}
-
-		if(isset($var['nextPageToken'])){
-			return array(
-				"next" => $var['nextPageToken'],
-				"response_from_google" => $var
-			);
-		}else{
-			return array(
-				"next" => "",
-				"response_from_google" => $var
-			);
 		}
 	}
 
@@ -939,48 +947,8 @@ class Search{
 				}
 			}
 		}
-		
-		/*
-		elseif($media == "LinkedIn"){
-			$index = "socialreader";
-			$host = "localhost";
-			$port = "9200";
-			$mapping = "people";
-			$size = 1000;
-			
-			
-			#USER FILTER SHOULD ONLY GET ONE RESPONSE PER
-			$es = Client::connection("http://$host:$port/$index/$mapping/");
-			$search = array(
-				"query" => array(
-					'term' => array(
-						"user.lastName" => strtolower($name),
-					)					
-				),
-				"filter" => array(
-					"term" => array(
-						"service" => strtolower($media)
-					)
-				)
-			);
 
-			$res = $es->search($search);
-			
-			if($res['hits']['total'] > 0){
-				for($s = 0; $s < count($res['hits']['hits']); $s++){
-					$returnObj[$s]['id'] = $res['hits']['hits'][$s]['_source']['user']['id'];
-					$returnObj[$s]['username'] = $res['hits']['hits'][$s]['_source']['user']['name'];
-					$returnObj[$s]['name'] = $res['hits']['hits'][$s]['_source']['user']['name'];
-					$returnObj[$s]['bio/gender'] = $res['hits']['hits'][$s]['_source']['user']['bio'];
-					$returnObj[$s]['searchable'] = $res['hits']['hits'][$s]['_source']['user']['id'];
-				}
-			}else{
-				$returnObj['Error'] = "No Users were found by that name";
-			}
-			
-		} */
-
-	return json_encode($returnObj);
+		return json_encode($returnObj);
 
 	}
 

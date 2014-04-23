@@ -25,6 +25,7 @@
 ** $QT_END_LICENSE$
 */
 
+require_once('../../rest/v1.0/lib/RefreshGoogleToken.php');
 require_once('../objects/activityObject.php');
 require_once('../objects/clientBaseObject.php');
 require_once('../../oAuth/twitteroauth/twitteroauth.php');
@@ -44,7 +45,7 @@ function objectToArray($d){
 	}
 }
 
-function normalizeActivityObjects($objArray, $builder, $account){
+function normalizeActivityObjects($objArray, $builder, $account, $feeds){
 	for($k = 0; $k < count($objArray); $k++){
 		$obj = $objArray[$k];
 
@@ -57,29 +58,31 @@ function normalizeActivityObjects($objArray, $builder, $account){
 		
 		//print_r($item);
 		
-		$this->writeObject((array)$item, $query);
+		$this->writeObject((array)$item, $query, $feeds);
 	}
 }
 
-function writeObject($obj, $query){
-	$index = "public";
-	$host = "localhost";
-	$port = "9200";
+function writeObject($obj, $query, $feeds){
+	for($g = 0; $g < count($feeds); $g++){
+		$index = $feeds[$g];
+		$host = "localhost";
+		$port = "9200";
 
-	$es = Client::connection("http://$host:$port/$index/$index/");
+		$es = Client::connection("http://$host:$port/$index/$index/");
 
-	$obj['id'] = strtolower($obj['id']);
-	$exists = $this->getObject($obj['id']);
-	if(isset($exists['starred'])){
-		$obj['starred'] = $exists['starred'];
-		$obj['isLiked'] = $exists['isLiked'];
-		$obj['isCommented'] = $exists['isCommented'];
-		$obj['isFavorited'] = $exists['isFavorited'];
+		$obj['id'] = strtolower($obj['id']);
+		$exists = $this->getObject($obj['id']);
+		if(isset($exists['starred'])){
+			$obj['starred'] = $exists['starred'];
+			$obj['isLiked'] = $exists['isLiked'];
+			$obj['isCommented'] = $exists['isCommented'];
+			$obj['isFavorited'] = $exists['isFavorited'];
+		}
+		$obj['serviceQuery'] = $query;
+
+		$grr = $es->index($obj, $obj['id']);
+		#print_r($grr . " ::index:: " . $feeds[$g]);
 	}
-	$obj['serviceQuery'] = $query;
-
-	$grr = $es->index($obj, $obj['id']);
-	#print_r($grr);
 }
 
 function minePublicQueryTerms($service){
@@ -99,36 +102,34 @@ function minePublicQueryTerms($service){
 				case "Facebook":
 					$accountNum = count($credObj['facebook'][0]['accounts']);
 					$RNG = rand(0, $accountNum-1);
-					
-					$token = $credObj['facebook'][0]['accounts'][$RNG]['accessToken'];
+
 					$account = $credObj['facebook'][0]['accounts'][$RNG];
+					$responseObj = queryFacebook($query, $account);
 					if(isset($responseObj['data'])){
 						$builder = new facebookNewsFeedObjectBuilder();
-						normalizeActivityObjects($responseObj['data'], $builder, $account);
+						normalizeActivityObjects($responseObj['data'], $builder, $account, $feeds);
 					}
 				break;
 				case "Google":
 					$accountNum = count($credObj['google'][0]['accounts']);
 					$RNG = rand(0, $accountNum-1);
 					
-					$token = $credObj['google'][0]['accounts'][$RNG]['accessToken'];
 					$account = $credObj['google'][0]['accounts'][$RNG];
-					$responseObj = queryGoogle($query, $token);
+					$responseObj = queryGoogle($query, $account);
 					if(isset($responseObj['items'])){
 						$builder = new googleObjectBuilder();
-						normalizeActivityObjects($responseObj['items'], $builder, $account);
+						normalizeActivityObjects($responseObj['items'], $builder, $account, $feeds);
 					}
 				break;
 				case "Twitter":
 					$accountNum = count($credObj['twitter'][0]['accounts']);
 					$RNG = rand(0, $accountNum-1);
 					
-					$token = $credObj['twitter'][0]['accounts'][$RNG];
 					$account = $credObj['twitter'][0]['accounts'][$RNG];
-					$responseObj = queryTwitter($query, $token);
+					$responseObj = queryTwitter($query, $account);
 					if(isset($responseObj['statuses'])){
 						$builder = new twitterObjectBuilder();
-						normalizeActivityObjects($responseObj['statuses'], $builder, $account);
+						normalizeActivityObjects($responseObj['statuses'], $builder, $account, $feeds);
 					}
 				break;
 				case "Instagram":
@@ -145,9 +146,9 @@ function minePublicQueryTerms($service){
 	}
 }
 
-function queryGoogle($queryStr, $accessToken){
+function queryGoogle($queryStr, $account){
 	$query = $queryStr;
-	$access_token = $accessToken;
+	$access_token = $account['accessToken'];
 	
 	$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&access_token='.$access_token.'&query='.$query;
 	$ch = curl_init($url);
@@ -155,27 +156,42 @@ function queryGoogle($queryStr, $accessToken){
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	$res = curl_exec($ch);
 	curl_close($ch);
-	return $var = json_decode($res, true);
+	$var = json_decode($res, true);
+	//if there is an error it is most likely the hour long token is dead so refresh
+	if(isset($var['error'])){
+		$token = refreshGoogToken($account['uuid']);
+		$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&access_token='.$token.'&query='.$query;
+		$ch = curl_init($url);
+
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$res = curl_exec($ch);
+		curl_close($ch);
+		//print_r($res);
+		$var = json_decode($res, true);
+		return $var
+	}else{
+		return $var;
+	}
 }
 
-function queryTwitter($queryStr, $tokenObj){
+function queryTwitter($queryStr, $account){
 	$query = $queryStr;
 
-	$oauth_Token = $tokenObj['accessToken'];
-	$consumer_key = $tokenObj['key'];
-	$consumer_secret = $tokenObj['secret'];
-	$access_secret = $tokenObj['accessSecret'];
+	$oauth_Token = $account['accessToken'];
+	$consumer_key = $account['key'];
+	$consumer_secret = $account['secret'];
+	$access_secret = $account['accessSecret'];
 
 	$connection = new TwitterOAuth($consumer_key, $consumer_secret, $oauth_Token, $access_secret);
-
-	$status = $connection->get('search/tweets', array('q' => urlencode($query), 'count' => 20));
+	$status = $connection->get('search/tweets', array('q' => urlencode($query), 'count' => 50));
+	
 	return $status = objectToArray($status);
 }
 
-function queryFacebook($queryStr, $accessToken){
+function queryFacebook($queryStr, $account){
 	$query = $queryStr;
-	$access_token = $accessToken;
-	$url = 'https://graph.facebook.com/search?limit=20&q=' . urlencode($query) . '&type=post&access_token=' . $access_token;
+	$access_token = $account['accessToken'];
+	$url = 'https://graph.facebook.com/search?limit=50&q=' . urlencode($query) . '&type=post&access_token=' . $access_token;
 
 	$ch = curl_init($url);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -189,7 +205,7 @@ if(!file_exists("../../lockFiles/publicManager.lock") || (time() > filemtime("..
 	touch("../../lockFiles/publicManager.lock");
 
 	echo "mining public search term data"; ?><br/><?php
-	minePublicQueryTerms();
+	#minePublicQueryTerms();
 
 	unlink("../../lockFiles/publicManager.lock");
 }
