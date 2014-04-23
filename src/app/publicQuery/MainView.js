@@ -53,7 +53,8 @@ define([
 		"app/SelRoundRectList",
 		"app/SelEdgeToEdgeList",	
 		"dojox/mobile/ListItem",	
-		"dojox/mobile/Button",	
+		"dojox/mobile/Button",
+		"dojox/mobile/CheckBox",	
 		"dijit/Dialog",
 		
 		"dojo/ready"
@@ -90,6 +91,7 @@ define([
 		EdgeToEdgeList,
 		ListItem,
 		Button,
+		CheckBox,
 		Dialog,
 		
 		ready
@@ -171,7 +173,7 @@ define([
 					"class": "borderlessListItemClass"
 				});
 
-				var infoDiv = domConstruct.create("div", {innerHTML: "Clicking the button on the left will display search results from previous Facebook queries that are stored in your database. Clicking the \"go\" button will search live data from Facebook. Click the button with the question mark for more info."});
+				var infoDiv = domConstruct.create("div", {innerHTML: "Clicking the button on the left will display search results from previous public queries that are stored in your database. Clicking the \"go\" button will search live data from the services you have selected"});
 
 				this.infoListItem.domNode.appendChild(infoDiv);
 				this.infoList.addChild(this.infoListItem);
@@ -179,7 +181,7 @@ define([
 
 				this.queryBox = new TextBox({
 					placeHolder: "Search here",
-					style: "height:19px; vertical-align: top; margin-right: 5px"
+					"class": "selectorTextBox"
 				});
 
 				this.justQuery = new Button({
@@ -263,7 +265,35 @@ define([
 
 				this.saveButton = new Button({
 					"name": "saveButton",
-					"right": "true"
+					"right": "true",
+					onClick: lang.hitch(this, function(){
+						var dialog = new Dialog({
+							title: "Save your query",
+							draggable: false,
+							"class": "saveDijitDialog"
+						});
+
+						var feedNameTextBox = new TextBox({
+							placeHolder: "Feed name"
+						});
+
+						var saveFeedButton = new Button({
+							label: "Save"
+						});
+
+						var mainFeedCheckBox = new CheckBox({
+							label: "Send this data to Main Feed"
+						});
+
+						var saveDiv = domConstruct.create("div", {});
+
+						saveDiv.appendChild(feedNameTextBox.domNode);
+						saveDiv.appendChild(mainFeedCheckBox.domNode);
+						saveDiv.appendChild(saveFeedButton.domNode);
+
+						dialog.set("content", saveDiv);
+						dialog.show();
+					})
 				});
 
 				this.queryButton = new Button({
@@ -346,7 +376,7 @@ define([
 
 				this.selectorItem = new SelectorBar({
 					textBoxes: [this.queryBox],
-					buttons: [this.queryButton, this.saveButton, this.scrollButton],
+					buttons: [this.queryButton, this.scrollButton, this.saveButton],
 					serviceSelectors: [this.services],
 					style: "text-align: center"
 				});
