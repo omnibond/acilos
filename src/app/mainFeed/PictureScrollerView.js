@@ -162,8 +162,8 @@ define([
 							"class": "feedPicContentItemClass"
 						});
 
-						var div = domConstruct.create("div", {innerHTML: '<span><img src="'+this.albumLinks[d]+'" style="max-width:90%;max-height:90%;" /></a></span>'});
-
+						var div = domConstruct.create("div", {innerHTML: '<span><img src="'+this.albumLinks[d]+'" /></a></span>'});
+					
 						div.onclick = lang.hitch(this, function(d){
 							var dialog = new Dialog({
 								title: "Click to close ->",
@@ -192,8 +192,7 @@ define([
 				
 						blastDiv.onclick = lang.hitch(this, function(blastDiv, d){
 							this.blastView.blastObj = {};
-							if(this.albumLinks[d] == undefined ||
-								this.albumLinks[d] == null){
+							if(this.albumLinks[d] == undefined || this.albumLinks[d] == null){
 								this.blastView.blastObj.url = "";
 							}else{
 								this.blastView.blastObj.url = this.albumLinks[d];

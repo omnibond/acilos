@@ -28,6 +28,8 @@
 require_once 'Google/Client.php';
 require_once 'Google/Service/Plus.php';
 
+session_start();
+
 if(isset($_GET['apiKey']) && isset($_GET['secretKey']) && isset($_GET['redirect_uri'])){
 
 $client = new Google_Client();

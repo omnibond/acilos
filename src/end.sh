@@ -32,10 +32,17 @@ echo "Run the start script to populate the esHeartbeat"
 EOF
 echo "Done"
 
-#This will clear out everything from from the heartbeat file
+#This will clear out everything from from the amazonRebooter file
 echo "Clearing AmazonRebootManager"
 cat > cron/callAmazonRebootManager.sh << 'EOF'
 echo "Run the start script to populate the callAmazonRebootManager"
+EOF
+echo "Done"
+
+#This will clear out everything from from the heartbeat file
+echo "Clearing PublicQueryCron"
+cat > cron/callPublicQueryManager.sh << 'EOF'
+echo "Run the start script to populate the callPublicQueryManager"
 EOF
 echo "Done"
 

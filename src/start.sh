@@ -109,11 +109,25 @@ eval /usr/bin/wget -q -O /dev/null http://'$HOST'/cron/poller/amazonRebootManage
 
 EOF
 
+echo "Writing The Public Query Cron"
+cat > cron/callPublicQueryManager.sh << 'EOF'
+#!/bin/bash
+#this script will be called by the cron every 10 minutes which
+#will in turn call the actual poller to go get new contact lists
+	
+EOF
+echo ". " $MAINPATH"/cron/socialConfig.txt" >> cron/callPublicQueryManager.sh
+cat >> cron/callPublicQueryManager.sh << 'EOF'
+eval /usr/bin/wget -q -O /dev/null http://'$HOST'/cron/poller/callPublicQueryManager.php?index='$INDEX'&mapping='$MAPPING'&host='$HOST'&port='$PORT'
+
+EOF
+
 CRONGREP=`crontab -l | grep /cron/`
 if [ "$CRONGREP" = "" ]; then
 	echo "no socialreader crons were found... adding cronjobs"
 
 	(crontab -l 2>/dev/null; echo "*/5 * * * * sh "$MAINPATH"/cron/callCronManager.sh") | crontab -
+	(crontab -l 2>/dev/null; echo "*/10 * * * * sh "$MAINPATH"/cron/callPublicQueryManager.sh") | crontab -
 	(crontab -l 2>/dev/null; echo "* */23 * * * sh "$MAINPATH"/cron/callClientManager.sh") | crontab -
 	(crontab -l 2>/dev/null; echo "*/20 * * * * sh "$MAINPATH"/cron/poller/clearLogPoller.sh") | crontab -
 	(crontab -l 2>/dev/null; echo "*/3 * * * * sh "$MAINPATH"/cron/esHeartbeat.sh") | crontab -
@@ -131,7 +145,6 @@ php startES.php
 running=$(ps axho user,comm|grep -E "httpd|apache"|uniq|grep -v "root"|awk 'END {if ($1) print $1}')
 
 echo "setting $running and 777 on all files"
-cd ..
 cd ..
 chown -R $running:$running *
 chmod -R 777 *

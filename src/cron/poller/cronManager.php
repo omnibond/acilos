@@ -415,7 +415,7 @@ function getGoogleFeed(){
 		if(isset($var['error'])){
 			if($error = $var['error']['errors'][0]['message'] == "Invalid Credentials"){
 				$token =  refreshGoogToken($accts[$h]['uuid']);
-				$url = "https://www.googleapis.com/plus/v1/people/me/people/visible?access_token=".$accts[$h]['accessToken'];
+				$url = "https://www.googleapis.com/plus/v1/people/me/people/visible?access_token=".$token;
 				$ch = curl_init($url);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				$res = curl_exec($ch);
@@ -447,6 +447,7 @@ function getGoogleFeed(){
 
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			$res = curl_exec($ch);
+			print_r($res);
 			curl_close($ch);
 			$var = json_decode($res, true);
 			
@@ -466,7 +467,7 @@ function normalizeGoogObject($objArray, $account){
 	for($k = 0; $k < count($objArray); $k++){
 		$obj = $objArray[$k];
 
-		#print_r($obj); ?><br/><?php
+		print_r($obj); ?><br/><?php
 
 		$manager = new Manager();
 		$builder = new googleObjectBuilder();
@@ -776,18 +777,12 @@ if(!file_exists("../../lockFiles/cronManager.lock") || (time() > filemtime("../.
 
 			if($key == "Instagram" && $value == "true"){
 				getUserFeed();
-			}			
+			}	
+
+			if($key == "Google" && $value == "true"){
+				getGoogleFeed();
+			}	
 		}
-
-		//Write out to the credential file how everything went
-		//$filename = "appCredentialStatus.txt";
-		//$fp = fopen($filename, 'w');
-		//fwrite($fp, json_encode($credentialObject));
-		//fclose($fp);
-
-		//this will call the notification module
-		//require_once('../../oAuth/notifications/facebookNotifications.php');
-
 	}else{
 
 		echo "backup check";?><br/><?php
