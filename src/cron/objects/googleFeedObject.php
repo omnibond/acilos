@@ -115,7 +115,10 @@ class googleObjectBuilder extends activityObjectBuilder{
 			$queryString = $queryString . " " . $obj['object']['content'];
 		}
 		$content->setText($text);
-		$content->setURL($obj['object']['attachments'][0]['url']);
+
+		if(isset($obj['object']['attachments'][0]['url'])){
+			$content->setURL($obj['object']['attachments'][0]['url']);
+		}
 		
 		$picArr = new GoogleAlbum();
 		if(isset($obj['object']['attachments'][0]['thumbnails'])){
@@ -128,8 +131,11 @@ class googleObjectBuilder extends activityObjectBuilder{
 		if(isset($obj['object']['attachments'][0]['image'])){
 			$content->setPicture($obj['object']['attachments'][0]['image']['url']);
 		}
-		$content->setHeader($obj['object']['attachments'][0]['displayName']);
-		$queryString = $queryString . " " . $obj['object']['attachments'][0]['displayName'];
+		if(isset($obj['object']['attachments'][0]['displayName'])){
+			$content->setHeader($obj['object']['attachments'][0]['displayName']);
+			$queryString = $queryString . " " . $obj['object']['attachments'][0]['displayName'];
+		}
+		
 		$content->setQueryString($queryString);
 		
 		$this->activityObject->setContent($content);

@@ -764,9 +764,8 @@
 					"type": "string",
 					"index": "not_analyzed"
 				},
-				"twitterQuery": {
-					"type": "string",
-					"index": "not_analyzed"
+				"serviceQuery": {
+					"type": "string"
 				}
 			}
 		}

@@ -391,11 +391,11 @@ class Search{
 
 			//print_r($item);
 
-			$this->writeObject((array)$item, $query, "twitter");
+			$this->writeObject((array)$item, $query);
 		}
 	}
 
-	public function writeObject($obj, $query, $service){
+	public function writeObject($obj, $query){
 		//echo "write object "; 
 
 		$index = "public";
@@ -417,7 +417,7 @@ class Search{
 
 		//print_R($obj);
 		$grr = $es->index($obj, $obj['id']);
-
+		//print_R($grr);
 	}
 
 	public function getObject($id){
@@ -540,6 +540,7 @@ class Search{
 		$res = $es->search($searchArr);
 		
 		$res['from'] = $from;
+		$res['searchArr'] = $searchArr;
 
 		return json_encode($res);
 	}
@@ -586,34 +587,76 @@ class Search{
 
 		if(isset($next)){
 			return array(
-					"next" => $next,
-					"response_from_facebook" => $response
+				"next" => $next,
+				"response_from_facebook" => $response
 			);
 		}else{
 			return array(
-					"next" => "",
-					"response_from_facebook" => $response
+				"next" => "",
+				"response_from_facebook" => $response
 			);
 		}	
 	}
 
 	public function queryGoogle($varObj){
-		echo "get google stuff"; ?><br/><?php
-
 		$query = $varObj['query'];
 
 		$access_token = $varObj['authStuff']['google'][0]['accounts'][0]['accessToken'];
 		
-        $url = 'https://www.googleapis.com/plus/v1/activities?access_token='.$access_token.'&query='.$query;
+        $url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&access_token='.$access_token.'&query='.$query;
 		$ch = curl_init($url);
 
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$res = curl_exec($ch);
 		curl_close($ch);
-		print_r($res);
+		//print_r($res);
 		$var = json_decode($res, true);
+
+		if(isset($var['errors'])){
+			print_r($var['errors'][0]['message']);
+			print_r($var['errors'][0]['code']);
+
+			return json_encode(array("Error" => $var['errors'][0]['message']));
+		}else{
+			if(isset($var['items'])){
+				$this->normalizeGoogObject($var['items'], $varObj['authStuff']['google'][0]['accounts'][0], $query);
+			}
+		}
+
+		if(isset($var['nextPageToken'])){
+			return array(
+				"next" => $var['nextPageToken'],
+				"response_from_google" => $var
+			);
+		}else{
+			return array(
+				"next" => "",
+				"response_from_google" => $var
+			);
+		}
+	}
+
+	function normalizeGoogObject($objArray, $account, $query){
+		//echo "normal goog";
+
+		$mediaArray = array();
+		for($k = 0; $k < count($objArray); $k++){
+			$obj = $objArray[$k];
+
+			#print_r($obj);
+
+			$manager = new Manager();
+			$builder = new googleObjectBuilder();
+			$manager->setBuilder($builder);
+			$manager->parseActivityObj($obj, $account);
 		
-		#normalizeGoogObject($var['items'], $accts[$h]);
+			$item = $manager->getActivityObj();
+			
+			//print_r($item);
+			
+			$this->writeObject((array)$item, $query);
+		}
+		sleep(2);
 	}
 
 	public function paginateService(){
@@ -638,9 +681,57 @@ class Search{
 					}
 				}
 			}
+			if($key == "Google"){
+				if($varObj['checked'][$key] == true){
+					if(isset($varObj['nextToken']['google']['next'])){
+						$returnObj['google'] = $this->paginateGoogle($varObj);
+					}
+				}
+			}
 		}
 
 		return json_encode($returnObj);
+	}
+
+	public function paginateGoogle($varObj){
+		//print_r($varObj);
+		$query = $varObj['query'];
+
+		$access_token = $varObj['authStuff']['google'][0]['accounts'][0]['accessToken'];
+
+		$next = $varObj['nextToken']['google']['next'];
+		
+        $url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&pageToken='.$next.'&access_token='.$access_token.'&query='.$query;
+		$ch = curl_init($url);
+
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$res = curl_exec($ch);
+		curl_close($ch);
+		//print_r($res);
+		$var = json_decode($res, true);
+
+		if(isset($var['errors'])){
+			print_r($var['errors'][0]['message']);
+			print_r($var['errors'][0]['code']);
+
+			return json_encode(array("Error" => $var['errors'][0]['message']));
+		}else{
+			if(isset($var['items'])){
+				$this->normalizeGoogObject($var['items'], $varObj['authStuff']['google'][0]['accounts'][0], $query);
+			}
+		}
+
+		if(isset($var['nextPageToken'])){
+			return array(
+				"next" => $var['nextPageToken'],
+				"response_from_google" => $var
+			);
+		}else{
+			return array(
+				"next" => "",
+				"response_from_google" => $var
+			);
+		}
 	}
 
 	public function paginateFacebook($varObj){
@@ -707,7 +798,7 @@ class Search{
 
 			//print_r($item); 
 
-			$this->writeObject((array)$item, $query, "facebook");
+			$this->writeObject((array)$item, $query);
 		}
 	}
 
