@@ -328,16 +328,6 @@ define([
 					//vertical: "true"
 				});
 
-				console.log("the facebook check box is: ", this.services.currentCheckBoxes[0].checked);
-
-				this.services.currentCheckBoxes[0].domNode.onclick = lang.hitch(this, function(){
-					console.log("the facebook checkbox: ", this.services.currentCheckBoxes[0].checked);
-				});
-
-				this.services.currentCheckBoxes[1].domNode.onclick = lang.hitch(this, function(){
-					console.log("the twitter checkbox: ", this.services.currentCheckBoxes[1].checked);
-				});
-
 				this.selectorItem = new SelectorBar({
 					textBoxes: [this.queryBox],
 					buttons: [this.queryButton, this.justQuery, this.scrollButton],

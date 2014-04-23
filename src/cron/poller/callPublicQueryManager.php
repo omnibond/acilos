@@ -33,10 +33,15 @@ require_once('../../vendor/autoload.php');
 use \ElasticSearch\Client;
 
 function minePublicQueryTerms($service){
-	if($service == null){
-		
-	}else{
-		echo $service;
+	$credObj = file_get_contents("../../serviceCreds.json");
+	$credObj = json_decode($credObj, true);
+	
+	$queryTermObj = file_get_contents("../../publicQueryTermObj.json");
+	$queryTermObj = json_decode($queryTermObj, true);
+	
+	foreach($queryTermObj as $key => $value){
+		$services = $value['services'];
+		$query = $value['query']; 
 	}
 }
 
@@ -44,15 +49,9 @@ function minePublicQueryTerms($service){
 if(!file_exists("../../lockFiles/publicManager.lock") || (time() > filemtime("../../lockFiles/publicManager.lock") + 600)){
 	touch("../../lockFiles/publicManager.lock");
 
-	if(isset($_GET['ServiceObj'])){
-		$serviceObj = json_decode($_GET['ServiceObj'], true);
-		foreach($serviceObj as $key => $value){
-			minePublicQueryTerms($key);		
-		}
-	}else{
-		echo "google feed"; ?><br/><?php
-		minePublicQueryTerms(null);
-	}
+	echo "google feed"; ?><br/><?php
+	minePublicQueryTerms(null);
+
 	unlink("../../lockFiles/publicManager.lock");
 }
 
