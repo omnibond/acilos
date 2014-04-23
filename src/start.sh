@@ -116,6 +116,7 @@ cat > cron/callPublicQueryManager.sh << 'EOF'
 #will in turn call the actual poller to go get new contact lists
 	
 EOF
+
 echo ". " $MAINPATH"/cron/socialConfig.txt" >> cron/callPublicQueryManager.sh
 cat >> cron/callPublicQueryManager.sh << 'EOF'
 eval /usr/bin/wget -q -O /dev/null http://'$HOST'/cron/poller/callPublicQueryManager.php?index='$INDEX'&mapping='$MAPPING'&host='$HOST'&port='$PORT'
