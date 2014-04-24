@@ -100,7 +100,8 @@ define(['dojo/_base/declare',
 					"name": "newFeedButton",
 					"left": "true",
 					onClick: lang.hitch(this, function(){
-						this.router.go("/CreateFeedView");
+						//this.router.go("/CreateFeedView");
+						this.router.go("/newMainView");
 					})
 				});
 

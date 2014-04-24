@@ -36,6 +36,7 @@ define(['dojo/_base/declare',
 		'app/feeds/DeleteFeed',
 		'app/feeds/EditFeed',
 		'app/feeds/EditFeedView',
+		'app/feeds/newMainView',
 		'app/mainFeed/BlastView'
 ], function(
 	declare, 
@@ -51,6 +52,7 @@ define(['dojo/_base/declare',
 	DeleteFeed, 
 	EditFeed, 
 	EditFeedView,
+	newMainView,
 	BlastView
 ) {
 	return declare([Module], {
@@ -121,6 +123,16 @@ define(['dojo/_base/declare',
 				
 				getFeedList: lang.hitch(this, this.getFeedList)
 			});
+			this.newMainView = new newMainView({
+				route: '/newMainView',
+
+				getFeedList: lang.hitch(this, this.getFeedList),
+				getServiceCreds: lang.hitch(this, this.getServiceCreds),
+				getPublicQueryObjects: lang.hitch(this, this.getPublicQueryObjects),
+				writeQueryTerm: lang.hitch(this, this.writeQueryTerm),
+				getPublicDBObjects: lang.hitch(this, this.getPublicDBObjects),
+				paginateService: lang.hitch(this, this.paginateService)
+			});
 			this.registerView(this.rootView);
 			this.registerView(this.FeedView);
 			this.registerView(this.CreateFeedView);
@@ -128,7 +140,7 @@ define(['dojo/_base/declare',
 			this.registerView(this.EditFeed);
 			this.registerView(this.EditFeedView);
 			this.registerView(this.blastView);
-
+			this.registerView(this.newMainView);
 		},
 		
 		deleteFeedList: function(feedName){
@@ -193,6 +205,28 @@ define(['dojo/_base/declare',
 		getServiceCreds: function(){
 			params = {};
 			return xhrManager.send('POST', 'rest/v1.0/Credentials/getServiceCreds', params);
+		},
+
+		getPublicQueryObjects: function(query, authStuff, checked){
+			params = {query: query, authStuff: authStuff, checked: checked};
+			return xhrManager.send('POST', 'rest/v1.0/Search/getPublicQueryObjects', params);
+		},
+
+		writeQueryTerm: function(feedName, services, queryString, feeds){
+			params = {feedName: feedName, services: services, queryString: queryString, feeds: feeds};
+			console.log("writeQueryTerm params are: ", params);
+			return xhrManager.send('POST', 'rest/v1.0/PublicQuery/writeQueryTerm', params);
+		},
+
+		getPublicDBObjects: function(query, from){
+			params = {from: from, query: query};
+			return xhrManager.send('POST', 'rest/v1.0/Search/getPublicDBObjects', params);
+		},
+
+		paginateService: function(nextToken, authStuff, query, checked){
+			params = {nextToken: nextToken, authStuff: authStuff, query: query, checked: checked};
+			console.log("paginateService params are: ", params);
+			return xhrManager.send('POST', 'rest/v1.0/Search/paginateService', params);
 		}
 	})
 });
