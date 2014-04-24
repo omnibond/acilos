@@ -110,8 +110,13 @@ define([
 
 			activate: function() {				
 				topic.publish("/dojo-mama/updateSubNav", {back: '/', title: "Search Public Data"} );
+			},
+
+			postCreate: function(){
+				this.inherited(arguments);
 
 				this.fromVar = 0;
+
 				on(this.domNode, "scroll", lang.hitch(this, this.dataPoints));
 				
 				this.getServiceCreds().then(lang.hitch(this, function(obj){
@@ -445,11 +450,6 @@ define([
 				if(this.infoList){
 					this.infoList.destroyRecursive();
 					this.infoList = null;
-				}
-
-				if(this.selectorItem){
-					this.selectorItem.destroyRecursive();
-					this.selectorItem = null;
 				}
 
 				if(this.pi){
