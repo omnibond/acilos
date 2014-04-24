@@ -43,6 +43,7 @@ define(['dojo/_base/declare',
 			this.textBoxes = [];
 			this.toolTips = [];
 			this.serviceSelectors = [];
+			this.divs = [];
 		},
 		
 		buildRendering: function() {
@@ -78,6 +79,32 @@ define(['dojo/_base/declare',
 			if(this.textBoxes.length > 0){
 				for(var x = 0; x < this.textBoxes.length; x++){
 					this.textBoxes[x].placeAt(this.domNode);
+				}
+			}
+
+			if(this.divs.length > 0){
+				for(var x = 0; x < this.divs.length; x++){
+					for(var y = 0; y < this.divs[x].children.length; y++){
+						if(this.divs[x].children[y].type == "button"){
+							if(this.divs[x].children[y].name == "goButton"){
+								var divSelectButton = domConstruct.create("div", {"class": "icon-go fontSize25 fontDiv30", title: "Go to the next page"});
+
+								this.divs[x].children[y].appendChild(divSelectButton);
+							}
+
+							if(this.divs[x].children[y].right == "true"){
+								domClass.add(this.divs[x].children[y], "floatRightButton");
+							}
+
+							if(this.divs[x].children[y].left == "true"){
+								domClass.add(this.divs[x].children[y], "floatLeftButton");
+							}
+
+							domClass.add(this.divs[x].children[y], "selectorButton");
+						}
+					}
+
+					this.domNode.appendChild(this.divs[x]);
 				}
 			}
 

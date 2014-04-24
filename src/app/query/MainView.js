@@ -184,7 +184,7 @@ define([
 					"class": "selectorTextBox"
 				});
 
-				this.justQuery = new Button({
+				/*this.justQuery = new Button({
 					"name": "searchButton",
 					left:"true",
 					onClick: lang.hitch(this, function(){
@@ -204,7 +204,6 @@ define([
 							this.list = new SearchScroller({
 								feedName: this.queryBox.get("value"),
 								postAddArray: this.postAddArray,
-								blastView: this.blastView,
 								getFeedData: lang.hitch(this, this.getPublicDBObjects),
 								getNextGroup: lang.hitch(this, this.getNextGroup),
 								setStarred: lang.hitch(this, this.setStarred),
@@ -217,7 +216,7 @@ define([
 							this.resize();
 						}
 					})
-				});
+				});*/
 
 				this.helpButton = new Button({
 					"name": "helpButton",
@@ -383,6 +382,10 @@ define([
 						}))
 					})
 				});
+
+				this.searchBoxQueryButtonHolder = domConstruct.create("div", {style: "display: inline"});
+				this.searchBoxQueryButtonHolder.appendChild(this.queryBox.domNode);
+				this.searchBoxQueryButtonHolder.appendChild(this.queryButton.domNode);
 				
 				this.services = new ServiceSelector({
 					checkBoxes: this.exists,
@@ -392,8 +395,8 @@ define([
 				});
 
 				this.selectorItem = new SelectorBar({
-					textBoxes: [this.queryBox],
-					buttons: [this.queryButton, this.scrollButton, this.saveButton],
+					divs: [this.searchBoxQueryButtonHolder],
+					buttons: [this.scrollButton, this.saveButton],
 					serviceSelectors: [this.services],
 					style: "text-align: center"
 				});
