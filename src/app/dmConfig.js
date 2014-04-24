@@ -89,7 +89,7 @@ define({
 		},
 		query: {
 			title: 'Query',
-			moduleId: 'app/publicQuery/Module'
+			moduleId: 'app/query/Module'
 		},
 		settings: {
 			title: 'Settings',

@@ -611,7 +611,7 @@ class Search{
 		curl_close($ch);
 		//print_r($res);
 		$var = json_decode($res, true);
-		
+
 		if(isset($var['error'])){
 			$token = refreshGoogToken($varObj['authStuff']['google'][0]['accounts'][0]['uuid']);
 			$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&access_token='.$token.'&query='.$query;
@@ -622,12 +622,20 @@ class Search{
 			curl_close($ch);
 			//print_r($res);
 			$var = json_decode($res, true);
-			
+		
 			if(isset($var['error'])){
 				return array(
 					"next" => "",
 					"response_from_google" => $var
 				);
+			}else{
+				if(isset($var['items'])){
+					$this->normalizeGoogObject($var['items'], $varObj['authStuff']['google'][0]['accounts'][0], $query);
+					return array(
+						"next" => $var['nextPageToken'],
+						"response_from_google" => $var
+					);
+				}
 			}
 		}else{
 			if(isset($var['items'])){

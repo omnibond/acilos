@@ -32,7 +32,8 @@ define(['dojo/_base/declare',
 	
 	'app/SelEdgeToEdgeList',
 	
-	'app/publicQuery/MainView',
+	'app/query/MainView',
+	'app/mainFeed/BlastView',
 	
 	'app/util/error-utils',
 	'app/util/xhrManager'
@@ -48,6 +49,7 @@ define(['dojo/_base/declare',
 	EdgeToEdgeList, 
 	
 	MainView,
+	BlastView,
 	
 	errorUtils, 
 	xhrManager
@@ -65,9 +67,19 @@ define(['dojo/_base/declare',
 			if(!kernel.global.feedPosition){
 				kernel.global.feedPosition = {};
 			}
-
+			
+			this.blastView = new BlastView({
+				route: '/BlastView',
+				mod: 'query',
+				
+				sendPostFile: lang.hitch(this, this.sendPostFile),
+				runAtCommand: lang.hitch(this, this.runAtCommand),
+				getServiceCreds: lang.hitch(this, this.getServiceCreds)
+			});
+			
 			this.rootView = new MainView({
 				route: '/',
+				blastView: this.blastView,
 				getPublicQueryObjects: lang.hitch(this, this.getPublicQueryObjects),
 				getServiceCreds: lang.hitch(this, this.getServiceCreds),
 				getPublicDBObjects: lang.hitch(this, this.getPublicDBObjects),
@@ -76,6 +88,7 @@ define(['dojo/_base/declare',
 			});
 
 			this.registerView(this.rootView);
+			this.registerView(this.blastView);
 		},
 
 		getPublicDBObjects: function(query, from){
@@ -103,6 +116,22 @@ define(['dojo/_base/declare',
 			params = {feedName: feedName, services: services, queryString: queryString, feeds: feeds};
 			console.log("writeQueryTerm params are: ", params);
 			return xhrManager.send('POST', 'rest/v1.0/PublicQuery/writeQueryTerm', params);
+		},
+		
+		sendPostFile: function(file, fileType, tokenArr, msg){
+			params = {file: file, fileType: fileType, tokenArr: tokenArr, msg: msg};
+			console.log("Module.js: Params for sendPostFile are: ", params);
+			return xhrManager.send('POST', 'rest/v1.0/Post/postFiles', params);
+		},
+
+		runAtCommand: function(time, file, fileType, tokenArr, msg){
+			params = {time: time, file: file, fileType: fileType, tokenArr: tokenArr, msg: msg};
+			return xhrManager.send('POST', 'rest/v1.0/Post/runAtCommand', params);
+		},
+		
+		getServiceCreds: function(){
+			params = {};
+			return xhrManager.send('POST', 'rest/v1.0/Credentials/getServiceCreds', params);
 		}
 	})
 });

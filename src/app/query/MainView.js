@@ -204,6 +204,7 @@ define([
 							this.list = new SearchScroller({
 								feedName: this.queryBox.get("value"),
 								postAddArray: this.postAddArray,
+								blastView: this.blastView,
 								getFeedData: lang.hitch(this, this.getPublicDBObjects),
 								getNextGroup: lang.hitch(this, this.getNextGroup),
 								setStarred: lang.hitch(this, this.setStarred),
@@ -364,6 +365,7 @@ define([
 								getFeedData: lang.hitch(this, this.getPublicDBObjects),
 								paginateService: lang.hitch(this, this.paginateService),
 								nextToken: obj,
+								blastView: this.blastView,
 								checkedServices: this.checked,
 								authStuff: this.authObj,
 								getNextGroup: lang.hitch(this, this.getNextGroup),
