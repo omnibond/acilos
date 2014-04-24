@@ -159,7 +159,13 @@ define(['dojo/_base/declare',
 				this.getFeedList().then(lang.hitch(this, this.buildMainList));
 			}
 			
+		},
+
+		postCreate: function(){
+			this.getPublicQueryObject().then(lang.hitch(this, function(obj){
+				this.publicQueryObj = obj;
+				console.log("The public query object is: ", this.publicQueryObj);
+			}));
 		}
-		
 	})
 });

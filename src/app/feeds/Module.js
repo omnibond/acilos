@@ -91,7 +91,8 @@ define(['dojo/_base/declare',
 				checkSpecificFeedList: lang.hitch(this, this.checkSpecificFeedList),
 				setStarred: lang.hitch(this, this.setStarred),
 				setStarredClient: lang.hitch(this, this.setStarredClient),
-				checkFeedName: lang.hitch(this, this.checkFeedName)
+				checkFeedName: lang.hitch(this, this.checkFeedName),
+				getPublicQueryObject: lang.hitch(this, this.getPublicQueryObject)
 			});
 			this.EditFeedView = new EditFeedView({
 				route: "/EditFeedView/:feedName",
@@ -103,8 +104,8 @@ define(['dojo/_base/declare',
 				checkFeedName: lang.hitch(this, this.checkFeedName),
 				setStarred: lang.hitch(this, this.setStarred),
 				setStarredClient: lang.hitch(this, this.setStarredClient),
-				overwriteFeedList: lang.hitch(this, this.overwriteFeedList)
-				//checkFeedName: lang.hitch(this, this.checkFeedName)		replace this with my new overwriteFeedName function
+				overwriteFeedList: lang.hitch(this, this.overwriteFeedList),
+				getPublicQueryObject: lang.hitch(this, this.getPublicQueryObject)
 			});
 			this.DeleteFeed = new DeleteFeed({
 				route: "/DeleteFeed",
@@ -121,7 +122,8 @@ define(['dojo/_base/declare',
 			this.rootView = new MainView({
 				route: '/',
 				
-				getFeedList: lang.hitch(this, this.getFeedList)
+				getFeedList: lang.hitch(this, this.getFeedList),
+				getPublicQueryObject: lang.hitch(this, this.getPublicQueryObject)
 			});
 			this.newMainView = new newMainView({
 				route: '/newMainView',
@@ -131,7 +133,8 @@ define(['dojo/_base/declare',
 				getPublicQueryObjects: lang.hitch(this, this.getPublicQueryObjects),
 				writeQueryTerm: lang.hitch(this, this.writeQueryTerm),
 				getPublicDBObjects: lang.hitch(this, this.getPublicDBObjects),
-				paginateService: lang.hitch(this, this.paginateService)
+				paginateService: lang.hitch(this, this.paginateService),
+				getPublicQueryObject: lang.hitch(this, this.getPublicQueryObject)
 			});
 			this.registerView(this.rootView);
 			this.registerView(this.FeedView);
@@ -227,6 +230,11 @@ define(['dojo/_base/declare',
 			params = {nextToken: nextToken, authStuff: authStuff, query: query, checked: checked};
 			console.log("paginateService params are: ", params);
 			return xhrManager.send('POST', 'rest/v1.0/Search/paginateService', params);
+		},
+
+		getPublicQueryObject: function(){
+			params = {};
+			return xhrManager.send('GET', 'rest/v1.0/PublicQuery/getPublicQueryObject', params);
 		}
 	})
 });

@@ -85,4 +85,11 @@ class PublicQuery{
 			file_put_contents("../../publicQueryTermObj.json", json_encode($queryObj));
 		}
 	}
+
+	public function getPublicQueryObject(){
+		$file = "../../publicQueryTermObj.json";
+		$var = file_get_contents($file);
+
+		return $var;
+	}
 }

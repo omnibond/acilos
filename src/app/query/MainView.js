@@ -178,7 +178,7 @@ define([
 					"class": "borderlessListItemClass"
 				});
 
-				var infoDiv = domConstruct.create("div", {innerHTML: "Clicking the button on the left will display search results from previous public queries that are stored in your database. Clicking the \"go\" button will search live data from the services you have selected"});
+				var infoDiv = domConstruct.create("div", {innerHTML: "Clicking the \"go\" button will search live data from the services you have selected"});
 
 				this.infoListItem.domNode.appendChild(infoDiv);
 				this.infoList.addChild(this.infoListItem);
