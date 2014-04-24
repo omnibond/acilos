@@ -168,7 +168,7 @@ function queryGoogle($queryStr, $account){
 		curl_close($ch);
 		//print_r($res);
 		$var = json_decode($res, true);
-		return $var
+		return $var;
 	}else{
 		return $var;
 	}
@@ -205,7 +205,7 @@ if(!file_exists("../../lockFiles/publicManager.lock") || (time() > filemtime("..
 	touch("../../lockFiles/publicManager.lock");
 
 	echo "mining public search term data"; ?><br/><?php
-	#minePublicQueryTerms();
+	minePublicQueryTerms();
 
 	unlink("../../lockFiles/publicManager.lock");
 }
