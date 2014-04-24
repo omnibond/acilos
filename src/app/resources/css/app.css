@@ -3809,6 +3809,13 @@ select {
   color: #265AC9;
   text-decoration: underline;
 }
+.displayBlockOnPhoneClass {
+  display: inline;
+}
+.dj_phone .displayBlockOnPhoneClass {
+  display: block;
+  float: left;
+}
 .tooltipDiv {
   position: absolute;
   text-align: center;

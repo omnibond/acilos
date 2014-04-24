@@ -383,7 +383,7 @@ define([
 					})
 				});
 
-				this.searchBoxQueryButtonHolder = domConstruct.create("div", {style: "display: inline"});
+				this.searchBoxQueryButtonHolder = domConstruct.create("div", {"class": "displayBlockOnPhoneClass"});
 				this.searchBoxQueryButtonHolder.appendChild(this.queryBox.domNode);
 				this.searchBoxQueryButtonHolder.appendChild(this.queryButton.domNode);
 				
