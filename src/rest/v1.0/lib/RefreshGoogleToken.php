@@ -26,7 +26,7 @@
 */
 
 function refreshGoogToken($uuid){
-	print_r("refreshing google token");
+	//print_r("refreshing google token");
 	$credObj = file_get_contents("../../serviceCreds.json");
 	$credObj = json_decode($credObj, true);
 	

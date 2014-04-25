@@ -254,7 +254,7 @@ class Search{
 		return json_encode($var);
 	}
 
-	public function queryTwitter($varObj){
+	public function queryTwitter($varObj, $returnObj){
 		//query string
 		$query = $varObj['query'];
 		//print_r($query);
@@ -291,31 +291,21 @@ class Search{
 			
 			return json_encode(array("Error" => $array['errors'][0]['message']));
 		}else{
-			$this->normalizeTwitterObject($array, $varObj['authStuff']['twitter'][0]['accounts'][0], $query);	    
+			$returnObj = $this->normalizeTwitterObject($array, $varObj['authStuff']['twitter'][0]['accounts'][0], $query, $returnObj);
 		}
 
-		if(isset($since_id)){
-			return array(
-				"next" => array(
-					"since_id" => $since_id,
-					"max_id" => $max_id
-				),
-				"response_from_twitter" => $status
-			);
-		}else{
-			return array(
-				"next" => "",
-				"response_from_twitter" => $status
-			);
+		if(isset($max_id)){
+			$returnObj['nextToken']['twitter']['next']['max_id'] = $max_id;
 		}
+
+		return $returnObj;
 	}
 
-	public function paginateTwitter($varObj){
+	public function paginateTwitter($varObj, $returnObj){
 		//echo "queryTwitter ";
 		//print_r($varObj);
 		//query string
 		$query = $varObj['query'];
-		$since_id = $varObj['nextToken']['twitter']['next']['since_id'];
 		$max_id = $varObj['nextToken']['twitter']['next']['max_id'];
 		//print_r($query);
 		//auth junk
@@ -330,9 +320,6 @@ class Search{
 		$status = objectToArray($status);
 
 		//print_r($status);
-
-		// We do this here because what we return depends on whether or not this variable is set. We don't want to return the $since_id from the top of the function. We only want to return a $since_id if we get one back from twitter this time.
-		unset($since_id);
 		
 		if(isset($status['search_metadata'])){
 			if(isset($status['search_metadata']['max_id_str'])){
@@ -356,26 +343,17 @@ class Search{
 			
 			return json_encode(array("Error" => $array['errors'][0]['message']));
 		}else{
-			$this->normalizeTwitterObject($array, $varObj['authStuff']['twitter'][0]['accounts'][0], $query);	    
+			$returnObj = $this->normalizeTwitterObject($array, $varObj['authStuff']['twitter'][0]['accounts'][0], $query, $returnObj);	    
 		}
 
-		if(isset($since_id)){
-			return array(
-				"next" => array(
-					"since_id" => $since_id,
-					"max_id" => $max_id
-				),
-				"response_from_twitter" => $status
-			);
-		}else{
-			return array(
-				"next" => "",
-				"response_from_twitter" => $status
-			);
+		if(isset($max_id)){
+			$returnObj['nextToken']['twitter']['next']['max_id'] = $max_id;
 		}
+
+		return $returnObj;
 	}
 
-	public function normalizeTwitterObject($objArray, $account, $query){
+	public function normalizeTwitterObject($objArray, $account, $query, $returnObj){
 		//echo "normal twitter stuff ";
 		for($k = 0; $k < count($objArray); $k++){
 			$obj = $objArray[$k];
@@ -385,14 +363,16 @@ class Search{
 			$manager = new Manager();
 			$builder = new twitterObjectBuilder();
 			$manager->setBuilder($builder);
+
 			$manager->parseActivityObj($obj, $account);
 
-			$item = $manager->getActivityObj();
+			$item = array();
+			$item['_source'] = $manager->getActivityObj();
 
-			//print_r($item);
-
-			$this->writeObject((array)$item, $query);
+			array_push($returnObj['hits']['hits'], $item);
 		}
+
+		return $returnObj;
 	}
 
 	public function writeObject($obj, $query){
@@ -593,7 +573,7 @@ class Search{
 		return $returnObj;
 	}
 
-	public function queryGoogle($varObj){
+	public function queryGoogle($varObj, $returnObj){
 		$query = $varObj['query'];
 
 		$access_token = $varObj['authStuff']['google'][0]['accounts'][0]['accessToken'];
@@ -618,34 +598,26 @@ class Search{
 			//print_r($res);
 			$var = json_decode($res, true);
 		
-			if(isset($var['error'])){
-				return array(
-					"next" => "",
-					"response_from_google" => $var
-				);
-			}else{
-				if(isset($var['items'])){
-					$this->normalizeGoogObject($var['items'], $varObj['authStuff']['google'][0]['accounts'][0], $query);
-					return array(
-						"next" => $var['nextPageToken'],
-						"response_from_google" => $var
-					);
-				}
+			$returnObj = $this->normalizeGoogObject($var['items'], $varObj['authStuff']['google'][0]['accounts'][0], $query, $returnObj);
+
+			if(isset($var['nextPageToken'])){
+				$returnObj['nextToken']['google']['next'] = $var['nextPageToken'];
 			}
+
+			return $returnObj;
 		}else{
-			if(isset($var['items'])){
-				$this->normalizeGoogObject($var['items'], $varObj['authStuff']['google'][0]['accounts'][0], $query);
-				return array(
-					"next" => $var['nextPageToken'],
-					"response_from_google" => $var
-				);
+			$returnObj = $this->normalizeGoogObject($var['items'], $varObj['authStuff']['google'][0]['accounts'][0], $query, $returnObj);
+
+			if(isset($var['nextPageToken'])){
+				$returnObj['nextToken']['google']['next'] = $var['nextPageToken'];
 			}
+
+			return $returnObj;
 		}
 	}
 
-	function normalizeGoogObject($objArray, $account, $query){
+	function normalizeGoogObject($objArray, $account, $query, $returnObj){
 		//echo "normal goog";
-
 		$mediaArray = array();
 		for($k = 0; $k < count($objArray); $k++){
 			$obj = $objArray[$k];
@@ -655,15 +627,16 @@ class Search{
 			$manager = new Manager();
 			$builder = new googleObjectBuilder();
 			$manager->setBuilder($builder);
+
 			$manager->parseActivityObj($obj, $account);
-		
-			$item = $manager->getActivityObj();
-			
-			//print_r($item);
-			
-			$this->writeObject((array)$item, $query);
+
+			$item = array();
+			$item['_source'] = $manager->getActivityObj();
+
+			array_push($returnObj['hits']['hits'], $item);
 		}
-		sleep(2);
+
+		return $returnObj;
 	}
 
 	public function paginateService(){
@@ -683,7 +656,6 @@ class Search{
 			)
 		);
 
-		$returnObj = array();
 		foreach($varObj['checked'] as $key => $value){
 			if($key == "Facebook"){
 				if($varObj['checked'][$key] == true){
@@ -711,7 +683,7 @@ class Search{
 		return json_encode($returnObj);
 	}
 
-	public function paginateGoogle($varObj){
+	public function paginateGoogle($varObj, $returnObj){
 		//print_r($varObj);
 		$query = $varObj['query'];
 
@@ -739,20 +711,21 @@ class Search{
 			//print_r($res);
 			$var = json_decode($res, true);
 			
-			if(isset($var['error'])){
-				return array(
-					"next" => "",
-					"response_from_google" => $var
-				);
+			$returnObj = $this->normalizeGoogObject($var['items'], $varObj['authStuff']['google'][0]['accounts'][0], $query, $returnObj);
+
+			if(isset($var['nextPageToken'])){
+				$returnObj['nextToken']['google']['next'] = $var['nextPageToken'];
 			}
+
+			return $returnObj;
 		}else{
-			if(isset($var['items'])){
-				$this->normalizeGoogObject($var['items'], $varObj['authStuff']['google'][0]['accounts'][0], $query);
-				return array(
-					"next" => $var['nextPageToken'],
-					"response_from_google" => $var
-				);
+			$returnObj = $this->normalizeGoogObject($var['items'], $varObj['authStuff']['google'][0]['accounts'][0], $query, $returnObj);
+
+			if(isset($var['nextPageToken'])){
+				$returnObj['nextToken']['google']['next'] = $var['nextPageToken'];
 			}
+
+			return $returnObj;
 		}
 	}
 
