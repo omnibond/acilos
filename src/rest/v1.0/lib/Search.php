@@ -454,7 +454,7 @@ class Search{
 		//print_r($varObj);
 
 		$returnObj = array(
-			"hits" => array(
+			'hits' => array(
 				'hits' => array(
 
 				)
@@ -587,7 +587,7 @@ class Search{
 		$returnObj = $this->normalizeNewsFeedObj($response, $varObj['authStuff']['facebook'][0]['accounts'][0], $query, $returnObj);	    
 		
 		if(isset($next)){
-			$returnObj['nextToken']['facebook'] = $next;
+			$returnObj['nextToken']['facebook']['next'] = $next;
 		}
 
 		return $returnObj;
@@ -672,26 +672,37 @@ class Search{
 
 		//print_r($varObj);
 
+		$returnObj = array(
+			'hits' => array(
+				'hits' => array(
+
+				)
+			),
+			'nextToken' => array(
+
+			)
+		);
+
 		$returnObj = array();
 		foreach($varObj['checked'] as $key => $value){
 			if($key == "Facebook"){
 				if($varObj['checked'][$key] == true){
 					if(isset($varObj['nextToken']['facebook']['next'])){
-						$returnObj = $this->paginateFacebook($varObj);
+						$returnObj = $this->paginateFacebook($varObj, $returnObj);
 					}
 				}
 			}
 			if($key == "Twitter"){
 				if($varObj['checked'][$key] == true){
 					if(isset($varObj['nextToken']['twitter']['next']['max_id'])){
-						$returnObj = $this->paginateTwitter($varObj);
+						$returnObj = $this->paginateTwitter($varObj, $returnObj);
 					}
 				}
 			}
 			if($key == "Google"){
 				if($varObj['checked'][$key] == true){
 					if(isset($varObj['nextToken']['google']['next'])){
-						$returnObj = $this->paginateGoogle($varObj);
+						$returnObj = $this->paginateGoogle($varObj, $returnObj);
 					}
 				}
 			}
@@ -768,37 +779,13 @@ class Search{
 
 		$response = $response['data'];
 
-		//response
-		if(isset($array['errors'])){
-			print_r($array['errors'][0]['message']);
-			print_r($array['errors'][0]['code']);
+		$returnObj = $this->normalizeNewsFeedObj($response, $varObj['authStuff']['facebook'][0]['accounts'][0], $query, $returnObj);	    
 
-			return json_encode(array("Error" => $array['errors'][0]['message']));
-		}else{
-			$facebookData = $this->normalizeNewsFeedObj($response, $varObj['authStuff']['facebook'][0]['accounts'][0], $query, $returnObj);	    
+		if(isset($next)){
+			$returnObj['nextToken']['facebook']['next'] = $next;
 		}
 
-		if(isset($facebookData)){
-			if(isset($next)){
-				return array(
-					"hits" => $facebookData,
-					"facebook" => array(
-						"next" => $next
-					),
-					"response_from_facebook" => $response
-				);
-			}else{
-				return array(
-					"hits" => $facebookData,
-					"facebook" => array(
-						"next" => ""
-					),
-					"response_from_facebook" => $response
-				);
-			}
-		}else{
-			array("Error" => "There was an error normalizing the data");
-		}
+		return $returnObj;
 	}
 
 	function normalizeNewsFeedObj($objArray, $account, $query, $returnObj){

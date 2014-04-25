@@ -249,17 +249,9 @@ define([
 			postAddToList: function(from){
 				this.loading = true;
 
+				this.nextToken = this.feedDataObj['nextToken'];
 
-				this.paginateService(this.authStuff, this.feedName, this.checkedServices).then(lang.hitch(this, function(obj){
-
-					if(obj){
-						this.nextToken = obj;	
-					}
-
-					if(from < 0){
-						from = 0;
-					}
-
+				this.paginateService(this.authStuff, this.feedName, this.checkedServices, this.nextToken).then(lang.hitch(this, function(obj){
 					this.feedDataObj = obj;
 					this.buildView();
 				}));
