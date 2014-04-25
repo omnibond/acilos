@@ -43,6 +43,7 @@ define([
 
 		"app/SelEdgeToEdgeList",
 		"dojox/mobile/ListItem",
+		'dojox/mobile/ProgressIndicator',
 
 		"dojo/ready"
 
@@ -66,6 +67,7 @@ define([
 
 		EdgeToEdgeList,
 		ListItem,
+		ProgressIndicator,
 
 		ready
 	){
@@ -92,6 +94,10 @@ define([
 			},
 
 			postCreate: function(){
+				this.pi = new ProgressIndicator();
+				this.pi.placeAt(document.body);
+				this.pi.start();
+
 				this.arrayList = [];
 				this.arrayList.push(this.searchStarredClients().then(lang.hitch(this, function(obj){
 					console.log("STARCLIENTOBJ: ", obj);
@@ -105,7 +111,7 @@ define([
 						}
 					}
 				})));
-				this.arrayList.push(this.getFeedData(this.feedName, this.fromVar).then(lang.hitch(this, function(obj){
+				this.arrayList.push(this.getFeedData(this.feedName, this.authStuff, this.checkedServices).then(lang.hitch(this, function(obj){
 					console.log("obj inside the first getFeedData (postCreate) is: ", obj);
 					this.feedDataObj = obj;
 				})));
@@ -114,7 +120,7 @@ define([
 				})));
 
 				var defList = new DeferredList(this.arrayList);
-				defList.then(lang.hitch(this, this.buildView));		
+				defList.then(lang.hitch(this, this.buildView));	
 			},
 
 			buildView: function(){
@@ -237,33 +243,26 @@ define([
 					this.resize();
 				}
 				this.loading = false;
+				this.pi.stop();
 			},
 
-			postAddToList: function(from){	
-				console.log("THE NEW FROM: ", from);
+			postAddToList: function(from){
 				this.loading = true;
 
-				console.log("THIS.NEXTTOKEN IN PUBLICSCROLLER IS: ", this.nextToken);
 
-				//make sure this one function works for twitter and facebook
-				if(this.nextToken != ""){
-					//console.log(this.nextToken);
-					this.paginateService(this.nextToken, this.authStuff, this.feedName, this.checkedServices).then(lang.hitch(this, function(obj){
+				this.paginateService(this.authStuff, this.feedName, this.checkedServices).then(lang.hitch(this, function(obj){
 
-						if(obj){
-							this.nextToken = obj;	
-						}
+					if(obj){
+						this.nextToken = obj;	
+					}
 
-						if(from < 0){
-							from = 0;
-						}
-						console.log("THE NEW FROM2: ", from);
-						this.getFeedData(this.feedName, from).then(lang.hitch(this, function(obj){
-							this.feedDataObj = obj;
-							this.buildView();
-						}));
-					}));
-				}	
+					if(from < 0){
+						from = 0;
+					}
+
+					this.feedDataObj = obj;
+					this.buildView();
+				}));
 			},
 
 			getDate: function(epoch){

@@ -126,17 +126,17 @@ define([
 					for(var key in this.authObj){	
 						if(key == "facebook" && this.authObj[key][0]['accounts'].length > 0){
 							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
-								this.exists['Facebook'] = true;
+								this.exists['Facebook'] = false;
 							}
 						}
 						if(key == "twitter" && this.authObj[key][0]['accounts'].length > 0){
 							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
-								this.exists['Twitter'] = true;
+								this.exists['Twitter'] = false;
 							}
 						}
 						if(key == "google" && this.authObj[key][0]['accounts'].length > 0){
 							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
-								this.exists['Google'] = true;
+								this.exists['Google'] = false;
 							}
 						}
 						/*
@@ -331,11 +331,6 @@ define([
 					onClick: lang.hitch(this, function(){
 						this.fromVar = 0;
 
-						if(this.pi){
-							this.pi.destroyRecursive();
-							this.pi = null;
-						}
-
 						if(this.list){
 							this.list.destroyRecursive();
 							this.postAddArray = [];
@@ -347,10 +342,6 @@ define([
 							this.infoList = null;
 						}
 
-						this.pi = new ProgressIndicator();
-						this.pi.placeAt(document.body);
-						this.pi.start();
-
 						this.checked = {};
 						for(var d=0; d < this.services.currentCheckBoxes.length; d++){
 							this.checked[this.services.currentCheckBoxes[d].label] = this.services.currentCheckBoxes[d].checked;
@@ -358,33 +349,23 @@ define([
 
 						console.log("checked outside", this.checked);
 
-						this.getPublicQueryObjects(this.queryBox.get("value"), this.authObj, this.checked).then(lang.hitch(this, function(obj, checked){
-
-							console.log("obj inside first getPublicQueryObjects is: ", obj);
-							console.log("checked inside", this.checked);
-
-							this.list = new PublicScroller({
-								feedName: this.queryBox.get("value"),
-								postAddArray: this.postAddArray,
-								getFeedData: lang.hitch(this, this.getPublicDBObjects),
-								paginateService: lang.hitch(this, this.paginateService),
-								nextToken: obj,
-								blastView: this.blastView,
-								checkedServices: this.checked,
-								authStuff: this.authObj,
-								getNextGroup: lang.hitch(this, this.getNextGroup),
-								setStarred: lang.hitch(this, this.setStarred),
-								setStarredClient: lang.hitch(this, this.setStarredClient),
-								fromVar: this.fromVar,
-								FeedViewID: this.id,
-								view: this
-							});			
-							this.addChild(this.list);
-							this.resize();
-
-							this.pi.stop();
-
-						}))
+						this.list = new PublicScroller({
+							feedName: this.queryBox.get("value"),
+							postAddArray: this.postAddArray,
+							getFeedData: lang.hitch(this, this.getPublicQueryObjects),
+							paginateService: lang.hitch(this, this.paginateService),
+							blastView: this.blastView,
+							checkedServices: this.checked,
+							authStuff: this.authObj,
+							getNextGroup: lang.hitch(this, this.getNextGroup),
+							setStarred: lang.hitch(this, this.setStarred),
+							setStarredClient: lang.hitch(this, this.setStarredClient),
+							fromVar: this.fromVar,
+							FeedViewID: this.id,
+							view: this
+						});			
+						this.addChild(this.list);
+						this.resize();
 					})
 				});
 
@@ -450,11 +431,6 @@ define([
 				if(this.infoList){
 					this.infoList.destroyRecursive();
 					this.infoList = null;
-				}
-
-				if(this.pi){
-					this.pi.destroyRecursive();
-					this.pi = null;
 				}
 
 				if(this.whiteoutDiv){

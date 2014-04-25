@@ -453,21 +453,30 @@ class Search{
 		//get checked and call thew two functions for what is checked
 		//print_r($varObj);
 
-		$returnObj = array();
+		$returnObj = array(
+			"hits" => array(
+				'hits' => array(
+
+				)
+			),
+			'nextToken' => array(
+
+			)
+		);
 		foreach($varObj['checked'] as $key => $value){
 			if($key == "Facebook"){
 				if($varObj['checked'][$key] == true){
-					$returnObj['facebook'] = $this->queryFacebook($varObj);
+					$returnObj = $this->queryFacebook($varObj, $returnObj);
 				}
 			}
 			if($key == "Twitter"){
 				if($varObj['checked'][$key] == true){
-					$returnObj['twitter'] = $this->queryTwitter($varObj);
+					$returnObj = $this->queryTwitter($varObj, $returnObj);
 				}
 			}
 			if($key == "Google"){
 				if($varObj['checked'][$key] == true){
-					$returnObj['google'] = $this->queryGoogle($varObj);
+					$returnObj = $this->queryGoogle($varObj, $returnObj);
 				}
 			}
 		}
@@ -545,7 +554,7 @@ class Search{
 		return json_encode($res);
 	}
 
-	public function queryFacebook($varObj){
+	public function queryFacebook($varObj, $returnObj){
 		//echo "queryFacebook ";
 	//	$var = file_get_contents("php://input");
 	//	$varObj = json_decode($var, true);
@@ -575,27 +584,13 @@ class Search{
 
 		$response = $response['data'];
 
-		//response
-		if(isset($array['errors'])){
-			print_r($array['errors'][0]['message']);
-			print_r($array['errors'][0]['code']);
-
-			return json_encode(array("Error" => $array['errors'][0]['message']));
-		}else{
-			$this->normalizeNewsFeedObj($response, $varObj['authStuff']['facebook'][0]['accounts'][0], $query);	    
+		$returnObj = $this->normalizeNewsFeedObj($response, $varObj['authStuff']['facebook'][0]['accounts'][0], $query, $returnObj);	    
+		
+		if(isset($next)){
+			$returnObj['nextToken']['facebook'] = $next;
 		}
 
-		if(isset($next)){
-			return array(
-				"next" => $next,
-				"response_from_facebook" => $response
-			);
-		}else{
-			return array(
-				"next" => "",
-				"response_from_facebook" => $response
-			);
-		}	
+		return $returnObj;
 	}
 
 	public function queryGoogle($varObj){
@@ -682,21 +677,21 @@ class Search{
 			if($key == "Facebook"){
 				if($varObj['checked'][$key] == true){
 					if(isset($varObj['nextToken']['facebook']['next'])){
-						$returnObj['facebook'] = $this->paginateFacebook($varObj);
+						$returnObj = $this->paginateFacebook($varObj);
 					}
 				}
 			}
 			if($key == "Twitter"){
 				if($varObj['checked'][$key] == true){
 					if(isset($varObj['nextToken']['twitter']['next']['max_id'])){
-						$returnObj['twitter'] = $this->paginateTwitter($varObj);
+						$returnObj = $this->paginateTwitter($varObj);
 					}
 				}
 			}
 			if($key == "Google"){
 				if($varObj['checked'][$key] == true){
 					if(isset($varObj['nextToken']['google']['next'])){
-						$returnObj['google'] = $this->paginateGoogle($varObj);
+						$returnObj = $this->paginateGoogle($varObj);
 					}
 				}
 			}
@@ -750,7 +745,7 @@ class Search{
 		}
 	}
 
-	public function paginateFacebook($varObj){
+	public function paginateFacebook($varObj, $returnObj){
 		//print_r($varObj);
 		//make the facebook request
 		$url = $varObj['nextToken']['facebook']['next'];
@@ -780,23 +775,33 @@ class Search{
 
 			return json_encode(array("Error" => $array['errors'][0]['message']));
 		}else{
-			$this->normalizeNewsFeedObj($response, $varObj['authStuff']['facebook'][0]['accounts'][0], $query);	    
+			$facebookData = $this->normalizeNewsFeedObj($response, $varObj['authStuff']['facebook'][0]['accounts'][0], $query, $returnObj);	    
 		}
 
-		if(isset($next)){
-			return array(
-				"next" => $next,
-				"response_from_facebook" => $response
-			);
+		if(isset($facebookData)){
+			if(isset($next)){
+				return array(
+					"hits" => $facebookData,
+					"facebook" => array(
+						"next" => $next
+					),
+					"response_from_facebook" => $response
+				);
+			}else{
+				return array(
+					"hits" => $facebookData,
+					"facebook" => array(
+						"next" => ""
+					),
+					"response_from_facebook" => $response
+				);
+			}
 		}else{
-			return array(
-				"next" => "",
-				"response_from_facebook" => $response
-			);
+			array("Error" => "There was an error normalizing the data");
 		}
 	}
 
-	function normalizeNewsFeedObj($objArray, $account, $query){
+	function normalizeNewsFeedObj($objArray, $account, $query, $returnObj){
 		//echo "normal face stuff"; 
 		//print_R($objArray);
 		for($k = 0; $k < count($objArray); $k++){
@@ -810,12 +815,13 @@ class Search{
 
 			$manager->parseActivityObj($obj, $account);
 
-			$item = $manager->getActivityObj();
+			$item = array();			
+			$item['_source'] = $manager->getActivityObj();
 
-			//print_r($item); 
-
-			$this->writeObject((array)$item, $query);
+			array_push($returnObj['hits']['hits'], $item);
 		}
+
+		return $returnObj;
 	}
 
 	public function getGeoLocation($loc){
