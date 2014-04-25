@@ -460,6 +460,9 @@ class Search{
 				}
 			}
 		}
+		
+		usort($returnObj['hits']['hits'], function($a, $b){ return intval($a['_source']->published) < intval($b['_source']->published); });
+	
 		return json_encode($returnObj);
 	}
 
@@ -679,6 +682,8 @@ class Search{
 				}
 			}
 		}
+		
+		usort($returnObj['hits']['hits'], function($a, $b){ return intval($a['_source']->published) < intval($b['_source']->published); });
 
 		return json_encode($returnObj);
 	}
