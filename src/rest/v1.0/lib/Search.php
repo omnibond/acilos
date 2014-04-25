@@ -279,7 +279,9 @@ class Search{
 			$id = $status['statuses'][$x]['id'];
 		}
 
-		$max_id = $id - 1;		
+		if(isset($id)){
+			$max_id = $id - 1;
+		}		
 
 		$array = $status['statuses'];
 
@@ -331,7 +333,9 @@ class Search{
 			$id = $status['statuses'][$x]['id'];
 		}
 
-		$max_id = $id - 1;
+		if(isset($id)){
+			$max_id = $id - 1;
+		}
 
 		$array = $status['statuses'];
 
