@@ -209,6 +209,18 @@ define(['dojo/_base/declare',
 						this.buttons[x].domNode.appendChild(divHelpButton);	
 					}
 
+					if(this.buttons[x]['name'] == "publicButton"){
+						var divPublicButton = domConstruct.create("div", {innerHTML: "P", "class": "fontSize25 fontDiv30", title: "Query public data"});
+
+						this.buttons[x].domNode.appendChild(divPublicButton);	
+					}
+
+					if(this.buttons[x]['name'] == "localButton"){
+						var divLocalButton = domConstruct.create("div", {innerHTML: "L", "class": "fontSize25 fontDiv30", title: "Query your local data"});
+
+						this.buttons[x].domNode.appendChild(divLocalButton);	
+					}
+
 					if(this.buttons[x]['right'] == "true"){
 						domClass.add(this.buttons[x].domNode, "floatRightButton");
 					}

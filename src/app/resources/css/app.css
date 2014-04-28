@@ -881,6 +881,9 @@ html.mobile,
 .dmActiveModule_mainFeed .selectorButton {
   background: #39c463;
 }
+.dmActiveModule_mainFeed .darkenedButton {
+  background: #174d27 !important;
+}
 .dmSelectedPrimaryNavItem_mainFeed .selectorButton {
   background: #39c463;
 }
@@ -976,6 +979,9 @@ html.mobile,
 }
 .dmActiveModule_feeds .selectorButton {
   background: #f66733;
+}
+.dmActiveModule_feeds .darkenedButton {
+  background: #8a2906 !important;
 }
 .dmSelectedPrimaryNavItem_feeds .selectorButton {
   background: #f66733;
@@ -1073,6 +1079,9 @@ html.mobile,
 .dmActiveModule_people .selectorButton {
   background: #e32252;
 }
+.dmActiveModule_people .darkenedButton {
+  background: #600c21 !important;
+}
 .dmSelectedPrimaryNavItem_people .selectorButton {
   background: #e32252;
 }
@@ -1168,6 +1177,9 @@ html.mobile,
 }
 .dmActiveModule_favorites .selectorButton {
   background: #41cccc;
+}
+.dmActiveModule_favorites .darkenedButton {
+  background: #195b5b !important;
 }
 .dmSelectedPrimaryNavItem_favorites .selectorButton {
   background: #41cccc;
@@ -1265,6 +1277,9 @@ html.mobile,
 .dmActiveModule_query .selectorButton {
   background: #8f5929;
 }
+.dmActiveModule_query .darkenedButton {
+  background: #180f07 !important;
+}
 .dmSelectedPrimaryNavItem_query .selectorButton {
   background: #8f5929;
 }
@@ -1360,6 +1375,9 @@ html.mobile,
 }
 .dmActiveModule_analytics .selectorButton {
   background: #8868e8;
+}
+.dmActiveModule_analytics .darkenedButton {
+  background: #3a189f !important;
 }
 .dmSelectedPrimaryNavItem_analytics .selectorButton {
   background: #8868e8;
@@ -1457,6 +1475,9 @@ html.mobile,
 .dmActiveModule_post .selectorButton {
   background: #0066ff;
 }
+.dmActiveModule_post .darkenedButton {
+  background: #002966 !important;
+}
 .dmSelectedPrimaryNavItem_post .selectorButton {
   background: #0066ff;
 }
@@ -1553,6 +1574,9 @@ html.mobile,
 .dmActiveModule_settings .selectorButton {
   background: #ffcc00;
 }
+.dmActiveModule_settings .darkenedButton {
+  background: #665200 !important;
+}
 .dmSelectedPrimaryNavItem_settings .selectorButton {
   background: #ffcc00;
 }
@@ -1648,6 +1672,9 @@ html.mobile,
 }
 .dmActiveModule_help .selectorButton {
   background: #b33da5;
+}
+.dmActiveModule_help .darkenedButton {
+  background: #41163c !important;
 }
 .dmSelectedPrimaryNavItem_help .selectorButton {
   background: #b33da5;

@@ -36,7 +36,7 @@ define(['dojo/_base/declare',
 		'app/feeds/DeleteFeed',
 		'app/feeds/EditFeed',
 		'app/feeds/EditFeedView',
-		'app/feeds/newMainView',
+		'app/feeds/newCreateFeedView',
 		'app/mainFeed/BlastView'
 ], function(
 	declare, 
@@ -52,7 +52,7 @@ define(['dojo/_base/declare',
 	DeleteFeed, 
 	EditFeed, 
 	EditFeedView,
-	newMainView,
+	newCreateFeedView,
 	BlastView
 ) {
 	return declare([Module], {
@@ -125,8 +125,8 @@ define(['dojo/_base/declare',
 				getFeedList: lang.hitch(this, this.getFeedList),
 				getPublicQueryObject: lang.hitch(this, this.getPublicQueryObject)
 			});
-			this.newMainView = new newMainView({
-				route: '/newMainView',
+			this.newCreateFeedView = new newCreateFeedView({
+				route: '/newCreateFeedView',
 
 				getFeedList: lang.hitch(this, this.getFeedList),
 				getServiceCreds: lang.hitch(this, this.getServiceCreds),
@@ -143,7 +143,7 @@ define(['dojo/_base/declare',
 			this.registerView(this.EditFeed);
 			this.registerView(this.EditFeedView);
 			this.registerView(this.blastView);
-			this.registerView(this.newMainView);
+			this.registerView(this.newCreateFeedView);
 		},
 		
 		deleteFeedList: function(feedName){

@@ -109,7 +109,7 @@ define([
 			},
 
 			activate: function() {				
-				topic.publish("/dojo-mama/updateSubNav", {back: '/', title: "Search Public Data"} );
+				topic.publish("/dojo-mama/updateSubNav", {back: '/feeds', title: "Search Public Data"} );
 
 				this.fromVar = 0;
 				on(this.domNode, "scroll", lang.hitch(this, this.dataPoints));
@@ -326,11 +326,6 @@ define([
 					onClick: lang.hitch(this, function(){
 						this.fromVar = 0;
 
-						if(this.pi){
-							this.pi.destroyRecursive();
-							this.pi = null;
-						}
-
 						if(this.list){
 							this.list.destroyRecursive();
 							this.postAddArray = [];
@@ -342,10 +337,6 @@ define([
 							this.infoList = null;
 						}
 
-						this.pi = new ProgressIndicator();
-						this.pi.placeAt(document.body);
-						this.pi.start();
-
 						this.checked = {};
 						for(var d=0; d < this.services.currentCheckBoxes.length; d++){
 							this.checked[this.services.currentCheckBoxes[d].label] = this.services.currentCheckBoxes[d].checked;
@@ -353,33 +344,54 @@ define([
 
 						console.log("checked outside", this.checked);
 
-						this.getPublicQueryObjects(this.queryBox.get("value"), this.authObj, this.checked).then(lang.hitch(this, function(obj, checked){
+						this.list = new PublicScroller({
+							feedName: this.queryBox.get("value"),
+							postAddArray: this.postAddArray,
+							getFeedData: lang.hitch(this, this.getPublicQueryObjects),
+							paginateService: lang.hitch(this, this.paginateService),
+							blastView: this.blastView,
+							checkedServices: this.checked,
+							authStuff: this.authObj,
+							getNextGroup: lang.hitch(this, this.getNextGroup),
+							setStarred: lang.hitch(this, this.setStarred),
+							setStarredClient: lang.hitch(this, this.setStarredClient),
+							fromVar: this.fromVar,
+							FeedViewID: this.id,
+							view: this
+						});			
+						this.addChild(this.list);
+						this.resize();
+					})
+				});
 
-							console.log("obj inside first getPublicQueryObjects is: ", obj);
-							console.log("checked inside", this.checked);
+				this.publicFlag = "false";
+				this.localFlag = "false";
 
-							this.list = new PublicScroller({
-								feedName: this.queryBox.get("value"),
-								postAddArray: this.postAddArray,
-								getFeedData: lang.hitch(this, this.getPublicDBObjects),
-								paginateService: lang.hitch(this, this.paginateService),
-								nextToken: obj,
-								blastView: this.blastView,
-								checkedServices: this.checked,
-								authStuff: this.authObj,
-								getNextGroup: lang.hitch(this, this.getNextGroup),
-								setStarred: lang.hitch(this, this.setStarred),
-								setStarredClient: lang.hitch(this, this.setStarredClient),
-								fromVar: this.fromVar,
-								FeedViewID: this.id,
-								view: this
-							});			
-							this.addChild(this.list);
-							this.resize();
+				this.publicButton = new Button({
+					"name": "publicButton",
+					"right": "true",
+					onClick: lang.hitch(this, function(){
+						if(this.publicFlag == "false"){
+							domClass.add(this.publicButton.domNode, "darkenedButton");
+							this.publicFlag = "true";
+						}else{
+							domClass.remove(this.publicButton.domNode, "darkenedButton");
+							this.publicFlag = "false";
+						}
+					})
+				});
 
-							this.pi.stop();
-
-						}))
+				this.localButton = new Button({
+					"name": "localButton",
+					"right": "true",
+					onClick: lang.hitch(this, function(){
+						if(this.localFlag == "false"){
+							domClass.add(this.localButton.domNode, "darkenedButton");
+							this.localFlag = "true";
+						}else{
+							domClass.remove(this.localButton.domNode, "darkenedButton");
+							this.localFlag = "false";
+						}
 					})
 				});
 
@@ -396,7 +408,7 @@ define([
 
 				this.selectorItem = new SelectorBar({
 					divs: [this.searchBoxQueryButtonHolder],
-					buttons: [this.scrollButton, this.saveButton],
+					buttons: [this.scrollButton, this.saveButton, this.publicButton, this.localButton],
 					serviceSelectors: [this.services],
 					style: "text-align: center"
 				});
