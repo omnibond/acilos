@@ -111,6 +111,8 @@ define([
 			activate: function() {				
 				topic.publish("/dojo-mama/updateSubNav", {back: '/feeds', title: "Search Public Data"} );
 
+				
+
 				if(this.infoList){
 					this.infoList.destroyRecursive();
 					this.infoList = null;

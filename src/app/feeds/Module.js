@@ -37,6 +37,7 @@ define(['dojo/_base/declare',
 		'app/feeds/EditFeed',
 		'app/feeds/EditFeedView',
 		'app/feeds/newCreateFeedView',
+		'app/feeds/newEditFeedView',
 		'app/mainFeed/BlastView'
 ], function(
 	declare, 
@@ -53,6 +54,7 @@ define(['dojo/_base/declare',
 	EditFeed, 
 	EditFeedView,
 	newCreateFeedView,
+	newEditFeedView,
 	BlastView
 ) {
 	return declare([Module], {
@@ -116,7 +118,8 @@ define(['dojo/_base/declare',
 			this.EditFeed = new EditFeed({
 				route: "/EditFeed",
 				
-				getFeedList: lang.hitch(this, this.getFeedList)
+				getFeedList: lang.hitch(this, this.getFeedList),
+				getPublicQueryObject: lang.hitch(this, this.getPublicQueryObject)
 				//May need to pass other functions in later
 			});
 			this.rootView = new MainView({
@@ -136,6 +139,17 @@ define(['dojo/_base/declare',
 				paginateService: lang.hitch(this, this.paginateService),
 				getPublicQueryObject: lang.hitch(this, this.getPublicQueryObject)
 			});
+			this.newEditFeedView = new newEditFeedView({
+				route: '/newEditFeedView/:feedTitle',
+
+				getFeedList: lang.hitch(this, this.getFeedList),
+				getServiceCreds: lang.hitch(this, this.getServiceCreds),
+				getPublicQueryObjects: lang.hitch(this, this.getPublicQueryObjects),
+				writeQueryTerm: lang.hitch(this, this.writeQueryTerm),
+				getPublicDBObjects: lang.hitch(this, this.getPublicDBObjects),
+				paginateService: lang.hitch(this, this.paginateService),
+				getPublicQueryObject: lang.hitch(this, this.getPublicQueryObject)
+			});
 			this.registerView(this.rootView);
 			this.registerView(this.FeedView);
 			this.registerView(this.CreateFeedView);
@@ -144,6 +158,7 @@ define(['dojo/_base/declare',
 			this.registerView(this.EditFeedView);
 			this.registerView(this.blastView);
 			this.registerView(this.newCreateFeedView);
+			this.registerView(this.newEditFeedView);
 		},
 		
 		deleteFeedList: function(feedName){

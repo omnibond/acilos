@@ -127,7 +127,7 @@ define(['dojo/_base/declare',
 				this.selectorItem.placeAt(this.domNode.parentNode);
 			}
 			
-			if(obj == null || obj.length == 0){
+			/*if(obj == null || obj.length == 0){
 				var item = new ListItem({
 					label: "No feeds have been saved yet"
 				});	
@@ -145,27 +145,45 @@ define(['dojo/_base/declare',
 					this.mainList.addChild(item);	
 				}
 			}
+			this.addChild(this.mainList);*/
+
+			if(obj == null || obj.length == 0){
+				var item = new ListItem({
+					label: "No feeds have been saved yet"
+				});	
+				this.mainList.addChild(item);	
+			}else{
+				for(var key in obj){
+					var item = new ListItem({
+						label: key,
+						clickable: true,
+						onClick: lang.hitch(this, function(obj, key){
+							this.router.go("/newFeedView/" + key);
+						}, obj, key)
+					});
+
+					this.mainList.addChild(item);
+				}
+			}
 			this.addChild(this.mainList);
-			
 		},
 		
 		activate: function(e){
 			topic.publish("/dojo-mama/updateSubNav", {back: '/', title: "Customize new feeds"} );
 				
-			if(this.mainList){
+			/*if(this.mainList){
 				this.mainList.destroyRecursive();
 				this.getFeedList().then(lang.hitch(this, this.buildMainList));
 			}else{
 				this.getFeedList().then(lang.hitch(this, this.buildMainList));
-			}
-			
-		},
+			}*/
 
-		postCreate: function(){
-			this.getPublicQueryObject().then(lang.hitch(this, function(obj){
-				this.publicQueryObj = obj;
-				console.log("The public query object is: ", this.publicQueryObj);
-			}));
+			if(this.mainList){
+				this.mainList.destroyRecursive();
+				this.getPublicQueryObject().then(lang.hitch(this, this.buildMainList));
+			}else{
+				this.getPublicQueryObject().then(lang.hitch(this, this.buildMainList));
+			}
 		}
 	})
 });
