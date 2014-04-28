@@ -225,9 +225,9 @@ define(['dojo/_base/declare',
 			params = {from: from, query: query};
 			return xhrManager.send('POST', 'rest/v1.0/Search/getPublicDBObjects', params);
 		},
-
-		paginateService: function(nextToken, authStuff, query, checked){
-			params = {nextToken: nextToken, authStuff: authStuff, query: query, checked: checked};
+		
+		paginateService: function(authStuff, query, checked, nextToken){
+			params = {authStuff: authStuff, query: query, checked: checked, nextToken: nextToken};
 			console.log("paginateService params are: ", params);
 			return xhrManager.send('POST', 'rest/v1.0/Search/paginateService', params);
 		},

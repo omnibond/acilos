@@ -585,7 +585,7 @@ class Search{
 
 		$access_token = $varObj['authStuff']['google'][0]['accounts'][0]['accessToken'];
 		
-		$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&access_token='.$access_token.'&query='.$query;
+		$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&access_token='.$access_token.'&query='.urlencode($query);
 		$ch = curl_init($url);
 
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -596,7 +596,7 @@ class Search{
 
 		if(isset($var['error'])){
 			$token = refreshGoogToken($varObj['authStuff']['google'][0]['accounts'][0]['uuid']);
-			$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&access_token='.$token.'&query='.$query;
+			$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&access_token='.$token.'&query='.urlencode($query);
 			$ch = curl_init($url);
 
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -700,7 +700,7 @@ class Search{
 
 		$next = $varObj['nextToken']['google']['next'];
 		
-        $url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&pageToken='.$next.'&access_token='.$access_token.'&query='.$query;
+        $url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&pageToken='.$next.'&access_token='.$access_token.'&query='.urlencode($query);
 		$ch = curl_init($url);
 
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -711,7 +711,7 @@ class Search{
 
 		if(isset($var['error'])){
 			$token = refreshGoogToken($varObj['authStuff']['google'][0]['accounts'][0]['uuid']);
-			$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&access_token='.$token.'&query='.$query;
+			$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&access_token='.$token.'&query='.urlencode($query);
 			$ch = curl_init($url);
 
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

@@ -110,8 +110,11 @@ define([
 
 			activate: function() {				
 				topic.publish("/dojo-mama/updateSubNav", {back: '/feeds', title: "Search Public Data"} );
+			},
 
+			postCreate: function(){
 				this.fromVar = 0;
+				
 				on(this.domNode, "scroll", lang.hitch(this, this.dataPoints));
 				
 				this.getServiceCreds().then(lang.hitch(this, function(obj){
@@ -121,17 +124,17 @@ define([
 					for(var key in this.authObj){	
 						if(key == "facebook" && this.authObj[key][0]['accounts'].length > 0){
 							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
-								this.exists['Facebook'] = true;
+								this.exists['Facebook'] = false;
 							}
 						}
 						if(key == "twitter" && this.authObj[key][0]['accounts'].length > 0){
 							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
-								this.exists['Twitter'] = true;
+								this.exists['Twitter'] = false;
 							}
 						}
 						if(key == "google" && this.authObj[key][0]['accounts'].length > 0){
 							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
-								this.exists['Google'] = true;
+								this.exists['Google'] = false;
 							}
 						}
 						/*
@@ -217,33 +220,6 @@ define([
 						}
 					})
 				});*/
-
-				this.helpButton = new Button({
-					"name": "helpButton",
-					onClick: lang.hitch(this, function(){
-						this.dialog = new Dialog({
-							title: "Help",
-							draggable: false,
-							"class": "helpDijitDialog",
-							"style": "height: 290px !important; overflow: scroll !important",
-							onHide: lang.hitch(this, function(){
-								if(this.whiteoutDiv){
-									document.body.removeChild(this.whiteoutDiv);
-									this.whiteoutDiv = null;
-								}
-							})
-						});
-
-						var dialogDiv = domConstruct.create("div", {innerHTML: "<span class='helpTitle'>Normal Search</span><br>Example: red hat<br><br><span class='helpTitle'>Exact Search</span><br>Put \"quotes\" around what you would like to search for. Example: \"the red hat\"<br><br><span class='helpTitle'>How it works</span><br>Clicking the button on the left will query your database for stored search results from Facebook. Clicking the \"go\" button will search live data from Facebook"});
-
-						this.whiteoutDiv = domConstruct.create("div", {"class": "whiteoutDiv"});
-
-						this.dialog.set("content", dialogDiv);
-						this.dialog.show();
-
-						document.body.appendChild(this.whiteoutDiv);
-					})
-				});
 
 				this.scrollButton = new Button({
 					"name": "scrollButton",
@@ -462,11 +438,6 @@ define([
 				if(this.selectorItem){
 					this.selectorItem.destroyRecursive();
 					this.selectorItem = null;
-				}
-
-				if(this.pi){
-					this.pi.destroyRecursive();
-					this.pi = null;
 				}
 
 				if(this.whiteoutDiv){
