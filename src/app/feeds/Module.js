@@ -155,7 +155,7 @@ define(['dojo/_base/declare',
 				getPublicQueryObject: lang.hitch(this, this.getPublicQueryObject)
 			});
 			this.newFeedView = new newFeedView({
-				route: '/newFeedView/:feedTitle',
+				route: '/newFeedView/:feedTitle/:queryTerm',
 
 				getFeedList: lang.hitch(this, this.getFeedList),
 				getServiceCreds: lang.hitch(this, this.getServiceCreds),

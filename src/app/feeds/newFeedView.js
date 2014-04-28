@@ -71,15 +71,15 @@ define(['dojo/_base/declare',
 			this.fromVar = 0;
 		},
 		
-		buildFeedList: function(feedObj){
+		buildFeedList: function(params, obj){
 			kernel.global.feedCount[this.id] = {};
 			kernel.global.feedCount[this.id].count = 0;
 			kernel.global.feedCount[this.id].services = {"Twitter": "false", "Facebook": "false", "Instagram": "false", "LinkedIn": "false"};
 				
-			console.log(feedObj);
+			console.log(params);
 			
-			if(feedObj['error']){
-				console.log(feedObj['error']);
+			if(params['error']){
+				console.log(params['error']);
 				return;
 			}
 			
@@ -88,9 +88,9 @@ define(['dojo/_base/declare',
 			}
 			
 			this.list = new SearchScroller({
-				feedName: feedObj,
+				feedName: params.queryTerm,
 				blastView: this.blastView,
-				getFeedData: lang.hitch(this, this.checkSpecificFeedList),
+				getFeedData: lang.hitch(this, this.getPublicDBObjects),
 				setStarred: lang.hitch(this, this.setStarred),
 				setStarredClient: lang.hitch(this, this.setStarredClient),
 				fromVar: this.fromVar,
@@ -139,10 +139,18 @@ define(['dojo/_base/declare',
 		
 		activate: function(e){
 			topic.publish("/dojo-mama/updateSubNav", {back: '/feeds', title: e.params.feedName} );
+
+			console.log("e.params: ", e.params);
+
+			var queryTerm = e.params.queryTerm;
 			
-			this.getSpecificFeedList(e.params.feedName).then(lang.hitch(this, this.buildFeedList));
+			//this.getSpecificFeedList(e.params.feedName).then(lang.hitch(this, this.buildFeedList));
+
+			this.getPublicDBObjects(queryTerm, this.fromVar).then(lang.hitch(this, function(obj){
+				this.buildFeedList(e.params, obj);
+			}));
+
 			on(this.domNode, "scroll", lang.hitch(this, this.dataPoints));
-			
 		},
 
 		deactivate: function(){

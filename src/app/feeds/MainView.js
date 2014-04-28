@@ -158,7 +158,7 @@ define(['dojo/_base/declare',
 						label: key,
 						clickable: true,
 						onClick: lang.hitch(this, function(obj, key){
-							this.router.go("/newFeedView/" + key);
+							this.router.go("/newFeedView/" + key + "/" + obj[key]['terms']);
 						}, obj, key)
 					});
 

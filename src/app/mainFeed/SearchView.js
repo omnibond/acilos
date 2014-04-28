@@ -169,7 +169,7 @@ define([
 				});
 				this.searchBox = new TextBox({
 					placeHolder: "Enter a term to search",
-					style: "height:19px; vertical-align: top; margin-right: 5px"
+					style: "height:19px; vertical-align: top; margin-right: 5px; margin-top: 5px"
 				});
 				this.searchButton = new Button({
 					"name": "searchButton",
