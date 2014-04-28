@@ -63,7 +63,7 @@ define(['dojo/_base/declare',
 ) {
 	return declare([ModuleScrollableView], {		
 		
-		buildMainList: function(obj){
+		/*buildMainList: function(obj){
 			console.log("buildMainList: ", obj);
 			
 			this.mainList = new EdgeToEdgeList({
@@ -96,19 +96,54 @@ define(['dojo/_base/declare',
 			}
 			this.addChild(this.mainList);
 			
+		},*/
+
+		buildMainList: function(obj){
+			console.log("buildMainList: ", obj);
+
+			this.mainList = new EdgeToEdgeList({
+				
+			});
+
+			if(obj == null || obj.length == 0){
+				var item = new ListItem({
+					label: "No feeds have been saved yet"
+				});	
+				this.mainList.addChild(item);	
+			}else{
+				for(var key in obj){
+					var item = new ListItem({
+						label: key,
+						clickable: true,
+						onClick: lang.hitch(this, function(obj, key){
+							this.deletePublicQueryObjectTerm(key).then(lang.hitch(this, function(){
+								this.router.go("/");
+							}));
+						}, obj, key)
+					});
+
+					this.mainList.addChild(item);
+				}
+			}
+			this.addChild(this.mainList);
 		},
 		
 		activate: function(e){
 			topic.publish("/dojo-mama/updateSubNav", {back: '/feeds', title: "Select a feed to delete"} );
 				
-			if(this.mainList){
+			/*if(this.mainList){
 				this.mainList.destroyRecursive();
 				this.getFeedList().then(lang.hitch(this, this.buildMainList));
 			}else{
 				this.getFeedList().then(lang.hitch(this, this.buildMainList));
+			}*/
+
+			if(this.mainList){
+				this.mainList.destroyRecursive();
+				this.getPublicQueryObject().then(lang.hitch(this, this.buildMainList));
+			}else{
+				this.getPublicQueryObject().then(lang.hitch(this, this.buildMainList));
 			}
-			
 		}
-		
 	})
 });

@@ -44,7 +44,9 @@ class PublicQuery{
 			$feeds = array();
 
 			foreach($varObj['services'] as $key => $value){
-				array_push($services, $key);
+				if($varObj['services'][$key] == true){
+					array_push($services, $key);
+				}
 			}
 
 			for($x = 0; $x < count($varObj['feeds']); $x++){
@@ -65,7 +67,9 @@ class PublicQuery{
 			$feeds = array();
 
 			foreach($varObj['services'] as $key => $value){
-				array_push($services, $key);
+				if($varObj['services'][$key] == true){
+					array_push($services, $key);
+				}
 			}
 
 			for($x = 0; $x < count($varObj['feeds']); $x++){
@@ -91,5 +95,26 @@ class PublicQuery{
 		$var = file_get_contents($file);
 
 		return $var;
+	}
+
+	public function deletePublicQueryObjectTerm(){
+		$var = file_get_contents("php://input");
+		$fileName = "../../publicQueryTermObj.json";
+
+		$param = json_decode($var, true);
+
+		//print_r($param);
+
+		$term = $param['term'];
+
+		$feedList = file_get_contents($fileName);
+		$obj = json_decode($feedList, true);
+
+		if(isset($obj[$term])){
+			unset($obj[$term]);
+		}
+
+		file_put_contents("../../publicQueryTermObj.json", json_encode($obj));
+		return json_encode(array("success" => "success"));
 	}
 }
