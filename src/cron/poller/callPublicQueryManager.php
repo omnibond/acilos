@@ -79,6 +79,7 @@ function writeObject($obj, $query, $feeds){
 			$obj['isFavorited'] = $exists['isFavorited'];
 		}
 		$obj['serviceQuery'] = $query;
+		$obj['dataLocation'] = "public";
 
 		$grr = $es->index($obj, $obj['id']);
 		#print_r($grr . " ::index:: " . $feeds[$g]);

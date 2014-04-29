@@ -348,10 +348,26 @@ define([
 					}
 				}, obj);
 				
+				this.localeItem = new ListItem({
+					variableHeight: true,
+					"class": "starItemClass"
+				});
+				if(obj.dataLocation == "local"){
+					var locale = "L";
+				}else{
+					var locale = "P";
+				}
+				this.locale = new domConstruct.create("div", {
+					"class": "localeClass",
+					innerHTML: locale
+				});
+				
 				this.starItem.domNode.appendChild(this.star);
 				this.starItem.domNode.appendChild(this.starClient);
+				this.localeItem.domNode.appendChild(this.locale);
 				this.roundLeft.addChild(this.picItem);
 				this.roundLeft.addChild(this.starItem);
+				this.roundLeft.addChild(this.localeItem);
 			//LeftPane/RoundRect
 				
 			//RightPane/RoundRect

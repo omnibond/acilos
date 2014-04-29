@@ -128,7 +128,7 @@ if [ "$CRONGREP" = "" ]; then
 	echo "no socialreader crons were found... adding cronjobs"
 
 	(crontab -l 2>/dev/null; echo "*/5 * * * * sh "$MAINPATH"/cron/callCronManager.sh") | crontab -
-	(crontab -l 2>/dev/null; echo "*/10 * * * * sh "$MAINPATH"/cron/callPublicQueryManager.sh") | crontab -
+	#(crontab -l 2>/dev/null; echo "*/10 * * * * sh "$MAINPATH"/cron/callPublicQueryManager.sh") | crontab -
 	(crontab -l 2>/dev/null; echo "* */23 * * * sh "$MAINPATH"/cron/callClientManager.sh") | crontab -
 	(crontab -l 2>/dev/null; echo "*/20 * * * * sh "$MAINPATH"/cron/poller/clearLogPoller.sh") | crontab -
 	(crontab -l 2>/dev/null; echo "*/3 * * * * sh "$MAINPATH"/cron/esHeartbeat.sh") | crontab -

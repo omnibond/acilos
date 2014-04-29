@@ -383,14 +383,24 @@ function getFriendsList($service){
 						$accts = array();
 					}
 				}
-	
+				
 				for($h=0; $h < count($accts); $h++){
+					print_r("TOKEN IS:" . $accts[$h]['accessToken']);
+					$ur = "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=".$accts[$h]['accessToken'];
+					$ch = curl_init($ur);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+					$res = curl_exec($ch);
+					curl_close($ch);					
+					print_r($res);
+				
 					$url = "https://www.googleapis.com/plus/v1/people/me/people/visible?access_token=".$accts[$h]['accessToken'];
 					$ch = curl_init($url);
 					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 					$res = curl_exec($ch);
 					curl_close($ch);
 					$var = json_decode($res, true);
+					
+					print_r($res);
 					
 					if(isset($var['error'])){
 						$returnArr = array("false" => array());
@@ -464,17 +474,17 @@ function saveFriendsList($friendArr){
 if(!file_exists("../../lockFiles/clientManager.lock") || (time() > filemtime("../../lockFiles/clientManager.lock") + 43200)){
 	touch("../../lockFiles/clientManager.lock");
 
-	$var = getFriendsList("Facebook");
-	saveFriendsList($var);
+//	$var = getFriendsList("Facebook");
+//	saveFriendsList($var);
 
-	$var = getFriendsList("Twitter");
-	saveFriendsList($var);
+//	$var = getFriendsList("Twitter");
+//	saveFriendsList($var);
 
-	$var = getFriendsList("Linkedin");
-	saveFriendsList($var);
+//	$var = getFriendsList("Linkedin");
+//	saveFriendsList($var);
 
-	$var = getFriendsList("Instagram");
-	saveFriendsList($var);
+//	$var = getFriendsList("Instagram");
+//	saveFriendsList($var);
 	
 	$var = getFriendsList("Google");
 	saveFriendsList($var);

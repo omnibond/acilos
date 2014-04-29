@@ -93,7 +93,7 @@ class Credentials{
 		if(isset($serviceCreds['instagram'])){
 			for($a=0; $a < count($serviceCreds['instagram']); $a++){
 				for($d=0; $d < count($serviceCreds['instagram'][$a]['accounts']); $d++){
-					if(isset($serviceCreds['instagram'][$a]['accounts'][$d]['accessToken'])){
+					if($serviceCreds['instagram'][$a]['accounts'][$d]['authenticated'] == "true"){
 						$obj = $serviceCreds['instagram'][$a]['accounts'][$d];
 
 						$url = 'https://api.instagram.com/v1/users/self/?&access_token=' . $obj['accessToken'];
@@ -147,18 +147,18 @@ class Credentials{
 		if(isset($serviceCreds['google'])){
 			for($a=0; $a < count($serviceCreds['google']); $a++){
 				for($d=0; $d < count($serviceCreds['google'][$a]['accounts']); $d++){
-					if(isset($serviceCreds['google'][$a]['accounts'][$d]['accessToken'])){
+					if($serviceCreds['google'][$a]['accounts'][$d]['authenticated'] == "true"){
 						$obj = $serviceCreds['google'][$a]['accounts'][$d];
 
-						//$url = 'https://www.google.com/m8/feeds/contacts/default/full?max-results=1&alt=json&access_token=' . $obj['accessToken'];
-						//$ch = curl_init($url);
-						//curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-						//$response = curl_exec($ch);
-						//curl_close($ch);
+						$url = 'https://www.google.com/m8/feeds/contacts/default/full?max-results=1&alt=json&access_token=' . $obj['accessToken'];
+						$ch = curl_init($url);
+						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+						$response = curl_exec($ch);
+						curl_close($ch);
 
 						$account;
-						//$responseObj = json_decode($response, true);
-						if(true){
+						$responseObj = json_decode($response, true);
+						if($responseObj[''] == ''){
 							$account = array(
 								"user" => $obj['user'],
 								"status" => "good",
@@ -203,7 +203,7 @@ class Credentials{
 		if(isset($serviceCreds['facebook'])){
 			for($a=0; $a < count($serviceCreds['facebook']); $a++){
 				for($d=0; $d < count($serviceCreds['facebook'][$a]['accounts']); $d++){
-					if(isset($serviceCreds['facebook'][$a]['accounts'][$d]['accessToken'])){
+					if($serviceCreds['facebook'][$a]['accounts'][$d]['authenticated'] == "true"){
 						$obj = $serviceCreds['facebook'][$a]['accounts'][$d];
 
 						$graph_url = "https://graph.facebook.com/me?access_token=" . $obj['accessToken'];
@@ -255,7 +255,7 @@ class Credentials{
 		if(isset($serviceCreds['twitter'])){
 			for($a=0; $a < count($serviceCreds['twitter']); $a++){
 				for($d=0; $d < count($serviceCreds['twitter'][$a]['accounts']); $d++){
-					if(isset($serviceCreds['twitter'][$a]['accounts'][$d]['accessToken'])){
+					if($serviceCreds['twitter'][$a]['accounts'][$d]['authenticated'] == "true"){
 						$obj = $serviceCreds['twitter'][$a]['accounts'][$d];
 
 						$oauth_Token = $obj['accessToken'];
@@ -311,7 +311,7 @@ class Credentials{
 		if(isset($serviceCreds['linkedin'])){
 			for($a=0; $a < count($serviceCreds['linkedin']); $a++){
 				for($d=0; $d < count($serviceCreds['linkedin'][$a]['accounts']); $d++){
-					if(isset($serviceCreds['linkedin'][$a]['accounts'][$d]['accessToken'])){
+					if($serviceCreds['linkedin'][$a]['accounts'][$d]['authenticated'] == "true"){
 						$obj = $serviceCreds['linkedin'][$a]['accounts'][$d];
 
 						$params = array(

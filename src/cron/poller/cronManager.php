@@ -104,6 +104,7 @@ function writeObject($obj){
 		$obj['isCommented'] = $exists['isCommented'];
 		$obj['isFavorited'] = $exists['isFavorited'];
 	}
+	$obj['dataLocation'] = "local";
 
 	$grr = $es->index($obj, $obj['id']);
 	print_r($grr);
@@ -629,67 +630,69 @@ function getDiscussionObjects(){
 		}
 	}
 	
-	for($h=0; $h < count($accts); $h++){	
-		print_r($accts); ?><br/><?php
-		$user = linkedInFetch('GET', '/v1/people/~/group-memberships', $accts[$h]['accessToken']);
-		print_r($user);
-		$user = objectToArray($user);
+	if(count($accts > 0)){
+		for($h=0; $h < count($accts); $h++){	
+			print_r($accts); ?><br/><?php
+			$user = linkedInFetch('GET', '/v1/people/~/group-memberships', $accts[$h]['accessToken']);
+			print_r($user);
+			$user = objectToArray($user);
 
-		$groupArr = array();
-		$counter = 0;
-		for($z = 0; $z < count($user['values']); $z++){
-			$groupPost = linkedInFetch('GET', '/v1/groups/'.$user['values'][$z]['group']['id'].'/posts:(creator:(first-name,last-name,picture-url,id,headline),title,summary,creation-timestamp,id,likes,comments,attachment:(image-url,content-domain,content-url,title,summary))', $accts[$h]['accessToken']);
-			$thing = objectToArray($groupPost);
+			$groupArr = array();
+			$counter = 0;
+			for($z = 0; $z < count($user['values']); $z++){
+				$groupPost = linkedInFetch('GET', '/v1/groups/'.$user['values'][$z]['group']['id'].'/posts:(creator:(first-name,last-name,picture-url,id,headline),title,summary,creation-timestamp,id,likes,comments,attachment:(image-url,content-domain,content-url,title,summary))', $accts[$h]['accessToken']);
+				$thing = objectToArray($groupPost);
 
-			for($t = 0; $t < count($thing['values']); $t++){
-				$groupArr[$counter]['networkObjectType'] = "DISCUSS";
-				$groupArr[$counter]['timestamp'] = $thing['values'][$t]['creationTimestamp'];
-				$groupArr[$counter]['id'] = $thing['values'][$t]['id'];
+				for($t = 0; $t < count($thing['values']); $t++){
+					$groupArr[$counter]['networkObjectType'] = "DISCUSS";
+					$groupArr[$counter]['timestamp'] = $thing['values'][$t]['creationTimestamp'];
+					$groupArr[$counter]['id'] = $thing['values'][$t]['id'];
 
-				$groupArr[$counter]['group']['name'] = $user['values'][$z]['group']['name'];
-				$groupArr[$counter]['group']['id'] = $user['values'][$z]['group']['id'];
-				$groupArr[$counter]['group']['status'] =  $user['values'][$z]['membershipState']['code'];
+					$groupArr[$counter]['group']['name'] = $user['values'][$z]['group']['name'];
+					$groupArr[$counter]['group']['id'] = $user['values'][$z]['group']['id'];
+					$groupArr[$counter]['group']['status'] =  $user['values'][$z]['membershipState']['code'];
 
-				$groupArr[$counter]['title'] = $thing['values'][$t]['title'];
-				$groupArr[$counter]['summary'] = $thing['values'][$t]['summary'];
-				$groupArr[$counter]['creator']['firstName'] = $thing['values'][$t]['creator']['firstName'];
-				$groupArr[$counter]['creator']['lastName'] = $thing['values'][$t]['creator']['lastName'];
-				$groupArr[$counter]['creator']['pictureUrl'] = $thing['values'][$t]['creator']['pictureUrl'];
-				$groupArr[$counter]['creator']['headline'] = $thing['values'][$t]['creator']['headline'];
-				$groupArr[$counter]['creator']['id'] = $thing['values'][$t]['creator']['id'];
+					$groupArr[$counter]['title'] = $thing['values'][$t]['title'];
+					$groupArr[$counter]['summary'] = $thing['values'][$t]['summary'];
+					$groupArr[$counter]['creator']['firstName'] = $thing['values'][$t]['creator']['firstName'];
+					$groupArr[$counter]['creator']['lastName'] = $thing['values'][$t]['creator']['lastName'];
+					$groupArr[$counter]['creator']['pictureUrl'] = $thing['values'][$t]['creator']['pictureUrl'];
+					$groupArr[$counter]['creator']['headline'] = $thing['values'][$t]['creator']['headline'];
+					$groupArr[$counter]['creator']['id'] = $thing['values'][$t]['creator']['id'];
 
-				if($thing['values'][$t]['attachment'] != null){
-					$groupArr[$counter]['attachment'][0]['contentDomain'] = $thing['values'][$t]['attachment']['contentDomain'];
-					$groupArr[$counter]['attachment'][0]['contentUrl'] = $thing['values'][$t]['attachment']['contentUrl'];
-					$groupArr[$counter]['attachment'][0]['imageUrl'] = $thing['values'][$t]['attachment']['imageUrl'];
-					$groupArr[$counter]['attachment'][0]['summary'] = $thing['values'][$t]['attachment']['summary'];
-					$groupArr[$counter]['attachment'][0]['title'] = $thing['values'][$t]['attachment']['title'];
-				}else{
-					$groupArr[$counter]['attachment'] = array();
+					if($thing['values'][$t]['attachment'] != null){
+						$groupArr[$counter]['attachment'][0]['contentDomain'] = $thing['values'][$t]['attachment']['contentDomain'];
+						$groupArr[$counter]['attachment'][0]['contentUrl'] = $thing['values'][$t]['attachment']['contentUrl'];
+						$groupArr[$counter]['attachment'][0]['imageUrl'] = $thing['values'][$t]['attachment']['imageUrl'];
+						$groupArr[$counter]['attachment'][0]['summary'] = $thing['values'][$t]['attachment']['summary'];
+						$groupArr[$counter]['attachment'][0]['title'] = $thing['values'][$t]['attachment']['title'];
+					}else{
+						$groupArr[$counter]['attachment'] = array();
+					}
+
+					$groupArr[$counter]['comments'] = array();
+					for($x = 0; $x < $thing['values'][$t]['comments']['_total']; $x++){
+						$groupArr[$counter]['comments'][$x]['person']['firstName'] = $thing['values'][$t]['comments']['values'][$x]['creator']['firstName'];
+						$groupArr[$counter]['comments'][$x]['person']['lastName'] = $thing['values'][$t]['comments']['values'][$x]['creator']['lastName'];
+						$groupArr[$counter]['comments'][$x]['person']['id'] = $thing['values'][$t]['comments']['values'][$x]['creator']['id'];
+						$groupArr[$counter]['comments'][$x]['person']['headline'] = $thing['values'][$t]['comments']['values'][$x]['creator']['headline'];
+						$groupArr[$counter]['comments'][$x]['person']['pictureUrl'] = $thing['values'][$t]['comments']['values'][$x]['creator']['pictureUrl'];
+						$groupArr[$counter]['comments'][$x]['id'] = $thing['values'][$t]['comments']['values'][$x]['id'];
+						$groupArr[$counter]['comments'][$x]['text'] = $thing['values'][$t]['comments']['values'][$x]['text'];
+					}
+					$groupArr[$counter]['likes'] = array();
+					for($x = 0; $x < $thing['values'][$t]['likes']['_total']; $x++){
+						$groupArr[$counter]['likes'][$x]['person']['firstName'] = $thing['values'][$t]['likes']['values'][$x]['person']['firstName'];
+						$groupArr[$counter]['likes'][$x]['person']['lastName'] = $thing['values'][$t]['likes']['values'][$x]['person']['lastName'];
+						$groupArr[$counter]['likes'][$x]['person']['id'] = $thing['values'][$t]['likes']['values'][$x]['person']['id'];
+						$groupArr[$counter]['likes'][$x]['person']['headline'] = $thing['values'][$t]['likes']['values'][$x]['person']['headline'];
+						$groupArr[$counter]['likes'][$x]['person']['pictureUrl'] = $thing['values'][$t]['likes']['values'][$x]['person']['pictureUrl'];
+					}
+				$counter++;
 				}
-
-				$groupArr[$counter]['comments'] = array();
-				for($x = 0; $x < $thing['values'][$t]['comments']['_total']; $x++){
-					$groupArr[$counter]['comments'][$x]['person']['firstName'] = $thing['values'][$t]['comments']['values'][$x]['creator']['firstName'];
-					$groupArr[$counter]['comments'][$x]['person']['lastName'] = $thing['values'][$t]['comments']['values'][$x]['creator']['lastName'];
-					$groupArr[$counter]['comments'][$x]['person']['id'] = $thing['values'][$t]['comments']['values'][$x]['creator']['id'];
-					$groupArr[$counter]['comments'][$x]['person']['headline'] = $thing['values'][$t]['comments']['values'][$x]['creator']['headline'];
-					$groupArr[$counter]['comments'][$x]['person']['pictureUrl'] = $thing['values'][$t]['comments']['values'][$x]['creator']['pictureUrl'];
-					$groupArr[$counter]['comments'][$x]['id'] = $thing['values'][$t]['comments']['values'][$x]['id'];
-					$groupArr[$counter]['comments'][$x]['text'] = $thing['values'][$t]['comments']['values'][$x]['text'];
-				}
-				$groupArr[$counter]['likes'] = array();
-				for($x = 0; $x < $thing['values'][$t]['likes']['_total']; $x++){
-					$groupArr[$counter]['likes'][$x]['person']['firstName'] = $thing['values'][$t]['likes']['values'][$x]['person']['firstName'];
-					$groupArr[$counter]['likes'][$x]['person']['lastName'] = $thing['values'][$t]['likes']['values'][$x]['person']['lastName'];
-					$groupArr[$counter]['likes'][$x]['person']['id'] = $thing['values'][$t]['likes']['values'][$x]['person']['id'];
-					$groupArr[$counter]['likes'][$x]['person']['headline'] = $thing['values'][$t]['likes']['values'][$x]['person']['headline'];
-					$groupArr[$counter]['likes'][$x]['person']['pictureUrl'] = $thing['values'][$t]['likes']['values'][$x]['person']['pictureUrl'];
-				}
-			$counter++;
 			}
+			normalizeDiscussionObj($groupArr, $accts[$h]);
 		}
-		normalizeDiscussionObj($groupArr, $accts[$h]);
 	}
 }
 

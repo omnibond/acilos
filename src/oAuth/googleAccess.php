@@ -91,8 +91,6 @@ if(isset($_GET['code'])) {
 	$token = json_decode($tok, true);
 	$state = $json['state'];
 	
-	print_r($token);
-	
 	$credObj = file_get_contents("../serviceCreds.json");
 	$credObj = json_decode($credObj, true);
 	$tempApp = $credObj['google'][0];
@@ -102,7 +100,7 @@ if(isset($_GET['code'])) {
 	$id = $me['id'];
 	$img = filter_var($me['image']['url'], FILTER_VALIDATE_URL);
 	$name = filter_var($me['displayName'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
-	
+	print_r($token);
 	if(isset($token['access_token'])){
 		$found = "false";
 		$open = 0;
@@ -137,6 +135,7 @@ if(isset($_GET['code'])) {
 		if(isset($token['refresh_token'])){
 			$temp['refreshToken'] = $token['refresh_token'];
 		}
+
 		$temp['accessToken'] = $token['access_token'];
 		$temp['expiresAt'] = $token['created'] + $token['expires_in'];
 		$temp['user'] = $id;
@@ -158,13 +157,14 @@ if(isset($_GET['code'])) {
 		}else{
 			$credObj['google'][0]['accounts'][$j] = $temp;
 		}
+
 		file_put_contents("../serviceCreds.json", json_encode($credObj));
 		
-		header('Location: ../login.php?google=true');
+		//header('Location: ../login.php?google=true');
 	}else{
 		setcookie ("googleCook", "", time() - 3600, $_SERVER['HTTP_HOST'], 'clemson.edu', false, false);
 		
-		header('Location: ../login.php?error=2&service=google');
+		//header('Location: ../login.php?error=2&service=google');
 	}
 	
 }
