@@ -387,7 +387,7 @@ define([
 					variableHeight: true,
 					"class": "starItemClass"
 				});
-				if(obj.dataLocation == "local"){
+				if(dataObj.dataLocation == "local"){
 					var locale = "L";
 				}else{
 					var locale = "P";
