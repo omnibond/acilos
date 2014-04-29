@@ -465,7 +465,7 @@ class Search{
 			}
 		}
 		
-		usort($returnObj['hits']['hits'], function($a, $b){ return intval($a['_source']->published) < intval($b['_source']->published); });
+		usort($returnObj['hits']['hits'], function($a, $b){ if($a['_source'] == $b['_source']){}else{return intval($a['_source']->published) < intval($b['_source']->published);} });
 	
 		return json_encode($returnObj);
 	}
@@ -487,19 +487,29 @@ class Search{
 
 		$es = Client::connection("http://$host:$port/$index/$index");
 
-		if(count(explode("\"", $queryString)) > 2){
+		if (preg_match_all('/"([^"]+)"/', $queryString, $m)) {
 			$searchType = "quotes";
-			$queryString = ltrim($queryString, "\"");
-			$queryString = rtrim($queryString, "\"");
+		    $queryString = $m[1];   
 		}else{
 			$searchType = "normal";
 		}
+
+	//	if(count(explode("\"", $queryString)) > 2){
+	//		$searchType = "quotes";
+	//		$queryString = ltrim($queryString, "\"");
+	//		$queryString = rtrim($queryString, "\"");
+	//	}else{
+	//		$searchType = "normal";
+	//	}
 
 		$searchArr = array(
 			"from" => $from,
 			"size" => $size,
 			"query" => array(
 				'bool' => array(
+					"should" => array(
+						//push stuff here
+					),
 					"must" => array(
 						//push stuff here
 					)
@@ -517,13 +527,13 @@ class Search{
 			//print_r($queryString);
 			for($x = 0; $x < count($queryString); $x++){
 				$temp = array('term' => array('serviceQuery' => $queryString[$x]));
-				array_push($searchArr['query']['bool']['must'], $temp);
+				array_push($searchArr['query']['bool']['should'], $temp);
 			}
 		}else{
 			$temp = array("match" => 
 				array("serviceQuery" => 
 					array(
-						"query" => $queryString,
+						"query" => strtolower($queryString),
 						"type" => "phrase"
 					)
 				)
@@ -687,7 +697,7 @@ class Search{
 			}
 		}
 		
-		usort($returnObj['hits']['hits'], function($a, $b){ return intval($a['_source']->published) < intval($b['_source']->published); });
+		usort($returnObj['hits']['hits'], function($a, $b){ if($a['_source'] == $b['_source']){}else{return intval($a['_source']->published) < intval($b['_source']->published);} });
 
 		return json_encode($returnObj);
 	}

@@ -35,6 +35,7 @@ define(['dojo/_base/declare',
 		'app/util/xhrManager',
 		'app/TitleBar',
 		"app/SelectorBar",
+		"app/SearchScroller",
 		
 		"dojox/mobile/ScrollableView",
 		"app/SelRoundRectList",
@@ -43,6 +44,7 @@ define(['dojo/_base/declare',
 		"dojox/mobile/ListItem",
 		"dojox/mobile/ToolBarButton",
 		"dojox/mobile/EdgeToEdgeCategory"
+
 ], function(
 	declare, 
 	ModuleScrollableView, 
@@ -56,6 +58,7 @@ define(['dojo/_base/declare',
 	xhrManager, 
 	TitleBar, 
 	SelectorBar,
+	SearchScroller,
 	
 	ScrollableView,
 	RoundRectList, 
@@ -67,28 +70,17 @@ define(['dojo/_base/declare',
 ) {
 	return declare([ModuleScrollableView], {		
 		
-		constructor: function(){
-			this.fromVar = 0;
-		},
-		
-		buildFeedList: function(params, obj){
+		buildFeedList: function(queryTerm){
 			kernel.global.feedCount[this.id] = {};
 			kernel.global.feedCount[this.id].count = 0;
 			kernel.global.feedCount[this.id].services = {"Twitter": "false", "Facebook": "false", "Instagram": "false", "LinkedIn": "false"};
-				
-			console.log(params);
-			
-			if(params['error']){
-				console.log(params['error']);
-				return;
-			}
 			
 			if(this.list){
 				this.list.destroyRecursive();
 			}
-			
+
 			this.list = new SearchScroller({
-				feedName: params.queryTerm,
+				feedName: queryTerm,
 				blastView: this.blastView,
 				getFeedData: lang.hitch(this, this.getPublicDBObjects),
 				setStarred: lang.hitch(this, this.setStarred),
@@ -133,22 +125,36 @@ define(['dojo/_base/declare',
 		
 		getNextGroup: function(){
 			if(this.list.ListEnded === false && this.list.loading == false){
+				console.log("scroll", this.fromVar+20);
 				this.list.postAddToList(this.fromVar+=20);
 			}
 		},
 		
 		activate: function(e){
-			topic.publish("/dojo-mama/updateSubNav", {back: '/feeds', title: e.params.feedName} );
+			topic.publish("/dojo-mama/updateSubNav", {back: '/feeds', title: e.params.feedTitle} );
 
 			console.log("e.params: ", e.params);
 
-			var queryTerm = e.params.queryTerm;
-			
-			//this.getSpecificFeedList(e.params.feedName).then(lang.hitch(this, this.buildFeedList));
+			console.log("dogs dogs dogs", e.params.dogs);
 
-			this.getPublicDBObjects(queryTerm, this.fromVar).then(lang.hitch(this, function(obj){
-				this.buildFeedList(e.params, obj);
-			}));
+			if(this.queryTerm != e.params.queryTerm){
+				if(this.list){
+					this.list.destroyRecursive();
+					this.list = null;
+					this.fromVar = 0;
+					this.buildFeedList(e.params.queryTerm);
+				}else{
+					this.fromVar = 0;
+					this.buildFeedList(e.params.queryTerm);
+				}
+			}else{
+				if(!this.list){
+					this.fromVar = 0;
+					this.buildFeedList(e.params.queryTerm);
+				}
+			}
+			this.queryTerm = e.params.queryTerm;
+			
 
 			on(this.domNode, "scroll", lang.hitch(this, this.dataPoints));
 		},
@@ -158,6 +164,11 @@ define(['dojo/_base/declare',
 				this.selectorItem.destroyRecursive();
 				this.selectorItem = null;
 			}
+
+			/*if(this.list){
+				this.list.destroyRecursive();
+				this.list = null;
+			}*/
 		}		
 	})
 });

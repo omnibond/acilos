@@ -44,9 +44,6 @@
 				},
 				"content": {
 					"properties": {
-						"queryString":{
-							"type": "string"
-						},
 						"URL": {
 							"type": "string",
 							"index": "no"
@@ -765,6 +762,9 @@
 					"index": "not_analyzed"
 				},
 				"serviceQuery": {
+					"type": "string"
+				},
+				"queryString": {
 					"type": "string"
 				}
 			}

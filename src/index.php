@@ -53,7 +53,7 @@
 				test: false,
 				autoRefresh: 20,
 				onError : function(code) {
-					if(code == "nfr" || !arguments || arguments == null || arguments == undefined) {
+					if(code == "nfr" || !arguments || arguments == null || arguments == undefined || code == "504" || code == 504) {
 						document.getElementById('adSlot').innerHTML = '<div><img src="app/resources/img/AcilosStaticMob_1.png"></div>';
 					}
 				}

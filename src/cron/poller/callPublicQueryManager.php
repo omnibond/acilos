@@ -45,7 +45,7 @@ function objectToArray($d){
 	}
 }
 
-function normalizeActivityObjects($objArray, $builder, $account, $feeds){
+function normalizeActivityObjects($objArray, $builder, $account, $feeds, $query){
 	for($k = 0; $k < count($objArray); $k++){
 		$obj = $objArray[$k];
 
@@ -58,8 +58,21 @@ function normalizeActivityObjects($objArray, $builder, $account, $feeds){
 		
 		//print_r($item);
 		
-		$this->writeObject((array)$item, $query, $feeds);
+		writeObject((array)$item, $query, $feeds);
 	}
+}
+
+function getObject($id, $feed){
+	#echo "getting object"; 
+
+	$index = $feed;
+	$host = "localhost";
+	$port = "9200";
+
+	$es = Client::connection("http://$host:$port/$index/$index");
+	$res = $es->get($id);
+
+	return $res;
 }
 
 function writeObject($obj, $query, $feeds){
@@ -68,10 +81,12 @@ function writeObject($obj, $query, $feeds){
 		$host = "localhost";
 		$port = "9200";
 
+		/*print_r($index); ?><br/><?php ?><br/><?php*/
+
 		$es = Client::connection("http://$host:$port/$index/$index/");
 
 		$obj['id'] = strtolower($obj['id']);
-		$exists = $this->getObject($obj['id']);
+		$exists = getObject($obj['id'], $feeds[$g]);
 		if(isset($exists['starred'])){
 			$obj['starred'] = $exists['starred'];
 			$obj['isLiked'] = $exists['isLiked'];
@@ -80,12 +95,15 @@ function writeObject($obj, $query, $feeds){
 		}
 		$obj['serviceQuery'] = $query;
 
+		print_R($obj); ?><br/><?php ?><br/><?php
+
 		$grr = $es->index($obj, $obj['id']);
-		#print_r($grr . " ::index:: " . $feeds[$g]);
+		//print_r($grr);
+		//print_r($grr . " ::index:: " . $feeds[$g]);
 	}
 }
 
-function minePublicQueryTerms($service){
+function minePublicQueryTerms(){
 	$credObj = file_get_contents("../../serviceCreds.json");
 	$credObj = json_decode($credObj, true);
 	
@@ -93,7 +111,9 @@ function minePublicQueryTerms($service){
 	$queryTermObj = json_decode($queryTermObj, true);
 	
 	foreach($queryTermObj as $key => $value){
-		$services = $value['services'];
+		print_r($key); ?><br/><?php ?><br/><?php
+
+		$services = $value['Services'];
 		$query = $value['terms'];
 		$feeds = $value['feeds'];
 		
@@ -107,7 +127,7 @@ function minePublicQueryTerms($service){
 					$responseObj = queryFacebook($query, $account);
 					if(isset($responseObj['data'])){
 						$builder = new facebookNewsFeedObjectBuilder();
-						normalizeActivityObjects($responseObj['data'], $builder, $account, $feeds);
+						normalizeActivityObjects($responseObj['data'], $builder, $account, $feeds, $query);
 					}
 				break;
 				case "Google":
@@ -116,9 +136,10 @@ function minePublicQueryTerms($service){
 					
 					$account = $credObj['google'][0]['accounts'][$RNG];
 					$responseObj = queryGoogle($query, $account);
+					//print_r($responseObj);
 					if(isset($responseObj['items'])){
 						$builder = new googleObjectBuilder();
-						normalizeActivityObjects($responseObj['items'], $builder, $account, $feeds);
+						normalizeActivityObjects($responseObj['items'], $builder, $account, $feeds, $query);
 					}
 				break;
 				case "Twitter":
@@ -129,7 +150,7 @@ function minePublicQueryTerms($service){
 					$responseObj = queryTwitter($query, $account);
 					if(isset($responseObj['statuses'])){
 						$builder = new twitterObjectBuilder();
-						normalizeActivityObjects($responseObj['statuses'], $builder, $account, $feeds);
+						normalizeActivityObjects($responseObj['statuses'], $builder, $account, $feeds, $query);
 					}
 				break;
 				case "Instagram":
@@ -150,7 +171,7 @@ function queryGoogle($queryStr, $account){
 	$query = $queryStr;
 	$access_token = $account['accessToken'];
 	
-	$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&access_token='.$access_token.'&query='.$query;
+	$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&access_token='.$access_token.'&query='.urlencode($query);
 	$ch = curl_init($url);
 
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -160,7 +181,7 @@ function queryGoogle($queryStr, $account){
 	//if there is an error it is most likely the hour long token is dead so refresh
 	if(isset($var['error'])){
 		$token = refreshGoogToken($account['uuid']);
-		$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&access_token='.$token.'&query='.$query;
+		$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&access_token='.$token.'&query='.urlencode($query);
 		$ch = curl_init($url);
 
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

@@ -44,9 +44,6 @@
 				},
 				"content": {
 					"properties": {
-						"queryString":{
-							"type": "string"
-						},
 						"URL": {
 							"type": "string",
 							"index": "no"
@@ -756,6 +753,12 @@
 				"mainAccountColor": {
 					"type": "string",
 					"index": "not_analyzed"
+				},				
+				"serviceQuery": {
+					"type": "string"
+				},
+				"queryString": {
+					"type": "string"
 				}
 			}
 		}
