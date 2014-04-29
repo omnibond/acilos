@@ -740,6 +740,9 @@
 				"service": {
 					"type": "string"
 				},
+				"dataLocation": {
+					"type": "string"
+				},
 				"starred": {
 					"type": "string",
 					"index": "not_analyzed"

@@ -142,7 +142,7 @@ class clientObject{
 		$searchIndex = explode(" ", $displayName);
 		$this->data['searchIndex'] = $searchIndex[0];
 		$searchIndex = explode(" ", $displayName);
-		$this->data['alphaIndex'] = $searchIndex[0];
+		$this->data['alphaIndex'] = strtolower($searchIndex[0]);
 	}
 	
 	public function setAbout($type, $data){

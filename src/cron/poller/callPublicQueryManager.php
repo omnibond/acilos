@@ -94,6 +94,7 @@ function writeObject($obj, $query, $feeds){
 			$obj['isFavorited'] = $exists['isFavorited'];
 		}
 		$obj['serviceQuery'] = $query;
+		$obj['dataLocation'] = "public";
 
 		print_R($obj); ?><br/><?php ?><br/><?php
 
