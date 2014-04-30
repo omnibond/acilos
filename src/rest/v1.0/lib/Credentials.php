@@ -161,7 +161,7 @@ class Credentials{
 
 						$account;
 						$responseObj = json_decode($response, true);
-						
+
 						if(isset($responseObj['kind'])){
 							$account = array(
 								"user" => $obj['user'],

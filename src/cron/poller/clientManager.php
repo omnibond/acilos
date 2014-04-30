@@ -24,7 +24,7 @@
 **
 ** $QT_END_LICENSE$
 */
-
+require_once('../../rest/v1.0/lib/RefreshGoogleToken.php');
 require_once('../../cron/objects/clientBaseObject.php');
 require_once('../../oAuth/twitteroauth/twitteroauth.php');
 require_once('../../vendor/autoload.php');
@@ -394,7 +394,34 @@ function getFriendsList($service){
 					$var = json_decode($res, true);
 					
 					if(isset($var['error'])){
-						$returnArr = array("false" => array());
+						$token = refreshGoogToken($accts[$h]['uuid']);
+						$url = "https://www.googleapis.com/plus/v1/people/me/people/visible";
+						$ch = curl_init($url);
+						$headers = array('Authorization: Bearer ' . $token);
+						curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+						$res = curl_exec($ch);
+						curl_close($ch);
+						$var = json_decode($res, true);
+
+						if(isset($var['error'])){
+							return (json_encode(array("Error" => "error getting refresh token")));
+						}else{
+							$returnArr = array();
+							for($x = 0; $x < count($var['items']); $x++){
+								$client = array(
+									'id' => $var['items'][$x]['id'],
+									'givenName' => $var['items'][$x]['displayName'],
+									'displayName' => $var['items'][$x]['displayName'],
+									'image' => $var['items'][$x]['image']['url'],
+									'service' => 'Google',
+									'about' => array(
+										'link' => $var['items'][$x]['url']
+									)
+								);
+								array_push($returnArr, $client);
+							}
+						}
 					}else{
 						$returnArr = array();
 						for($x = 0; $x < count($var['items']); $x++){

@@ -70,6 +70,7 @@ function refreshGoogToken($uuid){
 	print_r($credObj);
 	print_r($obj);
 	$credObj['google'][0]['accounts'][$d]['accessToken'] = $obj['access_token'];
+	$credObj['google'][0]['accounts'][$d]['expiresAt'] = @time() . intval($obj['expires_in']);
 	
 	file_put_contents("../../serviceCreds.json", json_encode($credObj));
 	
