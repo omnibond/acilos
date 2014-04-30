@@ -4083,6 +4083,13 @@ select {
   background: inherit;
   padding: 2px 0px 0px 0px;
 }
+.dj_iphone .feedCommentItemClass.mblListItem {
+  font-weight: normal;
+  border: none;
+  background: inherit;
+  margin-bottom: 5px;
+  padding: 2px 0px 0px 0px;
+}
 .feedCommentPaneLabelClass {
   font-weight: normal;
   font-family: 'Century Gothic';

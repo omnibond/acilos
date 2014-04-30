@@ -111,7 +111,7 @@ define(['dojo/_base/declare',
 
 			this.selectorItem = new SelectorBar({
 				buttons: [this.scrollButton]
-			})				
+			});			
 			this.selectorItem.placeAt(this.domNode.parentNode);
 		},
 		
@@ -131,7 +131,7 @@ define(['dojo/_base/declare',
 		},
 		
 		activate: function(e){
-			topic.publish("/dojo-mama/updateSubNav", {back: '/feeds', title: e.params.feedTitle} );
+			topic.publish("/dojo-mama/updateSubNav", {back: '/feeds/PublicMainView', title: e.params.feedTitle} );
 
 			console.log("e.params: ", e.params);
 
@@ -154,8 +154,31 @@ define(['dojo/_base/declare',
 				}
 			}
 			this.queryTerm = e.params.queryTerm;
-			
 
+			if(!this.selectorItem){
+				this.scrollButton = new Button({
+					"name": "scrollButton",
+					onClick: lang.hitch(this, function(){
+						var scroller = lang.hitch(this, function(){
+							if(this.domNode.scrollTop <= 0){
+								this.domNode.scrollTop = 0;
+							}else{
+								this.domNode.scrollTop = this.domNode.scrollTop - (this.domNode.scrollTop*.08);
+								if(this.domNode.scrollTop != 0){
+									setTimeout(scroller, 20);
+								}
+							}
+						});
+						setTimeout(scroller, 20);
+					})
+				});
+
+				this.selectorItem = new SelectorBar({
+					buttons: [this.scrollButton]
+				});			
+				this.selectorItem.placeAt(this.domNode.parentNode);
+			}
+			
 			on(this.domNode, "scroll", lang.hitch(this, this.dataPoints));
 		},
 

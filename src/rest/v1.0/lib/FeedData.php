@@ -83,7 +83,36 @@ class FeedData{
 		return $feedList;
 	}
 
+	public function getLocalFeedList(){
+		$fileName = "../../localQueryTermObj.json";
+		
+		try{
+			$feedList = file_get_contents($fileName);
+		}catch (Exception $e){
+			$feedList = json_encode(array());
+			file_put_contents($fileName, $feedList);
+		}
+		return $feedList;
+	}
+
 	public function getSpecificFeedList(){
+		$fileName = "../../localQueryTermObj.json";
+		$feedName = $_GET['feedName'];
+
+		$feedList = file_get_contents($fileName);
+		$obj = json_decode($feedList, true);
+
+		foreach($obj as $key => $value){
+			if($key == $feedName){
+				return json_encode($obj[$key]);
+			}
+		}
+
+		$error = array("error" => "Feed name not found in the list");
+		return json_encode($error);
+	}
+
+	/*public function getSpecificFeedList(){		<-------- OLD FUNCTION (feedlist.json)
 		$fileName = "../../app/util/feedList.json";
 		$feedName = $_GET['feedName'];
 
@@ -97,7 +126,7 @@ class FeedData{
 
 		$error = array("error" => "Feed name not found in the list");
 		return json_encode($error);
-	}
+	}*/
 
 	public function checkSpecificFeedList(){
 		$var = file_get_contents("php://input");
@@ -147,6 +176,32 @@ class FeedData{
 		file_put_contents($fileName, $outObject);
 
 		return json_encode(array("success" => "success"));
+	}
+
+	public function writeLocalFeed(){
+		$var = file_get_contents("php://input");
+		$varObj = json_decode($var, true);
+
+		try{
+			$queryObj = file_get_contents("../../localQueryTermObj.json");
+			$queryObj = json_decode($queryObj, true);
+
+			$queryObj[$varObj['feedName']] = array(
+				"terms" => $varObj['queryString']
+			);
+
+			file_put_contents("../../localQueryTermObj.json", json_encode($queryObj));
+		}catch (Exception $e){
+			$queryObj = array(
+				$varObj['feedName'] => array(
+					"terms" => $varObj['queryString']
+				)
+			);
+
+			//print_r($queryObj);
+
+			file_put_contents("../../localQueryTermObj.json", json_encode($queryObj));
+		}
 	}
 
 	function deleteFeedList(){

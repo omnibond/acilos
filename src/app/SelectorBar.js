@@ -210,13 +210,13 @@ define(['dojo/_base/declare',
 					}
 
 					if(this.buttons[x]['name'] == "publicButton"){
-						var divPublicButton = domConstruct.create("div", {innerHTML: "P", "class": "fontSize25 fontDiv30", title: "Query public data"});
+						var divPublicButton = domConstruct.create("div", {innerHTML: "P", "class": "fontSize25 fontDiv30", title: "View your local feeds"});
 
 						this.buttons[x].domNode.appendChild(divPublicButton);	
 					}
 
 					if(this.buttons[x]['name'] == "localButton"){
-						var divLocalButton = domConstruct.create("div", {innerHTML: "L", "class": "fontSize25 fontDiv30", title: "Query your local data"});
+						var divLocalButton = domConstruct.create("div", {innerHTML: "L", "class": "fontSize25 fontDiv30", title: "View your public feeds"});
 
 						this.buttons[x].domNode.appendChild(divLocalButton);	
 					}

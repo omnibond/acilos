@@ -73,26 +73,23 @@ define(['dojo/_base/declare',
 			this.fromVar = 0;
 		},
 		
-		buildFeedList: function(feedObj){
+		buildFeedList: function(){
 			kernel.global.feedCount[this.id] = {};
 			kernel.global.feedCount[this.id].count = 0;
 			kernel.global.feedCount[this.id].services = {"Twitter": "false", "Facebook": "false", "Instagram": "false", "LinkedIn": "false"};
-				
-			console.log(feedObj);
-			
-			if(feedObj['error']){
-				console.log(feedObj['error']);
-				return;
-			}
 			
 			if(this.list){
 				this.list.destroyRecursive();
+				this.list = null;
 			}
-			
+
+			console.log("this.searchString is: ", this.searchString);
+			this.searchString = this.searchString.replace(/ /gi, "+");
+
 			this.list = new SearchScroller({
-				feedName: feedObj,
+				feedName: this.searchString,
 				blastView: this.blastView,
-				getFeedData: lang.hitch(this, this.checkSpecificFeedList),
+				getFeedData: lang.hitch(this, this.sendSearchString),
 				setStarred: lang.hitch(this, this.setStarred),
 				setStarredClient: lang.hitch(this, this.setStarredClient),
 				fromVar: this.fromVar,
@@ -121,7 +118,7 @@ define(['dojo/_base/declare',
 
 			this.selectorItem = new SelectorBar({
 				buttons: [this.scrollButton]
-			})				
+			});			
 			this.selectorItem.placeAt(this.domNode.parentNode);
 		},
 		
@@ -141,16 +138,59 @@ define(['dojo/_base/declare',
 		
 		activate: function(e){
 			topic.publish("/dojo-mama/updateSubNav", {back: '/feeds', title: e.params.feedName} );
-			
-			this.getSpecificFeedList(e.params.feedName).then(lang.hitch(this, this.buildFeedList));
+
+			console.log("e.params is: from activate: ", e.params);
+
+			if(this.feedName != e.params.feedName){
+				if(this.list){
+					this.list.destroyRecursive();
+					this.list = null;
+					this.fromVar = 0;
+					this.buildFeedList();
+				}else{
+					this.fromVar = 0;
+					this.buildFeedList();
+				}
+			}else{
+				if(!this.list){
+					this.fromVar = 0;
+					this.buildFeedList();
+				}
+			}
+			this.feedName = e.params.feedName;
+
+			if(!this.selectorItem){
+				this.scrollButton = new Button({
+					"name": "scrollButton",
+					onClick: lang.hitch(this, function(){
+						var scroller = lang.hitch(this, function(){
+							if(this.domNode.scrollTop <= 0){
+								this.domNode.scrollTop = 0;
+							}else{
+								this.domNode.scrollTop = this.domNode.scrollTop - (this.domNode.scrollTop*.08);
+								if(this.domNode.scrollTop != 0){
+									setTimeout(scroller, 20);
+								}
+							}
+						});
+						setTimeout(scroller, 20);
+					})
+				});
+				
+				this.selectorItem = new SelectorBar({
+					buttons: [this.scrollButton]
+				});			
+				this.selectorItem.placeAt(this.domNode.parentNode);
+			}
+
 			on(this.domNode, "scroll", lang.hitch(this, this.dataPoints));
-			
 		},
 
 		deactivate: function(){
-			this.selectorItem.destroyRecursive();
-			this.selectorItem = null;
+			if(this.selectorItem){
+				this.selectorItem.destroyRecursive();
+				this.selectorItem = null;
+			}
 		}
-		
 	})
 });

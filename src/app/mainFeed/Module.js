@@ -99,7 +99,8 @@ define(['dojo/_base/declare',
 				searchFilters: lang.hitch(this, this.searchFilters),
 				manualRefresh: lang.hitch(this, this.manualRefresh),
 				sendSearchString: lang.hitch(this, this.sendSearchString),
-				paginateFacebook: lang.hitch(this, this.paginateFacebook)
+				paginateFacebook: lang.hitch(this, this.paginateFacebook),
+				writeLocalFeed: lang.hitch(this, this.writeLocalFeed)
 			});	
 
 			this.rootView = new FeedView({
@@ -118,7 +119,8 @@ define(['dojo/_base/declare',
 				setStarredClient: lang.hitch(this, this.setStarredClient),
 				searchFilters: lang.hitch(this, this.searchFilters),
 				manualRefresh: lang.hitch(this, this.manualRefresh),
-				sendSearchString: lang.hitch(this, this.sendSearchString)
+				sendSearchString: lang.hitch(this, this.sendSearchString),
+				writeLocalFeed: lang.hitch(this, this.writeLocalFeed)
 			});
 			this.registerView(this.blastView);
 			this.registerView(this.pictureScroller);
@@ -191,6 +193,12 @@ define(['dojo/_base/declare',
 		getServiceCreds: function(){
 			params = {};
 			return xhrManager.send('POST', 'rest/v1.0/Credentials/getServiceCreds', params);
+		},
+
+		writeLocalFeed: function(feedName, queryString){
+			params = {feedName: feedName, queryString: queryString};
+			console.log("writeQueryTerm params are: ", params);
+			return xhrManager.send('POST', 'rest/v1.0/FeedData/writeLocalFeed', params);
 		}
 	});
 });
