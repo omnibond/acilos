@@ -83,6 +83,18 @@ class FeedData{
 		return $feedList;
 	}
 
+	public function getLocalFeedList(){
+		$fileName = "../../localQueryTermObj.json";
+		
+		try{
+			$feedList = file_get_contents($fileName);
+		}catch (Exception $e){
+			$feedList = json_encode(array());
+			file_put_contents($fileName, $feedList);
+		}
+		return $feedList;
+	}
+
 	public function getSpecificFeedList(){
 		$fileName = "../../app/util/feedList.json";
 		$feedName = $_GET['feedName'];

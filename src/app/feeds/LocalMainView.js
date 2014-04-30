@@ -67,10 +67,8 @@ define(['dojo/_base/declare',
 				this.selectorItem = null;
 			}
 
-			if(this.mainList){
-				this.mainList.destroyRecursive();
-				this.mainList = null;	
-			}
+			this.mainList.destroyRecursive();
+			this.mainList = null;
 		},	
 		
 		buildMainList: function(obj){
@@ -103,8 +101,7 @@ define(['dojo/_base/declare',
 					"name": "newFeedButton",
 					"left": "true",
 					onClick: lang.hitch(this, function(){
-						//this.router.go("/CreateFeedView");
-						this.router.go("/newCreateFeedView");
+						this.router.go("/CreateFeedView");
 					})
 				});
 
@@ -124,36 +121,36 @@ define(['dojo/_base/declare',
 					})
 				});
 
-				this.localButton = new Button({
-					"name": "localButton",
+				this.publicButton = new Button({
+					"name": "publicButton",
 					"right": "true",
 					onClick: lang.hitch(this, function(){
-						this.router.go("/LocalMainView");
+						this.router.go("/MainView");
 					})
 				});
 
 				this.selectorItem = new SelectorBar({
-					buttons: [this.editFeedButton, this.newFeedButton, this.deleteFeedButton, this.scrollButton, this.localButton]
+					buttons: [this.editFeedButton, this.newFeedButton, this.deleteFeedButton, this.scrollButton, this.publicButton]
 				})
 				this.selectorItem.placeAt(this.domNode.parentNode);
 			}
-
+			
 			if(obj == null || obj.length == 0){
 				var item = new ListItem({
 					label: "No feeds have been saved yet"
 				});	
 				this.mainList.addChild(item);	
 			}else{
-				for(var key in obj){
+				for(var x = 0; x < obj.length; x++){
 					var item = new ListItem({
-						label: key,
+						label: obj[x].name,
 						clickable: true,
-						onClick: lang.hitch(this, function(obj, key){
-							this.router.go("/newFeedView/" + key + "/" + obj[key]['terms']);
-						}, obj, key)
-					});
+						onClick: lang.hitch(this, function(obj, x){
+							this.router.go("/FeedView/" + obj[x].name);
+						}, obj, x)
+					});	
 
-					this.mainList.addChild(item);
+					this.mainList.addChild(item);	
 				}
 			}
 			this.addChild(this.mainList);
@@ -161,12 +158,12 @@ define(['dojo/_base/declare',
 		
 		activate: function(e){
 			topic.publish("/dojo-mama/updateSubNav", {back: '/', title: "Customize new feeds"} );
-
+				
 			if(this.mainList){
 				this.mainList.destroyRecursive();
-				this.getPublicQueryObject().then(lang.hitch(this, this.buildMainList));
+				this.getLocalFeedList().then(lang.hitch(this, this.buildMainList));
 			}else{
-				this.getPublicQueryObject().then(lang.hitch(this, this.buildMainList));
+				this.getLocalFeedList().then(lang.hitch(this, this.buildMainList));
 			}
 		}
 	})

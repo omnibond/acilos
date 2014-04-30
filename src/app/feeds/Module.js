@@ -39,6 +39,7 @@ define(['dojo/_base/declare',
 		'app/feeds/newCreateFeedView',
 		'app/feeds/newEditFeedView',
 		'app/feeds/newFeedView',
+		'app/feeds/LocalMainView',
 		'app/mainFeed/BlastView'
 ], function(
 	declare, 
@@ -57,6 +58,7 @@ define(['dojo/_base/declare',
 	newCreateFeedView,
 	newEditFeedView,
 	newFeedView,
+	LocalMainView,
 	BlastView
 ) {
 	return declare([Module], {
@@ -166,6 +168,11 @@ define(['dojo/_base/declare',
 				getPublicQueryObject: lang.hitch(this, this.getPublicQueryObject),
 				getSpecificFeedList: lang.hitch(this, this.getSpecificFeedList)
 			});
+			this.LocalMainView = new LocalMainView({
+				route: '/LocalMainView',
+
+				getLocalFeedList: lang.hitch(this, this.getLocalFeedList)
+			});
 			this.registerView(this.rootView);
 			this.registerView(this.FeedView);
 			this.registerView(this.CreateFeedView);
@@ -176,6 +183,7 @@ define(['dojo/_base/declare',
 			this.registerView(this.newCreateFeedView);
 			this.registerView(this.newEditFeedView);
 			this.registerView(this.newFeedView);
+			this.registerView(this.LocalMainView);
 		},
 		
 		deleteFeedList: function(feedName){
@@ -272,6 +280,11 @@ define(['dojo/_base/declare',
 		deletePublicQueryObjectTerm: function(term){
 			params = {term: term};
 			return xhrManager.send('POST', 'rest/v1.0/PublicQuery/deletePublicQueryObjectTerm', params);
+		},
+
+		getLocalFeedList: function(){
+			params = {};
+			return xhrManager.send('GET', 'rest/v1.0/FeedData/getLocalFeedList', params);
 		}
 	})
 });
