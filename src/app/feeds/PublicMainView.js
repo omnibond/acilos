@@ -67,8 +67,10 @@ define(['dojo/_base/declare',
 				this.selectorItem = null;
 			}
 
-			this.mainList.destroyRecursive();
-			this.mainList = null;
+			if(this.mainList){
+				this.mainList.destroyRecursive();
+				this.mainList = null;	
+			}
 		},	
 		
 		buildMainList: function(obj){
@@ -101,7 +103,8 @@ define(['dojo/_base/declare',
 					"name": "newFeedButton",
 					"left": "true",
 					onClick: lang.hitch(this, function(){
-						this.router.go("/CreateFeedView");
+						//this.router.go("/CreateFeedView");
+						this.router.go("/newCreateFeedView");
 					})
 				});
 
@@ -121,22 +124,20 @@ define(['dojo/_base/declare',
 					})
 				});
 
-				this.publicButton = new Button({
-					"name": "publicButton",
+				this.localButton = new Button({
+					"name": "localButton",
 					"right": "true",
 					onClick: lang.hitch(this, function(){
-						this.router.go("/PublicMainView");
+						this.router.go("/");
 					})
 				});
 
 				this.selectorItem = new SelectorBar({
-					buttons: [this.editFeedButton, this.newFeedButton, this.deleteFeedButton, this.scrollButton, this.publicButton]
+					buttons: [this.editFeedButton, this.newFeedButton, this.deleteFeedButton, this.scrollButton, this.localButton]
 				})
 				this.selectorItem.placeAt(this.domNode.parentNode);
 			}
 
-			console.log("obj isssssss: ", obj);
-			
 			if(obj == null || obj.length == 0){
 				var item = new ListItem({
 					label: "No feeds have been saved yet"
@@ -148,37 +149,24 @@ define(['dojo/_base/declare',
 						label: key,
 						clickable: true,
 						onClick: lang.hitch(this, function(obj, key){
-							this.FeedView.searchString = obj[key]['terms'];
-							this.router.go("/FeedView/" + key)
+							this.router.go("/newFeedView/" + key + "/" + obj[key]['terms']);
 						}, obj, key)
 					});
 
 					this.mainList.addChild(item);
 				}
-
-				/*for(var x = 0; x < obj.length; x++){				<------ OLD WAY (feedlist.json)
-					var item = new ListItem({
-						label: obj[x].name,
-						clickable: true,
-						onClick: lang.hitch(this, function(obj, x){
-							this.router.go("/FeedView/" + obj[x].name);
-						}, obj, x)
-					});	
-
-					this.mainList.addChild(item);	
-				}*/
 			}
 			this.addChild(this.mainList);
 		},
 		
 		activate: function(e){
 			topic.publish("/dojo-mama/updateSubNav", {back: '/', title: "Customize new feeds"} );
-				
+
 			if(this.mainList){
 				this.mainList.destroyRecursive();
-				this.getLocalFeedList().then(lang.hitch(this, this.buildMainList));
+				this.getPublicQueryObject().then(lang.hitch(this, this.buildMainList));
 			}else{
-				this.getLocalFeedList().then(lang.hitch(this, this.buildMainList));
+				this.getPublicQueryObject().then(lang.hitch(this, this.buildMainList));
 			}
 		}
 	})
