@@ -172,9 +172,10 @@ function queryGoogle($queryStr, $account){
 	$query = $queryStr;
 	$access_token = $account['accessToken'];
 	
-	$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&access_token='.$access_token.'&query='.urlencode($query);
+	$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&query='.urlencode($query);
 	$ch = curl_init($url);
-
+	$headers = array('Authorization: Bearer ' . $access_token);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	$res = curl_exec($ch);
 	curl_close($ch);
@@ -182,9 +183,10 @@ function queryGoogle($queryStr, $account){
 	//if there is an error it is most likely the hour long token is dead so refresh
 	if(isset($var['error'])){
 		$token = refreshGoogToken($account['uuid']);
-		$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&access_token='.$token.'&query='.urlencode($query);
+		$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&query='.urlencode($query);
 		$ch = curl_init($url);
-
+		$headers = array('Authorization: Bearer ' . $token);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$res = curl_exec($ch);
 		curl_close($ch);

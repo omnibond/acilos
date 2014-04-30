@@ -595,9 +595,10 @@ class Search{
 
 		$access_token = $varObj['authStuff']['google'][0]['accounts'][0]['accessToken'];
 		
-		$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&access_token='.$access_token.'&query='.urlencode($query);
+		$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&query='.urlencode($query);
 		$ch = curl_init($url);
-
+		$headers = array('Authorization: Bearer ' . $access_token);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$res = curl_exec($ch);
 		curl_close($ch);
@@ -606,9 +607,10 @@ class Search{
 
 		if(isset($var['error'])){
 			$token = refreshGoogToken($varObj['authStuff']['google'][0]['accounts'][0]['uuid']);
-			$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&access_token='.$token.'&query='.urlencode($query);
+			$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&query='.urlencode($query);
 			$ch = curl_init($url);
-
+			$headers = array('Authorization: Bearer ' . $token);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			$res = curl_exec($ch);
 			curl_close($ch);

@@ -405,8 +405,10 @@ function getGoogleFeed(){
 	}
 	
 	for($h=0; $h < count($accts); $h++){
-		$url = "https://www.googleapis.com/plus/v1/people/me/people/visible?access_token=".$accts[$h]['accessToken'];
+		$url = "https://www.googleapis.com/plus/v1/people/me/people/visible";
 		$ch = curl_init($url);
+		$headers = array('Authorization: Bearer ' . $accts[$h]['accessToken']);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$res = curl_exec($ch);
 		curl_close($ch);
@@ -415,9 +417,11 @@ function getGoogleFeed(){
 		$idArr = array();
 		if(isset($var['error'])){
 			if($error = $var['error']['errors'][0]['message'] == "Invalid Credentials"){
-				$token =  refreshGoogToken($accts[$h]['uuid']);
-				$url = "https://www.googleapis.com/plus/v1/people/me/people/visible?access_token=".$token;
+				$accts[$h]['accessToken'] =  refreshGoogToken($accts[$h]['uuid']);
+				$url = "https://www.googleapis.com/plus/v1/people/me/people/visible";
 				$ch = curl_init($url);
+				$headers = array('Authorization: Bearer ' . $accts[$h]['accessToken']);
+				curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				$res = curl_exec($ch);
 				curl_close($ch);
@@ -443,9 +447,10 @@ function getGoogleFeed(){
 		
 		$dataArr = array();
 		for($t=0; $t < count($idArr); $t++){
-			$url = "https://www.googleapis.com/plus/v1/people/".$idArr[$t]."/activities/public?access_token=".$accts[$h]['accessToken'];
+			$url = "https://www.googleapis.com/plus/v1/people/".$idArr[$t]."/activities/public";
 			$ch = curl_init($url);
-
+			$headers = array('Authorization: Bearer ' . $accts[$h]['accessToken']);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			$res = curl_exec($ch);
 			print_r($res);
@@ -714,6 +719,9 @@ function refreshGoogToken($uuid){
 	
 	if($found == "false"){
 		return "User account was not found";
+	}
+	if(!isset($acct['refreshToken'])){
+		return "refresh token does not exist";
 	}
 	
 	$params = array(

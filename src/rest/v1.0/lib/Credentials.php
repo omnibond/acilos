@@ -29,6 +29,7 @@
 use \ElasticSearch\Client;
 require_once('../../cron/objects/authObject.php');
 require_once('../../oAuth/twitteroauth/twitteroauth.php');
+require_once('RefreshGoogleToken.php');
 
 class Credentials{
 	public function checkCredentials(){
@@ -149,16 +150,19 @@ class Credentials{
 				for($d=0; $d < count($serviceCreds['google'][$a]['accounts']); $d++){
 					if($serviceCreds['google'][$a]['accounts'][$d]['authenticated'] == "true"){
 						$obj = $serviceCreds['google'][$a]['accounts'][$d];
-
-						$url = 'https://www.google.com/m8/feeds/contacts/default/full?max-results=1&alt=json&access_token=' . $obj['accessToken'];
+						
+						$url = 'https://www.googleapis.com/plus/v1/people/me';
 						$ch = curl_init($url);
+						$headers = array('Authorization: Bearer ' . $obj['accessToken']);
+						curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 						$response = curl_exec($ch);
 						curl_close($ch);
 
 						$account;
 						$responseObj = json_decode($response, true);
-						if($responseObj[''] == ''){
+						
+						if(isset($responseObj['kind'])){
 							$account = array(
 								"user" => $obj['user'],
 								"status" => "good",
@@ -171,18 +175,43 @@ class Credentials{
 								"authenticated" => $obj['authenticated']
 							);
 						}else{
-							$account = array(
-								"user" => $obj['user'],
-								"status" => "bad",
-								"auth" => $serviceCreds['google'][$a]['auth'],
-								"name" => $obj['name'],
-								"image" => $obj['image'],
-								'expiresAt' => $obj['expiresAt'],
-								"color" => $obj['color'],
-								"loginDisallow" => $obj['loginDisallow'],
-								"authenticated" => $obj['authenticated']
-							);
+							$token = refreshGoogToken($obj['uuid']);
+							$url = 'https://www.googleapis.com/plus/v1/people/me';
+							$ch = curl_init($url);
+							$headers = array('Authorization: Bearer ' . $token);
+							curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+							curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+							$response = curl_exec($ch);
+							curl_close($ch);
+							$responseObj = json_decode($response, true);
+							
+							if(isset($responseObj['error'])){
+								$account = array(
+									"user" => $obj['user'],
+									"status" => "bad",
+									"auth" => $serviceCreds['google'][$a]['auth'],
+									"name" => $obj['name'],
+									"image" => $obj['image'],
+									'expiresAt' => $obj['expiresAt'],
+									"color" => $obj['color'],
+									"loginDisallow" => $obj['loginDisallow'],
+									"authenticated" => $obj['authenticated']
+								);							
+							}else{
+								$account = array(
+									"user" => $obj['user'],
+									"status" => "good",
+									"auth" => $serviceCreds['google'][$a]['auth'],
+									"name" => $obj['name'],
+									"image" => $obj['image'],
+									'expiresAt' => $obj['expiresAt'],
+									"color" => $obj['color'],
+									"loginDisallow" => $obj['loginDisallow'],
+									"authenticated" => $obj['authenticated']
+								);
+							}
 						}
+							
 						array_push($returnArr['google'], $account);
 					}else{
 						$account = array(

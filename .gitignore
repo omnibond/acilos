@@ -6,6 +6,7 @@ logs/
 nodes/
 serviceCreds.json
 publicQueryTermObj.json
+localQueryTermObj.json
 twitterClientInfo.txt
 linkedinStep1.txt
 googleStep1.txt

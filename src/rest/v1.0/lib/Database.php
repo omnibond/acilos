@@ -597,7 +597,7 @@ class Database{
 				);
 			}
 			if($key == "google"){
-				$scope = "https://www.googleapis.com/auth/plus.stream.read,https://www.googleapis.com/auth/plus.stream.write,https://www.googleapis.com/auth/plus.media.upload,https://www.googleapis.com/auth/plus.me,https://www.googleapis.com/auth/plus.circles.read,https://www.googleapis.com/auth/plus.circles.write";
+				$scope = "https://www.googleapis.com/auth/plus.stream.read,https://www.googleapis.com/auth/plus.stream.write,https://www.googleapis.com/auth/plus.media.upload,https://www.googleapis.com/auth/plus.me,https://www.googleapis.com/auth/plus.circles.read,https://www.googleapis.com/auth/plus.circles.write,https://www.googleapis.com/auth/plus.login";
 				$authLink = $obj[$key]['redir']."?apiKey=".$obj[$key]['key']."&secretKey=".$obj[$key]['secret']."&redirect_uri=".$obj[$key]['redir']."&scope=".$scope;
 				$account = array(
 					"color" => "#41CCCC",

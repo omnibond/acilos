@@ -135,8 +135,9 @@ if(isset($_GET['code'])) {
 		if(isset($token['refresh_token'])){
 			$temp['refreshToken'] = $token['refresh_token'];
 		}
-
-		$temp['accessToken'] = $token['access_token'];
+		if(isset($token['access_token'])){
+			$temp['accessToken'] = $token['access_token'];
+		}
 		$temp['expiresAt'] = $token['created'] + $token['expires_in'];
 		$temp['user'] = $id;
 		$temp['image'] = $img;
@@ -160,11 +161,11 @@ if(isset($_GET['code'])) {
 
 		file_put_contents("../serviceCreds.json", json_encode($credObj));
 		
-		//header('Location: ../login.php?google=true');
+		header('Location: ../login.php?google=true');
 	}else{
 		setcookie ("googleCook", "", time() - 3600, $_SERVER['HTTP_HOST'], 'clemson.edu', false, false);
 		
-		//header('Location: ../login.php?error=2&service=google');
+		header('Location: ../login.php?error=2&service=google');
 	}
 	
 }

@@ -44,6 +44,9 @@ function refreshGoogToken($uuid){
 	if($found == "false"){
 		return "User account was not found";
 	}
+	if(!isset($acct['refreshToken'])){
+		return "refresh token does not exist";
+	}
 	
 	$params = array(
 		"refresh_token" => $acct['refreshToken'],
@@ -64,7 +67,8 @@ function refreshGoogToken($uuid){
 	#the decode true param turns them into assoc arrays, 
 	#decode to add the refresh token to the object
 	$obj = json_decode($response, true);
-	
+	print_r($credObj);
+	print_r($obj);
 	$credObj['google'][0]['accounts'][$d]['accessToken'] = $obj['access_token'];
 	
 	file_put_contents("../../serviceCreds.json", json_encode($credObj));
