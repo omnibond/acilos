@@ -376,7 +376,7 @@ function matchQueryString($action, $searchObj, $from){
 		case "normal":
 			//searchObj['normal'] is the array of items that was in termlist 
 			for($f=0; $f<count($searchObj['normal']); $f++){
-				$temp = array("term" => array("queryString" => strtolower($searchObj['normal'][$f])));
+				$temp = array("term" => array("content.queryString" => strtolower($searchObj['normal'][$f])));
 				array_push($searchArr['query']['bool']['should'], $temp);
 			}
 		break;
@@ -384,14 +384,14 @@ function matchQueryString($action, $searchObj, $from){
 		case "hasQuotes":
 			for($f=0; $f<count($searchObj['normal']); $f++){
 				if($searchObj['normal'][$f] != ""){
-					$temp = array("term" => array("queryString" => strtolower($searchObj['normal'][$f])));
+					$temp = array("term" => array("content.queryString" => strtolower($searchObj['normal'][$f])));
 					array_push($searchArr['query']['bool']['should'], $temp);
 				}
 			}
 			for($f=0; $f<count($searchObj['quotes']); $f++){
 				$rep = str_replace("+", " ", $searchObj['quotes'][$f]);
 				$temp = array("match" => 
-							array("queryString" => 
+							array("content.queryString" => 
 								array(
 									"query" => strtolower($rep),
 									"type" => "phrase"
@@ -405,7 +405,7 @@ function matchQueryString($action, $searchObj, $from){
 		case "hasColon":
 			for($f=0; $f<count($searchObj['normal']); $f++){
 				if($searchObj['normal'][$f] != ""){
-					$temp = array("term" => array("queryString" => strtolower($searchObj['normal'][$f])));
+					$temp = array("term" => array("content.queryString" => strtolower($searchObj['normal'][$f])));
 					array_push($searchArr['filter']['bool']['should'], $temp);
 				}
 			}
@@ -444,7 +444,7 @@ function matchQueryString($action, $searchObj, $from){
 			
 			for($f=0; $f<count($searchObj['normal']); $f++){
 				if($searchObj['normal'][$f] != ""){
-					$temp = array("term" => array("queryString" => strtolower($searchObj['normal'][$f])));
+					$temp = array("term" => array("content.queryString" => strtolower($searchObj['normal'][$f])));
 					array_push($searchArr['filter']['bool']['should'], $temp);
 				}
 			}
@@ -452,7 +452,7 @@ function matchQueryString($action, $searchObj, $from){
 			for($f=0; $f<count($searchObj['quotes']); $f++){
 				$rep = str_replace("+", " ", $searchObj['quotes'][$f]);
 				$temp = array("match" => 
-							array("queryString" => 
+							array("content.queryString" => 
 								array(
 									"query" => strtolower($rep),
 									"type" => "phrase"
