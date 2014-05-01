@@ -108,78 +108,21 @@ define([
 				this.postAddArray = [];				
 			},
 
-			activate: function(e) {				
+			activate: function() {				
 				topic.publish("/dojo-mama/updateSubNav", {back: '/feeds', title: "Search Public Data"} );
 
-				console.log("e.params: ", e.params);
+				if(this.infoList){
+					this.infoList.destroyRecursive();
+					this.infoList = null;
+				}
 
-				this.feedTitle = e.params.feedTitle;
-
-				this.getPublicQueryObject().then(lang.hitch(this, function(obj){
-					this.queryObj = obj;
-
-					console.log("the public query object is: ", this.queryObj);
-
-					this.getServiceCreds().then(lang.hitch(this, function(obj){
-						this.authObj = obj;
-
-						this.exists = {};
-						for(var key in this.authObj){	
-							if(key == "facebook" && this.authObj[key][0]['accounts'].length > 0){
-								if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
-									this.exists['Facebook'] = false;
-								}
-							}
-							if(key == "twitter" && this.authObj[key][0]['accounts'].length > 0){
-								if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
-									this.exists['Twitter'] = false;
-								}
-							}
-							if(key == "google" && this.authObj[key][0]['accounts'].length > 0){
-								if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
-									this.exists['Google'] = false;
-								}
-							}
-							/*
-							if(key == "instagram" && this.authObj[key][0]['accounts'].length > 0){
-								if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
-									this.exists['Instagram'] = true;
-								}
-							}
-							if(key == "linkedin" && this.authObj[key][0]['accounts'].length > 0){
-								if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
-									this.exists['Linkedin'] = true;
-								}
-							}
-							*/
-						}
-
-						for(var x = 0; x < this.queryObj[this.feedTitle]['Services'].length; x++){
-							if(this.queryObj[this.feedTitle]["Services"][x] == "Facebook"){
-								this.exists['Facebook'] = true;
-							}
-							if(this.queryObj[this.feedTitle]["Services"][x] == "Twitter"){
-								this.exists['Twitter'] = true;
-							}
-							if(this.queryObj[this.feedTitle]["Services"][x] == "Google"){
-								this.exists['Google'] = true;
-							}
-						}
-
-						if(this.infoList){
-							this.infoList.destroyRecursive();
-							this.infoList = null;
-						}
-
-						if(this.list){
-							this.list.destroyRecursive();
-							this.postAddArray = [];
-							this.buildList();
-						}else{
-							this.buildList();
-						}
-					}));
-				}));
+				if(this.list){
+					this.list.destroyRecursive();
+					this.postAddArray = [];
+					this.buildList();
+				}else{
+					this.buildList();
+				}
 			},
 
 			postCreate: function(){
@@ -188,6 +131,41 @@ define([
 				this.fromVar = 0;
 				
 				on(this.domNode, "scroll", lang.hitch(this, this.dataPoints));
+				
+				this.getServiceCreds().then(lang.hitch(this, function(obj){
+					this.authObj = obj;
+
+					this.exists = {};
+					for(var key in this.authObj){	
+						if(key == "facebook" && this.authObj[key][0]['accounts'].length > 0){
+							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
+								this.exists['Facebook'] = false;
+							}
+						}
+						if(key == "twitter" && this.authObj[key][0]['accounts'].length > 0){
+							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
+								this.exists['Twitter'] = false;
+							}
+						}
+						if(key == "google" && this.authObj[key][0]['accounts'].length > 0){
+							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
+								this.exists['Google'] = false;
+							}
+						}
+						/*
+						if(key == "instagram" && this.authObj[key][0]['accounts'].length > 0){
+							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
+								this.exists['Instagram'] = true;
+							}
+						}
+						if(key == "linkedin" && this.authObj[key][0]['accounts'].length > 0){
+							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
+								this.exists['Linkedin'] = true;
+							}
+						}
+						*/
+					}
+				}))
 			},
 
 			buildList: function(){
@@ -207,9 +185,43 @@ define([
 				this.addChild(this.infoList);
 
 				this.queryBox = new TextBox({
-					value: this.feedTitle,
+					placeHolder: "Search here",
 					"class": "selectorTextBox"
 				});
+
+				/*this.justQuery = new Button({
+					"name": "searchButton",
+					left:"true",
+					onClick: lang.hitch(this, function(){
+						this.fromVar = 0;
+						if(this.list){
+							this.list.destroyRecursive();
+							this.postAddArray = [];
+							this.list = null;
+						}
+						if(this.infoList){
+							this.infoList.destroyRecursive();
+							this.infoList = null;
+						}
+						if(this.queryBox.get("value") == ""){
+
+						}else{
+							this.list = new SearchScroller({
+								feedName: this.queryBox.get("value"),
+								postAddArray: this.postAddArray,
+								getFeedData: lang.hitch(this, this.getPublicDBObjects),
+								getNextGroup: lang.hitch(this, this.getNextGroup),
+								setStarred: lang.hitch(this, this.setStarred),
+								setStarredClient: lang.hitch(this, this.setStarredClient),
+								fromVar: this.fromVar,
+								FeedViewID: this.id,
+								view: this
+							});			
+							this.addChild(this.list);
+							this.resize();
+						}
+					})
+				});*/
 
 				this.scrollButton = new Button({
 					"name": "scrollButton",
@@ -330,37 +342,6 @@ define([
 					})
 				});
 
-				this.publicFlag = "false";
-				this.localFlag = "false";
-
-				this.publicButton = new Button({
-					"name": "publicButton",
-					"right": "true",
-					onClick: lang.hitch(this, function(){
-						if(this.publicFlag == "false"){
-							domClass.add(this.publicButton.domNode, "darkenedButton");
-							this.publicFlag = "true";
-						}else{
-							domClass.remove(this.publicButton.domNode, "darkenedButton");
-							this.publicFlag = "false";
-						}
-					})
-				});
-
-				this.localButton = new Button({
-					"name": "localButton",
-					"right": "true",
-					onClick: lang.hitch(this, function(){
-						if(this.localFlag == "false"){
-							domClass.add(this.localButton.domNode, "darkenedButton");
-							this.localFlag = "true";
-						}else{
-							domClass.remove(this.localButton.domNode, "darkenedButton");
-							this.localFlag = "false";
-						}
-					})
-				});
-
 				this.searchBoxQueryButtonHolder = domConstruct.create("div", {"class": "displayBlockOnPhoneClass"});
 				this.searchBoxQueryButtonHolder.appendChild(this.queryBox.domNode);
 				this.searchBoxQueryButtonHolder.appendChild(this.queryButton.domNode);
@@ -374,7 +355,7 @@ define([
 
 				this.selectorItem = new SelectorBar({
 					divs: [this.searchBoxQueryButtonHolder],
-					buttons: [this.scrollButton, this.saveButton, this.publicButton, this.localButton],
+					buttons: [this.scrollButton, this.saveButton],
 					serviceSelectors: [this.services],
 					style: "text-align: center"
 				});

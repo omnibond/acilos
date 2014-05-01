@@ -108,21 +108,78 @@ define([
 				this.postAddArray = [];				
 			},
 
-			activate: function() {				
-				topic.publish("/dojo-mama/updateSubNav", {back: '/feeds', title: "Search Public Data"} );
+			activate: function(e) {				
+				topic.publish("/dojo-mama/updateSubNav", {back: '/feeds/NewEditFeed', title: "Search Public Data"} );
 
-				if(this.infoList){
-					this.infoList.destroyRecursive();
-					this.infoList = null;
-				}
+				console.log("e.params: ", e.params);
 
-				if(this.list){
-					this.list.destroyRecursive();
-					this.postAddArray = [];
-					this.buildList();
-				}else{
-					this.buildList();
-				}
+				this.feedTitle = e.params.feedTitle;
+
+				this.getPublicQueryObject().then(lang.hitch(this, function(obj){
+					this.queryObj = obj;
+
+					console.log("the public query object is: ", this.queryObj);
+
+					this.getServiceCreds().then(lang.hitch(this, function(obj){
+						this.authObj = obj;
+
+						this.exists = {};
+						for(var key in this.authObj){	
+							if(key == "facebook" && this.authObj[key][0]['accounts'].length > 0){
+								if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
+									this.exists['Facebook'] = false;
+								}
+							}
+							if(key == "twitter" && this.authObj[key][0]['accounts'].length > 0){
+								if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
+									this.exists['Twitter'] = false;
+								}
+							}
+							if(key == "google" && this.authObj[key][0]['accounts'].length > 0){
+								if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
+									this.exists['Google'] = false;
+								}
+							}
+							/*
+							if(key == "instagram" && this.authObj[key][0]['accounts'].length > 0){
+								if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
+									this.exists['Instagram'] = true;
+								}
+							}
+							if(key == "linkedin" && this.authObj[key][0]['accounts'].length > 0){
+								if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
+									this.exists['Linkedin'] = true;
+								}
+							}
+							*/
+						}
+
+						for(var x = 0; x < this.queryObj[this.feedTitle]['Services'].length; x++){
+							if(this.queryObj[this.feedTitle]["Services"][x] == "Facebook"){
+								this.exists['Facebook'] = true;
+							}
+							if(this.queryObj[this.feedTitle]["Services"][x] == "Twitter"){
+								this.exists['Twitter'] = true;
+							}
+							if(this.queryObj[this.feedTitle]["Services"][x] == "Google"){
+								this.exists['Google'] = true;
+							}
+						}
+
+						if(this.infoList){
+							this.infoList.destroyRecursive();
+							this.infoList = null;
+						}
+
+						if(this.list){
+							this.list.destroyRecursive();
+							this.postAddArray = [];
+							this.buildList();
+						}else{
+							this.buildList();
+						}
+					}));
+				}));
 			},
 
 			postCreate: function(){
@@ -131,41 +188,6 @@ define([
 				this.fromVar = 0;
 				
 				on(this.domNode, "scroll", lang.hitch(this, this.dataPoints));
-				
-				this.getServiceCreds().then(lang.hitch(this, function(obj){
-					this.authObj = obj;
-
-					this.exists = {};
-					for(var key in this.authObj){	
-						if(key == "facebook" && this.authObj[key][0]['accounts'].length > 0){
-							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
-								this.exists['Facebook'] = false;
-							}
-						}
-						if(key == "twitter" && this.authObj[key][0]['accounts'].length > 0){
-							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
-								this.exists['Twitter'] = false;
-							}
-						}
-						if(key == "google" && this.authObj[key][0]['accounts'].length > 0){
-							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
-								this.exists['Google'] = false;
-							}
-						}
-						/*
-						if(key == "instagram" && this.authObj[key][0]['accounts'].length > 0){
-							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
-								this.exists['Instagram'] = true;
-							}
-						}
-						if(key == "linkedin" && this.authObj[key][0]['accounts'].length > 0){
-							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
-								this.exists['Linkedin'] = true;
-							}
-						}
-						*/
-					}
-				}))
 			},
 
 			buildList: function(){
@@ -185,43 +207,9 @@ define([
 				this.addChild(this.infoList);
 
 				this.queryBox = new TextBox({
-					placeHolder: "Search here",
+					value: this.searchString,
 					"class": "selectorTextBox"
 				});
-
-				/*this.justQuery = new Button({
-					"name": "searchButton",
-					left:"true",
-					onClick: lang.hitch(this, function(){
-						this.fromVar = 0;
-						if(this.list){
-							this.list.destroyRecursive();
-							this.postAddArray = [];
-							this.list = null;
-						}
-						if(this.infoList){
-							this.infoList.destroyRecursive();
-							this.infoList = null;
-						}
-						if(this.queryBox.get("value") == ""){
-
-						}else{
-							this.list = new SearchScroller({
-								feedName: this.queryBox.get("value"),
-								postAddArray: this.postAddArray,
-								getFeedData: lang.hitch(this, this.getPublicDBObjects),
-								getNextGroup: lang.hitch(this, this.getNextGroup),
-								setStarred: lang.hitch(this, this.setStarred),
-								setStarredClient: lang.hitch(this, this.setStarredClient),
-								fromVar: this.fromVar,
-								FeedViewID: this.id,
-								view: this
-							});			
-							this.addChild(this.list);
-							this.resize();
-						}
-					})
-				});*/
 
 				this.scrollButton = new Button({
 					"name": "scrollButton",

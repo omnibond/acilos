@@ -36,10 +36,12 @@ define(['dojo/_base/declare',
 		'app/feeds/DeleteFeed',
 		'app/feeds/EditFeed',
 		'app/feeds/EditFeedView',
-		'app/feeds/newCreateFeedView',
-		'app/feeds/newEditFeedView',
-		'app/feeds/newFeedView',
+		'app/feeds/NewCreateFeedView',
+		'app/feeds/NewEditFeedView',
+		'app/feeds/NewFeedView',
 		'app/feeds/LocalMainView',
+		'app/feeds/NewDeleteFeed',
+		'app/feeds/NewEditFeed',
 		'app/mainFeed/BlastView'
 ], function(
 	declare, 
@@ -55,10 +57,12 @@ define(['dojo/_base/declare',
 	DeleteFeed, 
 	EditFeed, 
 	EditFeedView,
-	newCreateFeedView,
-	newEditFeedView,
-	newFeedView,
+	NewCreateFeedView,
+	NewEditFeedView,
+	NewFeedView,
 	LocalMainView,
+	NewDeleteFeed,
+	NewEditFeed,
 	BlastView
 ) {
 	return declare([Module], {
@@ -90,6 +94,7 @@ define(['dojo/_base/declare',
 				setStarredClient: lang.hitch(this, this.setStarredClient),
 				sendSearchString: lang.hitch(this, this.sendSearchString)
 			});
+
 			this.CreateFeedView = new CreateFeedView({
 				route: "/CreateFeedView",
 				
@@ -99,8 +104,11 @@ define(['dojo/_base/declare',
 				setStarred: lang.hitch(this, this.setStarred),
 				setStarredClient: lang.hitch(this, this.setStarredClient),
 				checkFeedName: lang.hitch(this, this.checkFeedName),
-				getPublicQueryObject: lang.hitch(this, this.getPublicQueryObject)
+				getPublicQueryObject: lang.hitch(this, this.getPublicQueryObject),
+				writeLocalFeed: lang.hitch(this, this.writeLocalFeed),
+				sendSearchString: lang.hitch(this, this.sendSearchString)
 			});
+
 			this.EditFeedView = new EditFeedView({
 				route: "/EditFeedView/:feedName",
 				
@@ -114,29 +122,63 @@ define(['dojo/_base/declare',
 				overwriteFeedList: lang.hitch(this, this.overwriteFeedList),
 				getPublicQueryObject: lang.hitch(this, this.getPublicQueryObject)
 			});
+
 			this.DeleteFeed = new DeleteFeed({
 				route: "/DeleteFeed",
+			
+				getFeedList: lang.hitch(this, this.getFeedList),
+				deleteLocalFeedList: lang.hitch(this, this.deleteLocalFeedList),
+				getLocalFeedList: lang.hitch(this, this.getLocalFeedList)
+			});
+
+			this.NewDeleteFeed = new NewDeleteFeed({
+				route: "/NewDeleteFeed",
 			
 				getFeedList: lang.hitch(this, this.getFeedList),
 				deleteFeedList: lang.hitch(this, this.deleteFeedList),
 				deletePublicQueryObjectTerm: lang.hitch(this, this.deletePublicQueryObjectTerm),
 				getPublicQueryObject: lang.hitch(this, this.getPublicQueryObject)
 			});
+
 			this.EditFeed = new EditFeed({
 				route: "/EditFeed",
+
+				EditFeedView: this.EditFeedView,
 				
+				getLocalFeedList: lang.hitch(this, this.getLocalFeedList)
+				//May need to pass other functions in later
+			});
+
+			this.NewEditFeedView = new NewEditFeedView({
+				route: '/NewEditFeedView/:feedTitle',
+
 				getFeedList: lang.hitch(this, this.getFeedList),
+				getServiceCreds: lang.hitch(this, this.getServiceCreds),
+				getPublicQueryObjects: lang.hitch(this, this.getPublicQueryObjects),
+				writeQueryTerm: lang.hitch(this, this.writeQueryTerm),
+				getPublicDBObjects: lang.hitch(this, this.getPublicDBObjects),
+				paginateService: lang.hitch(this, this.paginateService),
+				getPublicQueryObject: lang.hitch(this, this.getPublicQueryObject)
+			});
+
+			this.NewEditFeed = new NewEditFeed({
+				route: "/NewEditFeed",
+
+				NewEditFeedView: this.NewEditFeedView,
+
 				getPublicQueryObject: lang.hitch(this, this.getPublicQueryObject)
 				//May need to pass other functions in later
 			});
+
 			this.PublicMainView = new PublicMainView({
 				route: '/PublicMainView',
 				
 				getFeedList: lang.hitch(this, this.getFeedList),
 				getPublicQueryObject: lang.hitch(this, this.getPublicQueryObject)
 			});
-			this.newCreateFeedView = new newCreateFeedView({
-				route: '/newCreateFeedView',
+
+			this.NewCreateFeedView = new NewCreateFeedView({
+				route: '/NewCreateFeedView',
 
 				getFeedList: lang.hitch(this, this.getFeedList),
 				getServiceCreds: lang.hitch(this, this.getServiceCreds),
@@ -146,19 +188,9 @@ define(['dojo/_base/declare',
 				paginateService: lang.hitch(this, this.paginateService),
 				getPublicQueryObject: lang.hitch(this, this.getPublicQueryObject)
 			});
-			this.newEditFeedView = new newEditFeedView({
-				route: '/newEditFeedView/:feedTitle',
-
-				getFeedList: lang.hitch(this, this.getFeedList),
-				getServiceCreds: lang.hitch(this, this.getServiceCreds),
-				getPublicQueryObjects: lang.hitch(this, this.getPublicQueryObjects),
-				writeQueryTerm: lang.hitch(this, this.writeQueryTerm),
-				getPublicDBObjects: lang.hitch(this, this.getPublicDBObjects),
-				paginateService: lang.hitch(this, this.paginateService),
-				getPublicQueryObject: lang.hitch(this, this.getPublicQueryObject)
-			});
-			this.newFeedView = new newFeedView({
-				route: '/newFeedView/:feedTitle/:queryTerm',
+			
+			this.NewFeedView = new NewFeedView({
+				route: '/NewFeedView/:feedTitle/:queryTerm',
 
 				getFeedList: lang.hitch(this, this.getFeedList),
 				getServiceCreds: lang.hitch(this, this.getServiceCreds),
@@ -169,6 +201,7 @@ define(['dojo/_base/declare',
 				getPublicQueryObject: lang.hitch(this, this.getPublicQueryObject),
 				getSpecificFeedList: lang.hitch(this, this.getSpecificFeedList)
 			});
+
 			this.rootView = new LocalMainView({
 				route: '/',
 
@@ -176,6 +209,7 @@ define(['dojo/_base/declare',
 
 				getLocalFeedList: lang.hitch(this, this.getLocalFeedList)
 			});
+			
 			this.registerView(this.rootView);
 			this.registerView(this.FeedView);
 			this.registerView(this.CreateFeedView);
@@ -183,10 +217,12 @@ define(['dojo/_base/declare',
 			this.registerView(this.EditFeed);
 			this.registerView(this.EditFeedView);
 			this.registerView(this.blastView);
-			this.registerView(this.newCreateFeedView);
-			this.registerView(this.newEditFeedView);
-			this.registerView(this.newFeedView);
+			this.registerView(this.NewCreateFeedView);
+			this.registerView(this.NewEditFeedView);
+			this.registerView(this.NewFeedView);
 			this.registerView(this.PublicMainView);
+			this.registerView(this.NewDeleteFeed);
+			this.registerView(this.NewEditFeed);
 		},
 		
 		deleteFeedList: function(feedName){
@@ -290,9 +326,20 @@ define(['dojo/_base/declare',
 			return xhrManager.send('GET', 'rest/v1.0/FeedData/getLocalFeedList', params);
 		},
 
+		deleteLocalFeedList: function(feedName){
+			var params = {feedName: feedName};
+			return xhrManager.send('POST', 'rest/v1.0/FeedData/deleteLocalFeedList', params);
+		},
+
 		sendSearchString: function(searchString, from){
 			var params = {searchString: searchString, from: from};
 			return xhrManager.send('GET', 'rest/v1.0/Search/sendSearchString', params);
+		},
+
+		writeLocalFeed: function(feedName, queryString){
+			params = {feedName: feedName, queryString: queryString};
+			console.log("writeQueryTerm params are: ", params);
+			return xhrManager.send('POST', 'rest/v1.0/FeedData/writeLocalFeed', params);
 		}
 	})
 });

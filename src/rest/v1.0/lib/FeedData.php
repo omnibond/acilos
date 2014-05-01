@@ -140,6 +140,25 @@ class FeedData{
 		return json_encode($return);
 	}
 
+	public function deleteLocalFeedList(){
+		$var = file_get_contents("php://input");
+		$fileName = "../../localQueryTermObj.json";
+
+		$param = json_decode($var, true);
+
+		$feedName = $param['feedName'];
+
+		$feedList = file_get_contents($fileName);
+		$obj = json_decode($feedList, true);
+
+		if(isset($obj[$feedName])){
+			unset($obj[$feedName]);
+		}
+
+		file_put_contents("../../localQueryTermObj.json", json_encode($obj));
+		return json_encode(array("success" => "success"));
+	}
+
 	public function update(){
 		$var = file_get_contents("php://input");
 		$varObj = json_decode($var, true);

@@ -134,8 +134,6 @@ define(['dojo/_base/declare',
 				})
 				this.selectorItem.placeAt(this.domNode.parentNode);
 			}
-
-			console.log("obj isssssss: ", obj);
 			
 			if(obj == null || obj.length == 0){
 				var item = new ListItem({
@@ -172,7 +170,7 @@ define(['dojo/_base/declare',
 		},
 		
 		activate: function(e){
-			topic.publish("/dojo-mama/updateSubNav", {back: '/', title: "Customize new feeds"} );
+			topic.publish("/dojo-mama/updateSubNav", {back: '/', title: "Your local feeds"} );
 				
 			if(this.mainList){
 				this.mainList.destroyRecursive();

@@ -194,6 +194,46 @@ define([
 					})
 				});
 
+				this.saveButton = new Button({
+					"name": "saveButton",
+					"right": "true",
+					onClick: lang.hitch(this, function(){
+						var dialog = new Dialog({
+							title: "Save your query",
+							draggable: false,
+							"class": "saveDijitDialog"
+						});
+
+						var feedNameTextBox = new TextBox({
+							placeHolder: "Custom feed name"
+						});
+
+						var saveFeedButton = new Button({
+							label: "Save",
+							style: "height: 21px; line-height: 20px",
+							onClick: lang.hitch(this, function(){
+								if(feedNameTextBox.get("value") != "" && this.searchBox.get("value") != ""){	
+									this.writeLocalFeed(feedNameTextBox.get("value"), this.searchBox.get("value"));
+
+									dialog.hide();
+
+									this.router.goToAbsoluteRoute("/feeds");
+								}else{
+									console.log("you must enter a name for your feed");
+								}	
+							})
+						});
+
+						var saveDiv = domConstruct.create("div", {});
+
+						saveDiv.appendChild(feedNameTextBox.domNode);
+						saveDiv.appendChild(saveFeedButton.domNode);
+
+						dialog.set("content", saveDiv);
+						dialog.show();
+					})
+				});
+
 				this.helpButton = new Button({
 					"name": "helpButton",
 					onClick: lang.hitch(this, function(){
@@ -222,7 +262,7 @@ define([
 
 				this.selectorItem = new SelectorBar({
 					textBoxes: [this.searchBox],
-					buttons: [this.manualRefreshBut, this.searchButton, this.scrollButton],
+					buttons: [this.manualRefreshBut, this.searchButton, this.scrollButton, this.saveButton],
 					toolTips: [this.helpButton],
 					style: "text-align: center"
 				});

@@ -4,7 +4,7 @@
 ** All rights reserved.
 ** Omnibond Systems - www.omnibond.com for Acilos.com
 **
-** This file defines the mainView for the custom feeds module
+** This file defines the view for what feeds can be edited for the custom feeds module
 ** 
 **
 ** $QT_BEGIN_LICENSE:LGPL$
@@ -30,7 +30,7 @@ define(['dojo/_base/declare',
 		"dojo/_base/lang",
 		
 		'app/util/xhrManager',
-		'app/SelectorBar',
+		'app/TitleBar',
 		'app/SearchScroller',
 		
 		"dojox/mobile/ScrollableView",
@@ -48,7 +48,7 @@ define(['dojo/_base/declare',
 	lang, 
 	
 	xhrManager, 
-	SelectorBar, 
+	TitleBar, 
 	SearchScroller,
 	
 	ScrollableView,
@@ -61,82 +61,12 @@ define(['dojo/_base/declare',
 ) {
 	return declare([ModuleScrollableView], {
 
-		deactivate: function(){
-			if(this.selectorItem){
-				this.selectorItem.destroyRecursive();
-				this.selectorItem = null;
-			}
-
-			if(this.mainList){
-				this.mainList.destroyRecursive();
-				this.mainList = null;	
-			}
-		},	
-		
 		buildMainList: function(obj){
 			console.log("buildMainList: ", obj);
-			
+
 			this.mainList = new EdgeToEdgeList({
-				style: "margin-top: 40px;"
+				
 			});
-
-			if(!this.selectorItem){
-				this.scrollButton = new Button({
-					"name": "scrollButton",
-					"right": "true",
-					onClick: lang.hitch(this, function(){
-						var scroller = lang.hitch(this, function(){
-							if(this.domNode.scrollTop <= 0){
-								this.domNode.scrollTop = 0;
-							}else{
-								this.domNode.scrollTop = this.domNode.scrollTop - (this.domNode.scrollTop*.08);
-								if(this.domNode.scrollTop != 0){
-									setTimeout(scroller, 20);
-								}
-							}
-						});
-						setTimeout(scroller, 20);
-					})
-				});
-
-				this.newFeedButton = new Button({
-					"name": "newFeedButton",
-					"left": "true",
-					onClick: lang.hitch(this, function(){
-						//this.router.go("/CreateFeedView");
-						this.router.go("/NewCreateFeedView");
-					})
-				});
-
-				this.editFeedButton = new Button({
-					"name": "editFeedButton",
-					"left": "true",
-					onClick: lang.hitch(this, function(){
-						this.router.go("/NewEditFeed");
-					})
-				});
-
-				this.deleteFeedButton = new Button({
-					"name": "deleteFeedButton",
-					"left": "true",
-					onClick: lang.hitch(this, function(){
-						this.router.go("/NewDeleteFeed");
-					})
-				});
-
-				this.localButton = new Button({
-					"name": "localButton",
-					"right": "true",
-					onClick: lang.hitch(this, function(){
-						this.router.go("/");
-					})
-				});
-
-				this.selectorItem = new SelectorBar({
-					buttons: [this.editFeedButton, this.newFeedButton, this.deleteFeedButton, this.scrollButton, this.localButton]
-				})
-				this.selectorItem.placeAt(this.domNode.parentNode);
-			}
 
 			if(obj == null || obj.length == 0){
 				var item = new ListItem({
@@ -149,7 +79,8 @@ define(['dojo/_base/declare',
 						label: key,
 						clickable: true,
 						onClick: lang.hitch(this, function(obj, key){
-							this.router.go("/NewFeedView/" + key + "/" + obj[key]['terms']);
+							this.NewEditFeedView.searchString = obj[key]['terms'];
+							this.router.go("/NewEditFeedView/" + key);
 						}, obj, key)
 					});
 
@@ -160,7 +91,7 @@ define(['dojo/_base/declare',
 		},
 		
 		activate: function(e){
-			topic.publish("/dojo-mama/updateSubNav", {back: '/', title: "Your public feeds"} );
+			topic.publish("/dojo-mama/updateSubNav", {back: '/feeds/PublicMainView', title: "Select a feed to edit"} );
 
 			if(this.mainList){
 				this.mainList.destroyRecursive();

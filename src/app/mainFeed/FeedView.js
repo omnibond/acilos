@@ -215,7 +215,7 @@ define([
 
 									dialog.hide();
 
-									this.router.goToAbsoluteRoute("/feeds");
+									this.router.goToAbsoluteRoute("/feeds/\/");
 								}else{
 									console.log("you must enter a name for your feed");
 								}	

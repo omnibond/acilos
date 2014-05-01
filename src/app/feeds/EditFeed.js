@@ -61,43 +61,13 @@ define(['dojo/_base/declare',
 ) {
 	return declare([ModuleScrollableView], {		
 		
-		/*buildMainList: function(obj){
-			console.log("buildMainList: ", obj);
-			
-			this.mainList = new EdgeToEdgeList({
-				
-			});
-			if(obj == null || obj.length == 0){
-				var item = new ListItem({
-					label: "No feeds have been saved yet"
-				});	
-				this.mainList.addChild(item);	
-			}else{
-				for(var x = 0; x < obj.length; x++){
-					var item = new ListItem({
-						label: obj[x].name,
-						//icon: "app/resources/img/edit_icon_small.png",
-						clickable: true,
-						onClick: lang.hitch(this, function(obj, x){
-							console.log("console: ", obj);
-							this.router.go("/EditFeedView/" + obj[x].name);		
-						}, obj, x)
-					});	
-
-					this.mainList.addChild(item);	
-				}
-			}
-			this.addChild(this.mainList);
-			
-		},*/
-
 		buildMainList: function(obj){
 			console.log("buildMainList: ", obj);
-
+			
 			this.mainList = new EdgeToEdgeList({
 				
 			});
-
+			
 			if(obj == null || obj.length == 0){
 				var item = new ListItem({
 					label: "No feeds have been saved yet"
@@ -109,7 +79,8 @@ define(['dojo/_base/declare',
 						label: key,
 						clickable: true,
 						onClick: lang.hitch(this, function(obj, key){
-							this.router.go("/newEditFeedView/" + key);
+							this.EditFeedView.searchString = obj[key]['terms'];
+							this.router.go("/EditFeedView/" + key);
 						}, obj, key)
 					});
 
@@ -117,23 +88,17 @@ define(['dojo/_base/declare',
 				}
 			}
 			this.addChild(this.mainList);
+			
 		},
 		
 		activate: function(e){
 			topic.publish("/dojo-mama/updateSubNav", {back: '/feeds', title: "Select a feed to edit"} );
 				
-			/*if(this.mainList){
-				this.mainList.destroyRecursive();
-				this.getFeedList().then(lang.hitch(this, this.buildMainList));
-			}else{
-				this.getFeedList().then(lang.hitch(this, this.buildMainList));
-			}*/
-
 			if(this.mainList){
 				this.mainList.destroyRecursive();
-				this.getPublicQueryObject().then(lang.hitch(this, this.buildMainList));
+				this.getLocalFeedList().then(lang.hitch(this, this.buildMainList));
 			}else{
-				this.getPublicQueryObject().then(lang.hitch(this, this.buildMainList));
+				this.getLocalFeedList().then(lang.hitch(this, this.buildMainList));
 			}
 		}
 	})

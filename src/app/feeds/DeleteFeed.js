@@ -63,19 +63,22 @@ define(['dojo/_base/declare',
 ) {
 	return declare([ModuleScrollableView], {		
 		
-		/*buildMainList: function(obj){
+		buildMainList: function(obj){
 			console.log("buildMainList: ", obj);
 			
 			this.mainList = new EdgeToEdgeList({
 				
 			});
+
+			console.log("obj issssss: ", obj);
+
 			if(obj == null || obj.length == 0){
 				var item = new ListItem({
 					label: "No feeds have been saved yet"
 				});	
 				this.mainList.addChild(item);	
 			}else{
-				for(var x = 0; x < obj.length; x++){
+				/*for(var x = 0; x < obj.length; x++){
 					var item = new ListItem({
 						label: obj[x].name,
 						clickable: true,
@@ -85,43 +88,21 @@ define(['dojo/_base/declare',
 							}))
 						}, obj, x)
 					});	
-					//var divDelete = domConstruct.create("span", {innerHTML: "<img src=app/resources/img/minus_icon_small.png>", title: "Delete a Feed"});
-					//var divLabel = domConstruct.create("span", {innerHTML: obj[x].name,});
-					
-					//item.domNode.appendChild(divDelete);
-					//item.domNode.appendChild(divLabel);
-					//domClass.add(divDelete, "selectorButton");
 					this.mainList.addChild(item);	
-				}
-			}
-			this.addChild(this.mainList);
-			
-		},*/
+				}*/
 
-		buildMainList: function(obj){
-			console.log("buildMainList: ", obj);
-
-			this.mainList = new EdgeToEdgeList({
-				
-			});
-
-			if(obj == null || obj.length == 0){
-				var item = new ListItem({
-					label: "No feeds have been saved yet"
-				});	
-				this.mainList.addChild(item);	
-			}else{
 				for(var key in obj){
 					var item = new ListItem({
 						label: key,
 						clickable: true,
-						onClick: lang.hitch(this, function(obj, key){
-							this.deletePublicQueryObjectTerm(key).then(lang.hitch(this, function(){
+						onClick: lang.hitch(this, function(){
+							console.log("arguments are: ", arguments);
+							console.log("key is: ", key);
+							this.deleteLocalFeedList(key).then(lang.hitch(this, function(){
 								this.router.go("/");
 							}));
-						}, obj, key)
+						})
 					});
-
 					this.mainList.addChild(item);
 				}
 			}
@@ -131,18 +112,11 @@ define(['dojo/_base/declare',
 		activate: function(e){
 			topic.publish("/dojo-mama/updateSubNav", {back: '/feeds', title: "Select a feed to delete"} );
 				
-			/*if(this.mainList){
-				this.mainList.destroyRecursive();
-				this.getFeedList().then(lang.hitch(this, this.buildMainList));
-			}else{
-				this.getFeedList().then(lang.hitch(this, this.buildMainList));
-			}*/
-
 			if(this.mainList){
 				this.mainList.destroyRecursive();
-				this.getPublicQueryObject().then(lang.hitch(this, this.buildMainList));
+				this.getLocalFeedList().then(lang.hitch(this, this.buildMainList));
 			}else{
-				this.getPublicQueryObject().then(lang.hitch(this, this.buildMainList));
+				this.getLocalFeedList().then(lang.hitch(this, this.buildMainList));
 			}
 		}
 	})
