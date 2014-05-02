@@ -181,54 +181,14 @@ define([
 						var searchString = this.searchBox.get("value");						
 						if(searchString === ""){
 							console.log("You must enter a term to search");
-						}else{
+						}else{	
+
+							this.searchView.queryObjViewed = searchString;
 							searchString = searchString.replace(/ /gi, "+");
-							
-							
 							this.searchView.queryObj = searchString;
 							this.searchView.blastView = this.blastView;
 							this.router.go("/searchView");
 						}
-					})
-				});
-
-				this.saveButton = new Button({
-					"name": "saveButton",
-					"right": "true",
-					onClick: lang.hitch(this, function(){
-						var dialog = new Dialog({
-							title: "Save your query",
-							draggable: false,
-							"class": "saveDijitDialog"
-						});
-
-						var feedNameTextBox = new TextBox({
-							placeHolder: "Custom feed name"
-						});
-
-						var saveFeedButton = new Button({
-							label: "Save",
-							style: "height: 21px; line-height: 20px",
-							onClick: lang.hitch(this, function(){
-								if(feedNameTextBox.get("value") != "" && this.searchBox.get("value") != ""){	
-									this.writeLocalFeed(feedNameTextBox.get("value"), this.searchBox.get("value"));
-
-									dialog.hide();
-
-									this.router.goToAbsoluteRoute("/feeds/\/");
-								}else{
-									console.log("you must enter a name for your feed");
-								}	
-							})
-						});
-
-						var saveDiv = domConstruct.create("div", {});
-
-						saveDiv.appendChild(feedNameTextBox.domNode);
-						saveDiv.appendChild(saveFeedButton.domNode);
-
-						dialog.set("content", saveDiv);
-						dialog.show();
 					})
 				});
 
@@ -260,7 +220,7 @@ define([
 
 				this.selectorItem = new SelectorBar({
 					textBoxes: [this.searchBox],
-					buttons: [this.manualRefreshBut, this.searchButton, this.scrollButton, this.saveButton],
+					buttons: [this.manualRefreshBut, this.searchButton, this.scrollButton],
 					toolTips: [this.helpButton],
 					style: "text-align: center"
 				});

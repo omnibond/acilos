@@ -167,10 +167,18 @@ define([
 						}
 					})
 				});
-				this.searchBox = new TextBox({
-					placeHolder: "Enter a term to search",
-					style: "height:19px; vertical-align: top; margin-right: 5px; margin-top: 5px"
-				});
+				console.log("WSTUUUUUF", this.queryObjViewed);
+				if(this.queryObjViewed){
+					this.searchBox = new TextBox({
+						value: this.queryObjViewed,
+						style: "height:19px; vertical-align: top; margin-right: 5px; margin-top: 5px"
+					});
+				}else{
+					this.searchBox = new TextBox({
+						placeHolder: "Enter a term to search",
+						style: "height:19px; vertical-align: top; margin-right: 5px; margin-top: 5px"
+					});
+				}
 				this.searchButton = new Button({
 					"name": "searchButton",
 					onClick: lang.hitch(this, function(){
@@ -352,13 +360,6 @@ define([
 				});			
 				this.addChild(this.list);
 				this.resize();
-			},
-			
-			postCreate: function(){
-				if(this.dataObj == undefined){
-					console.log("Data for FeedListView is undefined"); 
-					return;
-				}
 			},
 			
 			getNextGroup: function(){

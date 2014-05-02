@@ -342,37 +342,6 @@ define([
 					})
 				});
 
-				this.publicFlag = "false";
-				this.localFlag = "false";
-
-				this.publicButton = new Button({
-					"name": "publicButton",
-					"right": "true",
-					onClick: lang.hitch(this, function(){
-						if(this.publicFlag == "false"){
-							domClass.add(this.publicButton.domNode, "darkenedButton");
-							this.publicFlag = "true";
-						}else{
-							domClass.remove(this.publicButton.domNode, "darkenedButton");
-							this.publicFlag = "false";
-						}
-					})
-				});
-
-				this.localButton = new Button({
-					"name": "localButton",
-					"right": "true",
-					onClick: lang.hitch(this, function(){
-						if(this.localFlag == "false"){
-							domClass.add(this.localButton.domNode, "darkenedButton");
-							this.localFlag = "true";
-						}else{
-							domClass.remove(this.localButton.domNode, "darkenedButton");
-							this.localFlag = "false";
-						}
-					})
-				});
-
 				this.searchBoxQueryButtonHolder = domConstruct.create("div", {"class": "displayBlockOnPhoneClass"});
 				this.searchBoxQueryButtonHolder.appendChild(this.queryBox.domNode);
 				this.searchBoxQueryButtonHolder.appendChild(this.queryButton.domNode);
@@ -386,7 +355,7 @@ define([
 
 				this.selectorItem = new SelectorBar({
 					divs: [this.searchBoxQueryButtonHolder],
-					buttons: [this.scrollButton, this.saveButton, this.publicButton, this.localButton],
+					buttons: [this.scrollButton, this.saveButton],
 					serviceSelectors: [this.services],
 					style: "text-align: center"
 				});
