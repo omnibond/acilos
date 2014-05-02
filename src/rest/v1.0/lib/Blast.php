@@ -263,17 +263,15 @@ class Blast{
 
 						$shareUrl = 'https://api.linkedin.com/v1/people/~/shares?oauth2_access_token='.$access_token;
 
-						$wallXML = "<activity>
-							<content-type>linkedin-html</content-type>
-								<body>
-									".$msg."
-								</body>
-							</activity>";
-
-						$wallUrl = 'https://api.linkedin.com/v1/people/~/person-activities?oauth2_access_token='. $access_token;
+						$wallXML = "<share>
+							<comment>".$msg."</comment>
+							<visibility>
+								<code>anyone</code>
+							</visibility>
+							</share>";
 
 						if($fileName == ""){
-							$url = $wallUrl;
+							$url = $shareUrl;
 							$xml = $wallXML;
 						}else{
 							$url = $shareUrl;
@@ -287,19 +285,23 @@ class Blast{
 						curl_setopt($ch2, CURLOPT_HTTPHEADER, $headerOptions);
 						$response = curl_exec($ch2);
 						$code = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
-						
-						#print_r($response);
-						
-						curl_close($ch2);
 
-						if(isset($code)){
-							if($code == "201"){
-								$returnArray['Linkedin'][$x] = array("success" => "true", "msg" => "Your LinkedIn status was posted successfully");
-							}else{
-								$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "Your LinkedIn message could not be posted - " . $response);
+						curl_close($ch2);
+						$xml = simplexml_load_string($response);
+
+						if($code == "201"){
+							$returnArray['Linkedin'][$x] = array("success" => "true", "msg" => "Your LinkedIn status was posted successfully");
+						}else{
+							$xml = (array)($xml);
+							if(isset($xml['error-code'])){
+								$linkCode = $xml['error-code'];
+								if($linkCode == "0"){
+									$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - Status is a duplicate.");
+								}else{
+									$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - " . $xml['message']);
+								}
 							}
 						}
-						return json_encode($returnArray);
 					}
 
 					break;

@@ -3348,6 +3348,29 @@ html.mobile,
 .saveDijitDialog .dijitDialogTitle {
   margin-left: 20px;
 }
+.errorDijitDialog .dijitDialogCloseIcon {
+  margin-left: -2px;
+  margin-top: -1px;
+  color: transparent;
+  background: url("../../../app/resources/img/closeIcon.png") no-repeat;
+  background-size: contain;
+  float: left;
+  height: 20px !important;
+  width: 20px !important;
+}
+.errorDijitDialog .dijitDialogCloseIconHover {
+  margin-left: -2px;
+  margin-top: -1px;
+  color: transparent;
+  background: url("../../../app/resources/img/closeIconHover.png") no-repeat;
+  background-size: contain;
+  float: left;
+  height: 20px !important;
+  width: 20px !important;
+}
+.errorDijitDialog .dijitDialogTitle {
+  margin-left: 20px;
+}
 /* Tooltip and TooltipDialog */
 .dijitTooltip,
 .dijitTooltipDialog {
@@ -3775,9 +3798,19 @@ select {
   position: absolute !important;
   overflow: hidden;
 }
-.saveDijitDialog {
+.errorDijitDialog {
   width: 230px !important;
   top: 149px !important;
+  overflow: hidden !important;
+}
+.dj_phone .errorDijitDialog {
+  width: 100% !important;
+  top: 117px !important;
+  overflow: hidden !important;
+}
+.dj_iphone .errorDijitDialog {
+  width: 100% !important;
+  top: 120px !important;
   overflow: hidden !important;
 }
 .saveQueryCheckBox {
