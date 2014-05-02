@@ -104,7 +104,7 @@ define(['dojo/_base/declare',
 									//var picUrl = accountArr[d].image;
 									var serviceUrl = "app/resources/img/Twitter_logo_blue_small.png";
 
-									checkBox.onClick = lang.hitch(this, function(){
+									checkBox.onClick = lang.hitch(this, function(checkBox){
 										if(checkBox.domNode.checked == false){
 											if(this.textArea.get('value').length > 140){
 												this.textAreaCountDiv.style.color = "red";
@@ -121,7 +121,7 @@ define(['dojo/_base/declare',
 
 											checkBox.domNode.checked = false;
 										}
-									});
+									}, checkBox);
 								}
 								if(key == "facebook"){
 									var checkBox = new CheckBox({

@@ -184,7 +184,6 @@ class Credentials{
 							$response = curl_exec($ch);
 							curl_close($ch);
 							$responseObj = json_decode($response, true);
-							
 							if(isset($responseObj['error'])){
 								$account = array(
 									"user" => $obj['user'],
