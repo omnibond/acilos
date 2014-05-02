@@ -26,6 +26,8 @@
 define(['dojo/_base/declare',
 		'dojo-mama/views/ModuleScrollableView',
 		"dojo/_base/lang",
+		"dojo/dom-class",
+		"dojo/dom-style",
 
 		"app/SelRoundRectList",
 		"app/SelEdgeToEdgeList",
@@ -48,7 +50,9 @@ define(['dojo/_base/declare',
 ], function(
 	declare, 
 	ModuleScrollableView,
-	lang, 
+	lang,
+	domClass,
+	domStyle,
 
 	RoundRectList, 
 	EdgeToEdgeList,
@@ -296,6 +300,11 @@ define(['dojo/_base/declare',
 									this.responseList = null;
 								}
 
+								if(this.errorDialog){
+									this.errorDialog.destroyRecursive();
+									this.errorDialog = null;
+								}
+
 								document.body.onkeyup = ""; 
 								var msg = this.textArea.get("value");
 								var file = '';
@@ -343,9 +352,18 @@ define(['dojo/_base/declare',
 
 									var div = domConstruct.create("div", {});
 
+									this.errorDialog = new Dialog({
+										title: "Error",
+										"class": "errorDijitDialog",
+										style: "top: 105px !important; width: 520px !important; padding: 10px !important; background-color: #FFE6E6",
+										draggable: false
+									});
+
+									this.errorHolderDiv = domConstruct.create("div", {style: "background-color: #FFE6E6"});
+
 									for(var key in returnStuff){
 										for(var x = 0; x < returnStuff[key].length; x++){
-											responseListItem = new ListItem({
+											/*responseListItem = new ListItem({
 												variableHeight: true,
 												style: "border:none"
 											});
@@ -358,9 +376,28 @@ define(['dojo/_base/declare',
 
 											this.responseList.addChild(responseListItem);
 
-											console.log("the list item is: ", responseListItem);
+											console.log("the list item is: ", responseListItem);*/
+
+											if(returnStuff[key][x]['failure']){
+												var errorDiv = domConstruct.create("div", {innerHTML: returnStuff[key][x]['msg'] + "<br/><br/>", style: "background-color: #FFE6E6"});
+
+												this.errorHolderDiv.appendChild(errorDiv);
+											}
 										}
 									}
+
+									for(var g = 0; g < this.errorDialog.domNode.children.length; g++){
+										if(domClass.contains(this.errorDialog.domNode.children[g], "dijitDialogPaneContent")){
+											domStyle.set(this.errorDialog.domNode.children[g], "padding", "0px");
+										}
+									}
+
+									if(errorDiv){
+										this.errorDialog.set("content", this.errorHolderDiv);
+										this.errorDialog.show();
+									}
+
+									
 
 									this.nowList.addChild(this.responseList);
 								}));
@@ -392,6 +429,11 @@ define(['dojo/_base/declare',
 							label: "Post",
 							style: "margin-left: 0px",
 							onClick: lang.hitch(this, function(){
+								if(this.errorDialog){
+									this.errorDialog.destroyRecursive();
+									this.errorDialog = null;
+								}
+
 								if(chooseDateTextBox.get("value") != ""){
 									var date = this.formatDateAtCommand(chooseDateTextBox.get("value"));
 									console.log("DATE: ", date);
@@ -580,6 +622,11 @@ define(['dojo/_base/declare',
 
 		deactivate: function(){
 			document.body.onkeyup = "";
+
+			if(this.errorDialog){
+				this.errorDialog.destroyRecursive();
+				this.errorDialog = null;
+			}
 
 			if(this.mainList){
 				this.mainList.destroyRecursive();
