@@ -268,20 +268,21 @@ define([
 					variableHeight: true,
 					"class": "starItemClass"
 				});
-				this.star = new domConstruct.create("div", {
-					"class": "starButtonClass",
-					checked: false
-				});
-				this.starClient = new domConstruct.create("div", {
-					"class": "starClientButtonClass",
-					checked: false
-				});
 				if(obj.starred == "true"){
 					this.star = new domConstruct.create("div", {
 						"class": "starButtonClassChecked",
 						checked: true
 					});
+				}else{
+					this.star = new domConstruct.create("div", {
+						"class": "starButtonClass",
+						checked: false
+					});
 				}
+				this.starClient = new domConstruct.create("div", {
+					"class": "starClientButtonClass",
+					checked: false
+				});
 				if(this.starClientObj){
 					for(var x = 0; x < this.starClientObj.length; x++){
 						if(obj.actor.id == this.starClientObj[x]){
@@ -325,31 +326,22 @@ define([
 					}
 				}, obj);
 				
-				this.localeItem = new ListItem({
-					variableHeight: true,
-					"class": "starItemClass"
-				});
-				if(obj.dataLocation == "local"){
-					var locale = "L";
-				}else{
-					var locale = "P";
+				if(!this.showFavs || this.showFavs == "true"){
+					this.starItem.domNode.appendChild(this.star);
+					this.starItem.domNode.appendChild(this.starClient);
 				}
-				this.locale = new domConstruct.create("div", {
-					"class": "localeClass",
-					innerHTML: locale
-				});
-				
-				this.starItem.domNode.appendChild(this.star);
-				this.starItem.domNode.appendChild(this.starClient);
-				this.localeItem.domNode.appendChild(this.locale);
 				this.roundLeft.addChild(this.picItem);
 				this.roundLeft.addChild(this.starItem);
-				this.roundLeft.addChild(this.localeItem);
 			//LeftPane/RoundRect
 			
 			//RightPane/RoundRect
-				this.servPub = domConstruct.create("div", {innerHTML: '<span><a href="' + obj.actor.url +'" target="_blank">'+obj.actor.displayName+'</a></span>' + " via " + '<span><a href="' + obj.postLink +'" target="_blank">'+obj.service+'</a></span>', "class": "feedServiceDivItemClass"});
-				this.dataPub = domConstruct.create("div", {innerHTML: this.getDate((obj.published).toString()), "class": "feedDateDivItemClass"});
+				if(obj.dataLocation == "local"){
+					var locale = "locally";
+				}else{
+					var locale = "publicly";
+				}
+				var dateTime = this.getDate((obj.published).toString());
+				this.servPub = domConstruct.create("div", {innerHTML: '<span><a href="' + obj.actor.url +'" target="_blank">'+obj.actor.displayName+'</a></span>' + " " + locale + " via " + '<span><a href="' + obj.postLink +'" target="_blank">'+obj.service+'</a></span>' + " - " + dateTime, "class": "feedServiceDivItemClass"});
 								
 				this.dateServItem = new ListItem({
 					variableHeight: true,
@@ -357,7 +349,6 @@ define([
 				});
 				
 				this.dateServItem.domNode.appendChild(this.servPub);
-				this.dateServItem.domNode.appendChild(this.dataPub);
 				
 				this.roundRight.addChild(this.dateServItem);
 			

@@ -157,6 +157,7 @@ define([
 								var item = new twitterFeedItem({
 									data: data,
 									counter: j,
+									showFavs: "false",
 									authObj: this.authObj,
 									blastView: this.blastView,
 									starClientObj: this.starClientObj,
@@ -173,6 +174,7 @@ define([
 								var item = new instagramFeedItem({
 									data: data,
 									counter: j,
+									showFavs: "false",
 									authObj: this.authObj,
 									blastView: this.blastView,
 									starClientObj: this.starClientObj,
@@ -190,6 +192,7 @@ define([
 								var item = new facebookFeedItem({
 									data: data,
 									counter: j,
+									showFavs: "false",
 									authObj: this.authObj,
 									blastView: this.blastView,
 									starClientObj: this.starClientObj,
@@ -206,6 +209,7 @@ define([
 								var item = new linkedinFeedItem({
 									data: data,
 									counter: j,
+									showFavs: "false",
 									authObj: this.authObj,
 									blastView: this.blastView,
 									starClientObj: this.starClientObj,
@@ -222,6 +226,7 @@ define([
 								var item = new googleFeedItem({
 									data: data,
 									counter: j,
+									showFavs: "false",
 									starClientObj: this.starClientObj,
 									getDate: this.getDate,
 									authObj: this.authObj,

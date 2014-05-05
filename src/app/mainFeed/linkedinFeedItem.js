@@ -291,20 +291,21 @@ define([
 					variableHeight: true,
 					"class": "starItemClass"
 				});
-				this.star = new domConstruct.create("div", {
-					"class": "starButtonClass",
-					checked: false
-				});
-				this.starClient = new domConstruct.create("div", {
-					"class": "starClientButtonClass",
-					checked: false
-				});
 				if(obj.starred == "true"){
 					this.star = new domConstruct.create("div", {
 						"class": "starButtonClassChecked",
 						checked: true
 					});
+				}else{
+					this.star = new domConstruct.create("div", {
+						"class": "starButtonClass",
+						checked: false
+					});
 				}
+				this.starClient = new domConstruct.create("div", {
+					"class": "starClientButtonClass",
+					checked: false
+				});
 				if(this.starClientObj){
 					for(var x = 0; x < this.starClientObj.length; x++){
 						if(obj.actor.id == this.starClientObj[x]){
@@ -348,26 +349,12 @@ define([
 					}
 				}, obj);
 				
-				this.localeItem = new ListItem({
-					variableHeight: true,
-					"class": "starItemClass"
-				});
-				if(obj.dataLocation == "local"){
-					var locale = "L";
-				}else{
-					var locale = "P";
+				if(!this.showFavs || this.showFavs == "true"){
+					this.starItem.domNode.appendChild(this.star);
+					this.starItem.domNode.appendChild(this.starClient);
 				}
-				this.locale = new domConstruct.create("div", {
-					"class": "localeClass",
-					innerHTML: locale
-				});
-				
-				this.starItem.domNode.appendChild(this.star);
-				this.starItem.domNode.appendChild(this.starClient);
-				this.localeItem.domNode.appendChild(this.locale);
 				this.roundLeft.addChild(this.picItem);
 				this.roundLeft.addChild(this.starItem);
-				this.roundLeft.addChild(this.localeItem);
 			//LeftPane/RoundRect
 				
 			//RightPane/RoundRect
@@ -376,15 +363,19 @@ define([
 					"class": "feedPicDateItemClass"
 				});
 					
-				if(type == "DISCUSS"){
-					this.servPub = domConstruct.create("div", {innerHTML: '<span><a href="' + obj.actor.url +'" target="_blank">'+obj.actor.displayName+'</a></span>' + " via " + obj.service + " posted a discussion in the group: " + '<span><a href=http://www.linkedin.com/groups?gid='+Math.floor(obj.content.discussion.groupId)+' target="_blank">'+obj.content.discussion.groupName+'</a></span>', "class": "feedServiceDivItemClass"});
+				if(obj.dataLocation == "local"){
+					var locale = "locally";
 				}else{
-					this.servPub = domConstruct.create("div", {innerHTML: '<span><a href="' + obj.actor.url +'" target="_blank">'+obj.actor.displayName+'</a></span>' + " via " + '<span><a href="' + obj.postLink +'" target="_blank">'+obj.service+'</a></span>', "class": "feedServiceDivItemClass"});
+					var locale = "publicly";
 				}
-				this.dataPub = domConstruct.create("div", {innerHTML: this.getDate((obj.published).toString()), "class": "feedDateDivItemClass"});
+				var dateTime = this.getDate((obj.published).toString());
+				if(type == "DISCUSS"){
+					this.servPub = domConstruct.create("div", {innerHTML: '<span><a href="' + obj.actor.url +'" target="_blank">'+obj.actor.displayName+'</a></span>' + " " + locale + " via " + obj.service + " posted a discussion in the group: " + '<span><a href=http://www.linkedin.com/groups?gid='+Math.floor(obj.content.discussion.groupId)+' target="_blank">'+obj.content.discussion.groupName+'</a></span>' + " - " + dateTime, "class": "feedServiceDivItemClass"});
+				}else{
+					this.servPub = domConstruct.create("div", {innerHTML: '<span><a href="' + obj.actor.url +'" target="_blank">'+obj.actor.displayName+'</a></span>' + " " + locale + " via " + '<span><a href="' + obj.postLink +'" target="_blank">'+obj.service+'</a></span>' + " - " + dateTime, "class": "feedServiceDivItemClass"});
+				}
 				
 				this.userItem.domNode.appendChild(this.servPub);
-				this.userItem.domNode.appendChild(this.dataPub);
 				
 				this.roundRight.addChild(this.userItem);
 				
