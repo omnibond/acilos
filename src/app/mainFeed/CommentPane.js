@@ -30,6 +30,7 @@ define([
 	"dojo/_base/sniff",
 	"dojo/dom",
 	"dojo/dom-class",
+	"dojo/dom-style",
 	"dojo/dom-construct",
 	"dojo",
 
@@ -45,8 +46,9 @@ define([
 	"dojox/mobile/ListItem",
 	"dojox/mobile/ContentPane",
 
-	'app/util/xhrManager'
-
+	'app/util/xhrManager',
+	
+	"dijit/Dialog"
 ], function(
 	array,
 	declare,
@@ -54,6 +56,7 @@ define([
 	has,
 	dom,
 	domClass,
+	domStyle,
 	domConstruct,
 	dojo,
 
@@ -69,7 +72,9 @@ define([
 	ListItem,
 	Pane,
 
-	xhrManager
+	xhrManager,
+	
+	Dialog
 
 ){
 
@@ -183,6 +188,7 @@ define([
 															for(var g = 0; g < this.errorDialog.domNode.children.length; g++){
 																if(domClass.contains(this.errorDialog.domNode.children[g], "dijitDialogPaneContent")){
 																	domStyle.set(this.errorDialog.domNode.children[g], "padding", "0px");
+																	domStyle.set(this.errorDialog.domNode.children[g], "background-color", "inherit");
 																}
 															}
 
@@ -310,6 +316,7 @@ define([
 																for(var g = 0; g < this.errorDialog.domNode.children.length; g++){
 																	if(domClass.contains(this.errorDialog.domNode.children[g], "dijitDialogPaneContent")){
 																		domStyle.set(this.errorDialog.domNode.children[g], "padding", "0px");
+																		domStyle.set(this.errorDialog.domNode.children[g], "background-color", "inherit");
 																	}
 																}
 
@@ -494,6 +501,7 @@ define([
 																for(var g = 0; g < this.errorDialog.domNode.children.length; g++){
 																	if(domClass.contains(this.errorDialog.domNode.children[g], "dijitDialogPaneContent")){
 																		domStyle.set(this.errorDialog.domNode.children[g], "padding", "0px");
+																		domStyle.set(this.errorDialog.domNode.children[g], "background-color", "inherit");
 																	}
 																}
 

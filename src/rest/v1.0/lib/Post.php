@@ -147,13 +147,13 @@ Class Post{
 		curl_setopt($ch, CURLOPT_POSTFIELDS, "<is-liked>true</is-liked>");
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
 		$response = curl_exec($ch);
-		$code = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
+		$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
 
 		if($code == "201"){
 			return json_encode(array("Success" => "Your LinkedIn comment was posted successfully"));
 		}else{
-			return json_encode(array("Failure" => "There was an error posting your LinkedIn comment."));
+			return json_encode(array("Failure" => "There was an error liking the Linkedin post."));
 		}
 	}
 	
@@ -170,13 +170,13 @@ Class Post{
 		curl_setopt($ch, CURLOPT_POSTFIELDS, "<is-liked>false</is-liked>");
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
 		$response = curl_exec($ch);
-		$code = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
+		$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
 
 		if($code == "201"){
 			return json_encode(array("Success" => "Your LinkedIn comment was posted successfully"));
 		}else{
-			return json_encode(array("Failure" => "There was an error posting your LinkedIn comment."));
+			return json_encode(array("Failure" => "There was an error unliking the Linkedin post."));
 		}
 	}
 	
@@ -194,7 +194,7 @@ Class Post{
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, "<comment><text>".$message."</text></comment>");
 		$response = curl_exec($ch);
-		$code = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
+		$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
 
 		//print_r($response);

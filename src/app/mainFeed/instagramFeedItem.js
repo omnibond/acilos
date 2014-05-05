@@ -518,6 +518,7 @@ define([
 														for(var g = 0; g < this.errorDialog.domNode.children.length; g++){
 															if(domClass.contains(this.errorDialog.domNode.children[g], "dijitDialogPaneContent")){
 																domStyle.set(this.errorDialog.domNode.children[g], "padding", "0px");
+																domStyle.set(this.errorDialog.domNode.children[g], "background-color", "inherit");
 															}
 														}
 
@@ -553,6 +554,7 @@ define([
 														for(var g = 0; g < this.errorDialog.domNode.children.length; g++){
 															if(domClass.contains(this.errorDialog.domNode.children[g], "dijitDialogPaneContent")){
 																domStyle.set(this.errorDialog.domNode.children[g], "padding", "0px");
+																domStyle.set(this.errorDialog.domNode.children[g], "background-color", "inherit");
 															}
 														}
 
