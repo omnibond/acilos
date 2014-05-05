@@ -7,17 +7,19 @@ To get started using the app there a few requirements and steps. You will need t
 
 2) PHP - apt-get install php
 
-3) Composer - https://getcomposer.org/doc/00-intro.md
+3) NodeJS - apt-get install nodejs 
 
-4) download the Acilos tarball/source from https://github.com/omnibond/acilos
+4) Composer - https://getcomposer.org/doc/00-intro.md
 
-5) untar/install in a location so that the apache webroot points at acilos/src
+5) download the Acilos tarball/source from https://github.com/omnibond/acilos
 
-6) from the acilos directory, run - make install - to download other dependencies, including DojoToolkit, nerveTattoo ES Client, AWS-client, and others. 
+6) untar/install in a location so that the apache webroot points at acilos/src
 
-7) fromt he acilos/src directory run - php composer.phar install - to install any remaining dependencies 
+7) from the acilos directory, run - make install - to download other dependencies, including DojoToolkit, nerveTattoo ES Client, AWS-client, and others. 
 
-8) start apache and from the acilos/src directory run - sudo sh start.sh - which will set up the data mining cronjobs, the cronManager shell scripts, start elasticsearch, and give all subsequent files and folders permissions.
+8) fromt he acilos/src directory run - php composer.phar install - to install any remaining dependencies 
+
+9) start apache and from the acilos/src directory run - sudo sh start.sh - which will set up the data mining cronjobs, the cronManager shell scripts, start elasticsearch, and give all subsequent files and folders permissions.
 
 9) Go to main domain page (http://YourDomain.com/) and you will be taken to the credentials page where you can follow our walkthroughs on setting up developer apps and adding in their key/secrets to the credentials page. After that is done you will be taken to login.php where you should log in normally with your account and begin using the app.
 
