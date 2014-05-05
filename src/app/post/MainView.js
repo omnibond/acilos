@@ -396,8 +396,6 @@ define(['dojo/_base/declare',
 										this.errorDialog.show();
 									}
 
-									
-
 									this.nowList.addChild(this.responseList);
 								}));
 							}, fUploader)

@@ -223,7 +223,6 @@ class activityObject{
     public $verb = '';
     public $id = '';
     public $service = '';
-    public $dateAdded = '';
     public $starred = '';
     public $postLink = '';
     public $isLiked = '';
@@ -256,9 +255,6 @@ class activityObject{
     }
     public function setService($service){
         $this->service = $service;
-    }
-    public function setDateAdded($dateAdded){
-	$this->dateAdded = $dateAdded;
     }
     public function setStarred($starred){
 	$this->starred = $starred;
@@ -305,7 +301,6 @@ abstract class activityObjectBuilder {
     public abstract function buildVerb($verb);
     public abstract function buildId($id);
     public abstract function buildService($service);
-    public abstract function buildDateAdded($dateAdded);
     public abstract function buildStarred($starred);
     public abstract function buildPostLink($postLink, $account);
     public abstract function buildIsLiked($isLiked);
@@ -336,7 +331,6 @@ class Manager {
         $this->activityObjectBuilder->buildVerb($obj);
         $this->activityObjectBuilder->buildId($obj);
         $this->activityObjectBuilder->buildService($obj);
-        $this->activityObjectBuilder->buildDateAdded($obj);
         $this->activityObjectBuilder->buildStarred($obj);
         $this->activityObjectBuilder->buildPostLink($obj, $account);
         $this->activityObjectBuilder->buildIsLiked($obj);

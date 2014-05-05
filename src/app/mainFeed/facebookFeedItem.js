@@ -619,6 +619,31 @@ define([
 												
 												this.sendFaceLike(idFirstPart, idSecondPart, accessToken).then(lang.hitch(this, function(obj){
 													console.log("obj is: ", obj);
+
+													if(obj['Failure']){
+														if(this.errorDialog){
+															this.errorDialog.destroyRecursive();
+															this.errorDialog = null;
+														}
+
+														var div = domConstruct.create("div", {innerHTML: obj['Failure']});
+
+														this.errorDialog = new Dialog({
+															title: "Error",
+															"class": "errorDijitDialog",
+															style: "top: 105px !important; width: 520px !important; padding: 10px !important; background-color: #FFE6E6",
+															draggable: false
+														});
+
+														for(var g = 0; g < this.errorDialog.domNode.children.length; g++){
+															if(domClass.contains(this.errorDialog.domNode.children[g], "dijitDialogPaneContent")){
+																domStyle.set(this.errorDialog.domNode.children[g], "padding", "0px");
+															}
+														}
+
+														this.errorDialog.set("content", div);
+														this.errorDialog.show();
+													}
 												}));
 											}else{
 												this.likeNum--;
@@ -633,6 +658,31 @@ define([
 												
 												this.sendFaceUnLike(idFirstPart, idSecondPart, accessToken).then(lang.hitch(this, function(obj){
 													console.log("obj is: ", obj);
+
+													if(obj['Failure']){
+														if(this.errorDialog){
+															this.errorDialog.destroyRecursive();
+															this.errorDialog = null;
+														}
+														
+														var div = domConstruct.create("div", {innerHTML: obj['Failure']});
+
+														this.errorDialog = new Dialog({
+															title: "Error",
+															"class": "errorDijitDialog",
+															style: "top: 105px !important; width: 520px !important; padding: 10px !important; background-color: #FFE6E6",
+															draggable: false
+														});
+
+														for(var g = 0; g < this.errorDialog.domNode.children.length; g++){
+															if(domClass.contains(this.errorDialog.domNode.children[g], "dijitDialogPaneContent")){
+																domStyle.set(this.errorDialog.domNode.children[g], "padding", "0px");
+															}
+														}
+
+														this.errorDialog.set("content", div);
+														this.errorDialog.show();
+													}
 												}));
 											}
 										}

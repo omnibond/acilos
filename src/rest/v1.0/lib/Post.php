@@ -68,7 +68,19 @@ Class Post{
 
 		curl_close($ch);
 
-		return json_encode(array("success" => "Your 'like' was successful."));
+		//print_R($response);
+
+		$response = json_decode($response, true);
+
+		//print_r($response['meta']['code']);
+
+		if(isset($response['meta']['code'])){
+			if($response['meta']['code'] == 200){
+				return json_encode(array("Success" => "Your like was successful."));
+			}else{
+				return json_encode(array("Failure" => "There was an error liking the  Instagram post."));
+			}
+		}
 	}
 	
 	function sendInstaUnLike(){
@@ -84,7 +96,17 @@ Class Post{
 		$response = curl_exec($ch);
 		curl_close($ch);
 
-		return json_encode(array("success" => "Your 'unlike' was successful."));
+		//print_R($response);
+
+		$response = json_decode($response, true);
+
+		if(isset($response['meta']['code'])){
+			if($response['meta']['code'] == 200){
+				return json_encode(array("Success" => "Your unlike was successful."));
+			}else{
+				return json_encode(array("Failure" => "There was an error unliking the Instagram post."));
+			}
+		}
 	}
 	
 	function sendInstaComment(){
@@ -107,7 +129,7 @@ Class Post{
 		$response = curl_exec($ch);
 		curl_close($ch);
 		
-		print_r($response);
+		//print_r($response);
 		
 		return json_encode(array("success" => "Your 'post' was successful."));
 	}
@@ -181,7 +203,17 @@ Class Post{
 	
 		$status = $connection->post('favorites/create', array('id' => $id));
 
-		return json_encode(array("success" => "Your 'like' was successful."));
+		//print_r($status);
+
+		if(isset($status->errors[0]->message)){
+			return json_encode(array("Failure" => "Your reply could not be posted. Twitter said: " . $status->errors[0]->message));
+		}else{
+			if(isset($status->created_at)){
+				return json_encode(array("Success" => "Your reply was posted successfully."));
+			}else{
+				return json_encode(array("Failure" => "There was an error favoriting the Twitter post."));
+			}
+		}
 	}
 	
 	function sendTwitterUnFav(){
@@ -197,7 +229,17 @@ Class Post{
 	
 		$status = $connection->post('favorites/destroy', array('id' => $id));
 
-		return json_encode(array("success" => "Your 'unlike' was successful."));
+		//print_r($status);
+
+		if(isset($status->errors[0]->message)){
+			return json_encode(array("Failure" => "Your reply could not be posted. Twitter said: " . $status->errors[0]->message));
+		}else{
+			if(isset($status->created_at)){
+				return json_encode(array("Success" => "Your reply was posted successfully."));
+			}else{
+				return json_encode(array("Failure" => "There was an error unfavoriting the twitter post."));
+			}
+		}
 	}
 	
 	function sendFaceLike(){
@@ -221,16 +263,16 @@ Class Post{
 
 		$response = curl_exec($ch);
 
-		print_r($response);
+		//print_r($response);
 		$response = json_decode($response, true);
 		curl_close($ch);
 
 		if(isset($response)){
 			if($response == "true" || $response == true){
-				return json_encode(array("success" => "Your 'like' was successful."));
+				return json_encode(array("Success" => "Your like was successful."));
 			}
 		}else{
-			return json_encode(array("failure" => "An error has occurred"));
+			return json_encode(array("Failure" => "There was an error liking the Facebook post."));
 		}	
 	}
 	
@@ -254,10 +296,10 @@ Class Post{
 		
 		if(isset($response)){
 			if($response == "true" || $response == true){
-				return json_encode(array("success" => "Your 'unlike' was successful."));
+				return json_encode(array("Success" => "Your unlike was successful."));
 			}
 		}else{
-			return json_encode(array("failure" => "An error occurred"));
+			return json_encode(array("Failure" => "There was an error unliking the Facebook post."));
 		}
 	}
 
@@ -275,8 +317,6 @@ Class Post{
 			'access_token' => $access_token,
 			'message' => $comment
 		);
-		
-		print_r($params);
 
 		$ch = curl_init($commentURL);
 		curl_setopt($ch, CURLOPT_POST, 1);
@@ -285,9 +325,15 @@ Class Post{
 
 		$response = curl_exec($ch);
 
+		$response = json_decode($response, true);
+
 		curl_close($ch);
 
-		return json_encode(array("success" => "Your 'comment' was posted successfully"));
+		if(isset($response['id'])){
+			return json_encode(array("Success" => "Your comment was posted successfully"));
+		}else{
+			return json_encode(array("Failure" => "There was an error posting your Facebook comment."));
+		}
 	}
 	
 	function sendTwitReply(){
@@ -354,13 +400,17 @@ Class Post{
 		$status = $connection->post('statuses/update', $stuff);
 		//$status = $connection->upload($url, $stuff);
 
-		print_r($status);
+		//print_r($status->created_at);
 
-		/*if(isset($status->errors[0]->message)){
-			return json_encode(array("error" => "Your reply could not be posted. Twitter said: " . $status->errors[0]->message));
+		if(isset($status->errors[0]->message)){
+			return json_encode(array("Failure" => "Your reply could not be posted. Twitter said: " . $status->errors[0]->message));
 		}else{
-			return json_encode(array("success" => "Your reply was posted successfully"));
-		}*/
+			if(isset($status->created_at)){
+				return json_encode(array("Success" => "Your reply was posted successfully."));
+			}else{
+				return json_encode(array("Failure" => "There was an error posting your Twitter reply."));
+			}
+		}
 	}
 
 	function sendTwitRetweet(){
@@ -377,10 +427,16 @@ Class Post{
 
 		$status = $connection->post('statuses/retweet/' . $tweetID);
 
-		if(isset($status->errors)){
-			return json_encode(array("error" => "The tweet could not be retweeted. Twitter said: " . $status->errors));
+		//print_R($status);
+
+		if(isset($status->errors[0]->message)){
+			return json_encode(array("Failure" => "The tweet could not be retweeted. Twitter said: " . $status->errors[0]->message));
 		}else{
-			return json_encode(array("success" => "The tweet was retweeted successfully"));
+			if(isset($status->created_at)){
+				return json_encode(array("Success" => "The tweet was retweeted successfully"));
+			}else{
+				return json_encode(array("Failure" => "There was an error posting your Twitter retweet."));
+			}
 		}
 	}
 	

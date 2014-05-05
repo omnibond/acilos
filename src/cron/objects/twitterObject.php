@@ -144,9 +144,6 @@ class twitterObjectBuilder extends activityObjectBuilder{
     public function buildService($obj){
 	    $this->activityObject->setService('Twitter');
     }
-    public function buildDateAdded($obj){
-	    $this->activityObject->setDateAdded(time());
-    }
     public function buildStarred($obj){
 	    $this->activityObject->setStarred("false");
     }

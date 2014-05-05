@@ -17,18 +17,18 @@
 						},
 						"geoLocation": {
 							"type": "string",
-							"index": "no"
+							"index": "not_analyzed"
 						},
 						"id": {
 							"type": "string"
 						},
 						"image": {
 							"type": "string",
-							"index": "no"
+							"index": "not_analyzed"
 						},
 						"location": {
 							"type": "string",
-							"index": "no"
+							"index": "not_analyzed"
 						},
 						"name": {
 							"type": "string"
@@ -38,7 +38,7 @@
 						},
 						"url": {
 							"type": "string",
-							"index": "no"
+							"index": "not_analyzed"
 						}
 					}
 				},
@@ -49,7 +49,7 @@
 						},
 						"URL": {
 							"type": "string",
-							"index": "no"
+							"index": "not_analyzed"
 						},
 						"action": {
 							"type": "string",
@@ -63,11 +63,11 @@
 							"properties": {
 								"contentUrl": {
 									"type": "string",
-									"index": "no"
+									"index": "not_analyzed"
 								},
 								"imageUrl": {
 									"type": "string",
-									"index": "no"
+									"index": "not_analyzed"
 								},
 								"summary": {
 									"type": "string",
@@ -81,7 +81,7 @@
 						},
 						"commentURL": {
 							"type": "string",
-							"index": "no"
+							"index": "not_analyzed"
 						},
 						"comments": {
 							"properties": {
@@ -119,7 +119,7 @@
 								},
 								"profileImg": {
 									"type": "string",
-									"index": "no"
+									"index": "not_analyzed"
 								},
 								"published": {
 									"type": "date",
@@ -190,7 +190,7 @@
 								},
 								"url": {
 									"type": "string",
-									"index": "no"
+									"index": "not_analyzed"
 								}
 							}
 						},
@@ -222,11 +222,11 @@
 												},
 												"url": {
 													"type": "string",
-													"index": "no"
+													"index": "not_analyzed"
 												},
 												"website": {
 													"type": "string",
-													"index": "no"
+													"index": "not_analyzed"
 												}
 											}
 										},
@@ -245,11 +245,11 @@
 												},
 												"url": {
 													"type": "string",
-													"index": "no"
+													"index": "not_analyzed"
 												},
 												"website": {
 													"type": "string",
-													"index": "no"
+													"index": "not_analyzed"
 												}
 											}
 										},
@@ -284,7 +284,7 @@
 								},
 								"groupURL": {
 									"type": "string",
-									"index": "no"
+									"index": "not_analyzed"
 								}
 							}
 						},
@@ -300,15 +300,15 @@
 							"properties": {
 								"highRes": {
 									"type": "string",
-									"index": "no"
+									"index": "not_analyzed"
 								},
 								"lowRes": {
 									"type": "string",
-									"index": "no"
+									"index": "not_analyzed"
 								},
 								"thumb": {
 									"type": "string",
-									"index": "no"
+									"index": "not_analyzed"
 								}
 							}
 						},
@@ -330,7 +330,7 @@
 						},
 						"likeURL": {
 							"type": "string",
-							"index": "no"
+							"index": "not_analyzed"
 						},
 						"likes": {
 							"properties": {
@@ -356,11 +356,11 @@
 								},
 								"pictureURL": {
 									"type": "string",
-									"index": "no"
+									"index": "not_analyzed"
 								},
 								"profileImg": {
 									"type": "string",
-									"index": "no"
+									"index": "not_analyzed"
 								},
 								"username": {
 									"type": "string",
@@ -374,7 +374,7 @@
 						},
 						"mediaUrl": {
 							"type": "string",
-							"index": "no"
+							"index": "not_analyzed"
 						},
 						"networkObjectType": {
 							"type": "string",
@@ -408,7 +408,7 @@
 								},
 								"url": {
 									"type": "string",
-									"index": "no"
+									"index": "not_analyzed"
 								}
 							}
 						},
@@ -486,11 +486,11 @@
 						},
 						"replyTo": {
 							"type": "long",
-							"index": "no"
+							"index": "not_analyzed"
 						},
 						"retweet": {
 							"type": "long",
-							"index": "no"
+							"index": "not_analyzed"
 						},
 						"service": {
 							"type": "string",
@@ -565,7 +565,7 @@
 							"properties": {
 								"commentURL": {
 									"type": "string",
-									"index": "no"
+									"index": "not_analyzed"
 								},
 								"comments": {
 									"properties": {
@@ -600,7 +600,7 @@
 								},
 								"likeURL": {
 									"type": "string",
-									"index": "no"
+									"index": "not_analyzed"
 								},
 								"likes": {
 									"properties": {
@@ -622,15 +622,15 @@
 										},
 										"url": {
 											"type": "string",
-											"index": "no"
+											"index": "not_analyzed"
 										},
 										"website": {
 											"type": "string",
-											"index": "no"
+											"index": "not_analyzed"
 										},
 										"youtube": {
 											"type": "string",
-											"index": "no"
+											"index": "not_analyzed"
 										}
 									}
 								},
@@ -649,15 +649,15 @@
 									"properties": {
 										"id": {
 											"type": "string",
-											"index": "no"
+											"index": "not_analyzed"
 										},
 										"name": {
 											"type": "string",
-											"index": "no"
+											"index": "not_analyzed"
 										},
 										"type": {
 											"type": "string",
-											"index": "no"
+											"index": "not_analyzed"
 										}
 									}
 								},
@@ -673,11 +673,11 @@
 							"properties": {
 								"id": {
 									"type": "string",
-									"index": "no"
+									"index": "not_analyzed"
 								},
 								"name": {
 									"type": "string",
-									"index": "no"
+									"index": "not_analyzed"
 								}
 							}
 						},
@@ -685,17 +685,17 @@
 							"properties": {
 								"updatedField": {
 									"type": "string",
-									"index": "no"
+									"index": "not_analyzed"
 								}
 							}
 						},
 						"url": {
 							"type": "string",
-							"index": "no"
+							"index": "not_analyzed"
 						},
 						"verb": {
 							"type": "string",
-							"index": "no"
+							"index": "not_analyzed"
 						}
 					}
 				},
