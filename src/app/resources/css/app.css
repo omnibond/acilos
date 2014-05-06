@@ -3349,8 +3349,8 @@ html.mobile,
   margin-left: 20px;
 }
 .errorDijitDialog .dijitDialogCloseIcon {
-  margin-left: -2px;
-  margin-top: -1px;
+  margin-left: -11px;
+  margin-top: -10px;
   color: transparent;
   background: url("../../../app/resources/img/closeIcon.png") no-repeat;
   background-size: contain;
@@ -3359,8 +3359,8 @@ html.mobile,
   width: 20px !important;
 }
 .errorDijitDialog .dijitDialogCloseIconHover {
-  margin-left: -2px;
-  margin-top: -1px;
+  margin-left: -11px;
+  margin-top: -10px;
   color: transparent;
   background: url("../../../app/resources/img/closeIconHover.png") no-repeat;
   background-size: contain;

@@ -26,6 +26,8 @@
 define(['dojo/_base/declare',
 		'dojo-mama/views/ModuleScrollableView',
 		"dojo/_base/lang",
+		"dojo/dom-class",
+		"dojo/dom-style",
 
 		"app/SelRoundRectList",
 		"app/SelEdgeToEdgeList",
@@ -49,6 +51,8 @@ define(['dojo/_base/declare',
 	declare, 
 	ModuleScrollableView,
 	lang, 
+	domClass,
+	domStyle,
 
 	RoundRectList, 
 	EdgeToEdgeList,
@@ -105,7 +109,7 @@ define(['dojo/_base/declare',
 									var serviceUrl = "app/resources/img/Twitter_logo_blue_small.png";
 
 									checkBox.onClick = lang.hitch(this, function(checkBox){
-										if(checkBox.domNode.checked == false){
+										if(checkBox.domNode.checked == true){
 											if(this.textArea.get('value').length > 140){
 												this.textAreaCountDiv.style.color = "red";
 											}else{
@@ -114,12 +118,12 @@ define(['dojo/_base/declare',
 
 											this.textAreaCountDiv.innerHTML = this.textArea.get("value").length + "/140 characters";
 
-											checkBox.domNode.checked = true;
+											checkBox.domNode.checked = false;
 										}else{
 											this.textAreaCountDiv.style.color = "black";
 											this.textAreaCountDiv.innerHTML = this.textArea.get("value").length + " characters";
 
-											checkBox.domNode.checked = false;
+											checkBox.domNode.checked = true;
 										}
 									}, checkBox);
 								}
@@ -141,12 +145,7 @@ define(['dojo/_base/declare',
 									serviceUrl = "app/resources/img/LinkedIn_logo.png";
 									
 								}if(key == "google"){
-									var checkBox = new CheckBox({
-										leToken: accountArr[d]['accesstoken'],
-										leKey: key,
-										style: "width:20px; height:20px"
-									});
-									var serviceUrl = "app/resources/img/googlePlus_icon.png";
+									break;
 								}if(key == "instagram"){
 									break;
 								}	
@@ -241,17 +240,29 @@ define(['dojo/_base/declare',
 					}
 						
 					console.log("tokenArr is: ", tokenArr);
-
-					this.responseList = new RoundRectList({
-						style: "border:none; margin-left:9px"
-					});
 					
 					this.sendPostFile(this.blastObj.imgName, tokenArr, msg).then(lang.hitch(this, function(obj){
-						//window.location = "#/mainFeed";
-
 						console.log("obj is: ", obj);
 
 						var returnStuff = obj['returnArray'];
+
+						this.failureFlag = "false";
+
+						console.log("this.failureFlag first is: ", this.failureFlag);
+
+						for(var key in returnStuff){
+							for(var x = 0; x < returnStuff[key].length; x++){
+								if(returnStuff[key][x]['failure']){
+									this.failureFlag = "true";
+								}
+							}								
+						}
+
+						console.log("this.failureFlag second is: ", this.failureFlag);
+
+						if(this.failureFlag == "false"){
+							window.location = "#/mainFeed";
+						}
 
 						var responseListItem = new ListItem({
 							variableHeight: true,
@@ -260,26 +271,35 @@ define(['dojo/_base/declare',
 
 						var div = domConstruct.create("div", {});
 
+						this.errorDialog = new Dialog({
+							title: "Error",
+							"class": "errorDijitDialog",
+							style: "top: 105px !important; width: 520px !important; padding: 10px !important; background-color: #FFE6E6",
+							draggable: false
+						});
+
+						this.errorHolderDiv = domConstruct.create("div", {style: "background-color: #FFE6E6"});
+
 						for(var key in returnStuff){
 							for(var x = 0; x < returnStuff[key].length; x++){
-								responseListItem = new ListItem({
-									variableHeight: true,
-									style: "border:none"
-								});
+								if(returnStuff[key][x]['failure']){
+									var errorDiv = domConstruct.create("div", {innerHTML: returnStuff[key][x]['msg'] + "<br/><br/>", style: "background-color: #FFE6E6"});
 
-								div = domConstruct.create("div", {});
-
-								div.innerHTML = returnStuff[key][x]['msg'];
-
-								responseListItem.domNode.appendChild(div);
-
-								this.responseList.addChild(responseListItem);
-
-								console.log("the list item is: ", responseListItem);
+									this.errorHolderDiv.appendChild(errorDiv);
+								}
 							}
 						}
 
-						this.addChild(this.responseList);
+						for(var g = 0; g < this.errorDialog.domNode.children.length; g++){
+							if(domClass.contains(this.errorDialog.domNode.children[g], "dijitDialogPaneContent")){
+								domStyle.set(this.errorDialog.domNode.children[g], "padding", "0px");
+							}
+						}
+
+						if(errorDiv){
+							this.errorDialog.set("content", this.errorHolderDiv);
+							this.errorDialog.show();
+						}
 					}));
 				})
 			});
