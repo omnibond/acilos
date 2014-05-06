@@ -48,6 +48,11 @@ class Blast{
 			return;
 		}
 		
+		$target = "../../app/post/tmpUpload";
+		if(!is_dir($target)){
+			mkdir($target); 
+		}
+
 		$path = "../../app/post/tmpUpload/" . $imgName;
 		
 		$file = fopen ($url, "rb");
@@ -170,7 +175,7 @@ class Blast{
 						$res = json_decode($response, true);
 
 						if(isset($res['error'])){
-							$returnArray['Facebook'][$x] = array("success" => 'false', "msg" => "Your Facebook status could not be posted - " . $res['error']['message']);
+							$returnArray['Facebook'][$x] = array("failure" => 'true', "msg" => "Your Facebook status could not be posted - " . $res['error']['message']);
 						}else{
 							$returnArray['Facebook'][$x] = array("success" => 'true', "msg" => "Your Facebook status was posted successfully");
 						}
