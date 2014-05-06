@@ -39,7 +39,6 @@ define({
 			'query',
 			'settings',
 			'help',
-			'cliffton'
 		],
 		/* secondary links show up in the meta nav secondary: */
 		secondary: [
