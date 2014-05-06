@@ -1759,6 +1759,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 			}elseif($obj['updateType'] == "CMPY"){							//we will test this block later
 				$company = new LinkedInContentCMPY();
 
+				/**
 				if(isset($obj['updateType']['companyProfileUpdate'])){
 					$dude = new LinkedInPerson();
 					$dude->setID($obj['updateContent']['companyProfileUpdate']['editor']['id']);
@@ -1774,15 +1775,16 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 					$company->setAction($obj['updateContent']['companyProfileUpdate']['action']['code']);
 					$company->setPersonType('employer');
 					$company->setPerson($dude);
-					$company->setUpdatedField($obj['updateContent']['companyProfileUpdate']['profileField']['code']);
-				}elseif(isset($obj['updateType']['companyJobUpdate'])){
+				}else
+				**/
+				if(isset($obj['updateType']['companyJobUpdate'])){
 					$job = LinkedInContentJOBP();
 
 					$job->setJobID($obj['updateContent']['companyJobUpdate']['job']['id']);
 					$job->setJobPosition($obj['updateContent']['companyJobUpdate']['job']['position']['title']);
 					$job->setJobCompany($obj['updateContent']['companyJobUpdate']['job']['company']['name']);
 					$job->setJobURL($obj['updateContent']['companyJobUpdate']['job']['siteJobRequest']['url']);
-					$job->setJobLocation($obj['updateContent']['companyJobUpdate']['job']['location']);
+					$job->setJobLocation($obj['updateContent']['companyJobUpdate']['job']['locationDescription']);
 					$job->setJobDescription($obj['updateContent']['companyJobUpdate']['job']['description']);
 
 					$company->setNetworkObjectType($obj['updateType']);
@@ -1792,7 +1794,9 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 					$company->setAction($obj['updateContent']['companyJobUpdate']['action']['code']);
 					$company->setPersonType('employee');
 					$company->setJob($job);
-				}elseif(isset($obj['updateType']['companyStatusUpdate'])){
+				}
+				/**
+				elseif(isset($obj['updateType']['companyStatusUpdate'])){
 					$company->setNetworkObjectType($obj['updateType']);
 					$company->setCompanyID($obj['updateContent']['company']['id']);
 					$company->setCompanyName($obj['updateContent']['company']['name']);
@@ -1800,7 +1804,9 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 					$company->setAction($obj['updateContent']['companyStatusUpdate']['action']['code']);
 					$company->setPersonType('employer');
 					$company->setUpdatedField('SomeFieldorStatus');
-				}elseif(isset($obj['updateType']['companyPersonUpdate'])){
+				}
+				
+				elseif(isset($obj['updateType']['companyPersonUpdate'])){
 					$dude = new LinkedInPerson();
 					$dude->setID($obj['updateContent']['companyPersonUpdate']['person']['id']);
 					$dude->setFirstName($obj['updateContent']['companyPersonUpdate']['person']['firstName']);
@@ -1817,6 +1823,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 					$company->setPerson($dude);
 					$company->setJob($obj['updateContent']['companyPersonUpdate']['newPosition']['title']);
 				}
+				**/
 
 				$this->activityObject->setContent($company);
 			}elseif($obj['updateType'] == "MSFC"){
@@ -2465,7 +2472,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 							}
 						}
 					}
-				}				
+				}
 			}
 		}	
 	}

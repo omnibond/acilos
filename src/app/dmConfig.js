@@ -38,7 +38,8 @@ define({
 			'post',
 			'query',
 			'settings',
-			'help'
+			'help',
+			'cliffton'
 		],
 		/* secondary links show up in the meta nav secondary: */
 		secondary: [
@@ -73,10 +74,9 @@ define({
 			moduleId: 'app/AppModuleGroup',
 			modules: ['favoritePosts', 'favoritePeople']
 		},
-		search: {
-			title: 'Search',
-			moduleId: 'dojo-mama/util/ModuleGroup',
-			modules: ['searchUser', 'searchKeyword', 'searchService']
+		cliffton: {
+			title: 'Cliffton',
+			moduleId: 'app/cliffton/Module'
 		},
 		analytics: {
 			title: 'Analytics',
@@ -226,23 +226,6 @@ define({
 			title: 'Get help with the app',
 			moduleId: 'app/appHelp/Module',
 			selectedPrimaryNavItem: "help"
-		},
-		
-		/*search modules */
-		searchUser: {
-			title: 'Search by user',
-			moduleId: 'app/searchUser/Module',
-			selectedPrimaryNavItem: "search"
-		},
-		searchKeyword: {
-			title: 'Search by keyword',
-			moduleId: 'app/searchKeyword/Module',
-			selectedPrimaryNavItem: "search"
-		},
-		searchService: {
-			title: 'Search by specific service',
-			moduleId: 'app/searchService/Module',
-			selectedPrimaryNavItem: "search"
 		},
 
 		/*notifications / credentials */

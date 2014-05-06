@@ -139,8 +139,8 @@ Class Post{
 		$varObj = json_decode($var, true);
 		$id = $varObj['id'];
 		$access_token = $varObj['accessToken'];
-
-		$url = "https://api.linkedin.com/v1/posts/".$id."/relation-to-viewer/is-liked?oauth2_access_token=".$access_token;
+		
+		$url = "https://api.linkedin.com/v1/people/~/network/updates/key=".$id."/is-liked?oauth2_access_token=".$access_token;
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_POST, 1);
@@ -149,7 +149,9 @@ Class Post{
 		$response = curl_exec($ch);
 		$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
-
+		
+		print_r($response);
+		
 		if($code == "201"){
 			return json_encode(array("Success" => "Your LinkedIn comment was posted successfully"));
 		}else{
@@ -163,7 +165,7 @@ Class Post{
 		$id = $varObj['id'];
 		$access_token = $varObj['accessToken'];
 
-		$url = "https://api.linkedin.com/v1/posts/".$id."/relation-to-viewer/is-liked?oauth2_access_token=".$access_token;
+		$url = "https://api.linkedin.com/v1/people/~/network/updates/key=".$id."/is-liked?oauth2_access_token=".$access_token;
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_POST, 1);
@@ -172,7 +174,9 @@ Class Post{
 		$response = curl_exec($ch);
 		$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
-
+		
+		print_r($response);
+		
 		if($code == "201"){
 			return json_encode(array("Success" => "Your LinkedIn comment was posted successfully"));
 		}else{
@@ -187,17 +191,17 @@ Class Post{
 		$access_token = $varObj['accessToken'];
 		$message = $varObj['msg'];
 		
-		$url = "https://api.linkedin.com/v1/posts/".$postID."/comments?oauth2_access_token=".$access_token;
+		$url = "https://api.linkedin.com/v1/people/~/network/updates/key=".$postID."/update-comments?oauth2_access_token=".$access_token;
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:text/xml'));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, "<comment><text>".$message."</text></comment>");
+		curl_setopt($ch, CURLOPT_POSTFIELDS, "<update-comment><comment>".$message."</comment></update-comment>");
 		$response = curl_exec($ch);
 		$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
 
-		//print_r($response);
+		print_r($response);
 
 		if($code == "201"){
 			return json_encode(array("Success" => "Your LinkedIn comment was posted successfully"));

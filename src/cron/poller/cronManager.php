@@ -96,7 +96,7 @@ function writeObject($obj){
 
 	$es = Client::connection("http://$host:$port/$index/$index/");
 
-	$obj['id'] = strtolower($obj['id']);
+	$obj['id'] = $obj['id'];
 	$exists = getObject($obj['id']);
 	if(isset($exists['starred'])){
 		$obj['starred'] = $exists['starred'];
@@ -539,18 +539,18 @@ function linkedInFetchWithParams($method, $resource, $token, $start, $count) {
  
     // Hocus Pocus
     $response = file_get_contents($url, false, $context);
- 	print_r($response);
+ 	
     // Native PHP object, please
     return json_decode($response);
 }
 
 function normalizeLinkedinObj($objArray, $account){
 	echo "normal linkedin object"; ?><br/><?php
-	print_r(count($objArray));
+
 	for($k = 0; $k < count($objArray); $k++){
 			$obj = $objArray[$k];
 
-			//print_r($obj);
+			print_r($obj);
 
 			$manager = new Manager();
 			$builder = new linkedInNetworkObjectBuilder();
@@ -560,7 +560,7 @@ function normalizeLinkedinObj($objArray, $account){
 
 			$item = $manager->getActivityObj();
 
-			//print_r($item); ?><br/><?php
+			print_r($item); ?><br/><?php
 
 			writeObject((array)$item);
 			global $credentialObject;
@@ -610,7 +610,7 @@ function getPersonalFeed(){
 	
 	for($h=0; $h < count($accts); $h++){
 		$feed = linkedInFetchWithParams('GET', '/v1/people/~/network/updates', $accts[$h]['accessToken'], 0, 100);
-		print_r($feed);
+
 		$feed = objectToArray($feed);
 		normalizeLinkedinObj($feed['values'], $accts[$h]);
 	}
@@ -634,9 +634,8 @@ function getDiscussionObjects(){
 	
 	if(count($accts > 0)){
 		for($h=0; $h < count($accts); $h++){	
-			print_r($accts); ?><br/><?php
 			$user = linkedInFetch('GET', '/v1/people/~/group-memberships', $accts[$h]['accessToken']);
-			print_r($user);
+
 			$user = objectToArray($user);
 
 			$groupArr = array();
@@ -794,20 +793,20 @@ if(!file_exists("../../lockFiles/cronManager.lock") || (time() > filemtime("../.
 		echo "linkedin feed"; ?><br/><?php
 		getPersonalFeed();
 
-		echo "facebook feed"; ?><br/><?php
-		getUserNewsFeed();
+	//	echo "facebook feed"; ?><br/><?php
+	//	getUserNewsFeed();
 
-		echo "calling twitter stuff";?><br/><?php
-		getUserTimeline();
+	//	echo "calling twitter stuff";?><br/><?php
+	//	getUserTimeline();
 
-		echo "instagram feed"; ?><br/><?php
-		getUserFeed();
+	//	echo "instagram feed"; ?><br/><?php
+	//	getUserFeed();
 
 		echo "linkedin feed"; ?><br/><?php
 		getDiscussionObjects();
 		
-		echo "google feed"; ?><br/><?php
-		getGoogleFeed();
+	//	echo "google feed"; ?><br/><?php
+	//	getGoogleFeed();
 
 	}
 	unlink("../../lockFiles/cronManager.lock");
