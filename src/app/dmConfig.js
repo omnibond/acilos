@@ -38,7 +38,7 @@ define({
 			'post',
 			'query',
 			'settings',
-			'help',
+			'help'
 		],
 		/* secondary links show up in the meta nav secondary: */
 		secondary: [

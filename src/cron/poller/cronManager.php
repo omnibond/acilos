@@ -793,20 +793,20 @@ if(!file_exists("../../lockFiles/cronManager.lock") || (time() > filemtime("../.
 		echo "linkedin feed"; ?><br/><?php
 		getPersonalFeed();
 
-	//	echo "facebook feed"; ?><br/><?php
-	//	getUserNewsFeed();
+		echo "facebook feed"; ?><br/><?php
+		getUserNewsFeed();
 
-	//	echo "calling twitter stuff";?><br/><?php
-	//	getUserTimeline();
+		echo "calling twitter stuff";?><br/><?php
+		getUserTimeline();
 
-	//	echo "instagram feed"; ?><br/><?php
-	//	getUserFeed();
+		echo "instagram feed"; ?><br/><?php
+		getUserFeed();
 
 		echo "linkedin feed"; ?><br/><?php
 		getDiscussionObjects();
 		
-	//	echo "google feed"; ?><br/><?php
-	//	getGoogleFeed();
+		echo "google feed"; ?><br/><?php
+		getGoogleFeed();
 
 	}
 	unlink("../../lockFiles/cronManager.lock");
