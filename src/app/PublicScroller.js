@@ -94,10 +94,6 @@ define([
 			},
 
 			postCreate: function(){
-				this.pi = new ProgressIndicator();
-				this.pi.placeAt(document.body);
-				this.pi.start();
-
 				this.arrayList = [];
 				this.arrayList.push(this.searchStarredClients().then(lang.hitch(this, function(obj){
 					console.log("STARCLIENTOBJ: ", obj);

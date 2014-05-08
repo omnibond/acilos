@@ -321,7 +321,11 @@ define([
 						}
 
 						console.log("checked outside", this.checked);
-
+						
+						this.pi = new ProgressIndicator();
+						this.pi.placeAt(document.body);
+						this.pi.start();
+						
 						this.list = new PublicScroller({
 							feedName: this.queryBox.get("value"),
 							postAddArray: this.postAddArray,
@@ -330,6 +334,7 @@ define([
 							blastView: this.blastView,
 							checkedServices: this.checked,
 							authStuff: this.authObj,
+							pi: this.pi,
 							getNextGroup: lang.hitch(this, this.getNextGroup),
 							setStarred: lang.hitch(this, this.setStarred),
 							setStarredClient: lang.hitch(this, this.setStarredClient),
@@ -395,7 +400,11 @@ define([
 			
 			deactivate: function(){
 				document.body.onkeydown = '';
-
+				
+				if(this.pi){
+					this.pi.stop();
+				}
+				
 				if(this.mainList){
 					this.mainList.destroyRecursive();
 					this.mainList = null;
