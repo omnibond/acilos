@@ -641,7 +641,7 @@ class Search{
 		for($k = 0; $k < count($objArray); $k++){
 			$obj = $objArray[$k];
 
-			#print_r($obj);
+			//print_r($obj);
 
 			$manager = new Manager();
 			$builder = new googleObjectBuilder();
