@@ -109,7 +109,7 @@ define([
 			},
 
 			activate: function() {				
-				topic.publish("/dojo-mama/updateSubNav", {back: '/feeds', title: "Search Public Data"} );
+				topic.publish("/dojo-mama/updateSubNav", {back: '/feeds/PublicMainView', title: "Search Public Data"} );
 
 				if(this.infoList){
 					this.infoList.destroyRecursive();
