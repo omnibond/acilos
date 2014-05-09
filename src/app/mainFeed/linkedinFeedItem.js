@@ -372,7 +372,7 @@ define([
 				if(type == "DISCUSS"){
 					this.servPub = domConstruct.create("div", {innerHTML: '<span><a href="' + obj.actor.url +'" target="_blank">'+obj.actor.displayName+'</a></span>' + " " + locale + " via " + obj.service + " posted a discussion in the group: " + '<span><a href=http://www.linkedin.com/groups?gid='+Math.floor(obj.content.discussion.groupId)+' target="_blank">'+obj.content.discussion.groupName+'</a></span>' + " - " + dateTime, "class": "feedServiceDivItemClass"});
 				}else{
-					this.servPub = domConstruct.create("div", {innerHTML: '<span><a href="' + obj.actor.url +'" target="_blank">'+obj.actor.displayName+'</a></span>' + " " + locale + " via " + '<span><a href="' + obj.postLink +'" target="_blank">'+obj.service+'</a></span>' + " - " + dateTime, "class": "feedServiceDivItemClass"});
+					this.servPub = domConstruct.create("div", {innerHTML: '<span><a href="' + obj.actor.url +'" target="_blank">'+obj.actor.displayName+'</a></span>' + " " + locale + " via " + '<span><a href="http://www.linkedin.com" target="_blank">'+obj.service+'</a></span>' + " - " + dateTime, "class": "feedServiceDivItemClass"});
 				}
 				
 				this.userItem.domNode.appendChild(this.servPub);

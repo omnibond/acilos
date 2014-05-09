@@ -107,7 +107,7 @@ function writeObject($obj){
 	$obj['dataLocation'] = "local";
 
 	$grr = $es->index($obj, $obj['id']);
-	print_r($grr);
+	print_r($grr); ?><br/><?php
 	
 	updateRecentPost($obj);
 }
@@ -248,7 +248,7 @@ function getUserFeed(){
 }
 
 function normalizeInstaObject($objArray, $account){
-	echo "normal insta";
+	echo "normal insta " . count($objArray); ?><br/><?php
 
 	$mediaArray = array();
 	for($k = 0; $k < count($objArray); $k++){
@@ -272,7 +272,7 @@ function normalizeInstaObject($objArray, $account){
 
 //FACEBOOK GOOOOOO --------------------------------------------------------------------------
 function normalizeNewsFeedObj($objArray, $account){
-	echo "normal face stuff"; 
+	echo "normal face stuff " . count($objArray); ?><br/><?php
 	for($k = 0; $k < count($objArray); $k++){
 		$obje = $objArray[$k];
 
@@ -330,7 +330,7 @@ function getUserNewsFeed(){
 
 //TWITTER GOOOOOOO ------------------------------------------------------------------------
 function normalizeTwitterObject($objArray, $account){
-	echo "normal twitter stuff"; 
+	echo "normal twitter stuff " . count($objArray); ?><br/><?php
 	for($k = 0; $k < count($objArray); $k++){
 		$obj = $objArray[$k];
 
@@ -375,8 +375,8 @@ function getUserTimeline(){
 		$array = objectToArray($var);
 
 		if($array['errors']){
-			print_r($array['errors'][0]['message']);
-			print_r($array['errors'][0]['code']);
+			//print_r($array['errors'][0]['message']);
+			//print_r($array['errors'][0]['code']);
 			//refresh token or call get new token again
 			//file_get_contents("../../oAuth/twitterAccess.php?appKey=" + $obj['appKey'] + "&appSecret=" + $obj['appSecret']);
 		}else{
@@ -443,7 +443,7 @@ function getGoogleFeed(){
 				array_push($idArr, $var['items'][$x]['id']);
 			}
 		}
-		print "items in idArr" . count($idArr); ?><br/><?php
+		//print "items in idArr" . count($idArr); ?><br/><?php
 		
 		$dataArr = array();
 		for($t=0; $t < count($idArr); $t++){
@@ -453,7 +453,7 @@ function getGoogleFeed(){
 			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			$res = curl_exec($ch);
-			print_r($res);
+			//print_r($res);
 			curl_close($ch);
 			$var = json_decode($res, true);
 			
@@ -461,19 +461,19 @@ function getGoogleFeed(){
 				array_push($dataArr, $var['items'][$k]);
 			}
 		}
-		print "items in dataArr" . count($dataArr); ?><br/><?php
+		//print "items in dataArr" . count($dataArr); ?><br/><?php
 		normalizeGoogObject($dataArr, $accts[$h]);
 	}
 }
 
 function normalizeGoogObject($objArray, $account){
-	echo "normal goog";
+	echo "normal goog " . count($objArray); ?><br/><?php
 
 	$mediaArray = array();
 	for($k = 0; $k < count($objArray); $k++){
 		$obj = $objArray[$k];
 
-		print_r($obj); ?><br/><?php
+		//print_r($obj); ?><br/><?php
 
 		$manager = new Manager();
 		$builder = new googleObjectBuilder();
@@ -482,7 +482,7 @@ function normalizeGoogObject($objArray, $account){
 	
 		$item = $manager->getActivityObj();
 		
-		print_r($item); ?><br/><?php
+		//print_r($item); ?><br/><?php
 		
 		writeObject((array)$item);
 	}
@@ -545,12 +545,12 @@ function linkedInFetchWithParams($method, $resource, $token, $start, $count) {
 }
 
 function normalizeLinkedinObj($objArray, $account){
-	echo "normal linkedin object"; ?><br/><?php
+	echo "normal linkedin object " . count($objArray); ?><br/><?php
 
 	for($k = 0; $k < count($objArray); $k++){
 			$obj = $objArray[$k];
 
-			print_r($obj);
+			//print_r($obj);
 
 			$manager = new Manager();
 			$builder = new linkedInNetworkObjectBuilder();
@@ -560,7 +560,7 @@ function normalizeLinkedinObj($objArray, $account){
 
 			$item = $manager->getActivityObj();
 
-			print_r($item); ?><br/><?php
+			//print_r($item); ?><br/><?php
 
 			writeObject((array)$item);
 			global $credentialObject;
@@ -569,7 +569,7 @@ function normalizeLinkedinObj($objArray, $account){
 }
 
 function normalizeDiscussionObj($objArray, $account){
-	echo "normal linkedin discussion object"; ?><br/><?php
+	echo "normal linkedin discussion object " . count($objArray); ?><br/><?php
 	#print_r($objArray);
 	for($k = 0; $k < count($objArray); $k++){
 			$obj = $objArray[$k];
@@ -702,30 +702,15 @@ if(!file_exists("../../lockFiles/cronManager.lock") || (time() > filemtime("../.
 	touch("../../lockFiles/cronManager.lock");
 
 	if(isset($_GET['ServiceObj'])){
-		//$credentialObject = array(
-		//	"Linkedin" => array(
-		//		"status" => "bad"
-		//	),
-		//	"Twitter" => array(
-		//		"status" => "bad"
-		//	),
-		//	"Facebook" => array(
-		//		"status" => "bad"
-		//	),
-		//	"Instagram" => array(
-		//		"status" => "bad"
-		//	)
-		//);
-
 		$serviceObj = json_decode($_GET['ServiceObj'], true);
 		foreach($serviceObj as $key => $value){
 			if($key == "Facebook" && $value == "true"){
 				getUserNewsFeed();
 			}
 
-			if($key == "Linkedin" && $value == "true"){				
-				getDiscussionObjects();				
+			if($key == "Linkedin" && $value == "true"){	
 				getPersonalFeed();
+				getDiscussionObjects();				
 			}
 
 			if($key == "Twitter" && $value == "true"){
