@@ -67,6 +67,30 @@
 	$iCount = (string)count($var['instagram']);
 	$gCount = (string)count($var['google']);
 	$login = $var['login'];
+
+	//print_r($var);
+
+	$goToManAccounts = "false";
+
+	foreach($var as $key => $value){
+		if($key != "login"){
+			for($x = 0; $x < count($var[$key]); $x++){
+				if(isset($var[$key][$x]['accounts']) && count($var[$key][$x]['accounts']) > 0){
+					for($y = 0; $y < count($var[$key][$x]['accounts']); $y++){
+						if(isset($var[$key][$x]['accounts'][$y]['authenticated'])){
+							if($var[$key][$x]['accounts'][$y]['authenticated'] == "false"){
+								$goToManAccounts = "true";
+							}
+						}else{
+							$goToManAccounts = "true";
+						}
+					}
+				}else{
+					$goToManAccounts = "true";
+				}
+			}
+		}
+	} 
 	
 	if(isset($_GET['error'])){
 		$errorCode = $_GET['error'];
@@ -110,8 +134,8 @@
 		);
 		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
 		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
-		if(isset($_GET['login']) && $_GET['login'] !== "second"){
-			header('Location: /#/ManAccounts');
+		if((isset($_GET['login']) && $_GET['login'] !== "second") || $goToManAccounts == "true"){
+			header('Location: /#/manAccounts/AuthAccounts');
 		}else{
 			header('Location: /#/mainFeed');
 		}
@@ -126,8 +150,8 @@
 		);
 		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
 		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
-		if(isset($_GET['login']) && $_GET['login'] !== "second"){
-			header('Location: /#/ManAccounts');
+		if((isset($_GET['login']) && $_GET['login'] !== "second") || $goToManAccounts == "true"){
+			header('Location: /#/manAccounts/AuthAccounts');
 		}else{	
 			header('Location: /#/mainFeed');
 		}
@@ -142,8 +166,8 @@
 		);
 		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
 		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
-		if(isset($_GET['login']) && $_GET['login'] !== "second"){
-			header('Location: /#/ManAccounts');
+		if((isset($_GET['login']) && $_GET['login'] !== "second") || $goToManAccounts == "true"){
+			header('Location: /#/manAccounts/AuthAccounts');
 		}else{
 			header('Location: /#/mainFeed');
 		}
@@ -158,8 +182,8 @@
 		);
 		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
 		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
-		if(isset($_GET['login']) && $_GET['login'] !== "second"){
-			header('Location: /#/ManAccounts');
+		if((isset($_GET['login']) && $_GET['login'] !== "second") || $goToManAccounts == "true"){
+			header('Location: /#/manAccounts/AuthAccounts');
 		}else{	
 			header('Location: /#/mainFeed');
 		}
@@ -174,8 +198,8 @@
 			);
 			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
 			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
-		if(isset($_GET['login']) && $_GET['login'] !== "second"){
-			header('Location: /#/ManAccounts');
+		if((isset($_GET['login']) && $_GET['login'] !== "second") || $goToManAccounts == "true"){
+			header('Location: /#/manAccounts/AuthAccounts');
 		}else{
 			header('Location: /#/mainFeed');
 		}

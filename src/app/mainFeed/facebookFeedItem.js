@@ -689,17 +689,22 @@ define([
 				
 				blastDiv.onclick = lang.hitch(this, function(blastDiv, source){
 					this.blastView.blastObj = {};
-					if(source.content.picture == undefined ||
-						source.content.picture == null){
-						this.blastView.blastObj.url = "";
-					}else{
-						this.blastView.blastObj.url = source.content.picture;
-					}
+
 					this.blastView.blastObj.imgName = source.content.id;
 					this.blastView.blastObj.postLink = source.postLink;
 					this.blastView.blastObj.service = source.service;
 					this.blastView.blastObj.poster = source.actor.displayName;
 					this.blastView.blastObj.msg = source.content.text.text;
+
+					if(source.content.picture == undefined ||
+						source.content.picture == null){
+						this.blastView.blastObj.url = "";
+						this.blastView.blastObj.finalUrl = "";
+					}else{
+						this.blastView.blastObj.url = source.content.picture;
+						this.blastView.blastObj.finalUrl = "app/post/tmpUpload/" + this.blastView.blastObj.imgName;
+					}
+					
 					this.downloadImage(this.blastView.blastObj.url, this.blastView.blastObj.imgName).then(lang.hitch(this, function(){
 						window.location = "#/"+this.blastView.mod+this.blastView.route;
 					}))
