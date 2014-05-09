@@ -37,8 +37,19 @@ $client->setClientId($_GET['apiKey']);
 $client->setClientSecret($_GET['secretKey']);
 $client->setRedirectUri($_GET['redirect_uri']);
 $client->setAccessType('offline');
-//need this line to get a new refresh token
-//$client->setApprovalPrompt('force');
+
+$credObj = file_get_contents("../serviceCreds.json");
+$credObj = json_decode($credObj, true);
+if(count($credObj['google']) > 0){
+	if(count($credObj['google'][0]['accounts']) > 0){
+		for($t=0; $t < count($credObj['google'][0]['accounts']); $t++){
+			if(!isset($credObj['google'][0]['accounts'][$t]['refreshToken'])){
+				$client->setApprovalPrompt('force');
+			}
+		}
+	}
+}
+
 $scopeArr = explode(",", $_GET['scope']);
 $client->setScopes($scopeArr);
 

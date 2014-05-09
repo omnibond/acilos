@@ -576,7 +576,7 @@ class LinkedInContentJOBP{
 	public function setJobPosition($jobPosition){
 		$this->jobPosition = $jobPosition;
 	}
-	public function setJ($jobCompany){
+	public function setJobCompany($jobCompany){
 		$this->jobCompany = $jobCompany;
 	}
 	public function setJobURL($jobURL){
@@ -585,10 +585,10 @@ class LinkedInContentJOBP{
 	public function setJobPoster($jobPoster){
 		$this->jobPoster = $jobPoster;
 	}
-	public function setLocation($location){
+	public function setJobLocation($location){
 		$this->jobLocation = $location;
 	}
-	public function setDescription($description){
+	public function setJobDescription($description){
 		$this->jobDescription = $description;
 	}
 	public function setLikes($likes){
@@ -1778,7 +1778,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 				}else
 				**/
 				if(isset($obj['updateType']['companyJobUpdate'])){
-					$job = LinkedInContentJOBP();
+					$job = new LinkedInContentJOBP();
 
 					$job->setJobID($obj['updateContent']['companyJobUpdate']['job']['id']);
 					$job->setJobPosition($obj['updateContent']['companyJobUpdate']['job']['position']['title']);
