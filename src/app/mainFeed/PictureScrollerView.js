@@ -192,16 +192,21 @@ define([
 				
 						blastDiv.onclick = lang.hitch(this, function(blastDiv, d){
 							this.blastView.blastObj = {};
-							if(this.albumLinks[d] == undefined || this.albumLinks[d] == null){
-								this.blastView.blastObj.url = "";
-							}else{
-								this.blastView.blastObj.url = this.albumLinks[d];
-							}
+
 							this.blastView.blastObj.imgName = this.dataObj.content.id;
 							this.blastView.blastObj.postLink = this.dataObj.postLink;
 							this.blastView.blastObj.service = this.dataObj.service;
 							this.blastView.blastObj.poster = this.dataObj.actor.displayName;
 							this.blastView.blastObj.msg = this.dataObj.content.text.text;
+
+							if(this.albumLinks[d] == undefined || this.albumLinks[d] == null){
+								this.blastView.blastObj.url = "";
+								this.blastView.blastObj.finalUrl = "";
+							}else{
+								this.blastView.blastObj.url = this.albumLinks[d];
+								this.blastView.blastObj.finalUrl = "app/post/tmpUpload/" + this.blastView.blastObj.imgName;
+							}
+							
 							this.downloadImage(this.blastView.blastObj.url, this.blastView.blastObj.imgName).then(lang.hitch(this, function(){
 								window.location = "#/"+this.blastView.mod+this.blastView.route;
 							}))
