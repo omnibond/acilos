@@ -784,11 +784,18 @@ define([
 							this.blastView.blastObj.url = source.content.picture;
 							this.blastView.blastObj.finalUrl = "app/post/tmpUpload/" + this.blastView.blastObj.imgName;
 						}
-						
-						if(!source.content.text){
-							this.blastView.blastObj.msg = source.content.status.text;
+
+						console.log("asdf;lkjadfs;lkjsdfa;lkjadfs;lkj", source.content);
+						if(source.title == "DISCUSS"){
+							if(source.content.discussion.summary.text){
+								this.blastView.blastObj.msg = source.content.discussion.summary.text;
+							}
 						}else{
-							this.blastView.blastObj.msg = source.content.text.text;
+							if(!source.content.text){
+								this.blastView.blastObj.msg = source.content.status.text;
+							}else{
+								this.blastView.blastObj.msg = source.content.text.text;
+							}
 						}
 						this.downloadImage(this.blastView.blastObj.url, this.blastView.blastObj.imgName).then(lang.hitch(this, function(){
 							window.location = "#/"+this.blastView.mod+this.blastView.route;

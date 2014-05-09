@@ -208,14 +208,25 @@ define(['dojo/_base/declare',
 
 			console.log("this.blastObj.finalUrl in BlastView is: ", this.blastObj.finalUrl);
 
-			if(this.blastObj.finalUrl != ""){
+
+			if(this.blastObj.finalUrl == undefined || this.blastObj.finalUrl == null){
 				var fileHolder = new ListItem({
 					variableHeight: true,
 					"class": "feedPicContentItemClass"
 				});
-				var div = domConstruct.create("div", {style: "margin: 10px 10px 10px 10px", innerHTML: '<img src="'+this.blastObj.finalUrl+'"style="max-width:90%;max-height:90%;"></img>'});
+				var div = domConstruct.create("div", {style: "margin: 10px 10px 10px 10px", innerHTML: 'Sorry, there was a problem retrieving the photo.'});
 				fileHolder.domNode.appendChild(div);
 				this.mainList.addChild(fileHolder);
+			}else{
+				if(this.blastObj.finalUrl != ""){
+					var fileHolder = new ListItem({
+						variableHeight: true,
+						"class": "feedPicContentItemClass"
+					});
+					var div = domConstruct.create("div", {style: "margin: 10px 10px 10px 10px", innerHTML: '<img src="'+this.blastObj.finalUrl+'"style="max-width:90%;max-height:90%;"></img>'});
+					fileHolder.domNode.appendChild(div);
+					this.mainList.addChild(fileHolder);
+				}
 			}
 
 			this.submitButton = new Button({
