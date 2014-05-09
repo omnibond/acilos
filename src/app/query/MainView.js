@@ -384,7 +384,7 @@ define([
 				if(this.list){
 					var pos= domGeom.position(this.list.domNode,true);
 				       
-					if(Math.abs(pos.y) > Math.abs(pos.h) - 1500){
+					if(Math.abs(pos.y) > Math.abs(pos.h) - 5500){
 						this.getNextGroup();
 					}
 				}

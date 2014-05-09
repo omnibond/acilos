@@ -777,7 +777,7 @@ define([
 						this.blastView.blastObj.poster = source.actor.displayName;
 
 						if(source.content.picture == undefined ||
-							source.content.picture == null){
+							source.content.picture == null || source.content.picture == ""){
 							this.blastView.blastObj.url = "";
 							this.blastView.blastObj.finalUrl = "";
 						}else{

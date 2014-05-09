@@ -697,7 +697,7 @@ define([
 					this.blastView.blastObj.msg = source.content.text.text;
 
 					if(source.content.picture == undefined ||
-						source.content.picture == null){
+						source.content.picture == null || source.content.picture == ""){
 						this.blastView.blastObj.url = "";
 						this.blastView.blastObj.finalUrl = "";
 					}else{

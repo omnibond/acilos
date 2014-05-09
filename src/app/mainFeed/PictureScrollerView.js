@@ -199,7 +199,7 @@ define([
 							this.blastView.blastObj.poster = this.dataObj.actor.displayName;
 							this.blastView.blastObj.msg = this.dataObj.content.text.text;
 
-							if(this.albumLinks[d] == undefined || this.albumLinks[d] == null){
+							if(this.albumLinks[d] == undefined || this.albumLinks[d] == null || this.albumLinks[d] == ""){
 								this.blastView.blastObj.url = "";
 								this.blastView.blastObj.finalUrl = "";
 							}else{

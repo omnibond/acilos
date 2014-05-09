@@ -581,7 +581,7 @@ define([
 					this.blastView.blastObj.msg = source.content.text.text;
 
 					if(source.content.image.lowRes == undefined ||
-						source.content.image.lowRes == null){
+						source.content.image.lowRes == null || source.content.image.lowRes == ""){
 						this.blastView.blastObj.url = "";
 						this.blastView.blastObj.finalUrl = "";
 					}else{

@@ -440,14 +440,18 @@ define([
 				blastDiv.onclick = lang.hitch(this, function(blastDiv, source){
 					this.blastView.blastObj = {};
 
-					this.blastView.blastObj.imgName = source.content.id;
+					var imgStuff = source.id;
+					imgStuff = imgStuff.split("-----");
+					imgStuff = imgStuff[1];
+
+					this.blastView.blastObj.imgName = imgStuff;
 					this.blastView.blastObj.postLink = source.postLink;
 					this.blastView.blastObj.service = source.service;
 					this.blastView.blastObj.poster = source.actor.displayName;
 					this.blastView.blastObj.msg = source.content.text.text;
 
 					if(source.content.picture == undefined ||
-						source.content.picture == null){
+						source.content.picture == null || source.content.picture == ""){
 						this.blastView.blastObj.url = "";
 						this.blastView.blastObj.finalUrl = "";
 					}else{
