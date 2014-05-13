@@ -127,7 +127,7 @@ class twitterObjectBuilder extends activityObjectBuilder{
         $this->activityObject->setContent($content);
     }
     public function buildPublished($obj){
-        $this->activityObject->setPublished(intval(substr(strtotime($obj['created_at']),0 ,10)));
+        $this->activityObject->setPublished(intval(substr(@strtotime($obj['created_at']),0 ,10)));
     }
     public function buildGenerator($obj){
         $this->activityObject->setGenerator($obj['source']);

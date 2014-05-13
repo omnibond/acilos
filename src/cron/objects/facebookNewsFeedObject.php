@@ -350,7 +350,7 @@ class facebookNewsFeedObjectBuilder extends activityObjectBuilder{
 	}
     public function buildPublished($obj){
         if(isset($obj['created_time'])){
-        	$this->activityObject->setPublished(intval(substr(strtotime($obj['created_time']), 0, 10)));
+        	$this->activityObject->setPublished(intval(substr(@strtotime($obj['created_time']), 0, 10)));
         }
     }
     public function buildGenerator($obj){

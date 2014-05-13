@@ -142,7 +142,7 @@ class googleObjectBuilder extends activityObjectBuilder{
 	}
 	
 	public function buildPublished($obj){
-		$this->activityObject->setPublished(strtotime($obj['published']));
+		$this->activityObject->setPublished(@strtotime($obj['published']));
 	}
 	public function buildGenerator($obj){
 		$this->activityObject->setGenerator('Google');
