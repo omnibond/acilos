@@ -34,15 +34,15 @@ require_once('googleFeedObject.php');
 
 #PRODUCT
 class Actor{
-    public $name = '';
-    public $id = '';
-    public $searchable = '';
-    public $displayName = '';
-    public $image = '';
-    public $url = '';
-    public $location = '';
-    public $geoLocation = '';
-    public $description = '';
+    public $name = "N/A";
+    public $id = "N/A";
+    public $searchable = "N/A";
+    public $displayName = "N/A";
+    public $image = "N/A";
+    public $url = "N/A";
+    public $location = "N/A";
+    public $geoLocation = "N/A";
+    public $description = "N/A";
    
    public function getGeoLocation($loc){
 	if($loc == ""){
@@ -99,8 +99,8 @@ class Actor{
 }
 
 class textBlockWithURLS{
-	public $text = '';
-	public $links = '';
+	public $text = "N/A";
+	public $links = array();
 
 	public function setText($textBlock){
 		$this->text = $textBlock;
@@ -215,23 +215,22 @@ class textBlockWithURLS{
 #PRODUCT
 class activityObject{
    
-    public $actor = '';
-    public $content = '';
-    public $published = '';
-    public $generator = '';
-    public $title = '';
-    public $verb = '';
-    public $id = '';
-    public $service = '';
-    public $starred = '';
-    public $postLink = '';
-    public $isLiked = '';
-    public $isCommented = '';
-    public $isFavorited = '';
-    public $mainAccountName = '';
-    public $mainAccountID = '';
-    public $mainAccountColor = '';
-   
+    public $actor = array();
+    public $content = array();
+    public $published = "N/A";
+    public $generator = "N/A";
+    public $title = "N/A";
+    public $verb = "N/A";
+    public $id = "N/A";
+    public $service = "N/A";
+    public $starred = "N/A";
+    public $postLink = "N/A";
+    public $isLiked = "N/A";
+    public $isCommented = "N/A";
+    public $isFavorited = "N/A";
+    public $mainAccountName = "N/A";
+    public $mainAccountID = "N/A";
+    public $mainAccountColor = "N/A";   
     public function setActor($actor){
         $this->actor = $actor;
     }

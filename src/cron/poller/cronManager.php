@@ -106,8 +106,10 @@ function writeObject($obj){
 	}
 	$obj['dataLocation'] = "local";
 
+	print_r($obj); ?><br/><?php ?><br/><?php ?><br/><?php
+
 	$grr = $es->index($obj, $obj['id']);
-	print_r($grr); ?><br/><?php
+	print_r($grr); ?><br/><?php ?><br/><?php ?><br/><?php
 	
 	updateRecentPost($obj);
 }
@@ -535,22 +537,26 @@ function linkedInFetchWithParams($method, $resource, $token, $start, $count) {
 			)
 		    )
 		);
- 
+
+   // print_r($url);
  
     // Hocus Pocus
     $response = file_get_contents($url, false, $context);
+
+    //var_dump($response);
  	
     // Native PHP object, please
-    return json_decode($response);
+    return json_decode($response, true);
 }
 
 function normalizeLinkedinObj($objArray, $account){
 	echo "normal linkedin object " . count($objArray); ?><br/><?php
 
 	for($k = 0; $k < count($objArray); $k++){
-			$obj = $objArray[$k];
+		$obj = $objArray[$k];
 
-			//print_r($obj);
+		//if($obj['updateType'] == "VIRL"){
+			print_r($obj); ?><br/><?php ?><br/><?php ?><br/><?php
 
 			$manager = new Manager();
 			$builder = new linkedInNetworkObjectBuilder();
@@ -560,11 +566,12 @@ function normalizeLinkedinObj($objArray, $account){
 
 			$item = $manager->getActivityObj();
 
-			//print_r($item); ?><br/><?php
+			//print_r($item); ?><br/><?php ?><br/><?php ?><br/><?php
 
 			writeObject((array)$item);
 			global $credentialObject;
 			$credentialObject['Linkedin']['status'] = 'good';
+		//}
 	}
 }
 
@@ -574,7 +581,7 @@ function normalizeDiscussionObj($objArray, $account){
 	for($k = 0; $k < count($objArray); $k++){
 			$obj = $objArray[$k];
 
-			#print_r($obj);
+			print_r($obj); ?><br/><?php ?><br/><?php ?><br/><?php
 
 			$manager = new Manager();
 			$builder = new linkedInNetworkObjectBuilder();
@@ -584,7 +591,7 @@ function normalizeDiscussionObj($objArray, $account){
 
 			$item = $manager->getActivityObj();
 
-			#print_r($item); ?><br/><?php
+			//print_r($item); ?><br/><?php ?><br/><?php ?><br/><?php
 
 			writeObject((array)$item);
 			global $credentialObject;
@@ -611,8 +618,9 @@ function getPersonalFeed(){
 	for($h=0; $h < count($accts); $h++){
 		$feed = linkedInFetchWithParams('GET', '/v1/people/~/network/updates', $accts[$h]['accessToken'], 0, 100);
 
-		$feed = objectToArray($feed);
-		normalizeLinkedinObj($feed['values'], $accts[$h]);
+		if(isset($feed['values'])){
+			normalizeLinkedinObj($feed['values'], $accts[$h]);
+		}
 	}
 }
 

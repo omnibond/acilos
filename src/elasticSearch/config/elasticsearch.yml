@@ -111,8 +111,8 @@
 # Note, that for development on a local machine, with small indices, it usually
 # makes sense to "disable" the distributed features:
 #
-# index.number_of_shards: 1
-# index.number_of_replicas: 0
+#index.number_of_shards: 1
+#index.number_of_replicas: 0
 
 # These settings directly affect the performance of index and search operations
 # in your cluster. Assuming you have enough machines to hold shards and
@@ -139,7 +139,7 @@ min_index_buffer_size:  48mb
 
 max_index_buffer_size:  48mb   
 
-index_mapper_dynamic: false
+#index.mapper.dynamic: false
 
 #################################### Paths ####################################
 

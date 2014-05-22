@@ -28,3 +28,4 @@ profiles/app-development.profile.js
 *.lock
 elasticsearch.yml
 *.yml
+src/cron/poller/companyObj.json

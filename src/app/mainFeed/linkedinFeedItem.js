@@ -236,7 +236,27 @@ define([
 				return finalStr;
 			},
 			
-			buildView: function(color){				
+			buildView: function(color){		
+				var obj = this.data.hits.hits[this.counter]._source;
+				
+				if(obj.content.connection){
+					if(obj.content.connection.length == 0){
+						return;
+					}
+				}
+
+				if(!obj.content || obj.actor.length == 0 || obj.actor.displayName == "private private" || obj.actor.searchable == "private"){
+					return;
+				}
+
+				if(obj.content){
+					if(obj.content.networkObjectType == "N/A" || obj.content.networkObjectType == null || obj.content.networkObjectType == "undefined"){
+						return;
+					}
+				}
+
+				console.log("OBJ IS: ", obj);
+
 				this.paneLeft = new Pane({
 					"class": "paneLeftClass"
 				});
@@ -253,8 +273,6 @@ define([
 				this.paneRight.addChild(this.roundRight);
 				this.addChild(this.paneLeft);
 				this.addChild(this.paneRight);
-
-				var obj = this.data.hits.hits[this.counter]._source;
 				
 				if(this.authObj['linkedin'].length > 0){
 					var acctArr = this.authObj['linkedin'][0]['accounts'];
@@ -269,10 +287,7 @@ define([
 						}
 					}
 				}
-				
-				if(!obj.content){
-					return;
-				}
+
 				var type = obj.content.networkObjectType;
 				
 			//LeftPane/RoundRect
@@ -382,29 +397,240 @@ define([
 				//CONTENT ITEM THREE-----------------------
 				switch (type){
 					case "CONN":
-						this.connItem = new ListItem({
-							variableHeight: true,
-							"class": "feedPicDateItemClass"
-						});
-						if(obj.content.actionString != null){
-							this.stringItem = new ListItem({
+						if(obj.content.connection.length > 0){
+							this.connItem = new ListItem({
 								variableHeight: true,
-								label: obj.content.person.firstName + " " + obj.content.person.lastName + " " + obj.content.actionString,
-								"class": "feedTextContentItemClass"
+								"class": "feedPicDateItemClass"
 							});
-							this.roundRight.addChild(this.stringItem);
-							for(var k = 0; k < obj.content.connection.length; k++){
-								if(obj.content.connection[k].picture != null){
-									this.userPic = domConstruct.create("div", {innerHTML: '<img src="'+obj.content.connection[k].picture+'" max-width="50px" max-height="50px" />', style: "float:left"});
-								}else{
-									this.userPic = domConstruct.create("div", {innerHTML: '<img src="app/resources/img/blankPerson.jpg" max-width="50px" max-height="50px" />', style: "float:left"});
+							if(obj.content.actionString != null){
+								this.stringItem = new ListItem({
+									variableHeight: true,
+									label: obj.content.person.firstName + " " + obj.content.person.lastName + " " + obj.content.actionString,
+									"class": "feedTextContentItemClass"
+								});
+								this.roundRight.addChild(this.stringItem);
+								for(var k = 0; k < obj.content.connection.length; k++){
+									if(obj.content.connection[k].picture != null){
+										this.userPic = domConstruct.create("div", {innerHTML: '<img src="'+obj.content.connection[k].picture+'" max-width="50px" max-height="50px" />', style: "float:left"});
+									}else{
+										this.userPic = domConstruct.create("div", {innerHTML: '<img src="app/resources/img/blankPerson.jpg" max-width="50px" max-height="50px" />', style: "float:left"});
+									}
+									this.connPerson = domConstruct.create("div", {innerHTML: obj.content.connection[k].firstName + " " + obj.content.connection[k].lastName + "\n", style: "float:center;margin-top:10px;clear:both;margin-left:-1px"});
+									this.connItem.domNode.appendChild(this.userPic);
+									this.connItem.domNode.appendChild(this.connPerson);
 								}
-								this.connPerson = domConstruct.create("div", {innerHTML: obj.content.connection[k].firstName + " " + obj.content.connection[k].lastName + "\n", style: "float:center;margin-top:10px;clear:both;margin-left:-1px"});
-								this.connItem.domNode.appendChild(this.userPic);
-								this.connItem.domNode.appendChild(this.connPerson);
+							}
+							this.roundRight.addChild(this.connItem);
+						}
+						
+					break;
+					case "CMPY":
+						if(obj.content){
+							if(obj.content.job){
+								if(obj.content.job.jobDescription){
+									if(obj.content.job.jobDescription != null && obj.content.job.jobDescription != "N/A" && obj.content.job.jobDescription != "undefined"){
+										var jobDescription = this.parseSpecialChars(obj.content.job.jobDescription.text);
+										if(obj.content.job.jobURL){
+											if(obj.content.job.jobURL != "" && obj.content.job.jobURL != "undefined" && obj.content.job.jobURL != null){
+												jobURL = this.parseSpecialChars(obj.content.job.jobURL);
+											}else{
+												jobURL = "";
+											}
+										}
+										if(obj.content.job.jobPosition != null){
+											var jobPosition = this.parseSpecialChars(obj.content.job.jobPosition);
+
+											this.jobItem = new ListItem({
+												variableHeight: true,
+												label: "Job Update: " + jobPosition + " " + jobURL + "<br /> " + "<br /> " + jobPosition,
+												"class": "feedTextContentItemClass"
+											});
+											this.roundRight.addChild(this.jobItem);
+										}else{
+											this.jobItem = new ListItem({
+												variableHeight: true,
+												label: "Job Update: " + jobURL + " " + jobDescription,
+												"class": "feedTextContentItemClass"
+											});
+											this.roundRight.addChild(this.jobItem);
+										}									
+
+										if(obj.content.imageUrl && obj.content.imageUrl != "N/A" && obj.content.imageUrl != null && obj.content.imageUrl != "undefined"){
+											this.pictureItem = new ListItem({
+												variableHeight: true,
+												"class": "feedPicDateItemClass"
+											});
+
+											div = domConstruct.create("div", {innerHTML: '<img src="'+obj.content.imageUrl+'"style="max-width:90%;max-height:90%;" />', style: "float:left"});
+
+											div.onclick = lang.hitch(this, function(){
+												var dialog = new Dialog({
+													title: "Click to close ->",
+													"class": "blackBackDijitDialog",
+													onHide: lang.hitch(this, function(){
+														if(blackoutDiv){
+															document.body.removeChild(blackoutDiv);
+														}
+													})
+												});
+
+												var dialogDiv = domConstruct.create("div", {innerHTML: '<img src="'+obj.content.imageUrl+'"style="" />'});
+
+												var blackoutDiv = domConstruct.create("div", {"class": "blackoutDiv"});
+
+												dialog.set("content", dialogDiv);
+												dialog.show();
+
+												document.body.appendChild(blackoutDiv);
+											});
+
+											this.pictureItem.domNode.appendChild(div);
+											this.roundRight.addChild(this.pictureItem);
+										}
+									}
+								}else if(obj.content.description && obj.content.comment){
+									if(obj.content.description.text && obj.content.comment.text){
+										if(obj.content.description.text != "" && obj.content.description.text != null && obj.content.description.text != "undefined" && obj.content.comment != null && obj.content.comment != "undefined" && obj.content.comment != ""){
+											var comment = this.parseSpecialChars(obj.content.comment.text);
+
+											this.commentItem = new ListItem({
+												variableHeight: true,
+												label: comment,
+												"class": "feedTextContentItemClass"
+											});
+											this.roundRight.addChild(this.commentItem);
+
+											if(obj.content.imageUrl && obj.content.imageUrl != "N/A" && obj.content.imageUrl != null && obj.content.imageUrl != "undefined"){
+												this.pictureItem = new ListItem({
+													variableHeight: true,
+													"class": "feedPicDateItemClass"
+												});
+
+												div = domConstruct.create("div", {innerHTML: '<img src="'+obj.content.imageUrl+'"style="max-width:90%;max-height:90%;" />', style: "float:left"});
+
+												div.onclick = lang.hitch(this, function(){
+													var dialog = new Dialog({
+														title: "Click to close ->",
+														"class": "blackBackDijitDialog",
+														onHide: lang.hitch(this, function(){
+															if(blackoutDiv){
+																document.body.removeChild(blackoutDiv);
+															}
+														})
+													});
+
+													var dialogDiv = domConstruct.create("div", {innerHTML: '<img src="'+obj.content.imageUrl+'"style="" />'});
+
+													var blackoutDiv = domConstruct.create("div", {"class": "blackoutDiv"});
+
+													dialog.set("content", dialogDiv);
+													dialog.show();
+
+													document.body.appendChild(blackoutDiv);
+												});
+
+												this.pictureItem.domNode.appendChild(div);
+												this.roundRight.addChild(this.pictureItem);
+											}
+
+											var description = this.parseSpecialChars(obj.content.description.text);
+											
+											this.descriptionItem = new ListItem({
+												variableHeight: true,
+												label: description,
+												"class": "feedTextContentItemClass"
+											});
+											this.roundRight.addChild(this.descriptionItem);
+										}
+									}else if(obj.content.comment){
+										if(obj.content.comment.text){
+											var comment = this.parseSpecialChars(obj.content.comment.text);
+											this.commentItem = new ListItem({
+												variableHeight: true,
+												label: comment,
+												"class": "feedTextContentItemClass"
+											});
+											this.roundRight.addChild(this.commentItem);
+
+											if(obj.content.imageUrl && obj.content.imageUrl != "N/A" && obj.content.imageUrl != null && obj.content.imageUrl != "undefined"){
+												this.pictureItem = new ListItem({
+													variableHeight: true,
+													"class": "feedPicDateItemClass"
+												});
+
+												div = domConstruct.create("div", {innerHTML: '<img src="'+obj.content.imageUrl+'"style="max-width:90%;max-height:90%;" />', style: "float:left"});
+
+												div.onclick = lang.hitch(this, function(){
+													var dialog = new Dialog({
+														title: "Click to close ->",
+														"class": "blackBackDijitDialog",
+														onHide: lang.hitch(this, function(){
+															if(blackoutDiv){
+																document.body.removeChild(blackoutDiv);
+															}
+														})
+													});
+
+													var dialogDiv = domConstruct.create("div", {innerHTML: '<img src="'+obj.content.imageUrl+'"style="" />'});
+
+													var blackoutDiv = domConstruct.create("div", {"class": "blackoutDiv"});
+
+													dialog.set("content", dialogDiv);
+													dialog.show();
+
+													document.body.appendChild(blackoutDiv);
+												});
+
+												this.pictureItem.domNode.appendChild(div);
+												this.roundRight.addChild(this.pictureItem);
+											}
+										}else if(obj.content.description.text){
+											var description = this.parseSpecialChars(obj.content.description.text);
+
+											this.descriptionItem = new ListItem({
+												variableHeight: true,
+												label: description,
+												"class": "feedTextContentItemClass"
+											});
+											this.roundRight.addChild(this.descriptionItem);
+
+											if(obj.content.imageUrl && obj.content.imageUrl != "N/A" && obj.content.imageUrl != null && obj.content.imageUrl != "undefined"){
+												this.pictureItem = new ListItem({
+													variableHeight: true,
+													"class": "feedPicDateItemClass"
+												});
+
+												div = domConstruct.create("div", {innerHTML: '<img src="'+obj.content.imageUrl+'"style="max-width:90%;max-height:90%;" />', style: "float:left"});
+
+												div.onclick = lang.hitch(this, function(){
+													var dialog = new Dialog({
+														title: "Click to close ->",
+														"class": "blackBackDijitDialog",
+														onHide: lang.hitch(this, function(){
+															if(blackoutDiv){
+																document.body.removeChild(blackoutDiv);
+															}
+														})
+													});
+
+													var dialogDiv = domConstruct.create("div", {innerHTML: '<img src="'+obj.content.imageUrl+'"style="" />'});
+
+													var blackoutDiv = domConstruct.create("div", {"class": "blackoutDiv"});
+
+													dialog.set("content", dialogDiv);
+													dialog.show();
+
+													document.body.appendChild(blackoutDiv);
+												});
+
+												this.pictureItem.domNode.appendChild(div);
+												this.roundRight.addChild(this.pictureItem);
+											}
+										}
+									}
+								}
 							}
 						}
-						this.roundRight.addChild(this.connItem);
 					break;
 					case "PICU":
 						if(obj.content.picture != null){
@@ -553,7 +779,7 @@ define([
 						if(obj.content.companyName != null){
 							this.msfcItem = new ListItem({
 								variableHeight: true,
-								label: obj.content.person.firstName + " has started following: " + obj.content.companyName,
+								label: obj.content.person.firstName + " is now following: " + obj.content.companyName,
 								"class": "feedTextContentItemClass"
 							});
 							this.roundRight.addChild(this.msfcItem);
@@ -615,7 +841,6 @@ define([
 					break;
 					default:
 						console.log("Unknown type: " + type);
-						console.log(obj);
 					break;
 				}
 				
@@ -785,7 +1010,6 @@ define([
 							this.blastView.blastObj.finalUrl = "app/post/tmpUpload/" + this.blastView.blastObj.imgName;
 						}
 
-						console.log("asdf;lkjadfs;lkjsdfa;lkjadfs;lkj", source.content);
 						if(source.title == "DISCUSS"){
 							if(source.content.discussion.summary.text){
 								this.blastView.blastObj.msg = source.content.discussion.summary.text;
