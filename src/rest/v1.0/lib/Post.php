@@ -153,7 +153,7 @@ Class Post{
 		print_r($response);
 		
 		if($code == "201"){
-			return json_encode(array("Success" => "Your LinkedIn comment was posted successfully"));
+			return json_encode(array("Success" => "Your LinkedIn like was posted successfully"));
 		}else{
 			return json_encode(array("Failure" => "There was an error liking the Linkedin post."));
 		}
@@ -533,11 +533,12 @@ Class Post{
 
 						$statusURL = 'https://graph.facebook.com/me/feed';
 
-						if(isset($fileName)){}
-						if($fileName == ""){
-							$url = $statusURL;
-						}else{
-							$url = $photoURL;
+						if(isset($fileName)){
+							if($fileName == ""){
+								$url = $statusURL;
+							}else{
+								$url = $photoURL;
+							}
 						}
 
 						$ch = curl_init($url);
@@ -563,14 +564,18 @@ Class Post{
 						$response = curl_exec($ch);
 						curl_close($ch);
 
-						//print_r($response);
+						//var_dump($response);
 										
 						$res = json_decode($response, true);
 
-						if(isset($res['error'])){
-							$returnArray['Facebook'][$x] = array("failure" => 'true', "msg" => "Your Facebook status could not be posted - " . $res['error']['message']);
+						if(isset($res)){
+							if(isset($res['error'])){
+								$returnArray['Facebook'][$x] = array("failure" => 'true', "msg" => "Your Facebook status could not be posted - " . $res['error']['message']);
+							}else{
+								$returnArray['Facebook'][$x] = array("success" => 'true', "msg" => "Your Facebook status was posted successfully");
+							}
 						}else{
-							$returnArray['Facebook'][$x] = array("success" => 'true', "msg" => "Your Facebook status was posted successfully");
+							$returnArray['Facebook'][$x] = array("failure" => 'true', "msg" => "Your Facebook status could not be posted - no response from Facebook");
 						}
 					}
 
@@ -609,12 +614,16 @@ Class Post{
 
 						$status = $connection->upload($url, $stuff);
 
-						//print_r($status);
+						//var_dump($status);
 
-						if(isset($status->errors[0]->message)){
-							$returnArray['Twitter'][$x] =  array("failure" => "true", "msg" => "Your Twitter status could not be posted - " . $status->errors[0]->message);
+						if(isset($status)){
+							if(isset($status->errors[0]->message)){
+								$returnArray['Twitter'][$x] =  array("failure" => "true", "msg" => "Your Twitter status could not be posted - " . $status->errors[0]->message);
+							}else{
+								$returnArray['Twitter'][$x] =  array("success" => "true", "msg" => "Your Twitter status was posted successfully");
+							}
 						}else{
-							$returnArray['Twitter'][$x] =  array("success" => "true", "msg" => "Your Twitter status was posted successfully");
+							$returnArray['Twitter'][$x] =  array("failure" => "true", "msg" => "Your Twitter status could not be posted - no response from Twitter	");
 						}
 					}
 
@@ -649,7 +658,7 @@ Class Post{
 						$imageURL = $_SERVER['HTTP_REFERER'] . 'app/post/tmpUpload/' . $fileName;
 						$title = "Title";
 						$shareXML = "<share>
-							<comment>Test Comment Linkedin</comment>
+							<comment></comment>
 							<content>
 								<title>".$msg."</title>
 								<submitted-url>".$imageURL."</submitted-url>
@@ -691,14 +700,18 @@ Class Post{
 						if($code == "201"){
 							$returnArray['Linkedin'][$x] = array("success" => "true", "msg" => "Your LinkedIn status was posted successfully");
 						}else{
-							$xml = (array)($xml);
-							if(isset($xml['error-code'])){
-								$linkCode = $xml['error-code'];
-								if($linkCode == "0"){
-									$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - Status is a duplicate.");
-								}else{
-									$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - " . $xml['message']);
+							if(isset($xml)){
+								$xml = (array)($xml);
+								if(isset($xml['error-code'])){
+									$linkCode = $xml['error-code'];
+									if($linkCode == "0"){
+										$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - Status is a duplicate.");
+									}else{
+										$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - " . $xml['message']);
+									}
 								}
+							}else{
+								$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - no response from LinkedIn.");
 							}
 						}
 					}

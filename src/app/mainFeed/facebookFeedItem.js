@@ -239,6 +239,38 @@ define([
 			},
 			
 			buildView: function(color){	
+				var obj = this.data.hits.hits[this.counter]._source;
+
+				if(obj.title){
+					if(obj.title.search("commented on a photo") != -1 || obj.title.search("likes a link") != -1 || obj.title.search("commented on a link") != -1 || obj.title.search("likes a photo") != -1 || obj.title.search("own photo") != -1 || obj.title.search("own link") != -1){
+						return;
+					}
+				}
+
+				if(obj.content){
+					if(obj.content.queryString){
+						if(obj.content.queryString.search("commented on a photo") != -1 || obj.content.queryString.search("likes a link") != -1 || obj.content.queryString.search("commented on a link") != -1 || obj.content.queryString.search("likes a photo") != -1 || obj.content.queryString.search("own photo") != -1 || obj.content.queryString.search("own link") != -1){
+							return;
+						}
+					}
+
+					if(obj.content.story){
+						if(obj.content.story.text){
+							if(obj.content.story.text.search("commented on a photo") != -1 || obj.content.story.text.search("likes a link") != -1 || obj.content.story.text.search("commented on a link") != -1 || obj.content.story.text.search("likes a photo") != -1 || obj.content.story.text.search("own photo") != -1 || obj.content.story.text.search("own link") != -1){
+								return;
+							}
+						}
+					}
+
+					if(obj.content.text){
+						if(obj.content.text.text){
+							if(obj.content.text.text.search("commented on a photo") != -1 || obj.content.text.text.search("likes a link") != -1 || obj.content.text.text.search("commented on a link") != -1 || obj.content.text.text.search("likes a photo") != -1 || obj.content.text.text.search("own photo") != -1 || obj.content.text.text.search("own link") != -1){
+								return;
+							}
+						}
+					}
+				}
+
 				this.paneLeft = new Pane({
 					"class": "paneLeftClass"
 				});
@@ -255,8 +287,6 @@ define([
 				this.paneRight.addChild(this.roundRight);
 				this.addChild(this.paneLeft);
 				this.addChild(this.paneRight);
-
-				var obj = this.data.hits.hits[this.counter]._source;
 
 				if(this.authObj['facebook'].length > 0){
 					var acctArr = this.authObj['facebook'][0]['accounts'];
@@ -297,7 +327,7 @@ define([
 					variableHeight: true,
 					"class": "picItemClass"
 				});
-				if(obj.actor.searchable != null){
+				if(obj.actor.searchable != null && obj.actor.searchable != "undefined" && obj.actor.searchable != "N/A" && obj.actor.searchable != ""){
 					this.userPic = domConstruct.create("div", {innerHTML: '<img src="https://graph.facebook.com/'+obj.actor.id+'/picture" width="50px" height="50px" />', "class": "feedPicDivItemClass"});
 				}else{
 					this.userPic = domConstruct.create("div", {innerHTML: '<img src="app/resources/img/blankPerson.jpg" width="50px" height="50px" />', "class": "feedPicDivItemClass"});
@@ -393,7 +423,7 @@ define([
 				this.roundRight.addChild(this.dateServItem);
 				
 				//PIC ITEM ----------------------
-				if(obj.content.picture != null && obj.content.url != null){
+				if(obj.content.picture != null && obj.content.picture != "undefined" && obj.content.picture != "" && obj.content.picture != "N/A" && obj.content.url != null && obj.content.url != "" && obj.content.url!= "undefined" && obj.content.url != "N/A"){
 					this.picContent = new ListItem({
 						variableHeight: true,
 						"class": "feedPicContentItemClass"
@@ -431,7 +461,7 @@ define([
 					this.picContent.domNode.appendChild(div);
 					this.roundRight.addChild(this.picContent);
 				}else{
-					if((obj.content.objectType == "photo") && (obj.content.picture == null) && (obj.content.url != null)){
+					if(obj.content.objectType == "photo" && (obj.content.picture == null || obj.content.picture == "" || obj.content.picture == "undefined" || obj.content.picture == "N/A") && obj.content.url != null && obj.content.url != "undefined" && obj.content.url != "" && obj.content.url != "N/A"){
 
 						this.picContent = new ListItem({
 							variableHeight: true,
@@ -467,7 +497,7 @@ define([
 				}				
 				
 				//TEXT ITEM FOUR-------------------------
-				if(obj.content.text.text != null){
+				if(obj.content.text.text != null && obj.content.text.text != "undefined" && obj.content.text.text != "N/A" && obj.content.text.text != ""){
 					/*
 					if(obj.content.to.length > 0){
 						var string =  this.parseSpecialChars(obj.content.text.text);
@@ -512,7 +542,7 @@ define([
 						});
 					}
 					this.roundRight.addChild(this.textContent);
-				}else if(obj.content.story.text != null){
+				}else if(obj.content.story.text != null && obj.content.story.text != "" && obj.content.story.text != "undefined" && obj.content.story.text != "N/A"){
 					var string =  this.parseSpecialChars(obj.content.story.text);
 					this.textContent = new ListItem({
 						variableHeight: true,

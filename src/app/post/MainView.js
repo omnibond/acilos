@@ -327,6 +327,8 @@ define(['dojo/_base/declare',
 								this.sendPostFile(this.fileToUpload, fileType, tokenArr, msg).then(lang.hitch(this, function(obj){
 									console.log("obj is: ", obj);
 
+									this.fileToUpload = "";
+
 									var returnStuff = obj['returnArray'];
 
 									this.failureFlag = "false";
@@ -341,6 +343,9 @@ define(['dojo/_base/declare',
 
 									if(this.failureFlag == "false"){
 										if(this.mainList){
+											this.fileToUpload = "";
+											fUploader.destroyRecursive();
+											fUploader = null;
 											this.mainList.destroyRecursive();
 											this.mainList = null;
 										}

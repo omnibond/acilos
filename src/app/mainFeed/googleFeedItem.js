@@ -257,7 +257,7 @@ define([
 					variableHeight: true,
 					"class": "picItemClass"
 				});
-				if(obj.actor.searchable != null){
+				if(obj.actor.searchable != null && obj.actor.searchable != "" && obj.actor.searchable != "undefined" && obj.actor.searchable != "N/A"){
 					this.userPic = domConstruct.create("div", {innerHTML: '<img src="'+obj.actor.image+'" width="50px" height="50px" />', "class": "feedPicDivItemClass"});
 				}else{
 					this.userPic = domConstruct.create("div", {innerHTML: '<img src="app/resources/img/blankPerson.jpg" width="50px" height="50px" />', "class": "feedPicDivItemClass"});
@@ -353,7 +353,7 @@ define([
 				this.roundRight.addChild(this.dateServItem);
 			
 				//TEXT ITEM -------------------------
-				if(obj.content.header != "" && obj.content.header != null){
+				if(obj.content.header != "" && obj.content.header != null && obj.content.header != "N/A" && obj.content.header != "undefined"){
 					var string = this.parseSpecialChars(obj.content.header);
 					this.textContent = new ListItem({
 						variableHeight: true,
@@ -371,7 +371,7 @@ define([
 			//		});
 			//		this.roundRight.addChild(this.textContent);
 			//	}
-				if(obj.content.text.text != "" && obj.content.text.text != null && obj.content.text.text != obj.content.header){					
+				if(obj.content.text.text != "" && obj.content.text.text != null && obj.content.text.text != obj.content.header && obj.content.text.text != "undefined" && obj.content.text.text != "N/A" ){					
 					var string = this.parseSpecialChars(obj.content.text.text);
 					this.textContent = new ListItem({
 						variableHeight: true,
@@ -382,7 +382,7 @@ define([
 				}				
 				
 				//PIC ITEM ----------------------
-				if(obj.content.picture != "" && obj.content.picture != null){
+				if(obj.content.picture != "" && obj.content.picture != null && obj.content.picture != "undefined" && obj.content.picture != "N/A"){
 					this.picContent = new ListItem({
 						variableHeight: true,
 						"class": "feedPicContentItemClass"

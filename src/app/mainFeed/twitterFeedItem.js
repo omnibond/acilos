@@ -314,7 +314,7 @@ define([
 					variableHeight: true,
 					"class": "picItemClass"
 				});
-				if(dataObj.actor.searchable != null){
+				if(dataObj.actor.searchable != null && dataObj.actor.searchable != "undefined" && dataObj.actor.searchable != "N/A"){
 					this.userPic = domConstruct.create("div", {innerHTML: '<img src="'+dataObj.actor.image+'" width="50px" height="50px" />', "class": "feedPicDivItemClass"});
 				}else{
 					this.userPic = domConstruct.create("div", {innerHTML: '<img src="app/resources/img/blankPerson.jpg" width="50px" height="50px" />', "class": "feedPicDivItemClass"});
@@ -415,8 +415,8 @@ define([
 					variableHeight: true,
 					"class": "feedPicDateItemClass"
 				});
-				if(dataObj.content && (dataObj.content != null)){
-					if(dataObj.content.mediaUrl && (dataObj.content.mediaUrl != null) && (dataObj.content.mediaUrl != "")){		
+				if(dataObj.content && dataObj.content != null && dataObj.content != "undefined" && dataObj.content != "N/A"){
+					if(dataObj.content.mediaUrl && (dataObj.content.mediaUrl != null) && (dataObj.content.mediaUrl != "") && (dataObj.content.mediaUrl != "N/A")){		
 						var div = domConstruct.create("div", {innerHTML: '<img src="'+dataObj.content.mediaUrl+'"style="max-width:90%;max-height:90%;"></img>'});
 
 						div.onclick = lang.hitch(this, function(){
@@ -446,7 +446,7 @@ define([
 				this.roundRight.addChild(this.twitterPic);
 
 				//TEXT ITEM FOUR-------------------------
-				if(dataObj.content.text.text != null){
+				if(dataObj.content.text.text != null && dataObj.content.text.text != "undefined" && dataObj.content.text.text != "N/A"){
 					var stringArr = dataObj.content.text.text.split(" ");
 					/*
 					var urlArr = [];

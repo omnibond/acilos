@@ -278,7 +278,7 @@ function normalizeNewsFeedObj($objArray, $account){
 	for($k = 0; $k < count($objArray); $k++){
 		$obje = $objArray[$k];
 
-		#print_r($obj); 
+		print_r($obje); 
 
 		$manager = new Manager();
 		$builder = new facebookNewsFeedObjectBuilder();
@@ -783,8 +783,8 @@ if(!file_exists("../../lockFiles/cronManager.lock") || (time() > filemtime("../.
 			$total = json_decode($totes, true);	
 
 		}		
-		echo "linkedin feed"; ?><br/><?php
-		getPersonalFeed();
+		//echo "linkedin feed"; ?><br/><?php
+		//getPersonalFeed();
 
 		echo "facebook feed"; ?><br/><?php
 		getUserNewsFeed();
