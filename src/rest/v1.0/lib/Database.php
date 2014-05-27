@@ -577,7 +577,7 @@ class Database{
 				);
 			}
 			if($key == "facebook"){
-				$scope = "friends_location,friends_hometown,user_hometown,user_location,publish_stream,read_stream,read_friendlists,friends_birthday,friends_religion_politics,email,user_likes,friends_likes,manage_notifications";
+				$scope = "friends_location,friends_hometown,user_hometown,user_location,publish_stream,publish_actions,read_stream,read_friendlists,friends_birthday,friends_religion_politics,email,user_likes,friends_likes,manage_notifications";
 				$authLink = "https://www.facebook.com/dialog/oauth?client_id=".$obj[$key]['key']."&redirect_uri=".$obj[$key]['redir']."&scope=".$scope;
 				$account = array(
 					"color" => "#0066FF",

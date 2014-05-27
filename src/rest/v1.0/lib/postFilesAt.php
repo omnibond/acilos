@@ -152,10 +152,10 @@ require_once('../../oAuth/twitteroauth/twitteroauth.php');
 			"Content-Type: text/xml;charset=utf-8"
 		);
 
-		$imageURL = $_SERVER['HTTP_REFERER'] . 'app/post/tmpUpload/' . $fileName;
+		$imageURL = $server . 'app/post/tmpUpload/' . $fileName;
 		$title = "Title";
 		$shareXML = "<share>
-			<comment>Test Comment Linkedin</comment>
+			<comment></comment>
 			<content>
 				<title>".$msg."</title>
 				<submitted-url>".$imageURL."</submitted-url>
@@ -175,8 +175,10 @@ require_once('../../oAuth/twitteroauth/twitteroauth.php');
 			</visibility>
 			</share>";
 
+		$wallUrl = 'https://api.linkedin.com/v1/people/~/person-activities?oauth2_access_token='. $access_token;
+
 		if($fileName == ""){
-			$url = $shareUrl;
+			$url = $wallUrl;
 			$xml = $wallXML;
 		}else{
 			$url = $shareUrl;

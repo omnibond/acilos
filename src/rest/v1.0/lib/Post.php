@@ -178,7 +178,7 @@ Class Post{
 		print_r($response);
 		
 		if($code == "201"){
-			return json_encode(array("Success" => "Your LinkedIn comment was posted successfully"));
+			return json_encode(array("Success" => "Your LinkedIn unlike was posted successfully"));
 		}else{
 			return json_encode(array("Failure" => "There was an error unliking the Linkedin post."));
 		}
@@ -288,8 +288,10 @@ Class Post{
 		curl_close($ch);
 
 		if(isset($response)){
-			if($response == "true" || $response == true){
+			if($response === "true" || $response === 1 || $response === true){
 				return json_encode(array("Success" => "Your like was successful."));
+			}else{
+				return json_encode(array("Failure" => "There was an error liking the Facebook post."));
 			}
 		}else{
 			return json_encode(array("Failure" => "There was an error liking the Facebook post."));
@@ -307,6 +309,7 @@ Class Post{
 	
 		$ch = curl_init($likeURL);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
 		$response = curl_exec($ch);
 
@@ -315,8 +318,10 @@ Class Post{
 		curl_close($ch);
 		
 		if(isset($response)){
-			if($response == "true" || $response == true){
+			if($response === "true" || $response === 1 || $response === true){
 				return json_encode(array("Success" => "Your unlike was successful."));
+			}else{
+				return json_encode(array("Failure" => "There was an error unliking the Facebook post."));
 			}
 		}else{
 			return json_encode(array("Failure" => "There was an error unliking the Facebook post."));
@@ -349,10 +354,12 @@ Class Post{
 
 		curl_close($ch);
 
-		if(isset($response['id'])){
-			return json_encode(array("Success" => "Your comment was posted successfully"));
-		}else{
-			return json_encode(array("Failure" => "There was an error posting your Facebook comment."));
+		if(isset($response)){
+			if(isset($response['id'])){
+				return json_encode(array("Success" => "Your comment was posted successfully"));
+			}else{
+				return json_encode(array("Failure" => "There was an error posting your Facebook comment."));
+			}	
 		}
 	}
 	
