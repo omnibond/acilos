@@ -91,10 +91,16 @@ class PublicQuery{
 	}
 
 	public function getPublicQueryObject(){
-		$file = "../../publicQueryTermObj.json";
-		$var = file_get_contents($file);
+		$fileName = "../../publicQueryTermObj.json";
+		
+		try{
+			$feedList = file_get_contents($fileName);
+		}catch (Exception $e){
+			$feedList = json_encode(array());
+			file_put_contents($fileName, $feedList);
+		}
 
-		return $var;
+		return $feedList;
 	}
 
 	public function deletePublicQueryObjectTerm(){
