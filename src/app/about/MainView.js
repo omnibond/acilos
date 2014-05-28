@@ -53,7 +53,7 @@ define(['dojo/_base/declare',
 	return declare([ModuleScrollableView], {	
 		
 		activate: function(){
-			window.location = "#/appHelp/AboutView";
+			window.location = "#/help/AboutView";
 		}
 	})
 });
