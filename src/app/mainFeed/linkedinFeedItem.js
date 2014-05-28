@@ -541,9 +541,42 @@ define([
 												"class": "feedTextContentItemClass"
 											});
 											this.roundRight.addChild(this.descriptionItem);
+										}else{
+											if(obj.content.imageUrl && obj.content.imageUrl != "N/A" && obj.content.imageUrl != null && obj.content.imageUrl != "undefined"){
+												this.pictureItem = new ListItem({
+													variableHeight: true,
+													"class": "feedPicDateItemClass"
+												});
+
+												div = domConstruct.create("div", {innerHTML: '<img src="'+obj.content.imageUrl+'"style="max-width:90%;max-height:90%;" />', style: "float:left"});
+
+												div.onclick = lang.hitch(this, function(){
+													var dialog = new Dialog({
+														title: "Click to close ->",
+														"class": "blackBackDijitDialog",
+														onHide: lang.hitch(this, function(){
+															if(blackoutDiv){
+																document.body.removeChild(blackoutDiv);
+															}
+														})
+													});
+
+													var dialogDiv = domConstruct.create("div", {innerHTML: '<img src="'+obj.content.imageUrl+'"style="" />'});
+
+													var blackoutDiv = domConstruct.create("div", {"class": "blackoutDiv"});
+
+													dialog.set("content", dialogDiv);
+													dialog.show();
+
+													document.body.appendChild(blackoutDiv);
+												});
+
+												this.pictureItem.domNode.appendChild(div);
+												this.roundRight.addChild(this.pictureItem);
+											}
 										}
 									}else if(obj.content.comment){
-										if(obj.content.comment.text){
+										if(obj.content.comment.text && obj.content.comment.text != "" && obj.content.comment.text != "N/A" && obj.content.comment.text != null && obj.content.comment.text != "undefined"){
 											var comment = this.parseSpecialChars(obj.content.comment.text);
 											this.commentItem = new ListItem({
 												variableHeight: true,
@@ -584,7 +617,7 @@ define([
 												this.pictureItem.domNode.appendChild(div);
 												this.roundRight.addChild(this.pictureItem);
 											}
-										}else if(obj.content.description.text){
+										}else if(obj.content.description.text && obj.content.description.text != "undefined" && obj.content.description.text != null && obj.content.description.text != "N/A" && obj.content.description.text != ""){
 											var description = this.parseSpecialChars(obj.content.description.text);
 
 											this.descriptionItem = new ListItem({
@@ -594,6 +627,39 @@ define([
 											});
 											this.roundRight.addChild(this.descriptionItem);
 
+											if(obj.content.imageUrl && obj.content.imageUrl != "N/A" && obj.content.imageUrl != null && obj.content.imageUrl != "undefined"){
+												this.pictureItem = new ListItem({
+													variableHeight: true,
+													"class": "feedPicDateItemClass"
+												});
+
+												div = domConstruct.create("div", {innerHTML: '<img src="'+obj.content.imageUrl+'"style="max-width:90%;max-height:90%;" />', style: "float:left"});
+
+												div.onclick = lang.hitch(this, function(){
+													var dialog = new Dialog({
+														title: "Click to close ->",
+														"class": "blackBackDijitDialog",
+														onHide: lang.hitch(this, function(){
+															if(blackoutDiv){
+																document.body.removeChild(blackoutDiv);
+															}
+														})
+													});
+
+													var dialogDiv = domConstruct.create("div", {innerHTML: '<img src="'+obj.content.imageUrl+'"style="" />'});
+
+													var blackoutDiv = domConstruct.create("div", {"class": "blackoutDiv"});
+
+													dialog.set("content", dialogDiv);
+													dialog.show();
+
+													document.body.appendChild(blackoutDiv);
+												});
+
+												this.pictureItem.domNode.appendChild(div);
+												this.roundRight.addChild(this.pictureItem);
+											}
+										}else{
 											if(obj.content.imageUrl && obj.content.imageUrl != "N/A" && obj.content.imageUrl != null && obj.content.imageUrl != "undefined"){
 												this.pictureItem = new ListItem({
 													variableHeight: true,
