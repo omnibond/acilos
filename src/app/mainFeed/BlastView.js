@@ -248,11 +248,13 @@ define(['dojo/_base/declare',
 						}
 					}
 
-					if(this.blastObj.url == "" || this.blastObj.finalUrl != ""){
+					/*if(this.blastObj.finalUrl != ""){
 						this.blastObj.imgName = "";
-					}
+					}*/
 						
 					console.log("tokenArr is: ", tokenArr);
+
+					console.log("this.blastObj is: ", this.blastObj);
 					
 					this.sendPostFile(this.blastObj.imgName, tokenArr, msg).then(lang.hitch(this, function(obj){
 						console.log("obj is: ", obj);
