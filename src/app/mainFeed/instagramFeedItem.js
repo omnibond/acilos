@@ -491,12 +491,8 @@ define([
 											var accessToken = accountArr[d].accessToken;
 
 											if(domClass.contains(likeDiv, "twitterOrangeDiv")){
-												this.likeNum++;
-												domClass.remove(likeDiv, "twitterOrangeDiv");
-												domClass.add(likeDiv, "twitterBlueDiv");
-												likeDiv.innerHTML = "Liked(" + (this.likeNum) + ")";
-												this.setIsLiked("instagram-----"+id, "true");
-												
+												var likeId = id;
+																								
 												this.sendInstaLike(id, accessToken).then(lang.hitch(this, function(obj){
 													console.log("obj is: ", obj);
 
@@ -524,14 +520,16 @@ define([
 
 														this.errorDialog.set("content", div);
 														this.errorDialog.show();
+													}else{
+														this.likeNum++;
+														domClass.remove(likeDiv, "twitterOrangeDiv");
+														domClass.add(likeDiv, "twitterBlueDiv");
+														likeDiv.innerHTML = "Liked(" + (this.likeNum) + ")";
+														this.setIsLiked("instagram-----"+likeId, "true");
 													}
 												}));
 											}else{
-												this.likeNum--;
-												domClass.remove(likeDiv, "twitterBlueDiv");
-												domClass.add(likeDiv, "twitterOrangeDiv");
-												likeDiv.innerHTML = "Like(" + (this.likeNum) + ")";
-												this.setIsLiked("instagram-----"+id, "false");
+												var likeId = id;
 												
 												this.sendInstaUnLike(id, accessToken).then(lang.hitch(this, function(obj){
 													console.log("obj is: ", obj);
@@ -560,6 +558,12 @@ define([
 
 														this.errorDialog.set("content", div);
 														this.errorDialog.show();
+													}else{
+														this.likeNum--;
+														domClass.remove(likeDiv, "twitterBlueDiv");
+														domClass.add(likeDiv, "twitterOrangeDiv");
+														likeDiv.innerHTML = "Like(" + (this.likeNum) + ")";
+														this.setIsLiked("instagram-----"+likeId, "false");
 													}
 												}));
 											}

@@ -93,6 +93,7 @@ Class Post{
 	
 		$ch = curl_init($likeURL);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$response = curl_exec($ch);
 		curl_close($ch);
 

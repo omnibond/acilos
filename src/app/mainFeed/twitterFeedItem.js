@@ -551,11 +551,7 @@ define([
 												var appSecret = accountArr[d].secret;
 
 												if(domClass.contains(retweetDiv, "twitterOrangeDiv")){
-													this.retweet++;
-													domClass.remove(retweetDiv, "twitterOrangeDiv");
-													domClass.add(retweetDiv, "twitterBlueDiv");
-													retweetDiv.innerHTML = "Retweeted(" + (this.retweet) + ")";
-													this.setIsCommented("twitter-----"+id, "true");
+													var retweetId = id;
 													
 													var tweetID = dataObj.id.split("-----");
 													tweetID = tweetID[1];
@@ -587,6 +583,12 @@ define([
 
 															this.errorDialog.set("content", div);
 															this.errorDialog.show();
+														}else{
+															this.retweet++;
+															domClass.remove(retweetDiv, "twitterOrangeDiv");
+															domClass.add(retweetDiv, "twitterBlueDiv");
+															retweetDiv.innerHTML = "Retweeted(" + (this.retweet) + ")";
+															this.setIsCommented("twitter-----"+retweetId, "true");
 														}
 													}));
 												}
@@ -613,11 +615,7 @@ define([
 												var appSecret = accountArr[d].secret;
 
 												if(domClass.contains(favoriteDiv, "twitterOrangeDiv")){
-													this.favorite++
-													domClass.remove(favoriteDiv, "twitterOrangeDiv");
-													domClass.add(favoriteDiv, "twitterBlueDiv");
-													favoriteDiv.innerHTML = "Favorited(" + (this.favorite) + ")";
-													this.setIsFavorited("twitter-----"+id, "true");
+													var favoriteId = id;
 													
 													var tweetID = dataObj.id.split("-----");
 													tweetID = tweetID[1];
@@ -649,14 +647,16 @@ define([
 
 															this.errorDialog.set("content", div);
 															this.errorDialog.show();
+														}else{
+															this.favorite++
+															domClass.remove(favoriteDiv, "twitterOrangeDiv");
+															domClass.add(favoriteDiv, "twitterBlueDiv");
+															favoriteDiv.innerHTML = "Favorited(" + (this.favorite) + ")";
+															this.setIsFavorited("twitter-----"+favoriteId, "true");
 														}
 													}));
 												}else{
-													this.favorite--;
-													domClass.remove(favoriteDiv, "twitterBlueDiv");
-													domClass.add(favoriteDiv, "twitterOrangeDiv");
-													favoriteDiv.innerHTML = "Favorite(" + (this.favorite) + ")";
-													this.setIsFavorited("twitter-----"+id, "false");
+													var favoriteId = id;
 													
 													var tweetID = dataObj.id.split("-----");
 													tweetID = tweetID[1];
@@ -686,6 +686,12 @@ define([
 
 															this.errorDialog.set("content", div);
 															this.errorDialog.show();
+														}else{
+															this.favorite--;
+															domClass.remove(favoriteDiv, "twitterBlueDiv");
+															domClass.add(favoriteDiv, "twitterOrangeDiv");
+															favoriteDiv.innerHTML = "Favorite(" + (this.favorite) + ")";
+															this.setIsFavorited("twitter-----"+favoriteId, "false");
 														}
 													}));
 												}

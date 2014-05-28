@@ -915,13 +915,7 @@ define([
 
 												var accessToken = accountArr[d].accessToken;
 
-												if(domClass.contains(likeDiv, "twitterOrangeDiv")){
-													this.likeNum++;
-													domClass.remove(likeDiv, "twitterOrangeDiv");
-													domClass.add(likeDiv, "twitterBlueDiv");
-													likeDiv.innerHTML = "Liked(" + (this.likeNum) + ")";
-													this.setIsLiked(source.id, "true");
-													
+												if(domClass.contains(likeDiv, "twitterOrangeDiv")){					
 													this.sendLinkedLike(id, accessToken).then(lang.hitch(this, function(obj){
 														if(obj['Failure']){
 															if(this.errorDialog){
@@ -947,15 +941,15 @@ define([
 
 															this.errorDialog.set("content", div);
 															this.errorDialog.show();
+														}else{
+															this.likeNum++;
+															domClass.remove(likeDiv, "twitterOrangeDiv");
+															domClass.add(likeDiv, "twitterBlueDiv");
+															likeDiv.innerHTML = "Liked(" + (this.likeNum) + ")";
+															this.setIsLiked(source.id, "true");
 														}
 													}));
-												}else{
-													this.likeNum--;
-													domClass.remove(likeDiv, "twitterBlueDiv");
-													domClass.add(likeDiv, "twitterOrangeDiv");
-													likeDiv.innerHTML = "Like(" + (this.likeNum) + ")";
-													this.setIsLiked(source.id, "false");
-													
+												}else{													
 													this.sendLinkedUnLike(id, accessToken).then(lang.hitch(this, function(obj){
 														if(obj['Failure']){
 															if(this.errorDialog){
@@ -981,6 +975,12 @@ define([
 
 															this.errorDialog.set("content", div);
 															this.errorDialog.show();
+														}else{
+															this.likeNum--;
+															domClass.remove(likeDiv, "twitterBlueDiv");
+															domClass.add(likeDiv, "twitterOrangeDiv");
+															likeDiv.innerHTML = "Like(" + (this.likeNum) + ")";
+															this.setIsLiked(source.id, "false");
 														}
 													}));
 												}

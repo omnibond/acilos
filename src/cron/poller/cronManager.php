@@ -106,7 +106,7 @@ function writeObject($obj){
 	}
 	$obj['dataLocation'] = "local";
 
-	print_r($obj); ?><br/><?php ?><br/><?php ?><br/><?php
+	//print_r($obj); ?><br/><?php ?><br/><?php ?><br/><?php
 
 	$grr = $es->index($obj, $obj['id']);
 	print_r($grr); ?><br/><?php ?><br/><?php ?><br/><?php
@@ -278,7 +278,7 @@ function normalizeNewsFeedObj($objArray, $account){
 	for($k = 0; $k < count($objArray); $k++){
 		$obje = $objArray[$k];
 
-		print_r($obje); 
+		//print_r($obje); 
 
 		$manager = new Manager();
 		$builder = new facebookNewsFeedObjectBuilder();
@@ -556,7 +556,7 @@ function normalizeLinkedinObj($objArray, $account){
 		$obj = $objArray[$k];
 
 		//if($obj['updateType'] == "VIRL"){
-			print_r($obj); ?><br/><?php ?><br/><?php ?><br/><?php
+			//print_r($obj); ?><br/><?php ?><br/><?php ?><br/><?php
 
 			$manager = new Manager();
 			$builder = new linkedInNetworkObjectBuilder();
@@ -581,7 +581,7 @@ function normalizeDiscussionObj($objArray, $account){
 	for($k = 0; $k < count($objArray); $k++){
 			$obj = $objArray[$k];
 
-			print_r($obj); ?><br/><?php ?><br/><?php ?><br/><?php
+			//print_r($obj); ?><br/><?php ?><br/><?php ?><br/><?php
 
 			$manager = new Manager();
 			$builder = new linkedInNetworkObjectBuilder();
@@ -783,8 +783,8 @@ if(!file_exists("../../lockFiles/cronManager.lock") || (time() > filemtime("../.
 			$total = json_decode($totes, true);	
 
 		}		
-		//echo "linkedin feed"; ?><br/><?php
-		//getPersonalFeed();
+		echo "linkedin feed"; ?><br/><?php
+		getPersonalFeed();
 
 		echo "facebook feed"; ?><br/><?php
 		getUserNewsFeed();

@@ -629,11 +629,7 @@ define([
 											var accessToken = accountArr[d].accessToken;
 
 											if(domClass.contains(likeDiv, "twitterOrangeDiv")){
-												this.likeNum++;
-												domClass.remove(likeDiv, "twitterOrangeDiv");
-												domClass.add(likeDiv, "twitterBlueDiv");
-												likeDiv.innerHTML = "Liked(" + (this.likeNum) + ")";
-												this.setIsLiked("facebook-----"+id, "true");		
+												var likeId = id;
 
 												var id = content.id.split("_");
 												idFirstPart = id[0];
@@ -666,15 +662,17 @@ define([
 
 														this.errorDialog.set("content", div);
 														this.errorDialog.show();
+													}else{
+														this.likeNum++;
+														domClass.remove(likeDiv, "twitterOrangeDiv");
+														domClass.add(likeDiv, "twitterBlueDiv");
+														likeDiv.innerHTML = "Liked(" + (this.likeNum) + ")";
+														this.setIsLiked("facebook-----"+likeId, "true");
 													}
 												}));
-											}else{
-												this.likeNum--;
-												domClass.remove(likeDiv, "twitterBlueDiv");
-												domClass.add(likeDiv, "twitterOrangeDiv");
-												likeDiv.innerHTML = "Like(" + (this.likeNum) + ")";
-												this.setIsLiked("facebook-----"+id, "false");
-												
+											}else{	
+												var likeId = id;
+																						
 												var id = content.id.split("_");
 												idFirstPart = id[0];
 												idSecondPart = id[1];
@@ -706,6 +704,12 @@ define([
 
 														this.errorDialog.set("content", div);
 														this.errorDialog.show();
+													}else{
+														this.likeNum--;
+														domClass.remove(likeDiv, "twitterBlueDiv");
+														domClass.add(likeDiv, "twitterOrangeDiv");
+														likeDiv.innerHTML = "Like(" + (this.likeNum) + ")";
+														this.setIsLiked("facebook-----"+likeId, "false");
 													}
 												}));
 											}
