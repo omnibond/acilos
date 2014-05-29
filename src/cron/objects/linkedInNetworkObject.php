@@ -276,7 +276,7 @@ class LinkedInContentSHAR{
     public $authorID = "N/A";
     public $authorHeadline = "N/A";
     public $id = "N/A";
-    public $postTime = "N/A";
+    public $postTime = 0;
     public $comments = array();
     public $likes = array();
     public $queryString = "N/A";
@@ -1716,7 +1716,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 		$this->activityObject->setMainAccountName($account['name']);
 	}
 	public function buildMainAccountID($account){
-		$this->activityObject->setMainAccountID($account['user']);
+		$this->activityObject->setMainAccountID((string)$account['user']);
 	}
 	public function buildMainAccountColor($account){
 		$this->activityObject->setMainAccountColor($account['color']);
