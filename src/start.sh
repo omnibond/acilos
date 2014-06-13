@@ -25,8 +25,8 @@ if [ $running = 1 ]; then
 	echo "Elasticsearch is already running"
 else
 	echo "Starting elasticsearch"
-#	export ES_MIN_MEM="128m"
-#	export ES_MAX_MEM="128m"
+	export ES_MIN_MEM="128m"
+	export ES_MAX_MEM="128m"
 	elasticSearch/bin/elasticsearch
 	echo "Done"
 fi
@@ -103,9 +103,9 @@ cat > cron/callAmazonRebootManager.sh << 'EOF'
 #will in turn call the actual poller to go get new contact lists
 	
 EOF
-echo ". " $MAINPATH"/cron/socialConfig.txt" >> cron/callAmazonRebootManager.sh
+
 cat >> cron/callAmazonRebootManager.sh << 'EOF'
-eval /usr/bin/wget -q -O /dev/null http://'$HOST'/cron/poller/amazonRebootManager.php?index='$INDEX'&mapping='$MAPPING'&host='$HOST'&port='$PORT'
+reboot
 
 EOF
 
