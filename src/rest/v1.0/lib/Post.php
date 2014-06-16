@@ -76,9 +76,13 @@ Class Post{
 
 		if(isset($response['meta']['code'])){
 			if($response['meta']['code'] == 200){
-				return json_encode(array("Success" => "Your like was successful."));
+				return json_encode(array("Success" => "Your Instagram 'like' was successful."));
 			}else{
-				return json_encode(array("Failure" => "There was an error liking the  Instagram post."));
+				if(isset($response['meta']['error_message'])){
+					return json_encode(array("Failure" => "Your Instagram 'like' was unsuccessful. Reason: " . $response['meta']['error_message']));	
+				}else{
+					return json_encode(array("Failure" => "Your Instagram 'like' was unsuccessful. Reason: unspecified"));
+				}
 			}
 		}
 	}
@@ -103,9 +107,13 @@ Class Post{
 
 		if(isset($response['meta']['code'])){
 			if($response['meta']['code'] == 200){
-				return json_encode(array("Success" => "Your unlike was successful."));
+				return json_encode(array("Success" => "Your Instagram 'unlike' was successful."));
 			}else{
-				return json_encode(array("Failure" => "There was an error unliking the Instagram post."));
+				if(isset($response['meta']['error_message'])){
+					return json_encode(array("Failure" => "Your Instagram 'unlike' was unsuccessful. Reason: " . $response['meta']['error_message']));
+				}else{
+					return json_encode(array("Failure" => "Your Instagram 'unlike' was unsuccessful. Reason: unspecified"));
+				}
 			}
 		}
 	}
@@ -141,7 +149,7 @@ Class Post{
 		$id = $varObj['id'];
 		$access_token = $varObj['accessToken'];
 		
-		$url = "https://api.linkedin.com/v1/people/~/network/updates/key=".$id."/is-liked?oauth2_access_token=".$access_token;
+		$url = "https://api.linkedin.com/v1/people/~/network/updates/key=".$id."/is-liked?format=json&oauth2_access_token=".$access_token;
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_POST, 1);
@@ -150,13 +158,19 @@ Class Post{
 		$response = curl_exec($ch);
 		$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
+
+		$response = json_decode($response, true);
 		
-		print_r($response);
+		//print_r($response);
 		
 		if($code == "201"){
-			return json_encode(array("Success" => "Your LinkedIn like was posted successfully"));
+			return json_encode(array("Success" => "Your LinkedIn 'like' was successful."));
 		}else{
-			return json_encode(array("Failure" => "There was an error liking the Linkedin post."));
+			if(isset($response['message'])){
+				return json_encode(array("Failure" => "Your LinkedIn 'like' was unsuccessful. Reason: " . $response['message']));
+			}else{
+				return json_encode(array("Failure" => "Your LinkedIn 'like' was unsuccessful. Reason: unspecified"));
+			}
 		}
 	}
 	
@@ -166,7 +180,7 @@ Class Post{
 		$id = $varObj['id'];
 		$access_token = $varObj['accessToken'];
 
-		$url = "https://api.linkedin.com/v1/people/~/network/updates/key=".$id."/is-liked?oauth2_access_token=".$access_token;
+		$url = "https://api.linkedin.com/v1/people/~/network/updates/key=".$id."/is-liked?format=json&oauth2_access_token=".$access_token;
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_POST, 1);
@@ -175,13 +189,19 @@ Class Post{
 		$response = curl_exec($ch);
 		$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
+
+		$response = json_decode($response, true);
 		
-		print_r($response);
+		//print_r($response);
 		
 		if($code == "201"){
-			return json_encode(array("Success" => "Your LinkedIn unlike was posted successfully"));
+			return json_encode(array("Success" => "Your LinkedIn 'unlike' was successful."));
 		}else{
-			return json_encode(array("Failure" => "There was an error unliking the Linkedin post."));
+			if(isset($response['message'])){
+				return json_encode(array("Failure" => "Your LinkedIn 'unlike' was unsuccessful. Reason: " . $response['message']));
+			}else{
+				return json_encode(array("Failure" => "Your LinkedIn 'unlike' was unsuccessful. Reason: unspecified"));
+			}
 		}
 	}
 	
@@ -192,7 +212,7 @@ Class Post{
 		$access_token = $varObj['accessToken'];
 		$message = $varObj['msg'];
 		
-		$url = "https://api.linkedin.com/v1/people/~/network/updates/key=".$postID."/update-comments?oauth2_access_token=".$access_token;
+		$url = "https://api.linkedin.com/v1/people/~/network/updates/key=".$postID."/update-comments?format=json&oauth2_access_token=".$access_token;
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:text/xml'));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -202,12 +222,18 @@ Class Post{
 		$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
 
-		print_r($response);
+		$response = json_decode($response, true);
+
+		//print_r($response);
 
 		if($code == "201"){
-			return json_encode(array("Success" => "Your LinkedIn comment was posted successfully"));
+			return json_encode(array("Success" => "Your LinkedIn 'comment' was successful."));
 		}else{
-			return json_encode(array("Failure" => "There was an error posting your LinkedIn comment."));
+			if(isset($response['message'])){
+				return json_encode(array("Failure" => "Your LinkedIn 'comment' was unsuccessful. Reason: " . $response['message']));
+			}else{
+				return json_encode(array("Failure" => "Your LinkedIn 'comment' was unsuccessful. Reason: unspecified"));
+			}
 		}
 	}
 	
@@ -227,12 +253,12 @@ Class Post{
 		//print_r($status);
 
 		if(isset($status->errors[0]->message)){
-			return json_encode(array("Failure" => "Your reply could not be posted. Twitter said: " . $status->errors[0]->message));
+			return json_encode(array("Failure" => "Your Twitter 'favorite' was unsuccessful. Reason: " . $status->errors[0]->message));
 		}else{
 			if(isset($status->created_at)){
-				return json_encode(array("Success" => "Your reply was posted successfully."));
+				return json_encode(array("Success" => "Your Twitter 'favorite' was successful."));
 			}else{
-				return json_encode(array("Failure" => "There was an error favoriting the Twitter post."));
+				return json_encode(array("Failure" => "Your Twitter 'favorite' was unsuccessful. Reason: unspecified"));
 			}
 		}
 	}
@@ -253,117 +279,43 @@ Class Post{
 		//print_r($status);
 
 		if(isset($status->errors[0]->message)){
-			return json_encode(array("Failure" => "Your reply could not be posted. Twitter said: " . $status->errors[0]->message));
+			return json_encode(array("Failure" => "Your Twitter 'unfavorite' was unsuccessful. Reason: " . $status->errors[0]->message));
 		}else{
 			if(isset($status->created_at)){
-				return json_encode(array("Success" => "Your reply was posted successfully."));
+				return json_encode(array("Success" => "Your Twitter 'unfavorite' was successful."));
 			}else{
-				return json_encode(array("Failure" => "There was an error unfavoriting the twitter post."));
+				return json_encode(array("Failure" => "Your Twitter 'unfavorite' was unsuccessful. Reason: unspecified"));
 			}
 		}
 	}
-	
-	function sendFaceLike(){
+
+	function sendTwitRetweet(){
 		$var = file_get_contents("php://input");
 		$varObj = json_decode($var, true);
-		$idFirstPart = $varObj['idFirstPart'];
-		$idSecondPart = $varObj['idSecondPart'];
-		$access_token = $varObj['accessToken'];
+		$tweetID = $varObj['tweetID'];
 
-		$likeURL = 'https://graph.facebook.com/' . $idSecondPart . '/likes';
-			
-		$params = array(
-			'access_token' => $access_token,
-			"url" => 'https://graph.facebook.com/' . $idSecondPart . '/likes'
-		);
-			
-		$ch = curl_init($likeURL);
-		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$oauth_Token = $varObj['accessToken'];
+		$consumer_key = $varObj['appKey'];
+		$consumer_secret = $varObj['appSecret'];
+		$access_secret = $varObj['accessSecret'];
 
-		$response = curl_exec($ch);
+		$connection = new TwitterOAuth($consumer_key, $consumer_secret, $oauth_Token, $access_secret);
 
-		//print_r($response);
-		$response = json_decode($response, true);
-		curl_close($ch);
+		$status = $connection->post('statuses/retweet/' . $tweetID);
 
-		if(isset($response)){
-			if($response === "true" || $response === 1 || $response === true){
-				return json_encode(array("Success" => "Your like was successful."));
-			}else{
-				return json_encode(array("Failure" => "There was an error liking the Facebook post."));
-			}
+		//print_R($status);
+
+		if(isset($status->errors[0]->message)){
+			return json_encode(array("Failure" => "Your Twitter 'retweet' was unsuccessful. Reason: " . $status->errors[0]->message));
 		}else{
-			return json_encode(array("Failure" => "There was an error liking the Facebook post."));
-		}	
-	}
-	
-	function sendFaceUnLike(){
-		$var = file_get_contents("php://input");
-		$varObj = json_decode($var, true);
-		$idFirstPart = $varObj['idFirstPart'];
-		$idSecondPart = $varObj['idSecondPart'];
-		$access_token = $varObj['accessToken'];
-
-		$likeURL = 'https://graph.facebook.com/' . $idSecondPart . '/likes?access_token='.$access_token;
-	
-		$ch = curl_init($likeURL);
-		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-		$response = curl_exec($ch);
-
-		//print_r($response);
-		$response = json_decode($response, true);
-		curl_close($ch);
-		
-		if(isset($response)){
-			if($response === "true" || $response === 1 || $response === true){
-				return json_encode(array("Success" => "Your unlike was successful."));
+			if(isset($status->created_at)){
+				return json_encode(array("Success" => "Your Twitter 'retweet' was successful."));
 			}else{
-				return json_encode(array("Failure" => "There was an error unliking the Facebook post."));
+				return json_encode(array("Failure" => "Your Twitter 'retweet' was unsuccessful. Reason: unspecified"));
 			}
-		}else{
-			return json_encode(array("Failure" => "There was an error unliking the Facebook post."));
 		}
 	}
 
-	function sendFaceComment(){
-		$var = file_get_contents("php://input");
-		$varObj = json_decode($var, true);
-
-		$id = $varObj['id'];
-		$comment = $varObj['comment'];
-		$access_token = $varObj['accessToken'];
-
-		$commentURL = 'https://graph.facebook.com/' . $id . '/comments';
-
-		$params = array(
-			'access_token' => $access_token,
-			'message' => $comment
-		);
-
-		$ch = curl_init($commentURL);
-		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-		$response = curl_exec($ch);
-
-		$response = json_decode($response, true);
-
-		curl_close($ch);
-
-		if(isset($response)){
-			if(isset($response['id'])){
-				return json_encode(array("Success" => "Your comment was posted successfully"));
-			}else{
-				return json_encode(array("Failure" => "There was an error posting your Facebook comment."));
-			}	
-		}
-	}
-	
 	function sendTwitReply(){
 		$var = file_get_contents("php://input");
 		$varObj = json_decode($var, true);
@@ -431,40 +383,126 @@ Class Post{
 		//print_r($status->created_at);
 
 		if(isset($status->errors[0]->message)){
-			return json_encode(array("Failure" => "Your reply could not be posted. Twitter said: " . $status->errors[0]->message));
+			return json_encode(array("Failure" => "Your Twitter 'reply' was unsuccessful. Reason: " . $status->errors[0]->message));
 		}else{
 			if(isset($status->created_at)){
-				return json_encode(array("Success" => "Your reply was posted successfully."));
+				return json_encode(array("Success" => "Your Twitter 'reply' was successful."));
 			}else{
-				return json_encode(array("Failure" => "There was an error posting your Twitter reply."));
+				return json_encode(array("Failure" => "Your Twitter 'reply' was unsuccessful. Reason: unspecified"));
 			}
 		}
 	}
-
-	function sendTwitRetweet(){
+	
+	function sendFaceLike(){
 		$var = file_get_contents("php://input");
 		$varObj = json_decode($var, true);
-		$tweetID = $varObj['tweetID'];
+		$idFirstPart = $varObj['idFirstPart'];
+		$idSecondPart = $varObj['idSecondPart'];
+		$access_token = $varObj['accessToken'];
 
-		$oauth_Token = $varObj['accessToken'];
-		$consumer_key = $varObj['appKey'];
-		$consumer_secret = $varObj['appSecret'];
-		$access_secret = $varObj['accessSecret'];
+		$likeURL = 'https://graph.facebook.com/' . $idSecondPart . '/likes';
+			
+		$params = array(
+			'access_token' => $access_token,
+			"url" => 'https://graph.facebook.com/' . $idSecondPart . '/likes'
+		);
+			
+		$ch = curl_init($likeURL);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-		$connection = new TwitterOAuth($consumer_key, $consumer_secret, $oauth_Token, $access_secret);
+		$response = curl_exec($ch);
 
-		$status = $connection->post('statuses/retweet/' . $tweetID);
+		$response = json_decode($response, true);
 
-		//print_R($status);
+		//print_r($response);
 
-		if(isset($status->errors[0]->message)){
-			return json_encode(array("Failure" => "The tweet could not be retweeted. Twitter said: " . $status->errors[0]->message));
-		}else{
-			if(isset($status->created_at)){
-				return json_encode(array("Success" => "The tweet was retweeted successfully"));
+		curl_close($ch);
+
+		if(isset($response)){
+			if($response === "true" || $response === 1 || $response === true){
+				return json_encode(array("Success" => "Your Facebook 'like' was successful."));
 			}else{
-				return json_encode(array("Failure" => "There was an error posting your Twitter retweet."));
+				if(isset($response['error']['message'])){
+					return json_encode(array("Failure" => "Your Facebook 'like' was unsuccessful. Reason: " . $response['error']['message']));	
+				}else{
+					return json_encode(array("Failure" => "Your Facebook 'like' was unsuccessful. Reason: unspecified"));
+				}
 			}
+		}else{
+			return json_encode(array("Failure" => "Your Facebook 'like' was unsuccessful. Reason: unspecified"));
+		}	
+	}
+	
+	function sendFaceUnLike(){
+		$var = file_get_contents("php://input");
+		$varObj = json_decode($var, true);
+		$idFirstPart = $varObj['idFirstPart'];
+		$idSecondPart = $varObj['idSecondPart'];
+		$access_token = $varObj['accessToken'];
+
+		$likeURL = 'https://graph.facebook.com/' . $idSecondPart . '/likes?access_token='.$access_token;
+	
+		$ch = curl_init($likeURL);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+		$response = curl_exec($ch);
+
+		$response = json_decode($response, true);
+
+		//print_r($response);
+
+		curl_close($ch);
+		
+		if(isset($response)){
+			if($response === "true" || $response === 1 || $response === true){
+				return json_encode(array("Success" => "Your Facebook 'unlike' was successful."));
+			}else{
+				if(isset($response['error']['message'])){
+					return json_encode(array("Failure" => "Your Facebook 'unlike' was unsuccessful. Reason: " . $response['error']['message']));	
+				}else{
+					return json_encode(array("Failure" => "Your Facebook 'unlike' was unsuccessful. Reason: unspecified"));
+				}
+			}
+		}else{
+			return json_encode(array("Failure" => "Your Facebook 'unlike' was unsuccessful. Reason: unspecified"));
+		}
+	}
+
+	function sendFaceComment(){
+		$var = file_get_contents("php://input");
+		$varObj = json_decode($var, true);
+
+		$id = $varObj['id'];
+		$comment = $varObj['comment'];
+		$access_token = $varObj['accessToken'];
+
+		$commentURL = 'https://graph.facebook.com/' . $id . '/comments';
+
+		$params = array(
+			'access_token' => $access_token,
+			'message' => $comment
+		);
+
+		$ch = curl_init($commentURL);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+		$response = curl_exec($ch);
+
+		$response = json_decode($response, true);
+
+		curl_close($ch);
+
+		if(isset($response)){
+			if(isset($response['id'])){
+				return json_encode(array("Success" => "Your comment was posted successfully"));
+			}else{
+				return json_encode(array("Failure" => "There was an error posting your Facebook comment."));
+			}	
 		}
 	}
 	
