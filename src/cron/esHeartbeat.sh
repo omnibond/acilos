@@ -10,8 +10,8 @@ if [ $running = 1 ]; then
 	echo "Elasticsearch is already running"
 else
 	echo "Starting elasticsearch"
-#	export ES_MIN_MEM="128m"
-#	export ES_MAX_MEM="128m"
+	export ES_MIN_MEM="128m"
+	export ES_MAX_MEM="128m"
 	../elasticSearch/bin/elasticsearch
 	echo "Done"
 	

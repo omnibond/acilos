@@ -52,8 +52,8 @@ if [ $running = 1 ]; then
 	echo "Elasticsearch is already running"
 else
 	echo "Starting elasticsearch"
-#	export ES_MIN_MEM="128m"
-#	export ES_MAX_MEM="128m"
+	export ES_MIN_MEM="128m"
+	export ES_MAX_MEM="128m"
 	../elasticSearch/bin/elasticsearch
 	echo "Done"
 	
@@ -105,8 +105,13 @@ cat > cron/callAmazonRebootManager.sh << 'EOF'
 EOF
 
 cat >> cron/callAmazonRebootManager.sh << 'EOF'
-reboot
+echo "This is callAmazonRebootManager.sh, and it is being called by the cron" >> /var/log/myLogFile
 
+var=`uname -a | grep amzn1`
+
+if [ -n "$var" ]; then
+        `/sbin/shutdown -r now`
+fi
 EOF
 
 echo "Writing The Public Query Cron"
@@ -133,7 +138,7 @@ if [ "$CRONGREP" = "" ]; then
 	(crontab -l 2>/dev/null; echo "*/20 * * * * sh "$MAINPATH"/cron/poller/clearLogPoller.sh") | crontab -
 	(crontab -l 2>/dev/null; echo "*/3 * * * * sh "$MAINPATH"/cron/esHeartbeat.sh") | crontab -
 	#should run every day at 3:30am
-	(crontab -l 2>/dev/null; echo "30 03 * * * sh "$MAINPATH"/cron/callAmazonRebootManager.sh") | crontab -
+	(crontab -l 2>/dev/null; echo "30 3 * * * sh "$MAINPATH"/cron/callAmazonRebootManager.sh") | crontab -
 	
 	echo "\nDone"
 else 
