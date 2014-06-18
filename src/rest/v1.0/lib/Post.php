@@ -495,14 +495,22 @@ Class Post{
 
 		$response = json_decode($response, true);
 
+		//print_r($response);
+
 		curl_close($ch);
 
 		if(isset($response)){
 			if(isset($response['id'])){
-				return json_encode(array("Success" => "Your comment was posted successfully"));
+				return json_encode(array("Success" => "Your Facebook 'comment' was successful."));
 			}else{
-				return json_encode(array("Failure" => "There was an error posting your Facebook comment."));
+				if(isset($response['error']['message'])){
+					return json_encode(array("Failure" => "Your Facebook 'comment' was unsuccessful. Reason: " . $response['error']['message']));
+				}else{
+					return json_encode(array("Failure" => "Your Facebook 'comment' was unsuccessful. Reason: unspecified"));
+				}
 			}	
+		}else{
+			return json_encode(array("Failure" => "Your Facebook 'comment' was unsuccessful. Reason: unspecified"));
 		}
 	}
 	

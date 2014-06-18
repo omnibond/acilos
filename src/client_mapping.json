@@ -27,53 +27,123 @@
         "client": {
             "properties": {
                 "data": {
+                    "dynamic": "true",
                     "properties": {
                         "about": {
+                            "dynamic": "true",
                             "properties": {
-                                "description": {
-                                    "type": "string",
-                                    "index": "not_analyzed"
-                                },
                                 "link": {
-                                    "type": "string",
-                                    "index": "no"
+                                    "type": "string"
                                 }
                             }
                         },
+                        "alphaIndex": {
+                            "type": "string"
+                        },
                         "credentials": {
-                            "type": "object",
-                            "enabled": false
+                            "dynamic": "true",
+                            "properties": {
+                                "Facebook": {
+                                    "dynamic": "true",
+                                    "properties": {
+                                        "displayName": {
+                                            "type": "string"
+                                        },
+                                        "givenName": {
+                                            "type": "string"
+                                        },
+                                        "id": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "Google": {
+                                    "dynamic": "true",
+                                    "properties": {
+                                        "displayName": {
+                                            "type": "string"
+                                        },
+                                        "givenName": {
+                                            "type": "string"
+                                        },
+                                        "id": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "Instagram": {
+                                    "dynamic": "true",
+                                    "properties": {
+                                        "displayName": {
+                                            "type": "string"
+                                        },
+                                        "givenName": {
+                                            "type": "string"
+                                        },
+                                        "id": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "Linkedin": {
+                                    "dynamic": "true",
+                                    "properties": {
+                                        "displayName": {
+                                            "type": "string"
+                                        },
+                                        "givenName": {
+                                            "type": "string"
+                                        },
+                                        "id": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "Twitter": {
+                                    "dynamic": "true",
+                                    "properties": {
+                                        "displayName": {
+                                            "type": "string"
+                                        },
+                                        "givenName": {
+                                            "type": "string"
+                                        },
+                                        "id": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "currentTown": {
+                            "type": "string"
                         },
                         "displayName": {
                             "type": "string"
                         },
-			"image": {
-                            "type": "string",
-			    "index": "not_analyzed"
+                        "friendDegree": {
+                            "type": "string"
                         },
-			"circles": {
-                            "type": "string",
-			     "index": "not_analyzed"
+                        "friendStatus": {
+                            "type": "stfring"
                         },
-			"givenName": {
+                        "givenName": {
+                            "type": "string"
+                        },
+                        "homeTown": {
                             "type": "string"
                         },
                         "id": {
-                            "type": "string",
-                            "index": "not_analyzed"
+                            "type": "string"
                         },
                         "ownedBy": {
-                            "type": "string",
-                            "index": "not_analyzed"
+                            "type": "string"
                         },
-			"owns": {
-				"type": "string"
-			},
                         "post": {
+                            "dynamic": "true",
                             "properties": {
                                 "recentPost": {
-                                    "type": "string",
-                                    "index": "not_analyzed"
+                                    "type": "string"
                                 },
                                 "recentPostTime": {
                                     "type": "long"
@@ -83,64 +153,18 @@
                                 }
                             }
                         },
-			 "searchIndex": {
-                            "type" : "multi_field",
-                            "fields": {
-                                "searchIndex" : {
-                                    "type" : "string",
-                                    "analyzer" : "searchIndex"
-                                },
-                                "autocomplete" : {
-                                    "type" : "string",
-                                    "index_analyzer" : "searchIndex_autocomplete",
-				    "search_analyzer" : "searchIndex"
-                                }
-                            }
+                        "searchIndex": {
+                            "type": "string"
                         },
-			"alphaIndex": {
-                            "type": "string",
-			    "index": "not_analyzed"
+                        "service": {
+                            "type": "string"
                         },
-			"homeTown": {
-                            "type": "string",
-			     "index": "not_analyzed"
-                        },
-			"friendDegree": {
-                            "type": "string",
-			     "index": "not_analyzed"
-                        },
-			"friendStatus": {
-                            "type": "string",
-			     "index": "not_analyzed"
-                        },
-			"shh": {
-                            "type": "date",
-			    "format": "dateOptionalTime"
-                        },
-			"currentTown": {
-                            "type": "string",
-			     "index": "not_analyzed"
+                        "shh": {
+                            "type": "long"
                         },
                         "starred": {
-                            "type": "string",
-                            "index": "not_analyzed"
-                        },
-			 "service": {
-                            "type": "string",
-                            "index": "not_analyzed"
-                        },
-			"isLiked": {
-                            "type": "string",
-                            "index": "not_analyzed"
-                        },
-			"isCommented": {
-                            "type": "string",
-                            "index": "not_analyzed"
-                        },
-			"isFavorited": {
-                            "type": "string",
-                            "index": "not_analyzed"
-                        }			
+                            "type": "string"
+                        }
                     }
                 }
             }

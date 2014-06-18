@@ -80,11 +80,11 @@ $es->delete();
 $es = Client::connection("http://$host:$port/$index3/$index3");
 $es->delete();
 
-//$mapCommand = "curl -XPUT 'http://$host:$port/$index1' -d @app_mapping.json";
-//$output = shell_exec($mapCommand);
+$mapCommand = "curl -XPUT 'http://$host:$port/$index1' -d @app_mapping.json";
+$output = shell_exec($mapCommand);
 
-//$mapCommand = "curl -XPUT 'http://$host:$port/$index2' -d @client_mapping.json";
-//$output = shell_exec($mapCommand);
+$mapCommand = "curl -XPUT 'http://$host:$port/$index2' -d @client_mapping.json";
+$output = shell_exec($mapCommand);
 
 //$mapCommand = "curl -XPUT 'http://$host:$port/$index3' -d @public_mapping.json";
 //$output = shell_exec($mapCommand);
