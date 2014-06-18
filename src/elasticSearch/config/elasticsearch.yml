@@ -139,7 +139,7 @@ min_index_buffer_size:  48mb
 
 max_index_buffer_size:  48mb   
 
-#index.mapper.dynamic: false
+index.mapper.dynamic: false
 
 #################################### Paths ####################################
 

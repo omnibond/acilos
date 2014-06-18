@@ -605,8 +605,11 @@ class Search{
 		//print_r($res);
 		$var = json_decode($res, true);
 
+		//print_r($var);
+
 		if(isset($var['error'])){
 			$token = refreshGoogToken($varObj['authStuff']['google'][0]['accounts'][0]['uuid']);
+			print_R($token);
 			$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&query='.urlencode($query);
 			$ch = curl_init($url);
 			$headers = array('Authorization: Bearer ' . $token);
