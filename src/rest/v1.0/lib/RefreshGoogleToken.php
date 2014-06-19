@@ -63,8 +63,6 @@ function refreshGoogToken($uuid){
 	#here is a new access_token object minues the refresh_token, so add it and then write to the file
 	$response = curl_exec($ch);		
 	curl_close($ch);
-
-	var_dump($response);
 	
 	#the decode true param turns them into assoc arrays, 
 	#decode to add the refresh token to the object

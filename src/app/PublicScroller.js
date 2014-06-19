@@ -95,6 +95,7 @@ define([
 
 			postCreate: function(){
 				this.arrayList = [];
+				/*
 				this.arrayList.push(this.searchStarredClients().then(lang.hitch(this, function(obj){
 					console.log("STARCLIENTOBJ: ", obj);
 					this.starClientObj = [];
@@ -107,6 +108,7 @@ define([
 						}
 					}
 				})));
+				*/
 				this.arrayList.push(this.getFeedData(this.feedName, this.authStuff, this.checkedServices).then(lang.hitch(this, function(obj){
 					console.log("obj inside the first getFeedData (postCreate) is: ", obj);
 					this.feedDataObj = obj;
