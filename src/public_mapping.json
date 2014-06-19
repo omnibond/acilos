@@ -4,766 +4,465 @@
 		"number_of_replicas": 0
 	},
 	"mappings": {
-		"app": {
-			"properties": {
-				"actor": {
-					"properties": {
-						"description": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"displayName": {
-							"type": "string"
-						},
-						"geoLocation": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"id": {
-							"type": "string"
-						},
-						"image": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"location": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"name": {
-							"type": "string"
-						},
-						"searchable": {
-							"type": "string"
-						},
-						"url": {
-							"type": "string",
-							"index": "not_analyzed"
-						}
-					}
-				},
-				"content": {
-					"properties": {
-						"queryString": {
-							"type": "string"
-						},
-						"URL": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"action": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"actionString": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"attachment": {
-							"properties": {
-								"contentUrl": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"imageUrl": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"summary": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"title": {
-									"type": "string",
-									"index": "not_analyzed"
-								}
-							}
-						},
-						"commentURL": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"comments": {
-							"properties": {
-								"commentID": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"commentId": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"commentUserId": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"createdTime": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"firstName": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"headline": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"lastName": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"name": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"profileImg": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"published": {
-									"type": "date",
-									"format": "dateOptionalTime"
-								},
-								"text": {
-									"properties": {
-										"links": {										
-											"properties": {
-												"type": {
-													"type": "string",
-													"index": "not_analyzed"
-												},
-												"url": {
-													"type": "string",
-													"index": "not_analyzed"
-												},
-												"youtube": {
-													"type": "string",
-													"index": "not_analyzed"
-												}
-											}
-										},
-										"text": {
-											"type": "string"
-										}
-									}
-								},
-								"userId": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"username": {
-									"type": "string",
-									"index": "not_analyzed"
-								}
-							}
-						},
-						"companyID": {
-							"type": "long",
-							"index": "not_analyzed"
-						},
-						"companyName": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"connection": {
-							"properties": {
-								"firstName": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"headline": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"id": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"lastName": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"picture": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"url": {
-									"type": "string",
-									"index": "not_analyzed"
-								}
-							}
-						},
-						"dateAdded": {
-							"type": "long",
-							"index": "not_analyzed"
-						},
-						"discussion": {
-							"properties": {
-								"groupId": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"groupName": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"groupStatus": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"summary": {
-									"properties": {
-										"links": {
-											"properties": {
-												"type": {
-													"type": "string",
-													"index": "not_analyzed"
-												},
-												"url": {
-													"type": "string",
-													"index": "not_analyzed"
-												},
-												"website": {
-													"type": "string",
-													"index": "not_analyzed"
-												}
-											}
-										},
-										"text": {
-											"type": "string"
-										}
-									}
-								},
-								"title": {
-									"properties": {
-										"links": {
-											"properties": {
-												"type": {
-													"type": "string",
-													"index": "not_analyzed"
-												},
-												"url": {
-													"type": "string",
-													"index": "not_analyzed"
-												},
-												"website": {
-													"type": "string",
-													"index": "not_analyzed"
-												}
-											}
-										},
-										"text": {
-											"type": "string"
-										}
-									}
-								}
-							}
-						},
-						"firstName": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"generator": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"geoLocation": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"groups": {
-							"properties": {
-								"groupID": {
-									"type": "long",
-									"index": "not_analyzed"
-								},
-								"groupName": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"groupURL": {
-									"type": "string",
-									"index": "not_analyzed"
-								}
-							}
-						},
-						"headline": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"id": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"image": {
-							"properties": {
-								"highRes": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"lowRes": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"thumb": {
-									"type": "string",
-									"index": "not_analyzed"
-								}
-							}
-						},
-						"isCommented": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"isFavorited": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"isLiked": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"lastName": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"likeURL": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"likes": {
-							"properties": {
-								"firstName": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"headline": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"id": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"lastName": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"name": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"pictureURL": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"profileImg": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"username": {
-									"type": "string",
-									"index": "not_analyzed"
-								}
-							}
-						},
-						"location": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"mediaUrl": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"networkObjectType": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"objectType": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"person": {
-							"properties": {
-								"firstName": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"headline": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"id": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"lastName": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"picture": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"url": {
-									"type": "string",
-									"index": "not_analyzed"
-								}
-							}
-						},
-						"personType": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"picture": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"positions": {
-							"properties": {
-								"ID": {
-									"type": "long",
-									"index": "not_analyzed"
-								},
-								"companyID": {
-									"type": "long",
-									"index": "not_analyzed"
-								},
-								"companyName": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"name": {
-									"type": "string",
-									"index": "not_analyzed"
-								}
-							}
-						},
-						"postLink": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"published": {
-							"type": "long",
-							"index": "not_analyzed"
-						},
-						"recommendations": {
-							"properties": {
-								"pictureURL": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"recID": {
-									"type": "long",
-									"index": "not_analyzed"
-								},
-								"recType": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"reccommenderFirstName": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"reccommenderHeadline": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"reccommenderID": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"reccommenderLastName": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"reccommenderURL": {
-									"type": "string",
-									"index": "not_analyzed"
-								}
-							}
-						},
-						"replyTo": {
-							"type": "long",
-							"index": "not_analyzed"
-						},
-						"retweet": {
-							"type": "long",
-							"index": "not_analyzed"
-						},
-						"service": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"skills": {
-							"properties": {
-								"name": {
-									"type": "string"
-								}
-							}
-						},
-						"starred": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"status": {
-							"properties": {
-								"links": {
-									"properties": {
-										"type": {
-											"type": "string",
-											"index": "not_analyzed"
-										},
-										"url": {
-											"type": "string",
-											"index": "not_analyzed"
-										},
-										"website": {
-											"type": "string",
-											"index": "not_analyzed"
-										}
-									}
-								},
-								"text": {
-									"type": "string"
-								}
-							}
-						},
-						"story": {
-							"properties": {
-								"text": {
-									"type": "string"
-								}
-							}
-						},
-						"storyTags": {
-							"properties": {
-								"id": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"name": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"type": {
-									"type": "string",
-									"index": "not_analyzed"
-								}
-							}
-						},
-						"tags": {
-							"properties": {
-								"tagList": {
-									"type": "string",
-									"index": "not_analyzed"
-								}
-							}
-						},
-						"text": {
-							"properties": {
-								"commentURL": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"comments": {
-									"properties": {
-										"commentId": {
-											"type": "string",
-											"index": "not_analyzed"
-										},
-										"name": {
-											"type": "string",
-											"index": "not_analyzed"
-										},
-										"published": {
-											"type": "date",
-											"format": "dateOptionalTime"
-										},
-										"text": {
-											"properties": {
-												"text": {
-													"type": "string"
-												}
-											}
-										},
-										"userId": {
-											"type": "string",
-											"index": "not_analyzed"
-										}
-									}
-								},
-								"id": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"likeURL": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"likes": {
-									"properties": {
-										"id": {
-											"type": "string",
-											"index": "not_analyzed"
-										},
-										"name": {
-											"type": "string",
-											"index": "not_analyzed"
-										}
-									}
-								},
-								"links": {
-									"properties": {
-										"type": {
-											"type": "string",
-											"index": "not_analyzed"
-										},
-										"url": {
-											"type": "string",
-											"index": "not_analyzed"
-										},
-										"website": {
-											"type": "string",
-											"index": "not_analyzed"
-										},
-										"youtube": {
-											"type": "string",
-											"index": "not_analyzed"
-										}
-									}
-								},
-								"picture": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"story": {
-									"properties": {
-										"text": {
-											"type": "string"
-										}
-									}
-								},
-								"storyTags": {
-									"properties": {
-										"id": {
-											"type": "string",
-											"index": "not_analyzed"
-										},
-										"name": {
-											"type": "string",
-											"index": "not_analyzed"
-										},
-										"type": {
-											"type": "string",
-											"index": "not_analyzed"
-										}
-									}
-								},
-								"text": {
-									"type": "string"
-								}
-							}
-						},
-						"title": {
-							"type": "string"
-						},
-						"to": {
-							"properties": {
-								"id": {
-									"type": "string",
-									"index": "not_analyzed"
-								},
-								"name": {
-									"type": "string",
-									"index": "not_analyzed"
-								}
-							}
-						},
-						"updatedFields": {
-							"properties": {
-								"updatedField": {
-									"type": "string",
-									"index": "not_analyzed"
-								}
-							}
-						},
-						"url": {
-							"type": "string",
-							"index": "not_analyzed"
-						},
-						"verb": {
-							"type": "string",
-							"index": "not_analyzed"
-						}
-					}
-				},
-				"dateAdded": {
-					"type": "long"
-				},
-				"generator": {
-					"type": "string",
-					"index": "not_analyzed"
-				},
-				"id": {
-					"type": "string",
-					"index": "not_analyzed"
-				},
-				"isCommented": {
-					"type": "string",
-					"index": "not_analyzed"
-				},
-				"isFavorited": {
-					"type": "string",
-					"index": "not_analyzed"
-				},
-				"isLiked": {
-					"type": "string",
-					"index": "not_analyzed"
-				},
-				"postLink": {
-					"type": "string",
-					"index": "not_analyzed"
-				},
-				"published": {
-					"type": "date",
-					"format": "dateOptionalTime"
-				},
-				"service": {
-					"type": "string"
-				},
-				"dataLocation": {
-					"type": "string"
-				},
-				"starred": {
-					"type": "string",
-					"index": "not_analyzed"
-				},
-				"title": {
-					"type": "string",
-					"index": "not_analyzed"
-				},
-				"verb": {
-					"type": "string",
-					"index": "not_analyzed"
-				},
-				"mainAccountName": {
-					"type": "string",
-					"index": "not_analyzed"
-				},
-				"mainAccountID": {
-					"type": "string",
-					"index": "not_analyzed"
-				},
-				"mainAccountColor": {
-					"type": "string",
-					"index": "not_analyzed"
-				},				
-				"serviceQuery": {
-					"type": "string"
-				}
-			}
-		}
+	    "app": {
+	        "properties": {
+	            "actor": {
+	                "dynamic": "true",
+	                "properties": {
+	                    "description": {
+	                        "type": "string"
+	                    },
+	                    "displayName": {
+	                        "type": "string"
+	                    },
+	                    "geoLocation": {
+	                        "type": "string"
+	                    },
+	                    "id": {
+	                        "type": "string"
+	                    },
+	                    "image": {
+	                        "type": "string"
+	                    },
+	                    "location": {
+	                        "type": "string"
+	                    },
+	                    "name": {
+	                        "type": "string"
+	                    },
+	                    "searchable": {
+	                        "type": "string"
+	                    },
+	                    "url": {
+	                        "type": "string"
+	                    }
+	                }
+	            },
+	            "content": {
+	                "dynamic": "true",
+	                "properties": {
+	                    "actionString": {
+	                        "type": "string"
+	                    },
+	                    "album": {
+	                        "dynamic": "true",
+	                        "properties": {
+	                            "url": {
+	                                "type": "string"
+	                            }
+	                        }
+	                    },
+	                    "attachment": {
+	                        "dynamic": "true",
+	                        "properties": {
+	                            "contentDomain": {
+	                                "type": "string"
+	                            },
+	                            "contentUrl": {
+	                                "type": "string"
+	                            },
+	                            "imageUrl": {
+	                                "type": "string"
+	                            },
+	                            "summary": {
+	                                "type": "string"
+	                            },
+	                            "title": {
+	                                "type": "string"
+	                            }
+	                        }
+	                    },
+	                    "authorFirstName": {
+	                        "type": "string"
+	                    },
+	                    "authorHeadline": {
+	                        "type": "string"
+	                    },
+	                    "authorID": {
+	                        "type": "string"
+	                    },
+	                    "authorLastName": {
+	                        "type": "string"
+	                    },
+	                    "comment": {
+	                        "dynamic": "true",
+	                        "properties": {
+	                            "text": {
+	                                "type": "string"
+	                            }
+	                        }
+	                    },
+	                    "commentURL": {
+	                        "type": "string"
+	                    },
+	                    "comments": {
+	                        "dynamic": "true",
+	                        "properties": {
+	                            "commentID": {
+	                                "type": "string"
+	                            },
+	                            "commentId": {
+	                                "type": "string"
+	                            },
+	                            "commentUserId": {
+	                                "type": "string"
+	                            },
+	                            "createdTime": {
+	                                "type": "string"
+	                            },
+	                            "firstName": {
+	                                "type": "string"
+	                            },
+	                            "headline": {
+	                                "type": "string"
+	                            },
+	                            "lastName": {
+	                                "type": "string"
+	                            },
+	                            "name": {
+	                                "type": "string"
+	                            },
+	                            "pictureURL": {
+	                                "type": "string"
+	                            },
+	                            "profileImg": {
+	                                "type": "string"
+	                            },
+	                            "published": {
+	                                "type": "date",
+	                                "format": "dateOptionalTime"
+	                            },
+	                            "text": {
+	                                "dynamic": "true",
+	                                "properties": {
+	                                    "text": {
+	                                        "type": "string"
+	                                    }
+	                                }
+	                            },
+	                            "userId": {
+	                                "type": "string"
+	                            },
+	                            "username": {
+	                                "type": "string"
+	                            }
+	                        }
+	                    },
+	                    "companyID": {
+	                        "type": "string"
+	                    },
+	                    "companyName": {
+	                        "type": "string"
+	                    },
+	                    "contentSource": {
+	                        "type": "string"
+	                    },
+	                    "contentTitle": {
+	                        "type": "string"
+	                    },
+	                    "contentURL": {
+	                        "type": "string"
+	                    },
+	                    "description": {
+	                        "dynamic": "true",
+	                        "properties": {
+	                            "text": {
+	                                "type": "string"
+	                            }
+	                        }
+	                    },
+	                    "discussion": {
+	                        "dynamic": "true",
+	                        "properties": {
+	                            "groupId": {
+	                                "type": "string"
+	                            },
+	                            "groupName": {
+	                                "type": "string"
+	                            },
+	                            "groupStatus": {
+	                                "type": "string"
+	                            },
+	                            "summary": {
+	                                "dynamic": "true",
+	                                "properties": {
+	                                    "text": {
+	                                        "type": "string"
+	                                    }
+	                                }
+	                            },
+	                            "title": {
+	                                "dynamic": "true",
+	                                "properties": {
+	                                    "text": {
+	                                        "type": "string"
+	                                    }
+	                                }
+	                            }
+	                        }
+	                    },
+	                    "favorite": {
+	                        "type": "long"
+	                    },
+	                    "geoLocation": {
+	                        "type": "string"
+	                    },
+	                    "header": {
+	                        "type": "string"
+	                    },
+	                    "id": {
+	                        "type": "string"
+	                    },
+	                    "image": {
+	                        "dynamic": "true",
+	                        "properties": {
+	                            "highRes": {
+	                                "type": "string"
+	                            },
+	                            "lowRes": {
+	                                "type": "string"
+	                            },
+	                            "thumb": {
+	                                "type": "string"
+	                            }
+	                        }
+	                    },
+	                    "imageUrl": {
+	                        "type": "string"
+	                    },
+	                    "job": {
+	                        "dynamic": "true",
+	                        "properties": {
+	                            "jobCompany": {
+	                                "type": "string"
+	                            },
+	                            "jobDescription": {
+	                                "dynamic": "true",
+	                                "properties": {
+	                                    "text": {
+	                                        "type": "string"
+	                                    }
+	                                }
+	                            },
+	                            "jobID": {
+	                                "type": "string"
+	                            },
+	                            "jobLocation": {
+	                                "type": "string"
+	                            },
+	                            "jobPosition": {
+	                                "type": "string"
+	                            },
+	                            "jobPoster": {
+	                                "type": "string"
+	                            },
+	                            "jobURL": {
+	                                "type": "string"
+	                            },
+	                            "networkObjectType": {
+	                                "type": "string"
+	                            },
+	                            "queryString": {
+	                                "type": "string"
+	                            }
+	                        }
+	                    },
+	                    "likeURL": {
+	                        "type": "string"
+	                    },
+	                    "likes": {
+	                        "dynamic": "true",
+	                        "properties": {
+	                            "firstName": {
+	                                "type": "string"
+	                            },
+	                            "headline": {
+	                                "type": "string"
+	                            },
+	                            "id": {
+	                                "type": "string"
+	                            },
+	                            "lastName": {
+	                                "type": "string"
+	                            },
+	                            "name": {
+	                                "type": "string"
+	                            },
+	                            "pictureURL": {
+	                                "type": "string"
+	                            },
+	                            "profileImg": {
+	                                "type": "string"
+	                            },
+	                            "username": {
+	                                "type": "string"
+	                            }
+	                        }
+	                    },
+	                    "location": {
+	                        "type": "string"
+	                    },
+	                    "mediaUrl": {
+	                        "type": "string"
+	                    },
+	                    "networkObjectType": {
+	                        "type": "string"
+	                    },
+	                    "objectType": {
+	                        "type": "string"
+	                    },
+	                    "person": {
+	                        "dynamic": "true",
+	                        "properties": {
+	                            "firstName": {
+	                                "type": "string"
+	                            },
+	                            "headline": {
+	                                "type": "string"
+	                            },
+	                            "id": {
+	                                "type": "string"
+	                            },
+	                            "lastName": {
+	                                "type": "string"
+	                            },
+	                            "picture": {
+	                                "type": "string"
+	                            },
+	                            "url": {
+	                                "type": "string"
+	                            }
+	                        }
+	                    },
+	                    "personType": {
+	                        "type": "string"
+	                    },
+	                    "picture": {
+	                        "type": "string"
+	                    },
+	                    "postTime": {
+	                        "type": "long"
+	                    },
+	                    "queryString": {
+	                        "type": "string"
+	                    },
+	                    "replyTo": {
+	                        "type": "long"
+	                    },
+	                    "retweet": {
+	                        "type": "long"
+	                    },
+	                    "story": {
+	                        "dynamic": "true",
+	                        "properties": {
+	                            "text": {
+	                                "type": "string"
+	                            }
+	                        }
+	                    },
+	                    "storyTags": {
+	                        "dynamic": "true",
+	                        "properties": {
+	                            "id": {
+	                                "type": "string"
+	                            },
+	                            "name": {
+	                                "type": "string"
+	                            },
+	                            "type": {
+	                                "type": "string"
+	                            }
+	                        }
+	                    },
+	                    "tags": {
+	                        "dynamic": "true",
+	                        "properties": {
+	                            "tagList": {
+	                                "type": "string"
+	                            }
+	                        }
+	                    },
+	                    "text": {
+	                        "dynamic": "true",
+	                        "properties": {
+	                            "text": {
+	                                "type": "string"
+	                            }
+	                        }
+	                    },
+	                    "title": {
+	                        "dynamic": "true",
+	                        "properties": {
+	                            "text": {
+	                                "type": "string"
+	                            }
+	                        }
+	                    },
+	                    "to": {
+	                        "dynamic": "true",
+	                        "properties": {
+	                            "id": {
+	                                "type": "string"
+	                            },
+	                            "name": {
+	                                "type": "string"
+	                            }
+	                        }
+	                    },
+	                    "updatedField": {
+	                        "type": "string"
+	                    },
+	                    "url": {
+	                        "type": "string"
+	                    }
+	                }
+	            },
+	            "dataLocation": {
+	                "type": "string"
+	            },
+	            "generator": {
+	                "type": "string"
+	            },
+	            "id": {
+	                "type": "string"
+	            },
+	            "isCommented": {
+	                "type": "string"
+	            },
+	            "isFavorited": {
+	                "type": "string"
+	            },
+	            "isLiked": {
+	                "type": "string"
+	            },
+	            "mainAccountColor": {
+	                "type": "string"
+	            },
+	            "mainAccountID": {
+	                "type": "string"
+	            },
+	            "mainAccountName": {
+	                "type": "string"
+	            },
+	            "postLink": {
+	                "type": "string"
+	            },
+	            "published": {
+	                "type": "long"
+	            },
+	            "service": {
+	                "type": "string"
+	            },
+	            "starred": {
+	                "type": "string"
+	            },
+	            "title": {
+	                "type": "string"
+	            },
+	            "verb": {
+	                "type": "string"
+	            }
+	        }
+	    }
 	}
 }

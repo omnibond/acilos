@@ -145,6 +145,15 @@ define([
 				this.addChild(this.mainList);
 			},
 			
+			getRandomColor: function(){ 
+				var letters = '0123456789ABCDEF'.split(''); 
+				var color = '#'; 
+				for (var i = 0; i < 6; i++ ) { 
+					color += letters[Math.floor(Math.random() * 16)]; 
+				} 
+				return color; 
+			},
+			
 			authButtonsNitems: function(param, obj){	
 				if(param == "login"){
 					return;
@@ -157,8 +166,21 @@ define([
 				if(obj[param].length > 0){
 					obj = obj[param][0];
 					
+					if(obj['accounts'].length == 0){						
+						var color = this.getRandomColor();
+						var loginDisallow = "false";
+						var authenticated = "false";
+						this.saveNewAccount(color, loginDisallow, authenticated, param).then(lang.hitch(this, function(obj){
+							if(obj['error']){
+								this.errorItem.set("label", obj['error']);
+							}else{
+								this.errorItem.set("label", obj['success']);
+							}
+							this.activate();
+						}));
+					}
 					
-					if(obj['accounts'].length == 0){
+					if(obj['accounts'].length == 1 && obj['accounts'][0]['authenticated'] == "false"){
 						var deleteAuther = new ListItem({
 							style: "border: none",
 							variableHeight:true
@@ -176,21 +198,23 @@ define([
 						this.mainList.addChild(deleteAuther);
 					}
 					
-					var addAccount = new ListItem({
-						style: "border:none",
-						variableHeight:true
-					})
-					var add = domConstruct.create("div", {innerHTML: "Add a new " + param + " account", "class": "twitterOrangeDiv"});
-					add.onclick = lang.hitch(this, function(){						
-							var list = new EdgeToEdgeList({style:"margin-top:30px;border:none"})			
-							
-							this.makeAccountPane(obj, param, list);
+					if(obj['accounts'].length == 1 && obj['accounts'][0]['authenticated'] == "true"){						
+						var addAccount = new ListItem({
+							style: "border:none",
+							variableHeight:true
+						})
+						var add = domConstruct.create("div", {innerHTML: "Add a new " + param + " account", "class": "twitterOrangeDiv"});
+						add.onclick = lang.hitch(this, function(){						
+								var list = new EdgeToEdgeList({style:"margin-top:30px;border:none"})			
 								
-							addAccount.domNode.appendChild(list.domNode);	
-					}, obj,  param, addAccount)
-					addAccount.domNode.appendChild(add);
-					this.mainList.addChild(addAccount);
-										
+								this.makeAccountPane(obj, param, list);
+									
+								addAccount.domNode.appendChild(list.domNode);	
+						}, obj,  param, addAccount)
+						addAccount.domNode.appendChild(add);
+						this.mainList.addChild(addAccount);
+					}
+				
 					for(w = 0; w < obj['accounts'].length; w++){
 						var item = new ListItem({
 							style: "height:auto;border-top:none;border-bottom:none;border-left:5px solid " +obj['accounts'][w].color+ ";right:none"
@@ -231,8 +255,13 @@ define([
 						}
 						
 						obj['accounts'][w].param = param;
+						if(obj['accounts'].length == 1 && obj['accounts'][0].authenticated == "false"){
+							var delLabel = "Change Color";
+						}else{
+							var delLabel = "Delete";
+						}
 						var Delete = new Button({
-							label: "Delete",
+							label: delLabel,
 							onClick: lang.hitch(this, function(item, obj, param, w){
 		
 								this.deleteAccountCred(obj['accounts'][w]).then(lang.hitch(this, function(obj){

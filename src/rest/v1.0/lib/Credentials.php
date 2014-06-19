@@ -132,7 +132,8 @@ class Credentials{
 					}else{
 						$account = array(
 							"status" => "unauthorized",
-							"auth" => $serviceCreds['instagram'][$a]['auth']
+							"auth" => $serviceCreds['instagram'][$a]['auth'],
+							"color" => $serviceCreds['instagram'][$a]['accounts'][0]['color']
 						);
 						array_push($returnArr['instagram'], $account);
 					}
@@ -215,7 +216,8 @@ class Credentials{
 					}else{
 						$account = array(
 							"status" => "unauthorized",
-							"auth" => $serviceCreds['google'][$a]['auth']
+							"auth" => $serviceCreds['google'][$a]['auth'],
+							"color" => $serviceCreds['google'][$a]['accounts'][0]['color']
 						);
 						array_push($returnArr['google'], $account);
 					}
@@ -267,7 +269,8 @@ class Credentials{
 					}else{					
 						$account = array(
 							"status" => "unauthorized",
-							"auth" => $serviceCreds['facebook'][$a]['auth']
+							"auth" => $serviceCreds['facebook'][$a]['auth'],
+							"color" => $serviceCreds['facebook'][$a]['accounts'][0]['color']
 						);
 						array_push($returnArr['facebook'], $account);
 					}
@@ -323,7 +326,8 @@ class Credentials{
 					}else{
 						$account = array(
 							"status" => "unauthorized",
-							"auth" => $serviceCreds['twitter'][$a]['auth']
+							"auth" => $serviceCreds['twitter'][$a]['auth'],
+							"auth" => $serviceCreds['twitter'][$a]['accounts'][0]['color']
 						);
 						array_push($returnArr['twitter'], $account);
 					}
@@ -390,7 +394,8 @@ class Credentials{
 					}else{
 						$account = array(
 							"status" => "unauthorized",
-							"auth" => $serviceCreds['linkedin'][$a]['auth']
+							"auth" => $serviceCreds['linkedin'][$a]['auth'],
+							"auth" => $serviceCreds['linkedin'][$a]['accounts'][0]['color']
 						);
 						array_push($returnArr['linkedin'], $account);
 					}

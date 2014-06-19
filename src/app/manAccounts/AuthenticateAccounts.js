@@ -107,432 +107,434 @@ define(['dojo/_base/declare',
 		buttonsNitems: function(param){	
 
 			for(var d = 0; d < this.authCreds[param].length; d++){
-				var list = new EdgeToEdgeList({
-					style: "height: auto; border-bottom: 1px solid #e7e7de; border-left: 5px solid " + this.authCreds[param][d].color
-				})
-				var toDoLabel = new ListItem({
-					label: "Click the " + this.capitalizeFirstLetter(param) + " icon to refresh/generate a token",
-					style: "border:none"
-				})
-				list.addChild(toDoLabel);
-				
-				if(this.authCreds[param][d]['loginDisallow'] == "true"){
-					var allow = true;
-				}else{
-					var allow = false;
-				}
-				var check = new CheckBox({
-					name: param,
-					checked: allow,
-					style: "top:18px;position:absolute;width:20px;height:20px",
-					onClick: lang.hitch(this, function(param, d){
-						console.log("clicked");
-						this.authCreds[param][d].param = param;
-						this.setDisableLogin(this.authCreds[param][d]);
-					}, param, d)
-				});
-				var checkLabel = domConstruct.create("div", {style:"top:6px;position:absolute;margin-left:30px; margin-top: 4px", innerHTML:"Disable login"});
-				loginHolder = new ListItem({
-					style:"border:none"
-				})
-				if(this.authCreds[param][d]['status'] !== "null"){
-					item = new ListItem({
-						style: "border:none; height: 70px",
-						variableHeight: true
-					})	
-					if(param === "google"){
-						if(this.authCreds[param][d]['status'] === "unauthorized"){
-							statusItem = new ListItem({
-								label: "This account has not been authenticated yet",
-								style: "border: none;margin-left:5px;overflow: visible",
-								variableHeight: true
-							})
-							var logDiv = domConstruct.create("div", {style: "float:left"});
-							var refresh = new Button({
-								style: "width:68px;height:50px;margin-right:10px; display: block",
-								onClick: lang.hitch(this, function(param, d){
-									window.location = this.authCreds[param][d]["auth"]+"&state=inside";
-								}, param, d)
-							});
-							var googleDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/googlePlusHalfSize.png>"});
-							refresh.domNode.appendChild(googleDiv);
-							var logout = new Button({
-								label: "Website",
-								style: "height:50px;position:absolute; height: 25px; line-height: 25px; margin-top: 5px; margin-left: 0px",
-								onClick: lang.hitch(this, function(param){
-									var iAuth = window.open();
-									iAuth.location = "http://mail.google.com/";
-								}, param)
-							});
-							logDiv.appendChild(refresh.domNode);
-							logDiv.appendChild(logout.domNode);
-							item.domNode.appendChild(logDiv);
-							list.addChild(item);
-							list.addChild(statusItem);
-						}else{
-							loginHolder.addChild(check);
-							loginHolder.domNode.appendChild(checkLabel);
-							if(this.authCreds[param][d]['status'] === "good"){
-								console.log(this.authCreds[param][d]['expiresAt'])
-								var date = new Date(this.authCreds[param][d]['expiresAt'] * 1000);
-								var str = "Token Expires: " + date;
-							}else{
-								var str = "Token is expired";
-							}
-							statusItem = new ListItem({
-								label: str,
-								style: "border: none;margin-left:5px;overflow: visible",
-								variableHeight: true
-							})
-
-							var logDiv = domConstruct.create("div", {style: "float:left"});
-							var refresh = new Button({
-								style: "width:68px;height:50px;margin-right:10px; display: block",
-								onClick: lang.hitch(this, function(param, d){
-									window.location = this.authCreds[param][d]["auth"]+"&state=inside";
-								}, param, d)
-							});
-							var googleDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/googlePlusHalfSize.png>"});
-							refresh.domNode.appendChild(googleDiv);
-							var logout = new Button({
-								label: "Website",
-								style: "height:50px;position:absolute; height: 25px; line-height: 25px; margin-top: 5px; margin-left: 0px",
-								onClick: lang.hitch(this, function(param){
-									var iAuth = window.open();
-									iAuth.location = "http://mail.google.com/";
-								}, param)
-							});
-
-							logDiv.appendChild(refresh.domNode);
-							logDiv.appendChild(logout.domNode);
-							var userDiv = domConstruct.create("div", {style: "margin-left:40px;float:left"});
-							var pictureDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML:  '<img src="'+this.authCreds[param][d]["image"]+'" width="50px" height="50px" />'}); 
-							var nameDiv = domConstruct.create("div", {style: "margin-top:20px", innerHTML: this.authCreds[param][d].name});
-							userDiv.appendChild(pictureDiv);
-							userDiv.appendChild(nameDiv);
-
-							item.domNode.appendChild(logDiv);
-							item.domNode.appendChild(userDiv);
-
-							list.addChild(item);
-							list.addChild(loginHolder);
-							list.addChild(statusItem);	
-						}
+				if(this.authCreds[param][d].status != "null"){
+					var list = new EdgeToEdgeList({
+						style: "height: auto; border-bottom: 1px solid #e7e7de; border-left: 5px solid " + this.authCreds[param][d].color
+					})
+					var toDoLabel = new ListItem({
+						label: "Click the " + this.capitalizeFirstLetter(param) + " icon to refresh/generate a token",
+						style: "border:none"
+					})
+					list.addChild(toDoLabel);
+					
+					if(this.authCreds[param][d]['loginDisallow'] == "true"){
+						var allow = true;
+					}else{
+						var allow = false;
 					}
-					if(param === "facebook"){
-						if(this.authCreds[param][d]['status'] === "unauthorized"){
-							statusItem = new ListItem({
-								label: "This account has not been authenticated yet",
-								style: "border: none;margin-left:5px;overflow: visible",
-								variableHeight: true
-							})
-							var logDiv = domConstruct.create("div", {style: "float:left"});
-							var refresh = new Button({
-								style: "width:68px;height:50px;margin-right:10px; display: block",
-								onClick: lang.hitch(this, function(param, d){
-									window.location = this.authCreds[param][d]["auth"]+"&state=inside";
-								}, param, d)
-							});
-							var faceDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/facebookLoginHalfSize.png>"});
-							refresh.domNode.appendChild(faceDiv);
-							var logout = new Button({
-								label: "Website",
-								style: "height:50px;position:absolute; height: 25px; line-height: 25px; margin-top: 5px; margin-left: 0px",
-								onClick: lang.hitch(this, function(param){
-									var iAuth = window.open();
-									iAuth.location = "https://facebook.com/";
-								}, param)
-							});
-							logDiv.appendChild(refresh.domNode);
-							logDiv.appendChild(logout.domNode);
-							item.domNode.appendChild(logDiv);
-							list.addChild(item);
-							list.addChild(statusItem);
-						}else{
-							loginHolder.addChild(check);
-							loginHolder.domNode.appendChild(checkLabel);
-							if(this.authCreds[param][d]['status'] === "good"){
-								var date = new Date(this.authCreds[param][d]['expiresAt'] * 1000);
-								var str = "Token Expires: " + date;
-							}else{
-								var str = "Token is expired";
-							}
-							statusItem = new ListItem({
-								label: str,
-								style: "border: none;margin-left:5px;overflow: visible",
-								variableHeight: true
-							})
-
-							var logDiv = domConstruct.create("div", {style: "float:left"});
-							var refresh = new Button({
-								style: "width:68px;height:50px;margin-right:10px; display: block",
-								onClick: lang.hitch(this, function(param, d){
-									window.location = this.authCreds[param][d]["auth"]+"&state=inside";
-								}, param, d)
-							});
-							var faceDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/facebookLoginHalfSize.png>"});
-							refresh.domNode.appendChild(faceDiv);
-							var logout = new Button({
-								label: "Website",
-								style: "height:50px;position:absolute; height: 25px; line-height: 25px; margin-top: 5px; margin-left: 0px",
-								onClick: lang.hitch(this, function(param){
-									var iAuth = window.open();
-									iAuth.location = "https://facebook.com/";
-								}, param)
-							});
-
-							logDiv.appendChild(refresh.domNode);
-							logDiv.appendChild(logout.domNode);
-							var userDiv = domConstruct.create("div", {style: "margin-left:40px;float:left"});
-							var pictureDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML:  '<img src="https://graph.facebook.com/'+this.authCreds[param][d]['image']+'/picture" width="50px" height="50px" />'}); 
-							var nameDiv = domConstruct.create("div", {style: "margin-top:20px", innerHTML: this.authCreds[param][d].name});
-							userDiv.appendChild(pictureDiv);
-							userDiv.appendChild(nameDiv);
-
-							item.domNode.appendChild(logDiv);
-							item.domNode.appendChild(userDiv);
-
-							list.addChild(item);
-							list.addChild(loginHolder);
-							list.addChild(statusItem);	
-						}
-					}
-					if(param === "twitter"){
-						if(this.authCreds[param][d]['status'] === "unauthorized"){
-							statusItem = new ListItem({
-								label: "This account has not been authenticated yet",
-								style: "border: none;margin-left:5px;overflow: visible",
-								variableHeight: true
-							})
-							var refresh = new Button({
-								style: "width:68px;height:50px;margin-right:10px; display: block",
-								onClick: lang.hitch(this, function(param, d){
-									window.location = this.authCreds[param][d]["auth"]+"&state=inside";
-								}, param, d)
-							});
-							var twitDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/twitterLoginHalfSize.png>"});
-
-							var logDiv = domConstruct.create("div", {style: "float:left"});
-							refresh.domNode.appendChild(twitDiv);
-							var logout = new Button({
-								label: "Website",
-								style: "height:50px;position:absolute; height: 25px; line-height: 25px; margin-top: 5px; margin-left: 0px",
-								onClick: lang.hitch(this, function(param){
-									var iAuth = window.open();
-									iAuth.location = "https://twitter.com";
-								}, param)
-							});
-							logDiv.appendChild(refresh.domNode);
-							logDiv.appendChild(logout.domNode);							
-							item.domNode.appendChild(logDiv);							
-							list.addChild(item);
-							list.addChild(statusItem);
-						}else{
-							loginHolder.addChild(check);
-							loginHolder.domNode.appendChild(checkLabel);
-							if(this.authCreds[param][d]['status'] === "good"){
-								var str = " and expires when revoked";
-							}else{
-								var str = " please refresh";
-							}
-							statusItem = new ListItem({
-								label: "Token is: " + this.authCreds[param][d]['status'] + str,
-								style: "border: none;margin-left:5px",
-								variableHeight: true
-							})
-
-							var refresh = new Button({
-								style: "width:68px;height:50px;margin-right:10px; display: block",
-								onClick: lang.hitch(this, function(param, d){
-									window.location = this.authCreds[param][d]["auth"]+"&state=inside";
-								}, param, d)
-							});
-							var twitDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/twitterLoginHalfSize.png>"});
-
-							var logDiv = domConstruct.create("div", {style: "float:left"});
-							refresh.domNode.appendChild(twitDiv);
-							var logout = new Button({
-								label: "Website",
-								style: "height:50px;position:absolute; height: 25px; line-height: 25px; margin-top: 5px; margin-left: 0px",
-								onClick: lang.hitch(this, function(param){
-									var iAuth = window.open();
-									iAuth.location = "https://twitter.com";
-								}, param)
-							});
-							logDiv.appendChild(refresh.domNode);
-							logDiv.appendChild(logout.domNode);
-							var userDiv = domConstruct.create("div", {style: "margin-left:40px;float:left"});
-							var pictureDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML:  '<img src="'+this.authCreds[param][d].image+'" width="50px" height="50px">'}); 
-							var nameDiv = domConstruct.create("div", {style: "margin-top:20px", innerHTML: this.authCreds[param][d].name});
-							userDiv.appendChild(pictureDiv);
-							userDiv.appendChild(nameDiv);
-
-							item.domNode.appendChild(logDiv);
-							item.domNode.appendChild(userDiv);
-
-							list.addChild(item);
-							list.addChild(loginHolder);
-							list.addChild(statusItem);
-						}
-					}
-					if(param === "instagram"){
-						if(this.authCreds[param][d]['status'] === "unauthorized"){
-							statusItem = new ListItem({
-								label: "This account has not been authenticated yet",
-								style: "border: none;margin-left:5px;overflow: visible",
-								variableHeight: true
-							})
-							var logDiv = domConstruct.create("div", {style: "float:left"});
-							var refresh = new Button({
-								style: "width:68px;height:50px;margin-right:10px",
-								onClick: lang.hitch(this, function(param, d){
-									window.location = this.authCreds[param][d]["auth"]+"&state=inside";
-								}, param, d)
-							});
-							var instaDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/instagramLoginHalfSize.png>"});
-							refresh.domNode.appendChild(instaDiv);
-							var logout = new Button({
-								label: "Website",
-								style: "height:50px;position:absolute; height: 25px; line-height: 25px; margin-top: 5px; margin-left: 0px; display: block",
-								onClick: lang.hitch(this, function(param){
-									var iAuth = window.open();
-									iAuth.location = "https://instagram.com";
-								}, param)
-							});
-							logDiv.appendChild(refresh.domNode);
-							logDiv.appendChild(logout.domNode);
-							item.domNode.appendChild(logDiv);							
-							list.addChild(item);
-							list.addChild(statusItem);
-						}else{
-							loginHolder.addChild(check);
-							loginHolder.domNode.appendChild(checkLabel);
-							if(this.authCreds[param][d]['status'] === "good"){
-								var str = " and expires when revoked";
-							}else{
-								var str = " please refresh";
-							}
-							statusItem = new ListItem({
-								label: "Token is: " + this.authCreds[param][d]['status'] + str,
-								style: "border: none;margin-left:5px;",
-								variableHeight: true
-							})
-
-							var logDiv = domConstruct.create("div", {style: "float:left"});
-							var refresh = new Button({
-								style: "width:68px;height:50px;margin-right:10px",
-								onClick: lang.hitch(this, function(param, d){
-									window.location = this.authCreds[param][d]["auth"]+"&state=inside";
-								}, param, d)
-							});
-							var instaDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/instagramLoginHalfSize.png>"});
-							refresh.domNode.appendChild(instaDiv);
-							var logout = new Button({
-								label: "Website",
-								style: "height:50px;position:absolute; height: 25px; line-height: 25px; margin-top: 5px; margin-left: 0px; display: block",
-								onClick: lang.hitch(this, function(param){
-									var iAuth = window.open();
-									iAuth.location = "https://instagram.com";
-								}, param)
-							});
-							logDiv.appendChild(refresh.domNode);
-							logDiv.appendChild(logout.domNode);
-							var userDiv = domConstruct.create("div", {style: "margin-left:40px;float:left"});
-							var pictureDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML:  '<img src="'+this.authCreds[param][d].image+'" width="50px" height="50px" />'}); 
-							var nameDiv = domConstruct.create("div", {style: "margin-top:20px", innerHTML: this.authCreds[param][d].name});
-							userDiv.appendChild(pictureDiv);
-							userDiv.appendChild(nameDiv);
-
-							item.domNode.appendChild(logDiv);
-							item.domNode.appendChild(userDiv);
-
-							list.addChild(item);
-							list.addChild(loginHolder);
-							list.addChild(statusItem);
-						}
-					}
-					if(param === "linkedin"){
-						if(this.authCreds[param][d]['status'] === "unauthorized"){
-							statusItem = new ListItem({
-								label: "This account has not been authenticated yet",
-								style: "border: none;margin-left:5px;overflow: visible",
-								variableHeight: true
-							})
-							var logDiv = domConstruct.create("div", {style: "float:left"});
-							var refresh = new Button({
-								style: "width:68px;height:50px;margin-right:10px; display: block",
-								onClick: lang.hitch(this, function(param, d){
-									window.location = this.authCreds[param][d]["auth"]+"&state=inside";
-								}, param, d)
-							});
-							var linkDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/linkedinLoginHalfSize.png>"});
-							refresh.domNode.appendChild(linkDiv);
-							var logout = new Button({
-								label: "Website",
-								style: "height:50px;position:absolute; height: 25px; line-height: 25px; margin-top: 5px; margin-left: 0px",
-								onClick: lang.hitch(this, function(param){
-									var iAuth = window.open();
-									iAuth.location = "https://linkedin.com/";
-								}, param)
-							});
-							logDiv.appendChild(refresh.domNode);
-							logDiv.appendChild(logout.domNode);							
-							item.domNode.appendChild(logDiv);							
-							list.addChild(item);
-							list.addChild(statusItem);
-						}else{
-							loginHolder.addChild(check);
-							loginHolder.domNode.appendChild(checkLabel);
-							if(this.authCreds[param][d]['status'] === "bad"){
+					var check = new CheckBox({
+						name: param,
+						checked: allow,
+						style: "top:18px;position:absolute;width:20px;height:20px",
+						onClick: lang.hitch(this, function(param, d){
+							console.log("clicked");
+							this.authCreds[param][d].param = param;
+							this.setDisableLogin(this.authCreds[param][d]);
+						}, param, d)
+					});
+					var checkLabel = domConstruct.create("div", {style:"top:6px;position:absolute;margin-left:30px; margin-top: 4px", innerHTML:"Disable login"});
+					loginHolder = new ListItem({
+						style:"border:none"
+					})
+					if(this.authCreds[param][d]['status'] !== "null"){
+						item = new ListItem({
+							style: "border:none; height: 70px",
+							variableHeight: true
+						})
+						if(param === "google"){
+							if(this.authCreds[param][d]['status'] === "unauthorized"){
 								statusItem = new ListItem({
-									label: "Token is expired",
-									style: "border: none;margin-left:5px;margin-bottom: 5px; margin-top: 5px",
+									label: "This account has not been authenticated yet",
+									style: "border: none;margin-left:5px;overflow: visible",
 									variableHeight: true
 								})
+								var logDiv = domConstruct.create("div", {style: "float:left"});
+								var refresh = new Button({
+									style: "width:68px;height:50px;margin-right:10px; display: block",
+									onClick: lang.hitch(this, function(param, d){
+										window.location = this.authCreds[param][d]["auth"]+"&state=inside";
+									}, param, d)
+								});
+								var googleDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/googlePlusHalfSize.png>"});
+								refresh.domNode.appendChild(googleDiv);
+								var logout = new Button({
+									label: "Website",
+									style: "height:50px;position:absolute; height: 25px; line-height: 25px; margin-top: 5px; margin-left: 0px",
+									onClick: lang.hitch(this, function(param){
+										var iAuth = window.open();
+										iAuth.location = "http://mail.google.com/";
+									}, param)
+								});
+								logDiv.appendChild(refresh.domNode);
+								logDiv.appendChild(logout.domNode);
+								item.domNode.appendChild(logDiv);
+								list.addChild(item);
+								list.addChild(statusItem);
 							}else{
-								var date = new Date(this.authCreds[param][d]['expiresAt'] * 1000);
+								loginHolder.addChild(check);
+								loginHolder.domNode.appendChild(checkLabel);
+								if(this.authCreds[param][d]['status'] === "good"){
+									console.log(this.authCreds[param][d]['expiresAt'])
+									var date = new Date(this.authCreds[param][d]['expiresAt'] * 1000);
+									var str = "Token Expires: " + date;
+								}else{
+									var str = "Token is expired";
+								}
 								statusItem = new ListItem({
-									label: "Token Expires: " + date,
-									style: "border: none;margin-left:5px;margin-bottom: 5px; margin-top: 5px",
+									label: str,
+									style: "border: none;margin-left:5px;overflow: visible",
 									variableHeight: true
 								})
+
+								var logDiv = domConstruct.create("div", {style: "float:left"});
+								var refresh = new Button({
+									style: "width:68px;height:50px;margin-right:10px; display: block",
+									onClick: lang.hitch(this, function(param, d){
+										window.location = this.authCreds[param][d]["auth"]+"&state=inside";
+									}, param, d)
+								});
+								var googleDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/googlePlusHalfSize.png>"});
+								refresh.domNode.appendChild(googleDiv);
+								var logout = new Button({
+									label: "Website",
+									style: "height:50px;position:absolute; height: 25px; line-height: 25px; margin-top: 5px; margin-left: 0px",
+									onClick: lang.hitch(this, function(param){
+										var iAuth = window.open();
+										iAuth.location = "http://mail.google.com/";
+									}, param)
+								});
+
+								logDiv.appendChild(refresh.domNode);
+								logDiv.appendChild(logout.domNode);
+								var userDiv = domConstruct.create("div", {style: "margin-left:40px;float:left"});
+								var pictureDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML:  '<img src="'+this.authCreds[param][d]["image"]+'" width="50px" height="50px" />'}); 
+								var nameDiv = domConstruct.create("div", {style: "margin-top:20px", innerHTML: this.authCreds[param][d].name});
+								userDiv.appendChild(pictureDiv);
+								userDiv.appendChild(nameDiv);
+
+								item.domNode.appendChild(logDiv);
+								item.domNode.appendChild(userDiv);
+
+								list.addChild(item);
+								list.addChild(loginHolder);
+								list.addChild(statusItem);	
 							}
+						}
+						if(param === "facebook"){
+							if(this.authCreds[param][d]['status'] === "unauthorized"){
+								statusItem = new ListItem({
+									label: "This account has not been authenticated yet",
+									style: "border: none;margin-left:5px;overflow: visible",
+									variableHeight: true
+								})
+								var logDiv = domConstruct.create("div", {style: "float:left"});
+								var refresh = new Button({
+									style: "width:68px;height:50px;margin-right:10px; display: block",
+									onClick: lang.hitch(this, function(param, d){
+										window.location = this.authCreds[param][d]["auth"]+"&state=inside";
+									}, param, d)
+								});
+								var faceDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/facebookLoginHalfSize.png>"});
+								refresh.domNode.appendChild(faceDiv);
+								var logout = new Button({
+									label: "Website",
+									style: "height:50px;position:absolute; height: 25px; line-height: 25px; margin-top: 5px; margin-left: 0px",
+									onClick: lang.hitch(this, function(param){
+										var iAuth = window.open();
+										iAuth.location = "https://facebook.com/";
+									}, param)
+								});
+								logDiv.appendChild(refresh.domNode);
+								logDiv.appendChild(logout.domNode);
+								item.domNode.appendChild(logDiv);
+								list.addChild(item);
+								list.addChild(statusItem);
+							}else{
+								loginHolder.addChild(check);
+								loginHolder.domNode.appendChild(checkLabel);
+								if(this.authCreds[param][d]['status'] === "good"){
+									var date = new Date(this.authCreds[param][d]['expiresAt'] * 1000);
+									var str = "Token Expires: " + date;
+								}else{
+									var str = "Token is expired";
+								}
+								statusItem = new ListItem({
+									label: str,
+									style: "border: none;margin-left:5px;overflow: visible",
+									variableHeight: true
+								})
 
-							var logDiv = domConstruct.create("div", {style: "float:left"});
-							var refresh = new Button({
-								style: "width:68px;height:50px;margin-right:10px; display: block",
-								onClick: lang.hitch(this, function(param, d){
-									window.location = this.authCreds[param][d]["auth"]+"&state=inside";
-								}, param, d)
-							});
-							var linkDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/linkedinLoginHalfSize.png>"});
-							refresh.domNode.appendChild(linkDiv);
-							var logout = new Button({
-								label: "Website",
-								style: "height:50px;position:absolute; height: 25px; line-height: 25px; margin-top: 5px; margin-left: 0px",
-								onClick: lang.hitch(this, function(param){
-									var iAuth = window.open();
-									iAuth.location = "https://linkedin.com/";
-								}, param)
-							});
-							logDiv.appendChild(refresh.domNode);
-							logDiv.appendChild(logout.domNode);
-							var userDiv = domConstruct.create("div", {style: "margin-left:40px;float:left"});
-							var pictureDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML:  '<img src="'+this.authCreds[param][d].image+'" width="50px" height="50px" />'}); 
-							var nameDiv = domConstruct.create("div", {style: "margin-top:20px", innerHTML: this.authCreds[param][d].name});
-							userDiv.appendChild(pictureDiv);
-							userDiv.appendChild(nameDiv);
+								var logDiv = domConstruct.create("div", {style: "float:left"});
+								var refresh = new Button({
+									style: "width:68px;height:50px;margin-right:10px; display: block",
+									onClick: lang.hitch(this, function(param, d){
+										window.location = this.authCreds[param][d]["auth"]+"&state=inside";
+									}, param, d)
+								});
+								var faceDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/facebookLoginHalfSize.png>"});
+								refresh.domNode.appendChild(faceDiv);
+								var logout = new Button({
+									label: "Website",
+									style: "height:50px;position:absolute; height: 25px; line-height: 25px; margin-top: 5px; margin-left: 0px",
+									onClick: lang.hitch(this, function(param){
+										var iAuth = window.open();
+										iAuth.location = "https://facebook.com/";
+									}, param)
+								});
 
-							item.domNode.appendChild(logDiv);
-							item.domNode.appendChild(userDiv);
+								logDiv.appendChild(refresh.domNode);
+								logDiv.appendChild(logout.domNode);
+								var userDiv = domConstruct.create("div", {style: "margin-left:40px;float:left"});
+								var pictureDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML:  '<img src="https://graph.facebook.com/'+this.authCreds[param][d]['image']+'/picture" width="50px" height="50px" />'}); 
+								var nameDiv = domConstruct.create("div", {style: "margin-top:20px", innerHTML: this.authCreds[param][d].name});
+								userDiv.appendChild(pictureDiv);
+								userDiv.appendChild(nameDiv);
 
-							list.addChild(item);
-							list.addChild(loginHolder);
-							list.addChild(statusItem);
+								item.domNode.appendChild(logDiv);
+								item.domNode.appendChild(userDiv);
+
+								list.addChild(item);
+								list.addChild(loginHolder);
+								list.addChild(statusItem);	
+							}
+						}
+						if(param === "twitter"){
+							if(this.authCreds[param][d]['status'] === "unauthorized"){
+								statusItem = new ListItem({
+									label: "This account has not been authenticated yet",
+									style: "border: none;margin-left:5px;overflow: visible",
+									variableHeight: true
+								})
+								var refresh = new Button({
+									style: "width:68px;height:50px;margin-right:10px; display: block",
+									onClick: lang.hitch(this, function(param, d){
+										window.location = this.authCreds[param][d]["auth"]+"&state=inside";
+									}, param, d)
+								});
+								var twitDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/twitterLoginHalfSize.png>"});
+
+								var logDiv = domConstruct.create("div", {style: "float:left"});
+								refresh.domNode.appendChild(twitDiv);
+								var logout = new Button({
+									label: "Website",
+									style: "height:50px;position:absolute; height: 25px; line-height: 25px; margin-top: 5px; margin-left: 0px",
+									onClick: lang.hitch(this, function(param){
+										var iAuth = window.open();
+										iAuth.location = "https://twitter.com";
+									}, param)
+								});
+								logDiv.appendChild(refresh.domNode);
+								logDiv.appendChild(logout.domNode);							
+								item.domNode.appendChild(logDiv);							
+								list.addChild(item);
+								list.addChild(statusItem);
+							}else{
+								loginHolder.addChild(check);
+								loginHolder.domNode.appendChild(checkLabel);
+								if(this.authCreds[param][d]['status'] === "good"){
+									var str = " and expires when revoked";
+								}else{
+									var str = " please refresh";
+								}
+								statusItem = new ListItem({
+									label: "Token is: " + this.authCreds[param][d]['status'] + str,
+									style: "border: none;margin-left:5px",
+									variableHeight: true
+								})
+
+								var refresh = new Button({
+									style: "width:68px;height:50px;margin-right:10px; display: block",
+									onClick: lang.hitch(this, function(param, d){
+										window.location = this.authCreds[param][d]["auth"]+"&state=inside";
+									}, param, d)
+								});
+								var twitDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/twitterLoginHalfSize.png>"});
+
+								var logDiv = domConstruct.create("div", {style: "float:left"});
+								refresh.domNode.appendChild(twitDiv);
+								var logout = new Button({
+									label: "Website",
+									style: "height:50px;position:absolute; height: 25px; line-height: 25px; margin-top: 5px; margin-left: 0px",
+									onClick: lang.hitch(this, function(param){
+										var iAuth = window.open();
+										iAuth.location = "https://twitter.com";
+									}, param)
+								});
+								logDiv.appendChild(refresh.domNode);
+								logDiv.appendChild(logout.domNode);
+								var userDiv = domConstruct.create("div", {style: "margin-left:40px;float:left"});
+								var pictureDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML:  '<img src="'+this.authCreds[param][d].image+'" width="50px" height="50px">'}); 
+								var nameDiv = domConstruct.create("div", {style: "margin-top:20px", innerHTML: this.authCreds[param][d].name});
+								userDiv.appendChild(pictureDiv);
+								userDiv.appendChild(nameDiv);
+
+								item.domNode.appendChild(logDiv);
+								item.domNode.appendChild(userDiv);
+
+								list.addChild(item);
+								list.addChild(loginHolder);
+								list.addChild(statusItem);
+							}
+						}
+						if(param === "instagram"){
+							if(this.authCreds[param][d]['status'] === "unauthorized"){
+								statusItem = new ListItem({
+									label: "This account has not been authenticated yet",
+									style: "border: none;margin-left:5px;overflow: visible",
+									variableHeight: true
+								})
+								var logDiv = domConstruct.create("div", {style: "float:left"});
+								var refresh = new Button({
+									style: "width:68px;height:50px;margin-right:10px",
+									onClick: lang.hitch(this, function(param, d){
+										window.location = this.authCreds[param][d]["auth"]+"&state=inside";
+									}, param, d)
+								});
+								var instaDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/instagramLoginHalfSize.png>"});
+								refresh.domNode.appendChild(instaDiv);
+								var logout = new Button({
+									label: "Website",
+									style: "height:50px;position:absolute; height: 25px; line-height: 25px; margin-top: 5px; margin-left: 0px; display: block",
+									onClick: lang.hitch(this, function(param){
+										var iAuth = window.open();
+										iAuth.location = "https://instagram.com";
+									}, param)
+								});
+								logDiv.appendChild(refresh.domNode);
+								logDiv.appendChild(logout.domNode);
+								item.domNode.appendChild(logDiv);							
+								list.addChild(item);
+								list.addChild(statusItem);
+							}else{
+								loginHolder.addChild(check);
+								loginHolder.domNode.appendChild(checkLabel);
+								if(this.authCreds[param][d]['status'] === "good"){
+									var str = " and expires when revoked";
+								}else{
+									var str = " please refresh";
+								}
+								statusItem = new ListItem({
+									label: "Token is: " + this.authCreds[param][d]['status'] + str,
+									style: "border: none;margin-left:5px;",
+									variableHeight: true
+								})
+
+								var logDiv = domConstruct.create("div", {style: "float:left"});
+								var refresh = new Button({
+									style: "width:68px;height:50px;margin-right:10px",
+									onClick: lang.hitch(this, function(param, d){
+										window.location = this.authCreds[param][d]["auth"]+"&state=inside";
+									}, param, d)
+								});
+								var instaDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/instagramLoginHalfSize.png>"});
+								refresh.domNode.appendChild(instaDiv);
+								var logout = new Button({
+									label: "Website",
+									style: "height:50px;position:absolute; height: 25px; line-height: 25px; margin-top: 5px; margin-left: 0px; display: block",
+									onClick: lang.hitch(this, function(param){
+										var iAuth = window.open();
+										iAuth.location = "https://instagram.com";
+									}, param)
+								});
+								logDiv.appendChild(refresh.domNode);
+								logDiv.appendChild(logout.domNode);
+								var userDiv = domConstruct.create("div", {style: "margin-left:40px;float:left"});
+								var pictureDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML:  '<img src="'+this.authCreds[param][d].image+'" width="50px" height="50px" />'}); 
+								var nameDiv = domConstruct.create("div", {style: "margin-top:20px", innerHTML: this.authCreds[param][d].name});
+								userDiv.appendChild(pictureDiv);
+								userDiv.appendChild(nameDiv);
+
+								item.domNode.appendChild(logDiv);
+								item.domNode.appendChild(userDiv);
+
+								list.addChild(item);
+								list.addChild(loginHolder);
+								list.addChild(statusItem);
+							}
+						}
+						if(param === "linkedin"){
+							if(this.authCreds[param][d]['status'] === "unauthorized"){
+								statusItem = new ListItem({
+									label: "This account has not been authenticated yet",
+									style: "border: none;margin-left:5px;overflow: visible",
+									variableHeight: true
+								})
+								var logDiv = domConstruct.create("div", {style: "float:left"});
+								var refresh = new Button({
+									style: "width:68px;height:50px;margin-right:10px; display: block",
+									onClick: lang.hitch(this, function(param, d){
+										window.location = this.authCreds[param][d]["auth"]+"&state=inside";
+									}, param, d)
+								});
+								var linkDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/linkedinLoginHalfSize.png>"});
+								refresh.domNode.appendChild(linkDiv);
+								var logout = new Button({
+									label: "Website",
+									style: "height:50px;position:absolute; height: 25px; line-height: 25px; margin-top: 5px; margin-left: 0px",
+									onClick: lang.hitch(this, function(param){
+										var iAuth = window.open();
+										iAuth.location = "https://linkedin.com/";
+									}, param)
+								});
+								logDiv.appendChild(refresh.domNode);
+								logDiv.appendChild(logout.domNode);							
+								item.domNode.appendChild(logDiv);							
+								list.addChild(item);
+								list.addChild(statusItem);
+							}else{
+								loginHolder.addChild(check);
+								loginHolder.domNode.appendChild(checkLabel);
+								if(this.authCreds[param][d]['status'] === "bad"){
+									statusItem = new ListItem({
+										label: "Token is expired",
+										style: "border: none;margin-left:5px;margin-bottom: 5px; margin-top: 5px",
+										variableHeight: true
+									})
+								}else{
+									var date = new Date(this.authCreds[param][d]['expiresAt'] * 1000);
+									statusItem = new ListItem({
+										label: "Token Expires: " + date,
+										style: "border: none;margin-left:5px;margin-bottom: 5px; margin-top: 5px",
+										variableHeight: true
+									})
+								}
+
+								var logDiv = domConstruct.create("div", {style: "float:left"});
+								var refresh = new Button({
+									style: "width:68px;height:50px;margin-right:10px; display: block",
+									onClick: lang.hitch(this, function(param, d){
+										window.location = this.authCreds[param][d]["auth"]+"&state=inside";
+									}, param, d)
+								});
+								var linkDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML: "<img src=app/resources/img/linkedinLoginHalfSize.png>"});
+								refresh.domNode.appendChild(linkDiv);
+								var logout = new Button({
+									label: "Website",
+									style: "height:50px;position:absolute; height: 25px; line-height: 25px; margin-top: 5px; margin-left: 0px",
+									onClick: lang.hitch(this, function(param){
+										var iAuth = window.open();
+										iAuth.location = "https://linkedin.com/";
+									}, param)
+								});
+								logDiv.appendChild(refresh.domNode);
+								logDiv.appendChild(logout.domNode);
+								var userDiv = domConstruct.create("div", {style: "margin-left:40px;float:left"});
+								var pictureDiv = domConstruct.create("div", {"class":"accountLogo", innerHTML:  '<img src="'+this.authCreds[param][d].image+'" width="50px" height="50px" />'}); 
+								var nameDiv = domConstruct.create("div", {style: "margin-top:20px", innerHTML: this.authCreds[param][d].name});
+								userDiv.appendChild(pictureDiv);
+								userDiv.appendChild(nameDiv);
+
+								item.domNode.appendChild(logDiv);
+								item.domNode.appendChild(userDiv);
+
+								list.addChild(item);
+								list.addChild(loginHolder);
+								list.addChild(statusItem);
+							}
 						}
 					}
+					this.mainList.addChild(list);
 				}
-				this.mainList.addChild(list);
 			}
 		},
 
