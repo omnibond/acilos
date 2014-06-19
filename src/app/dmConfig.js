@@ -202,7 +202,7 @@ define({
 			selectedPrimaryNavItem: "settings"
 		},
 		manDatabase: {
-			title: 'Manage the Database',
+			title: 'Manage the App',
 			moduleId: 'app/manDatabase/Module',
 			selectedPrimaryNavItem: "settings"
 		},

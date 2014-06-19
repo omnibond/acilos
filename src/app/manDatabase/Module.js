@@ -33,7 +33,8 @@ define(['dojo/_base/declare',
 		'app/manDatabase/MainView',
 		'app/manDatabase/RestartAmazon',
 		'app/manDatabase/RestoreDB',
-		'app/manDatabase/restartDB'
+		'app/manDatabase/restartDB',
+		'app/manDatabase/RebootSetting',
 ], function(
 	declare, 
 	Module, 
@@ -45,7 +46,8 @@ define(['dojo/_base/declare',
 	MainView,
 	RestartHost,
 	RestoreDB,
-	restartDB
+	restartDB,
+	RebootSetting
 ) {
 	return declare([Module], {
 		
@@ -63,6 +65,13 @@ define(['dojo/_base/declare',
 				
 				restartDBase: this.restartDBase
 			});
+
+			this.rebootSetting = new RebootSetting({
+				route: '/RebootSetting',
+
+				checkRebootSetting: lang.hitch(this, this.checkRebootSetting),
+				saveRebootSetting: lang.hitch(this, this.saveRebootSetting)
+			});
 			
 			this.rootView = new MainView({
 				route: '/',
@@ -74,26 +83,26 @@ define(['dojo/_base/declare',
 			this.registerView(this.rootView);
 			this.registerView(this.restartHost);
 			this.registerView(this.restartDB);
-
+			this.registerView(this.rebootSetting);
 		},
 		
 		getBackUpList: function(){
-			params = {};
+			var params = {};
 			return xhrManager.send('GET', 'rest/v1.0/Database/getBackUpList', params);
 		},
 		
 		restoreBackUpData: function(file){
-			params = {file: file};
+			var params = {file: file};
 			return xhrManager.send('POST', 'rest/v1.0/Database/restoreBackUpData', params);
 		},
 		
 		getAmazonInstances: function(){
-			params = {};
+			var params = {};
 			return xhrManager.send('GET', 'rest/v1.0/Database/getAmazonInstances', params);
 		},
 		
 		rebootHostSystem: function(){
-			params = {};
+			var params = {};
 			return xhrManager.send('GET', 'rest/v1.0/Database/rebootHostSystem', params);
 		},
 		
@@ -103,7 +112,15 @@ define(['dojo/_base/declare',
 		
 		getHostSystem: function(){
 			return xhrManager.send('GET', 'rest/v1.0/Database/getHostSystem', {});
-		}
+		},
 
+		checkRebootSetting: function(){
+			return xhrManager.send('GET', 'rest/v1.0/Database/checkRebootSetting', {});
+		},
+
+		saveRebootSetting: function(reboot){
+			var params = {reboot: reboot};
+			return xhrManager.send('POST', 'rest/v1.0/Database/saveRebootSetting', params);
+		}
 	})
 });
