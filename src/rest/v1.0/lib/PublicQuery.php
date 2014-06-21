@@ -33,7 +33,7 @@ class PublicQuery{
 		$var = file_get_contents("php://input");
 		$varObj = json_decode($var, true);
 
-		print_r($varObj);
+		//print_r($varObj);
 		try{
 			$queryObj = file_get_contents("../../publicQueryTermObj.json");
 			$queryObj = json_decode($queryObj, true);

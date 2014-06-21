@@ -99,7 +99,7 @@ function matchServiceClients(){
 					'term' => array("service" => strtolower($service))
 				)
 			)
-	    )
+	        )
 	);
 }
 
@@ -169,7 +169,9 @@ function matchBarGraphClients($users){
 	);
 	
 	for($f=0; $f<count($users); $f++){
-		$temp = array("term" => array("id" => $users[$f]));
+		$idArr = explode("-----", $users[$f]);
+		$id = $idArr[1];
+		$temp = array("term" => array("id" => $id));
 		array_push($searchArr['query']['bool']['should'], $temp);
 	}
 	
@@ -190,7 +192,10 @@ function matchSelectedLineChartUser($id){
 	$port = "9200";
 
 	$es = Client::connection("http://$host:$port/$index/$index");
-
+	
+	$tempUser = explode("-----", $id);
+	$id = $tempUser[1];
+	//print_r($id);
 	$searchArr = array(
 		"from" => $from,
 		"size" => $size,

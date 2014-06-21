@@ -465,8 +465,9 @@ class Search{
 			}
 		}
 		
-		usort($returnObj['hits']['hits'], function($a, $b){ if($a['_source'] == $b['_source']){}else{return intval($a['_source']->published) < intval($b['_source']->published);} });
-	
+		if(!isset($returnObj['error'])){
+			usort($returnObj['hits']['hits'], function($a, $b){ if($a['_source'] == $b['_source']){}else{return intval($a['_source']->published) < intval($b['_source']->published);} });
+		}
 		return json_encode($returnObj);
 	}
 
@@ -606,6 +607,7 @@ class Search{
 		$var = json_decode($res, true);
 		if(isset($var['error'])){
 			$token = refreshGoogToken($varObj['authStuff']['google'][0]['accounts'][0]['uuid']);
+			//print_r($token);
 			$url = 'https://www.googleapis.com/plus/v1/activities?maxResults=20&query='.urlencode($query);
 			$ch = curl_init($url);
 			$headers = array('Authorization: Bearer ' . $token);
@@ -615,7 +617,10 @@ class Search{
 			curl_close($ch);
 			//print_r($res);
 			$var = json_decode($res, true);
-		
+			
+			if(isset($var['error'])){
+				return array("error" => $var['error']['errors'][0]['message']);
+			}
 			$returnObj = $this->normalizeGoogObject($var['items'], $varObj['authStuff']['google'][0]['accounts'][0], $query, $returnObj);
 
 			if(isset($var['nextPageToken'])){

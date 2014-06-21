@@ -126,15 +126,15 @@ define([
 				var data = this.feedDataObj;
 				console.log("DATA INSIDE BUILDVIEW IS: ", data);
 				if(data.error){
-					if(this.ListEnded == false){
+					//if(this.ListEnded == false){
 						this.errorItem = new ListItem({
 							//label: data.error,
-							label: "There was an error getting data from the server",
+							label: "There was an error getting data: " + data.error,
 							"class": "feedSearchErrorClass"
 						})
 						this.addChild(this.errorItem);
 						this.ListEnded = true;
-					}
+					//}
 				}else if(data.hits.hits.length == 0){
 					if(this.ListEnded == false){
 						this.ListEnded = true;

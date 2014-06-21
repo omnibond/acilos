@@ -103,25 +103,25 @@ class Charts{
 	public function getLineChartServices(){
 		$returnArray = array();
 		
-		$var = matchTotalPostsInterval(0, 'Facebook');
+		$var = matchTotalPostsInterval(0, 'facebook');
 		for($x=0; $x<count($var['facets']['histo1']['entries']); $x++){
 			$returnArray[$x]['TotalPosts'] = $x;
 			$returnArray[$x]['Facebook'] = $var['facets']['histo1']['entries'][$x]['count'];
 		}
 		
-		$var = matchTotalPostsInterval(0, 'Twitter');
+		$var = matchTotalPostsInterval(0, 'twitter');
 		for($x=0; $x<count($var['facets']['histo1']['entries']); $x++){
 			$returnArray[$x]['TotalPosts'] = $x;
 			$returnArray[$x]['Twitter'] = $var['facets']['histo1']['entries'][$x]['count'];
 		}
 
-		$var = matchTotalPostsInterval(0, 'Instagram');
+		$var = matchTotalPostsInterval(0, 'instagram');
 		for($x=0; $x<count($var['facets']['histo1']['entries']); $x++){
 			$returnArray[$x]['TotalPosts'] = $x;
 			$returnArray[$x]['Instagram'] = $var['facets']['histo1']['entries'][$x]['count'];
 		}
 
-		$var = matchTotalPostsInterval(0, 'LinkedIn');
+		$var = matchTotalPostsInterval(0, 'linkedIn');
 		for($x=0; $x<count($var['facets']['histo1']['entries']); $x++){
 			$returnArray[$x]['TotalPosts'] = $x;
 			$returnArray[$x]['Linkedin'] = $var['facets']['histo1']['entries'][$x]['count'];
@@ -143,9 +143,11 @@ class Charts{
 		for($x=0; $x<count($users); $x++){
 			$tempArr = array();
 			$id = $users[$x];
+			//print_r($id);
 			/*$id = explode("-", $id);
 			$id = $id[1];*/
 			$client = matchSelectedLineChartUser($id);
+			
 			$dude = $client['hits']['hits'][0]['_source'];
 			$ownsArr = $dude['data']['owns'];
 

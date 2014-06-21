@@ -25,6 +25,11 @@
 **
 ** $QT_END_LICENSE$
 */
+	session_start();
+	setcookie("facebookCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', $cookieDom, false, false);
+
+	print_R($_COOKIE);
+
 	$dom = $_SERVER['SERVER_NAME'];
 	$domArr = explode(".", $dom);
 	$one = array_pop($domArr);
