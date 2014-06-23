@@ -112,6 +112,7 @@ var=`uname -a | grep amzn1`
 if [ -n "$var" ]; then
         `/sbin/shutdown -r now`
 fi
+
 EOF
 
 echo "Writing The Public Query Cron"

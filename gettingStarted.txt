@@ -17,10 +17,14 @@ To get started using the app there a few requirements and steps. You will need t
 
 7) untar/install in a location so that the apache webroot points at acilos/src
 
-8) from the acilos directory, run - make install - to download other dependencies, including DojoToolkit, nerveTattoo ES Client, AWS-client, and others. 
+8) from the acilos/src directory run - php composer.phar self-update - then - sudo apt-get install php5-curl - and - 
+php composer.phar install - to install any remaining dependencies 
+
 
 9) from the acilos/src directory run - php composer.phar self-update - then - sudo apt-get install php5-curl - and - 
 php composer.phar install - to install any remaining dependencies
+
+9) Go to main domain page (http://YourDomain.com/) and you will be taken to the credentials page where you can follow our walkthroughs on setting up developer apps and adding in their key/secrets to the credentials page. After that is done you will be taken to login.php where you should log in normally with your account and begin using the app.
 
 10) from the command line run - sudo a2enmod rewrite - to turn on the apache rewrite rule
 
@@ -29,4 +33,3 @@ php composer.phar install - to install any remaining dependencies
 12) start apache and from the acilos/src directory run - sudo sh start.sh - which will set up the data mining cronjobs, the cronManager shell scripts, start elasticsearch, and give all subsequent files and folders permissions.
 
 13) Go to main domain page (http://YourDomain.com/) and you will be taken to the credentials page where you can follow our walkthroughs on setting up developer apps and adding in their key/secrets to the credentials page. After that is done you will be taken to login.php where you should log in normally with your account and begin using the app.
-

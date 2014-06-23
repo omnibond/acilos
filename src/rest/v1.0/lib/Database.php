@@ -84,6 +84,72 @@ class Database{
 		return json_encode($var);
 	}
 
+	public function checkRebootSetting(){
+		$fileName = "../../appSettings.json";
+		
+		try{
+			$settingsList = file_get_contents($fileName);
+			$settingsObj = json_decode($settingsList, true);
+
+			if(isset($settingsObj['reboot'])){
+				if($settingsObj['reboot'] == 'true'){
+					return json_encode(array("Response" => "true"));
+				}else if($settingsObj['reboot'] == 'false'){
+					return json_encode(array("Response" => "false"));
+				}
+			}else{
+				return json_encode(array("Response" => "not set"));
+			}
+		}catch (Exception $e){
+			return json_encode(array("Response" => "file doesn't exist"));
+		}
+	}
+
+	public function saveRebootSetting(){
+		$var = file_get_contents("php://input");
+		$obj = json_decode($var, true);
+
+		$fileName = "../../appSettings.json";
+
+		try{
+			$settingsList = file_get_contents($fileName);
+			$settingsObj = json_decode($settingsList, true);
+
+			if($obj['reboot'] == "true"){
+				$settingsObj['reboot'] = "true";
+				file_put_contents($fileName, json_encode($settingsObj));
+
+				#file_put_contents("../../cron/callAmazonRebootManager.php", "`/sbin/shutdown -r now`");
+				$handle = fopen("../../cron/callAmazonRebootManager.sh", 'w');
+				fwrite($handle, "#!/bin/bash" . "\n");
+				fwrite($handle, "#this script will be called by the cron every 5 minutes which" . "\n");
+				fwrite($handle, "#will in turn call the actual poller to go get new contact lists" . "\n");
+				fwrite($handle, "echo 'This is callAmazonRebootManager.sh, and it is being called by the cron' >> /var/log/myLogFile" . "\n");
+				fwrite($handle, "`/sbin/shutdown -r now`");
+				fclose($handle);
+
+				return json_encode(array("Response" => "wrote reboot: true into the file"));
+			}else{
+				$settingsObj['reboot'] = "false";
+				file_put_contents($fileName, json_encode($settingsObj));
+
+				file_put_contents("../../cron/callAmazonRebootManager.sh", "This setting can be changed from the app settings tab under Reset App");
+
+				return json_encode(array("Response" => "wrote reboot: false into the file"));
+			}
+		}catch (Exception $e){
+			$settingsObj = array();
+
+			$settingsObj['reboot'] = "false";
+
+			file_put_contents($fileName, json_encode($settingsObj));
+
+			file_put_contents("../../cron/callAmazonRebootManager.sh", "This setting can be changed from the app settings tab under Reset App");
+
+			return json_encode(array("Response" => "file didn't exist...created the file and wrote reboot: false into it"));
+		}
+	}
+
     public function checkForNewItems(){
         $feedName = $_GET['feed'];
         $fileName = "../../app/util/layout.json";

@@ -92,6 +92,15 @@ define(['dojo/_base/declare',
 				});
 				this.mainList.addChild(item);
 			}
+
+			var rebootItem = new ListItem({
+				label: "Reboot settings",
+				clickable: true,
+				onClick: lang.hitch(this, function(){
+					this.router.go("/RebootSetting");
+				})
+			});
+			this.mainList.addChild(rebootItem);
 			
 			this.mainList.addChild(responseList);
 			this.addChild(this.mainList);

@@ -395,7 +395,7 @@ class Credentials{
 						$account = array(
 							"status" => "unauthorized",
 							"auth" => $serviceCreds['linkedin'][$a]['auth'],
-							"auth" => $serviceCreds['linkedin'][$a]['accounts'][0]['color']
+							"color" => $serviceCreds['linkedin'][$a]['accounts'][0]['color']
 						);
 						array_push($returnArr['linkedin'], $account);
 					}
