@@ -1,1 +1,0 @@
-echo "This is callAmazonRebootManager.sh, and it is being called by the cron" >> /var/log/myLogFile`/sbin/shutdown -r now`

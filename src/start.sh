@@ -96,20 +96,24 @@ eval /usr/bin/wget -q -O /dev/null http://'$HOST'/cron/poller/clientManager.php?
 	
 EOF
 
-# echo "Writing The Amazon Reboot Manager"
-# cat > cron/callAmazonRebootManager.sh << 'EOF'
-# #!/bin/bash
-# #this script will be called by the cron every 5 minutes which
-# #will in turn call the actual poller to go get new contact lists
+echo "Writing The Amazon Reboot Manager"
+cat > cron/callAmazonRebootManager.sh << 'EOF'
+#!/bin/bash
+#this script will be called by the cron every 5 minutes which
+#will in turn call the actual poller to go get new contact lists
 	
-# EOF
+EOF
 
-# cat >> cron/callAmazonRebootManager.sh << 'EOF'
-# echo "This is callAmazonRebootManager.sh, and it is being called by the cron" >> /var/log/myLogFile
+cat >> cron/callAmazonRebootManager.sh << 'EOF'
+echo "This is callAmazonRebootManager.sh, and it is being called by the cron" >> /var/log/myLogFile
 
-# php cron/callAmazonRebootManager.php
+var=`uname -a | grep amzn1`
 
-# EOF
+if [ -n "$var" ]; then
+        `/sbin/shutdown -r now`
+fi
+
+EOF
 
 echo "Writing The Public Query Cron"
 cat > cron/callPublicQueryManager.sh << 'EOF'
