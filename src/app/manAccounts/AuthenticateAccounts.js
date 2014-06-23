@@ -463,6 +463,7 @@ define(['dojo/_base/declare',
 								var refresh = new Button({
 									style: "width:68px;height:50px;margin-right:10px; display: block",
 									onClick: lang.hitch(this, function(param, d){
+										console.log(this.authCreds[param][d]["auth"]);
 										window.location = this.authCreds[param][d]["auth"]+"&state=inside";
 									}, param, d)
 								});

@@ -91,7 +91,7 @@ define(['dojo/_base/declare',
 				style: "margin-top: 50px"
 			});
 
-			var onDiv = domConstruct.create("span", {innerHTML: "Select this option to have your computer reboot every day at 3 am" + "<br>"});
+			var onDiv = domConstruct.create("span", {innerHTML: "Select this option to have your computer reboot every day at 3:30 am" + "<br>"});
 
 			var offDiv = domConstruct.create("span", {innerHTML: "Select this option and acilos will not reboot your computer", style: "margin-top: 10px"});
 
