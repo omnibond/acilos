@@ -105,13 +105,8 @@ cat > cron/callAmazonRebootManager.sh << 'EOF'
 EOF
 
 cat >> cron/callAmazonRebootManager.sh << 'EOF'
-echo "This is callAmazonRebootManager.sh, and it is being called by the cron" >> /var/log/myLogFile
 
-var=`uname -a | grep amzn1`
-
-if [ -n "$var" ]; then
-        `/sbin/shutdown -r now`
-fi
+#This setting can be changed from the app settings tab under Reset App
 
 EOF
 

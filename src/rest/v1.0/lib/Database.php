@@ -31,6 +31,7 @@ require_once('../../cron/objects/authObject.php');
 require_once('counts.php');
 require_once('S3Functions.php');
 require_once('EC2Functions.php');
+require_once('matchHelpers.php');
 
 use \ElasticSearch\Client;
 
@@ -219,6 +220,70 @@ class Database{
 
 		return json_encode(array("success"));
 
+	}
+
+	public function checkForBackupData(){
+		if(file_get_contents("../../backupData.json") != false){
+			return json_encode(array("success" => "there is backup data"));
+		}else{
+			return json_encode(array("failure" => "there is no backup data"));
+		}
+	}
+
+	public function saveBackupData(){
+		$var = file_get_contents("php://input");
+		$obj = json_decode($var, true);
+
+		$from = 0;
+
+		$keepGoing = "true";
+
+		$finalStuff = array();
+
+		while($keepGoing == "true"){
+			$results = matchAll200($from);
+
+			if(isset($results)){
+				if(isset($results['hits'])){
+					if(isset($results['hits']['hits']) && count($results['hits']['hits']) != 0){
+						$stuffToKeep = $results['hits']['hits'];
+
+						for($x = 0; $x < count($stuffToKeep); $x++){
+							array_push($finalStuff, $stuffToKeep[$x]);	
+						}
+
+						$from += 200;
+					}else{
+						$keepGoing = "false";
+					}
+				}else{
+					$keepGoing = "false";
+				}
+			}else{
+				$keepGoing = "false";
+			}
+		}
+
+		file_put_contents("../../backupData.json", json_encode($finalStuff));
+
+		$keepServiceCreds = $obj['keepServiceCreds'];
+
+		//print_R($keepServiceCreds);
+
+		if($keepServiceCreds == "true"){
+			$stuff = file_get_contents("../../serviceCreds.json");
+
+			file_put_contents("../../serviceCredsBackup.json", $stuff);
+
+			unlink("../../serviceCreds.json");
+		}
+
+		//return json_encode($finalStuff);
+	}
+
+	public function importBackupData(){
+		$var = file_get_contents("php://input");
+		$obj = json_decode($var, true);
 	}
 
 	function getBackUpCounts(){		

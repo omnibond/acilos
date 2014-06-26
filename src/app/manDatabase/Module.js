@@ -35,6 +35,7 @@ define(['dojo/_base/declare',
 		'app/manDatabase/RestoreDB',
 		'app/manDatabase/restartDB',
 		'app/manDatabase/RebootSetting',
+		'app/manDatabase/BackupData',
 ], function(
 	declare, 
 	Module, 
@@ -47,7 +48,8 @@ define(['dojo/_base/declare',
 	RestartHost,
 	RestoreDB,
 	restartDB,
-	RebootSetting
+	RebootSetting,
+	BackupData
 ) {
 	return declare([Module], {
 		
@@ -72,6 +74,13 @@ define(['dojo/_base/declare',
 				checkRebootSetting: lang.hitch(this, this.checkRebootSetting),
 				saveRebootSetting: lang.hitch(this, this.saveRebootSetting)
 			});
+
+			this.backupData = new BackupData({
+				route: '/BackupData',
+
+				saveBackupData: lang.hitch(this, this.saveBackupData),
+				checkForBackupData: lang.hitch(this, this.checkForBackupData)
+			});
 			
 			this.rootView = new MainView({
 				route: '/',
@@ -84,6 +93,7 @@ define(['dojo/_base/declare',
 			this.registerView(this.restartHost);
 			this.registerView(this.restartDB);
 			this.registerView(this.rebootSetting);
+			this.registerView(this.backupData);
 		},
 		
 		getBackUpList: function(){
@@ -121,6 +131,15 @@ define(['dojo/_base/declare',
 		saveRebootSetting: function(reboot){
 			var params = {reboot: reboot};
 			return xhrManager.send('POST', 'rest/v1.0/Database/saveRebootSetting', params);
+		},
+
+		saveBackupData: function(keepServiceCreds){
+			var params = {keepServiceCreds: keepServiceCreds};
+			return xhrManager.send('POST', 'rest/v1.0/Database/saveBackupData', params);
+		},
+
+		checkForBackupData: function(){
+			return xhrManager.send('GET', 'rest/v1.0/Database/checkForBackupData', {});
 		}
 	})
 });

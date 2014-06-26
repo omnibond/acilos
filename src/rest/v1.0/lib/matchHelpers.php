@@ -52,6 +52,30 @@ function matchAll($from){
 	return $res;
 }
 
+function matchAll200($from){
+	$size = 200;
+
+	$index = "app";
+	$host = "localhost";
+	$port = "9200";
+
+	$es = Client::connection("http://$host:$port/$index/$index");
+	$res = $es->search(array(
+		'from' => $from,
+		'size' => $size,
+		'query' => array(
+			'match_all' => array()
+		),
+		'sort' => array(
+			'published' => array(
+				"order" => "desc"
+			)
+		)
+	));
+	
+	return $res;
+}
+
 function matchAllClients($from){
 
 	if(!(isset($_GET['from']))){
