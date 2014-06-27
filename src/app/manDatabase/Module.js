@@ -79,7 +79,8 @@ define(['dojo/_base/declare',
 				route: '/BackupData',
 
 				saveBackupData: lang.hitch(this, this.saveBackupData),
-				checkForBackupData: lang.hitch(this, this.checkForBackupData)
+				checkForBackupData: lang.hitch(this, this.checkForBackupData),
+				importBackupData: lang.hitch(this, this.importBackupData)
 			});
 			
 			this.rootView = new MainView({
@@ -133,13 +134,17 @@ define(['dojo/_base/declare',
 			return xhrManager.send('POST', 'rest/v1.0/Database/saveRebootSetting', params);
 		},
 
-		saveBackupData: function(keepServiceCreds){
-			var params = {keepServiceCreds: keepServiceCreds};
+		saveBackupData: function(keepServiceCreds, wipeCurrentData){
+			var params = {keepServiceCreds: keepServiceCreds, wipeCurrentData: wipeCurrentData};
 			return xhrManager.send('POST', 'rest/v1.0/Database/saveBackupData', params);
 		},
 
 		checkForBackupData: function(){
 			return xhrManager.send('GET', 'rest/v1.0/Database/checkForBackupData', {});
+		},
+
+		importBackupData: function(){
+			return xhrManager.send('GET', 'rest/v1.0/Database/importBackupData', {});
 		}
 	})
 });

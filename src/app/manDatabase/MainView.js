@@ -103,7 +103,7 @@ define(['dojo/_base/declare',
 			this.mainList.addChild(rebootItem);
 
 			var backupItem = new ListItem({
-				label: "Back up your data",
+				label: "Back up or restore your data",
 				clickable: true,
 				onClick: lang.hitch(this, function(){
 					this.router.go("/BackupData");

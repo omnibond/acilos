@@ -76,7 +76,17 @@ define(['dojo/_base/declare',
 				style: "-webkit-transform: scale(1.4); -moz-transform: scale(1.4); -ms-transform: scale(1.4); -o-transform: scale(1.4)"
 			});
 
+			this.credentialsWrapperDiv = domConstruct.create("div", {});
+			this.wipeDataWrapperDiv = domConstruct.create("div", {});
+
+			this.wipeDataBox = new CheckBox({
+				checked: false,
+				style: "-webkit-transform: scale(1.4); -moz-transform: scale(1.4); -ms-transform: scale(1.4); -o-transform: scale(1.4)"
+			});
+
 			this.credsOptionDiv = domConstruct.create("div", {innerHTML: "Check this box to back up your service credentials in addition to your other data.", style: "display: inline-block; margin-left: 5px"});
+
+			this.wipeDataDiv = domConstruct.create("div", {innerHTML: "Check this box to also wipe the data you are backing up from the database.", style: "display: inline-block; margin-left: 5px"});
 
 			this.backupButton = new Button({
 				label: "Back up data",
@@ -86,15 +96,19 @@ define(['dojo/_base/declare',
 					pi.placeAt(document.body);
 					pi.start();
 
-					console.log("check isissisisisisis", this.credentialsBox.get("checked"));
-
 					if(this.credentialsBox.get("checked") == false){
 						var saveServiceCreds = "false";
 					}else if(this.credentialsBox.get("checked") == true){
 						var saveServiceCreds = "true";
 					}
 
-					this.saveBackupData(saveServiceCreds).then(lang.hitch(this, function(obj){
+					if(this.wipeDataBox.get("checked") == false){
+						var wipeCurrentData = "false";
+					}else if(this.wipeDataBox.get("checked") == true){
+						var wipeCurrentData = "true";
+					}
+
+					this.saveBackupData(saveServiceCreds, wipeCurrentData).then(lang.hitch(this, function(obj){
 						console.log("obj is: ", obj);
 
 						pi.stop();
@@ -105,14 +119,25 @@ define(['dojo/_base/declare',
 			if(obj){
 				if(obj['success']){
 					this.restoreButton = new Button({
-						label: "Restore data from backup"
+						label: "Restore data from backup",
+						onClick: lang.hitch(this, function(){
+							this.importBackupData().then(lang.hitch(this, function(obj){
+								console.log("obj is: ", obj);
+							}));
+						})
 					});
 				}
 			}
 
+			this.credentialsWrapperDiv.appendChild(this.credentialsBox.domNode);
+			this.credentialsWrapperDiv.appendChild(this.credsOptionDiv);
+
+			this.wipeDataWrapperDiv.appendChild(this.wipeDataBox.domNode);
+			this.wipeDataWrapperDiv.appendChild(this.wipeDataDiv);
+
 			this.mainList.domNode.appendChild(this.instructionDiv);
-			this.mainList.addChild(this.credentialsBox);
-			this.mainList.domNode.appendChild(this.credsOptionDiv);
+			this.mainList.domNode.appendChild(this.credentialsWrapperDiv);
+			this.mainList.domNode.appendChild(this.wipeDataWrapperDiv);
 			this.mainList.addChild(this.backupButton);
 
 			if(this.restoreButton){

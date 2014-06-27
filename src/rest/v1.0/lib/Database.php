@@ -202,6 +202,19 @@ class Database{
 		}
 	}
 
+	public function getObject($id){
+		//echo "getting object"; 
+
+		$index = "app";
+		$host = "localhost";
+		$port = "9200";
+
+		$es = Client::connection("http://$host:$port/$index/$index");
+		$res = $es->get($id);
+
+		return $res;
+	}
+
 	function deleteAll(){
 		$var = file_get_contents("php://input");
 		$obj = json_decode($var, true);
@@ -249,7 +262,7 @@ class Database{
 						$stuffToKeep = $results['hits']['hits'];
 
 						for($x = 0; $x < count($stuffToKeep); $x++){
-							array_push($finalStuff, $stuffToKeep[$x]);	
+							array_push($finalStuff, $stuffToKeep[$x]['_source']);	
 						}
 
 						$from += 200;
@@ -275,15 +288,31 @@ class Database{
 
 			file_put_contents("../../serviceCredsBackup.json", $stuff);
 
-			unlink("../../serviceCreds.json");
+			//unlink("../../serviceCreds.json");
+		}
+
+		$wipeCurrentData = $obj['wipeCurrentData'];
+
+		if($wipeCurrentData == "true"){
+			$es = Client::connection("http://localhost:9200/app/app");
+			$es->delete();
+
+			$mapCommand = "curl -XPUT 'http://localhost:9200/app' -d @../../app_mapping.json";
+			$output = shell_exec($mapCommand);
 		}
 
 		//return json_encode($finalStuff);
 	}
 
 	public function importBackupData(){
-		$var = file_get_contents("php://input");
-		$obj = json_decode($var, true);
+		$data = file_get_contents("../../backupData.json");
+		$data = json_decode($data, true);
+
+		for($x = 0; $x < count($data); $x++){
+			$result = $this->writeObject($data[$x]);
+
+			print_r($result);
+		}
 	}
 
 	function getBackUpCounts(){		

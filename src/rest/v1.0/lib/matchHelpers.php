@@ -9,7 +9,7 @@
 ** This file defines server side group of function pertaining to elasticsearch search functions
 ** 
 **
-** $QT_BEGIN_LICENSE:LGPL$
+** $QT_BEGIN_LICENSE:LlGPL$
 **
 ** GNU Lesser General Public License Usage
 ** Alternatively, this file may be used under the terms of the GNU Lesser
