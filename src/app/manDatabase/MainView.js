@@ -103,13 +103,22 @@ define(['dojo/_base/declare',
 			this.mainList.addChild(rebootItem);
 
 			var backupItem = new ListItem({
-				label: "Back up or restore your data",
+				label: "Back up your data",
 				clickable: true,
 				onClick: lang.hitch(this, function(){
 					this.router.go("/BackupData");
 				})
 			});
 			this.mainList.addChild(backupItem);
+
+			var restoreItem = new ListItem({
+				label: "Restore backed up data",
+				clickable: true,
+				onClick: lang.hitch(this, function(){
+					this.router.go("/RestoreData");
+				})
+			});
+			this.mainList.addChild(restoreItem);
 			
 			this.mainList.addChild(responseList);
 			this.addChild(this.mainList);

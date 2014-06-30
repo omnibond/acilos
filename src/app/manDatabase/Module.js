@@ -36,6 +36,7 @@ define(['dojo/_base/declare',
 		'app/manDatabase/restartDB',
 		'app/manDatabase/RebootSetting',
 		'app/manDatabase/BackupData',
+		'app/manDatabase/RestoreData',
 ], function(
 	declare, 
 	Module, 
@@ -49,7 +50,8 @@ define(['dojo/_base/declare',
 	RestoreDB,
 	restartDB,
 	RebootSetting,
-	BackupData
+	BackupData,
+	RestoreData
 ) {
 	return declare([Module], {
 		
@@ -82,6 +84,13 @@ define(['dojo/_base/declare',
 				checkForBackupData: lang.hitch(this, this.checkForBackupData),
 				importBackupData: lang.hitch(this, this.importBackupData)
 			});
+
+			this.restoreData = new RestoreData({
+				route: '/RestoreData',
+
+				checkForBackupData: lang.hitch(this, this.checkForBackupData),
+				importBackupData: lang.hitch(this, this.importBackupData)
+			});
 			
 			this.rootView = new MainView({
 				route: '/',
@@ -95,6 +104,7 @@ define(['dojo/_base/declare',
 			this.registerView(this.restartDB);
 			this.registerView(this.rebootSetting);
 			this.registerView(this.backupData);
+			this.registerView(this.restoreData);
 		},
 		
 		getBackUpList: function(){
@@ -143,8 +153,9 @@ define(['dojo/_base/declare',
 			return xhrManager.send('GET', 'rest/v1.0/Database/checkForBackupData', {});
 		},
 
-		importBackupData: function(){
-			return xhrManager.send('GET', 'rest/v1.0/Database/importBackupData', {});
+		importBackupData: function(restoreServiceCreds, wipeDBData, deleteBackupFile, deleteBackupCredentials){
+			var params = {restoreServiceCreds: restoreServiceCreds, wipeDBData: wipeDBData, deleteBackupFile: deleteBackupFile, deleteBackupCredentials: deleteBackupCredentials};
+			return xhrManager.send('POST', 'rest/v1.0/Database/importBackupData', params);
 		}
 	})
 });

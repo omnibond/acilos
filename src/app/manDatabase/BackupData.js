@@ -66,7 +66,7 @@ define(['dojo/_base/declare',
 	return declare([ModuleScrollableView], {		
 		style: "overflow:scroll",
 			
-		buildMainList: function(obj){
+		buildMainList: function(){
 			this.mainList = new EdgeToEdgeList({ });
 
 			this.instructionDiv = domConstruct.create("div", {innerHTML: "This page will allow you to back up the items in your database. You can also choose to back up your service credentials.", style: "margin-bottom: 10px"});
@@ -90,11 +90,11 @@ define(['dojo/_base/declare',
 
 			this.backupButton = new Button({
 				label: "Back up data",
-				style: "display: block",
+				style: "display: block; margin-top: 10px",
 				onClick: lang.hitch(this, function(){
-					pi = new ProgressIndicator();
-					pi.placeAt(document.body);
-					pi.start();
+					this.pi = new ProgressIndicator();
+					this.pi.placeAt(document.body);
+					this.pi.start();
 
 					if(this.credentialsBox.get("checked") == false){
 						var saveServiceCreds = "false";
@@ -111,23 +111,10 @@ define(['dojo/_base/declare',
 					this.saveBackupData(saveServiceCreds, wipeCurrentData).then(lang.hitch(this, function(obj){
 						console.log("obj is: ", obj);
 
-						pi.stop();
+						this.pi.stop();
 					}));
 				})
 			});
-
-			if(obj){
-				if(obj['success']){
-					this.restoreButton = new Button({
-						label: "Restore data from backup",
-						onClick: lang.hitch(this, function(){
-							this.importBackupData().then(lang.hitch(this, function(obj){
-								console.log("obj is: ", obj);
-							}));
-						})
-					});
-				}
-			}
 
 			this.credentialsWrapperDiv.appendChild(this.credentialsBox.domNode);
 			this.credentialsWrapperDiv.appendChild(this.credsOptionDiv);
@@ -140,26 +127,29 @@ define(['dojo/_base/declare',
 			this.mainList.domNode.appendChild(this.wipeDataWrapperDiv);
 			this.mainList.addChild(this.backupButton);
 
-			if(this.restoreButton){
-				this.mainList.addChild(this.restoreButton);
-			}
-
 			this.addChild(this.mainList);
 		},
 		
 		activate: function() {
-			topic.publish("/dojo-mama/updateSubNav", {back: '/manDatabase', title: "Restore previous saves"} );
+			topic.publish("/dojo-mama/updateSubNav", {back: '/manDatabase', title: "Back up data"} );
 
-			this.checkForBackupData().then(lang.hitch(this, function(obj){
-				if(this.mainList){
-					this.mainList.destroyRecursive();
-					this.mainList = null;
+			if(this.mainList){
+				this.mainList.destroyRecursive();
+				this.mainList = null;
 
-					this.buildMainList(obj);
-				}else{
-					this.buildMainList(obj);
-				}
-			}));	
+				this.buildMainList();
+			}else{
+				this.buildMainList();
+			}	
+		},
+
+		deactivate: function(){
+			this.inherited(arguments);
+
+			if(this.pi){
+				this.pi.destroyRecursive();
+				this.pi = null;
+			}
 		}
 	})
 });

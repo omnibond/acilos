@@ -236,10 +236,16 @@ class Database{
 	}
 
 	public function checkForBackupData(){
-		if(file_get_contents("../../backupData.json") != false){
-			return json_encode(array("success" => "there is backup data"));
-		}else{
-			return json_encode(array("failure" => "there is no backup data"));
+		try{
+			$check = file_get_contents("../../backupData.json");
+
+			if($check != false){
+				return json_encode(array("success" => "there is backup data"));
+			}else{
+				return json_encode(array("failure" => "there is no backup data"));
+			}
+		}catch(Exception $e){
+			return json_encode(array("failure" => $e->getMessage()));
 		}
 	}
 
@@ -305,14 +311,49 @@ class Database{
 	}
 
 	public function importBackupData(){
-		$data = file_get_contents("../../backupData.json");
+		$var = file_get_contents("php://input");
+		$obj = json_decode($var, true);
+
+		print_R($obj);
+
+		if(isset($obj)){
+			if(isset($obj['restoreServiceCreds'])){
+				if($obj['restoreServiceCreds'] == "true"){
+					$backupServiceCreds = file_get_contents("../../serviceCredsBackup.json");
+
+					file_put_contents("../../serviceCreds.json", $backupServiceCreds);	
+
+					if(isset($obj['deleteBackupCredentials'])){
+						if($obj['deleteBackupCredentials'] == "true"){
+							unlink("../../serviceCredsBackup.json");
+						}
+					}
+				}
+			}
+			if(isset($obj['wipeDBData'])){
+				if($obj['wipeDBData'] == "true"){
+					
+				}else{
+					
+				}
+			}
+			if(isset($obj['deleteBackupFile'])){
+				if($obj['deleteBackupFile'] == "true"){
+					
+				}else{
+					
+				}
+			}
+		}
+
+		/*$data = file_get_contents("../../backupData.json");
 		$data = json_decode($data, true);
 
 		for($x = 0; $x < count($data); $x++){
 			$result = $this->writeObject($data[$x]);
 
 			print_r($result);
-		}
+		}*/
 	}
 
 	function getBackUpCounts(){		
