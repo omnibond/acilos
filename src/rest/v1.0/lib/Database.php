@@ -314,7 +314,7 @@ class Database{
 		$var = file_get_contents("php://input");
 		$obj = json_decode($var, true);
 
-		print_R($obj);
+		//print_R($obj);
 
 		if(isset($obj)){
 			if(isset($obj['restoreServiceCreds'])){
@@ -332,28 +332,31 @@ class Database{
 			}
 			if(isset($obj['wipeDBData'])){
 				if($obj['wipeDBData'] == "true"){
-					
-				}else{
-					
-				}
-			}
-			if(isset($obj['deleteBackupFile'])){
-				if($obj['deleteBackupFile'] == "true"){
-					
-				}else{
-					
+					$es = Client::connection("http://localhost:9200/app/app");
+					$es->delete();
+
+					$mapCommand = "curl -XPUT 'http://localhost:9200/app' -d @../../app_mapping.json";
+					$output = shell_exec($mapCommand);
 				}
 			}
 		}
 
-		/*$data = file_get_contents("../../backupData.json");
+		$data = file_get_contents("../../backupData.json");
 		$data = json_decode($data, true);
 
 		for($x = 0; $x < count($data); $x++){
 			$result = $this->writeObject($data[$x]);
 
-			print_r($result);
-		}*/
+			//print_r($result);
+		}
+
+		if(isset($obj)){
+			if(isset($obj['deleteBackupFile'])){
+				if($obj['deleteBackupFile'] == "true"){
+					unlink("../../backupData.json");
+				}
+			}
+		}
 	}
 
 	function getBackUpCounts(){		
