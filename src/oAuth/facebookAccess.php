@@ -38,7 +38,7 @@ session_start();
 		
 		$url = 'https://graph.facebook.com/oauth/access_token';
 		
-		$credObj = file_get_contents("../serviceCreds.json");
+		$credObj = file_get_contents($_SERVER['SERVICECREDS']);
 		$credObj = json_decode($credObj, true);
 		
 		#with the new code we set up the post to get the accessToken from facebook
@@ -133,7 +133,7 @@ session_start();
 				$credObj['facebook'][0]['accounts'][$j] = $temp;
 			}
 			
-			file_put_contents("../serviceCreds.json", json_encode($credObj));
+			file_put_contents($_SERVER['SERVICECREDS'], json_encode($credObj));
 
 			header('Location: ../login.php?facebook=true');
 		}else{

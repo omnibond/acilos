@@ -36,7 +36,7 @@
 	
 	function getData(){
 		try{
-			$credObj = file_get_contents("serviceCreds.json");
+			$credObj = file_get_contents($_SERVER['SERVICECREDS']);
 			$credObj = json_decode($credObj, true);
 		}catch (Exception $e){
 			$credObj = array(
@@ -47,7 +47,7 @@
 				"google" => array(),
 				"login" => "first"
 			);
-			file_put_contents("serviceCreds.json", json_encode($credObj));
+			file_put_contents($_SERVER['SERVICECREDS'], json_encode($credObj));
 		}
 		return $credObj;
 	}
@@ -275,7 +275,7 @@
 					window.location = "credentials.php";
 				}else{
 					xhr.get({
-						url: 'serviceCreds.json',
+						url: 'private/config/serviceCreds.json',
 						handleAs: 'json',
 						async: false,
 						preventCache: true,

@@ -105,7 +105,7 @@ function writeObject($obj, $query, $feeds){
 }
 
 function minePublicQueryTerms(){
-	$credObj = file_get_contents("../../serviceCreds.json");
+	$credObj = file_get_contents($_SERVER['SERVICECREDS']);
 	$credObj = json_decode($credObj, true);
 	
 	$queryTermObj = file_get_contents("../../publicQueryTermObj.json");

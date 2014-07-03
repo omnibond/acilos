@@ -76,6 +76,8 @@ define(['dojo/_base/declare',
 
 			this.instructionDiv = domConstruct.create("div", {innerHTML: "This page will allow you to restore backed up items to your database. You can also choose to restore your backed up service credentials.", style: "margin-bottom: 10px"});
 
+			this.selectOptionsDiv = domConstruct.create("div", {innerHTML: "You may select any of the following options that apply to you.", style: "margin-bottom: 10px; font-weight: bold"});
+
 			this.credentialsBox = new CheckBox({
 				checked: false,
 				style: "-webkit-transform: scale(1.4); -moz-transform: scale(1.4); -ms-transform: scale(1.4); -o-transform: scale(1.4)"
@@ -148,6 +150,8 @@ define(['dojo/_base/declare',
 						console.log("obj is: ", obj);
 
 						this.pi.stop();
+
+						this.router.goToAbsoluteRoute("/manDatabase");
 					}));
 				})
 			});
@@ -165,6 +169,7 @@ define(['dojo/_base/declare',
 			this.wipeCredentialsBackupWrapperDiv.appendChild(this.wipeCredentialsBackupDiv);
 
 			this.mainList.domNode.appendChild(this.instructionDiv);
+			this.mainList.domNode.appendChild(this.selectOptionsDiv);
 			this.mainList.domNode.appendChild(this.credentialsWrapperDiv);
 			this.mainList.domNode.appendChild(this.wipeDataWrapperDiv);
 			this.mainList.domNode.appendChild(this.wipeBackupFileWrapperDiv);

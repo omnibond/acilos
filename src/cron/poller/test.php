@@ -48,7 +48,7 @@ function getGoogleFeed(){
 	echo "get google stuff"; ?><br/><?php
 
 	//get the token from the file
-	$filename = "../../serviceCreds.json";
+	$filename = $_SERVER['SERVICECREDS'];
 	$file = file_get_contents($filename);
 	
 	$tokenObject = json_decode($file, true);

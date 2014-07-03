@@ -89,7 +89,7 @@ if(isset($_REQUEST['oauth_verifier'])){
 
 	$obj = json_decode($file, true);
 	
-	$credObj = file_get_contents("../serviceCreds.json");
+	$credObj = file_get_contents($_SERVER['SERVICECREDS']);
 	$credObj = json_decode($credObj, true);
 	
 	$tempApp;
@@ -166,7 +166,7 @@ if(isset($_REQUEST['oauth_verifier'])){
 			$credObj['twitter'][0]['accounts'][$j] = $temp;
 		}
 		
-		file_put_contents("../serviceCreds.json", json_encode($credObj));
+		file_put_contents($_SERVER['SERVICECREDS'], json_encode($credObj));
 		
 		header('Location: ../login.php?twitter=true');
 	}else{

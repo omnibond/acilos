@@ -112,7 +112,7 @@ function getAccessToken() {
 	
     if(isset($token->access_token)){
 
-	$credObj = file_get_contents("../serviceCreds.json");
+	$credObj = file_get_contents($_SERVER['SERVICECREDS']);
 	$credObj = json_decode($credObj, true);
 	
 	$tempApp;
@@ -175,7 +175,7 @@ function getAccessToken() {
 		$credObj['linkedin'][0]['accounts'][$j] = $temp;
 	}
 		
-	file_put_contents("../serviceCreds.json", json_encode($credObj));
+	file_put_contents($_SERVER['SERVICECREDS'], json_encode($credObj));
 	
 	header('Location: ../login.php?linkedin=true');
     }else{
