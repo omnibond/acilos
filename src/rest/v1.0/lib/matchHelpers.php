@@ -27,6 +27,8 @@
 */
 
 use \ElasticSearch\Client;
+
+require_once('authCalls.php');
 	
 function matchAll($from){
 	$size = 20;

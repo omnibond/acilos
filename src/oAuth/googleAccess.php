@@ -171,7 +171,7 @@ if(isset($_GET['code'])) {
 		}
 
 		file_put_contents($_SERVER['SERVICECREDS'], json_encode($credObj));
-		
+		$_SESSION['authed'] = true;
 		header('Location: ../login.php?google=true');
 	}else{
 		setcookie ("googleCook", "", time() - 3600, $_SERVER['HTTP_HOST'], 'clemson.edu', false, false);

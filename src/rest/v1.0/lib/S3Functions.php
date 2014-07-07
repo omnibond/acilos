@@ -29,6 +29,8 @@
 use \ElasticSearch\Client;
 use \Aws\S3\S3Client;
 
+require_once('authCalls.php');
+
 function createS3Bucket() {
 	//make sure that region is correct
 	$credArr = array(

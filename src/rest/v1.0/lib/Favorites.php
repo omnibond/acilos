@@ -29,6 +29,7 @@
 require_once('setStarred.php');
 require_once('clientHelpers.php');
 require_once('refreshES.php');
+require_once('authCalls.php');
 
 use \ElasticSearch\Client;
 

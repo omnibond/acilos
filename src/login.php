@@ -53,15 +53,15 @@
 	}
 	
 	if(isset($_GET['logout']) && $_GET['logout'] == "true"){
-		setcookie("facebookCook", $_COOKIE['PHPSESSID'], time()-3600, '/', $cookieDom, false, false);
-		setcookie("linkedinCook", $_COOKIE['PHPSESSID'], time()-3600, '/', $cookieDom, false, false);
-		setcookie("twitterCook", $_COOKIE['PHPSESSID'], time()-3600, '/', $cookieDom, false, false);
-		setcookie("instagramCook", $_COOKIE['PHPSESSID'], time()-3600, '/', $cookieDom, false, false);
-		setcookie("googleCook", $_COOKIE['PHPSESSID'], time()-3600, '/', $cookieDom, false, false);
-		header('Location: /auth.php');
+		session_start();
+		$_SESSION['authed'] = false;
+	    session_destroy();
+		//here we want to set authed to false and then end the session (which should delete the authed variable)
+		//the cookies wont exist anymore
+		header('Location: /login.php');
+		die();
 	}
 	
-	#print_r($_COOKIE);
 	$var = getData();
 	$fCount = (string)count($var['facebook']);
 	$tCount = (string)count($var['twitter']);
@@ -126,81 +126,17 @@
 		$gCook = "false";
 	}
 	
-	if(isset($_GET['facebook']) && $_GET['facebook'] == "true"){
-		setcookie("facebookCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', $cookieDom, false, false);
-		$ctx = stream_context_create(array(
-		    'http' => array(
-			'timeout' => 1
-			)
-		    )
-		);
-		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
-		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
-		if((isset($_GET['login']) && $_GET['login'] !== "second") || $goToManAccounts == "true"){
-			header('Location: /#/manAccounts/AuthAccounts');
-		}else{
-			header('Location: /#/mainFeed');
-		}
-	}
-	if(isset($_GET['linkedin']) && $_GET['linkedin'] == "true"){
-		setcookie("linkedinCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', $cookieDom, false, false);
-		$ctx = stream_context_create(array(
-		    'http' => array(
-			'timeout' => 1
-			)
-		    )
-		);
-		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
-		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
-		if((isset($_GET['login']) && $_GET['login'] !== "second") || $goToManAccounts == "true"){
-			header('Location: /#/manAccounts/AuthAccounts');
-		}else{	
-			header('Location: /#/mainFeed');
-		}
-	}
-	if(isset($_GET['twitter']) && $_GET['twitter'] == "true"){
-		setcookie("twitterCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', $cookieDom, false, false);
-		$ctx = stream_context_create(array(
-		    'http' => array(
-			'timeout' => 1
-			)
-		    )
-		);
-		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
-		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
-		if((isset($_GET['login']) && $_GET['login'] !== "second") || $goToManAccounts == "true"){
-			header('Location: /#/manAccounts/AuthAccounts');
-		}else{
-			header('Location: /#/mainFeed');
-		}
-	}
-	if(isset($_GET['instagram']) && $_GET['instagram'] == "true"){
-		setcookie("instagramCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', $cookieDom, false, false);
-		$ctx = stream_context_create(array(
-		    'http' => array(
-			'timeout' => 1
-			)
-		    )
-		);
-		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
-		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
-		if((isset($_GET['login']) && $_GET['login'] !== "second") || $goToManAccounts == "true"){
-			header('Location: /#/manAccounts/AuthAccounts');
-		}else{	
-			header('Location: /#/mainFeed');
-		}
-	}
-	if(isset($_GET['google']) && $_GET['google'] == "true"){
-		setcookie("googleCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', $cookieDom, false, false);
-			$ctx = stream_context_create(array(
+	if(isset($_SESSION['authed']) && $_SESSION['authed'] === true){
+		$ctx = stream_context_create(
+			array(
 			    'http' => array(
-				'timeout' => 1
+					'timeout' => 1
 				)
-			    )
-			);
-			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
-			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
-		if((isset($_GET['login']) && $_GET['login'] !== "second") || $goToManAccounts == "true"){
+		    )
+		);
+		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
+		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
+		if(isset($goToManAccounts) && $goToManAccounts == "true"){
 			header('Location: /#/manAccounts/AuthAccounts');
 		}else{
 			header('Location: /#/mainFeed');

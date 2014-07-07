@@ -167,11 +167,9 @@ if(isset($_REQUEST['oauth_verifier'])){
 		}
 		
 		file_put_contents($_SERVER['SERVICECREDS'], json_encode($credObj));
-		
-		header('Location: ../login.php?twitter=true');
-	}else{
-		setcookie ("facebookCook", "", time() - 3600, $_SERVER['HTTP_HOST'], 'clemson.edu', false, false);
-		
+		$_SESSION['authed'] = true;
+		header('Location: ../login.php');
+	}else{	
 		header('Location: ../login.php?error=2&service=twitter');
 	}	
 }

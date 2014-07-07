@@ -29,6 +29,7 @@
 require_once('matchHelpers.php');
 require_once('getFilterObject.php');
 require_once('clientHelpers.php');
+require_once('authCalls.php');
 
 use \ElasticSearch\Client;
 
@@ -84,7 +85,7 @@ class FeedData{
 	}
 
 	public function getLocalFeedList(){
-		$fileName = "../../localQueryTermObj.json";
+		$fileName = $_SERVER['LOCALQUERYTERMOBJ'];
 		
 		try{
 			$feedList = file_get_contents($fileName);
@@ -96,7 +97,7 @@ class FeedData{
 	}
 
 	public function getSpecificFeedList(){
-		$fileName = "../../localQueryTermObj.json";
+		$fileName = $_SERVER['LOCALQUERYTERMOBJ'];
 		$feedName = $_GET['feedName'];
 
 		$feedList = file_get_contents($fileName);
@@ -142,7 +143,7 @@ class FeedData{
 
 	public function deleteLocalFeedList(){
 		$var = file_get_contents("php://input");
-		$fileName = "../../localQueryTermObj.json";
+		$fileName = $_SERVER['LOCALQUERYTERMOBJ'];
 
 		$param = json_decode($var, true);
 
@@ -155,7 +156,7 @@ class FeedData{
 			unset($obj[$feedName]);
 		}
 
-		file_put_contents("../../localQueryTermObj.json", json_encode($obj));
+		file_put_contents($_SERVER['LOCALQUERYTERMOBJ'], json_encode($obj));
 		return json_encode(array("success" => "success"));
 	}
 
@@ -202,14 +203,14 @@ class FeedData{
 		$varObj = json_decode($var, true);
 
 		try{
-			$queryObj = file_get_contents("../../localQueryTermObj.json");
+			$queryObj = file_get_contents($_SERVER['LOCALQUERYTERMOBJ']);
 			$queryObj = json_decode($queryObj, true);
 
 			$queryObj[$varObj['feedName']] = array(
 				"terms" => $varObj['queryString']
 			);
 
-			file_put_contents("../../localQueryTermObj.json", json_encode($queryObj));
+			file_put_contents($_SERVER['LOCALQUERYTERMOBJ'], json_encode($queryObj));
 		}catch (Exception $e){
 			$queryObj = array(
 				$varObj['feedName'] => array(
@@ -219,7 +220,7 @@ class FeedData{
 
 			//print_r($queryObj);
 
-			file_put_contents("../../localQueryTermObj.json", json_encode($queryObj));
+			file_put_contents($_SERVER['LOCALQUERYTERMOBJ'], json_encode($queryObj));
 		}
 	}
 

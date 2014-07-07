@@ -28,6 +28,8 @@
 
 use \ElasticSearch\Client;
 
+require_once('authCalls.php');
+
 class PublicQuery{
 	public function writeQueryTerm(){
 		$var = file_get_contents("php://input");
@@ -35,7 +37,7 @@ class PublicQuery{
 
 		//print_r($varObj);
 		try{
-			$queryObj = file_get_contents("../../publicQueryTermObj.json");
+			$queryObj = file_get_contents($_SERVER['PUBLICQUERYTERMOBJ']);
 			$queryObj = json_decode($queryObj, true);
 
 			//print_r($queryObj);
@@ -61,7 +63,7 @@ class PublicQuery{
 
 			//print_r($queryObj);
 
-			file_put_contents("../../publicQueryTermObj.json", json_encode($queryObj));
+			file_put_contents($_SERVER['PUBLICQUERYTERMOBJ'], json_encode($queryObj));
 		}catch (Exception $e){
 			$services = array();
 			$feeds = array();
@@ -86,12 +88,12 @@ class PublicQuery{
 
 			//print_r($queryObj);
 
-			file_put_contents("../../publicQueryTermObj.json", json_encode($queryObj));
+			file_put_contents($_SERVER['PUBLICQUERYTERMOBJ'], json_encode($queryObj));
 		}
 	}
 
 	public function getPublicQueryObject(){
-		$fileName = "../../publicQueryTermObj.json";
+		$fileName = $_SERVER['PUBLICQUERYTERMOBJ'];
 		
 		try{
 			$feedList = file_get_contents($fileName);
@@ -105,7 +107,7 @@ class PublicQuery{
 
 	public function deletePublicQueryObjectTerm(){
 		$var = file_get_contents("php://input");
-		$fileName = "../../publicQueryTermObj.json";
+		$fileName = $_SERVER['PUBLICQUERYTERMOBJ'];
 
 		$param = json_decode($var, true);
 
@@ -120,7 +122,7 @@ class PublicQuery{
 			unset($obj[$term]);
 		}
 
-		file_put_contents("../../publicQueryTermObj.json", json_encode($obj));
+		file_put_contents($_SERVER['PUBLICQUERYTERMOBJ'], json_encode($obj));
 		return json_encode(array("success" => "success"));
 	}
 }

@@ -29,6 +29,8 @@
 use \ElasticSearch\Client;
 use \Aws\Ec2\Ec2Client;
 
+require_once('authCalls.php');
+
 function rebootEC2Instance($id){
 	$credArr = array(
 		'key'    => '',

@@ -108,7 +108,7 @@ function minePublicQueryTerms(){
 	$credObj = file_get_contents($_SERVER['SERVICECREDS']);
 	$credObj = json_decode($credObj, true);
 	
-	$queryTermObj = file_get_contents("../../publicQueryTermObj.json");
+	$queryTermObj = file_get_contents($_SERVER['PUBLICQUERYTERMOBJ']);
 	$queryTermObj = json_decode($queryTermObj, true);
 	
 	foreach($queryTermObj as $key => $value){

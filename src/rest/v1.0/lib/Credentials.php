@@ -30,6 +30,7 @@ use \ElasticSearch\Client;
 require_once('../../cron/objects/authObject.php');
 require_once('../../oAuth/twitteroauth/twitteroauth.php');
 require_once('RefreshGoogleToken.php');
+require_once('authCalls.php');
 
 class Credentials{
 	public function checkCredentials(){

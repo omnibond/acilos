@@ -28,6 +28,8 @@
 
 use \ElasticSearch\Client;
 
+require_once('authCalls.php');
+
 function setStarred($id, $status){
 	$index = "app";
 	$host = "localhost";

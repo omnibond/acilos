@@ -32,6 +32,7 @@ require_once('counts.php');
 require_once('S3Functions.php');
 require_once('EC2Functions.php');
 require_once('matchHelpers.php');
+require_once('authCalls.php');
 
 //include '../../hidden/settings'
 
@@ -88,7 +89,7 @@ class Database{
 	}
 
 	public function checkRebootSetting(){
-		$fileName = "../../appSettings.json";
+		$fileName = $_SERVER['APPSETTINGS'];
 		
 		try{
 			$settingsList = file_get_contents($fileName);
@@ -112,7 +113,7 @@ class Database{
 		$var = file_get_contents("php://input");
 		$obj = json_decode($var, true);
 
-		$fileName = "../../appSettings.json";
+		$fileName = $_SERVER['APPSETTINGS'];
 
 		try{
 			$settingsList = file_get_contents($fileName);
@@ -239,7 +240,7 @@ class Database{
 
 	public function checkForBackupData(){
 		try{
-			$check = file_get_contents("../../backupData.json");
+			$check = file_get_contents($_SERVER['BACKUPDATA']);
 
 			if($check != false){
 				return json_encode(array("success" => "there is backup data"));
@@ -285,14 +286,14 @@ class Database{
 			}
 		}
 
-		file_put_contents("../../backupData.json", json_encode($finalStuff));
+		file_put_contents($_SERVER['BACKUPDATA'], json_encode($finalStuff));
 
 		$keepServiceCreds = $obj['keepServiceCreds'];
 
 		if($keepServiceCreds == "true"){
 			$stuff = file_get_contents($_SERVER['SERVICECREDS']);
 
-			file_put_contents("../../serviceCredsBackup.json", $stuff);
+			file_put_contents($_SERVER['SERVICECREDSBACKUP'], $stuff);
 		}
 
 		$wipeCurrentData = $obj['wipeCurrentData'];
@@ -313,13 +314,13 @@ class Database{
 		if(isset($obj)){
 			if(isset($obj['restoreServiceCreds'])){
 				if($obj['restoreServiceCreds'] == "true"){
-					$backupServiceCreds = file_get_contents("../../serviceCredsBackup.json");
+					$backupServiceCreds = file_get_contents($_SERVER['SERVICECREDSBACKUP']);
 
 					file_put_contents($_SERVER['SERVICECREDS'], $backupServiceCreds);	
 
 					if(isset($obj['deleteBackupCredentials'])){
 						if($obj['deleteBackupCredentials'] == "true"){
-							unlink("../../serviceCredsBackup.json");
+							unlink($_SERVER['SERVICECREDSBACKUP']);
 						}
 					}
 				}
@@ -335,7 +336,7 @@ class Database{
 			}
 		}
 
-		$data = file_get_contents("../../backupData.json");
+		$data = file_get_contents($_SERVER['BACKUPDATA']);
 		$data = json_decode($data, true);
 
 		for($x = 0; $x < count($data); $x++){
@@ -345,7 +346,7 @@ class Database{
 		if(isset($obj)){
 			if(isset($obj['deleteBackupFile'])){
 				if($obj['deleteBackupFile'] == "true"){
-					unlink("../../backupData.json");
+					unlink($_SERVER['BACKUPDATA']);
 				}
 			}
 		}

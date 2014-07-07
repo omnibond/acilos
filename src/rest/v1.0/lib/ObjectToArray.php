@@ -26,6 +26,8 @@
 ** $QT_END_LICENSE$
 */
 
+require_once('authCalls.php');
+
 function objectToArray($d){
 	if(is_object($d)){
 		$d = get_object_vars($d);

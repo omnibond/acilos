@@ -28,6 +28,8 @@
 
 use \ElasticSearch\Client;
 
+require_once('authCalls.php');
+
 function santizeWord($word){
 	$s = substr($word, 0, 1);
 	$e = substr($word, -1);

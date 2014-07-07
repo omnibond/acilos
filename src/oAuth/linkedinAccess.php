@@ -30,7 +30,6 @@ require_once('../cron/objects/authObject.php');
 
 session_start();
 
-
 // OAuth 2 Control Flow
 if (isset($_GET['error'])) {
     print $_GET['error'] . ': ' . $_GET['error_description'];
@@ -176,7 +175,7 @@ function getAccessToken() {
 	}
 		
 	file_put_contents($_SERVER['SERVICECREDS'], json_encode($credObj));
-	
+	$_SESSION['authed'] = true;
 	header('Location: ../login.php?linkedin=true');
     }else{
 	//setting a cookie to an expired time will trigger removal by the browser

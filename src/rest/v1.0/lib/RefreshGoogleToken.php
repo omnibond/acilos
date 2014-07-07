@@ -25,6 +25,8 @@
 ** $QT_END_LICENSE$
 */
 
+require_once('authCalls.php');
+
 function refreshGoogToken($uuid){
 	//print_r("refreshing google token");
 	$credObj = file_get_contents($_SERVER['SERVICECREDS']);

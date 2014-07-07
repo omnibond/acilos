@@ -115,7 +115,7 @@ if(isset($_GET['code'])){
 		}
 		
 		file_put_contents($_SERVER['SERVICECREDS'], json_encode($credObj));
-		
+		$_SESSION['authed'] = true;
 		header('Location: ../login.php?instagram=true');
 	}else{
 		//setting a cookie to an expired time will trigger removal by the browser

@@ -29,6 +29,7 @@
 require_once('../../cron/objects/clientBaseObject.php');
 require_once('../../oAuth/twitteroauth/twitteroauth.php');
 require_once('../../vendor/autoload.php');
+require_once('authCalls.php');
 
 use \ElasticSearch\Client;
 

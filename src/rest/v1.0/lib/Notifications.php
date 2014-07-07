@@ -26,6 +26,8 @@
 ** $QT_END_LICENSE$
 */
 
+require_once('authCalls.php');
+
 class Notifications{
 
         /*public function query(){

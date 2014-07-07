@@ -28,6 +28,8 @@
 
 use \ElasticSearch\Client;
 
+require_once('authCalls.php');
+
 function refreshES(){
 	$index = "client";
 	$host = "localhost";
