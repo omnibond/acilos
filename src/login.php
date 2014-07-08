@@ -210,78 +210,71 @@
 				){
 					window.location = "credentials.php";
 				}else{
-					xhr.get({
-						url: 'private/config/serviceCreds.json',
-						handleAs: 'json',
-						async: false,
-						preventCache: true,
-						content: { },
-						error: function(error){
-							console.log("Error has occurred: " + error);
+					var data = '<?php echo json_encode($var); ?>';
+					var serviceCreds = JSON.parse(data);
+
+
+					var leftPane = new Container({
+						style: "text-align: center"
+					});
+					domWindow.body().appendChild(leftPane.domNode);
+
+					if(has('iphone') != undefined){
+						domWindow.body().style.overflow = "scroll";
+					}
+
+					if(has('android' < 4)){
+						domWindow.body().style.overflow = "scroll";
+					}
+
+					document.body.style.backgroundColor = "#d0d3d4";
+
+					console.log("document.body: ", document.body.style);
+					
+					var item = new ListItem({
+						label: "Welcome to",
+						style: "border:none;height:35px;font-size;font-family:arial;font-size:20px; background-color: #d0d3d4"
+					});
+					leftPane.addChild(item);
+
+					var acilosLoginDiv = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/acilosLoginLogo.png>"});
+					leftPane.domNode.appendChild(acilosLoginDiv);
+
+					var item = new ListItem({
+						label: "Please Log In To Continue",
+						style: "border:none;height:35px;font-size;font-family:arial;font-size:20px; background-color: #d0d3d4"
+					});
+					leftPane.addChild(item);
+					
+					if('<?php echo $errorCode; ?>' != ""){
+						var list = new RoundRectList({	})
+						if('<?php echo $errorCode; ?>' == "1"){
+							var item = new ListItem({
+								variableHeight: true,
+								label: "Failed to authenticate user",
+								style: "border:none;height:30px;padding-left:4px;background-color:inherit"
+							});
+							var button = new Button({
+								label: "Change accounts",
+								style: "margin-left:5px;margin-bottom:10px",
+								onClick: function(){
+									var newWin = window.open();
+									newWin.location = "https://"+'<?php echo $errorService; ?>'+".com";
+								}
+							});
+							leftPane.addChild(item);
+							leftPane.addChild(button);
 						}
-					}).then(lang.hitch(this, function(serviceCreds){
-						var leftPane = new Container({
-							style: "text-align: center"
-						});
-						domWindow.body().appendChild(leftPane.domNode);
+						if('<?php echo $errorCode; ?>' == "2"){
+							var item = new ListItem({
+								label: "Error logging in to " + '<?php echo $errorService; ?>',
+								style: "background-color:inherit"
+							});
+							leftPane.addChild(item);
+						}						
+					}
 
-						if(has('iphone') != undefined){
-							domWindow.body().style.overflow = "scroll";
-						}
-
-						if(has('android' < 4)){
-							domWindow.body().style.overflow = "scroll";
-						}
-
-						document.body.style.backgroundColor = "#d0d3d4";
-
-						console.log("document.body: ", document.body.style);
-						
-						var item = new ListItem({
-							label: "Welcome to",
-							style: "border:none;height:35px;font-size;font-family:arial;font-size:20px; background-color: #d0d3d4"
-						});
-						leftPane.addChild(item);
-
-						var acilosLoginDiv = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/acilosLoginLogo.png>"});
-						leftPane.domNode.appendChild(acilosLoginDiv);
-
-						var item = new ListItem({
-							label: "Please Log In To Continue",
-							style: "border:none;height:35px;font-size;font-family:arial;font-size:20px; background-color: #d0d3d4"
-						});
-						leftPane.addChild(item);
-						
-						if('<?php echo $errorCode; ?>' != ""){
-							var list = new RoundRectList({	})
-							if('<?php echo $errorCode; ?>' == "1"){
-								var item = new ListItem({
-									variableHeight: true,
-									label: "Failed to authenticate user",
-									style: "border:none;height:30px;padding-left:4px;background-color:inherit"
-								});
-								var button = new Button({
-									label: "Change accounts",
-									style: "margin-left:5px;margin-bottom:10px",
-									onClick: function(){
-										var newWin = window.open();
-										newWin.location = "https://"+'<?php echo $errorService; ?>'+".com";
-									}
-								});
-								leftPane.addChild(item);
-								leftPane.addChild(button);
-							}
-							if('<?php echo $errorCode; ?>' == "2"){
-								var item = new ListItem({
-									label: "Error logging in to " + '<?php echo $errorService; ?>',
-									style: "background-color:inherit"
-								});
-								leftPane.addChild(item);
-							}						
-						}
-
-						loginPart(leftPane, serviceCreds);
-					}));
+					loginPart(leftPane, serviceCreds);
 				}
 			},
 			

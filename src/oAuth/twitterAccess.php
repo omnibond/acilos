@@ -145,7 +145,6 @@ if(isset($_REQUEST['oauth_verifier'])){
 		$temp['accessSecret'] = $access_token['oauth_token_secret'];
 		$temp['key'] = $obj['appKey'];
 		$temp['secret'] = $obj['appSecret'];
-		$temp['expiresAt'] = `date +%s`;
 		$temp['user'] = $account->id;
 		$temp['image'] = $account->profile_image_url;
 		$temp['name'] = $account->screen_name;

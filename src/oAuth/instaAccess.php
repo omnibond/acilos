@@ -93,7 +93,6 @@ if(isset($_GET['code'])){
 		}
 					
 		$temp['accessToken'] = $obj['access_token'];
-		$temp['expiresAt'] = `date +%s`;
 		$temp['user'] = $obj['user']['id'];
 		$temp['image'] = $obj['user']['profile_picture'];
 		$temp['name'] =  $obj['user']['username'];
