@@ -71,7 +71,7 @@
 	$gCount = (string)count($var['google']);
 	$login = $var['login'];
 
-	//print_r($var);
+	//print_r(session_id());
 
 	$goToManAccounts = "false";
 
