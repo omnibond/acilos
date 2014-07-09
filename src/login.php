@@ -63,6 +63,7 @@
 	}
 	
 	$var = getData();
+	$alteredVar = getData();
 	$fCount = (string)count($var['facebook']);
 	$tCount = (string)count($var['twitter']);
 	$lCount = (string)count($var['linkedin']);
@@ -89,6 +90,31 @@
 					}
 				}else{
 					$goToManAccounts = "true";
+				}
+			}
+		}
+	}
+
+	foreach($alteredVar as $key => $value){
+		if($key != "login"){			
+			for($x = 0; $x < count($alteredVar[$key]); $x++){
+				if(isset($alteredVar[$key][$x]['key'])){
+					$alteredVar[$key][$x]['key'] = '';
+				}
+
+				if(isset($alteredVar[$key][$x]['secret'])){
+					$alteredVar[$key][$x]['secret'] = '';
+				}
+				if(isset($alteredVar[$key][$x]['accounts']) && count($alteredVar[$key][$x]['accounts']) > 0){
+					for($y = 0; $y < count($alteredVar[$key][$x]['accounts']); $y++){
+						if(isset($alteredVar[$key][$x]['accounts'][$y]['accessToken'])){
+							$alteredVar[$key][$x]['accounts'][$y]['accessToken'] = '';
+						}
+
+						if(isset($alteredVar[$key][$x]['accounts'][$y]['refreshToken'])){
+							$alteredVar[$key][$x]['accounts'][$y]['refreshToken'] = '';
+						}
+					}
 				}
 			}
 		}
@@ -210,7 +236,7 @@
 				){
 					window.location = "credentials.php";
 				}else{
-					var data = '<?php echo json_encode($var); ?>';
+					var data = '<?php echo json_encode($alteredVar); ?>';
 					var serviceCreds = JSON.parse(data);
 
 
