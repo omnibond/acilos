@@ -27,7 +27,9 @@
 */
 	$browser = $_SERVER['HTTP_USER_AGENT'];
 	session_start();
-	$is_xhr = isset($_GET['xhr']) && $_GET['xhr'] == 'true';
+	if(isset($_GET['xhr']) && $_GET['xhr'] == 'true'){
+		$is_xhr = $_GET['xhr'];
+	}
 	// check cookie and session
 	if(isset($_SESSION['authed']) && $_SESSION['authed'] === true) {
 		//if logged in..
