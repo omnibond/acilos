@@ -26,18 +26,14 @@
 */
 	$target = "tmpUpload";
 
-	//print_r($_FILES);
+	if(isset($_FILES['fUploader'])){
+		$stuff = $_FILES['fUploader'];
+	}
 
-	$file = $_FILES['file'];
-	$name = $_FILES['file']['name'][0];
-	$tmp_name = $_FILES['file']['tmp_name'][0];
-	$size = $_FILES['file']['size'][0];
-	$type = $_FILES['file']['type'][0];
-
-	/*print_r($name);
-	print_r($tmp_name);
-	print_r($size);
-	print_r($type);*/
+	$name = $stuff['name'];
+	$tmp_name = $stuff['tmp_name'];
+	$size = $stuff['size'];
+	$type = $stuff['type'];
 
 	if(is_dir($target)){
 		$target = $target . "/" . basename($name);
@@ -45,33 +41,35 @@
 		mkdir($target);
 		$target = $target . "/" . basename($name);
 	}
-
-	//print_R($target);
 	
 	$ok = 1;
 	
 	//This is our size condition 10megs
 	if($size > 10000000){
-		$ok=0;
+		$ok = 0;
 
-		return json_encode(array("error" => "Sorry, your file is too large to upload."));
+		print_r(json_encode(array("error" => "Sorry, your file is too large to upload.")));
 	}
 	
 	//This is our limit file type condition
 	if($type == "text/php"){
-		$ok=0;
+		$ok = 0;
 
-		return json_encode(array("error" => "Sorry, no PHP files allowed."));
+		print_r(json_encode(array("error" => "Sorry, no PHP files allowed.")));
 	}
 	 
 	//Here we check that $ok was not set to 0 by an error
-	if($ok == 0){
-		return json_encode(array("error" => "Sorry, your file was not uploaded"));
+	if(isset($ok)){
+		if($ok === 0){
+			print_r(json_encode(array("error" => "Sorry, your file was not uploaded")));
+		}else{
+		    if(move_uploaded_file($tmp_name, $target)){
+				print_r(json_encode(array("success" => "The file has been uploaded")));
+		    }else{
+		        print_r(json_encode(array("error" => "Sorry, there was a problem uploading your file.")));
+		    }
+		} 
 	}else{
-	    if(move_uploaded_file($tmp_name, $target)){
-			return json_encode(array("success" => "The file has been uploaded"));
-	    }else{
-	        return json_encode(array("error" => "Sorry, there was a problem uploading your file."));
-	    }
-	} 
+		print_r(json_encode(array("error" => "Sorry, your file was not uploaded")));
+	}
 ?>

@@ -4,5 +4,5 @@ SetEnv LOCALQUERYTERMOBJ /home/aaron/github/acilos/src/private/config/localQuery
 SetEnv APPSETTINGS /home/aaron/github/acilos/src/private/settings/appSettings.json
 SetEnv BACKUPDATA /home/aaron/github/acilos/src/private/config/backupData.json
 SetEnv SERVICECREDSBACKUP /home/aaron/github/acilos/src/private/config/serviceCredsBackup.json
-php_value session.cookie_lifetime 0
+php_value session.cookie_lifetime 604800
 php_value session.gc_maxlifetime 10

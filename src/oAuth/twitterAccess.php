@@ -26,7 +26,6 @@
 */
 
 require_once('../cron/logs/KLogger.php');
-
 require_once('../vendor/autoload.php');
 require_once('../cron/objects/authObject.php');
 
