@@ -511,7 +511,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 									}elseif(isset($companyObj[$obj['updateContent']['company']['id']]['logoUrl']) && $companyObj[$obj['updateContent']['company']['id']]['logoUrl'] != "undefined" && $companyObj[$obj['updateContent']['company']['id']]['logoUrl'] != "" && $companyObj[$obj['updateContent']['company']['id']]['logoUrl'] != "N/A"){
 										$actor->setImage($companyObj[$obj['updateContent']['company']['id']]['logoUrl']);
 									}else{
-										$filename = "../../serviceCreds.json";
+										$filename = $_SERVER['SERVICECREDS'];
 										$file = file_get_contents($filename);
 
 										$tokenObject = json_decode($file, true);
@@ -562,7 +562,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 										}
 									}
 								}else{
-									$filename = "../../serviceCreds.json";
+									$filename = $_SERVER['SERVICECREDS'];
 									$file = file_get_contents($filename);
 
 									$tokenObject = json_decode($file, true);
@@ -619,7 +619,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 
 								$companyObj = array();
 
-								$filename = "../../serviceCreds.json";
+								$filename = $_SERVER['SERVICECREDS'];
 								$file = file_get_contents($filename);
 
 								$tokenObject = json_decode($file, true);

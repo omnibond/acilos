@@ -103,10 +103,11 @@ define([
 				//app.toaster.setContent("Service timed out.");
 				//app.toaster.show();fixe
 			}
-			
 			if(error.status == 404 ){
-				//app.toaster.setContent("Service returned an error.");
-				//app.toaster.show();
+				//ow my legs
+			}
+			if(error.status == 403 ){
+				window.location = "login.php?logout=true";
 			}				
 		}
 	});

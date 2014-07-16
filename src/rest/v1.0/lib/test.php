@@ -1,6 +1,6 @@
 <?php
 
-$creds = file_get_contents("../../../serviceCreds.json");
+$creds = file_get_contents($_SERVER['SERVICECREDS']);
 $credObj = json_decode($creds, true);
 $access_token = $credObj['google'][0]['accounts'][0]['accessToken'];
 

@@ -9,7 +9,7 @@
 ** This file defines server side group of function pertaining to elasticsearch search functions
 ** 
 **
-** $QT_BEGIN_LICENSE:LGPL$
+** $QT_BEGIN_LICENSE:LlGPL$
 **
 ** GNU Lesser General Public License Usage
 ** Alternatively, this file may be used under the terms of the GNU Lesser
@@ -27,9 +27,35 @@
 */
 
 use \ElasticSearch\Client;
+
+require_once('authCalls.php');
 	
 function matchAll($from){
 	$size = 20;
+
+	$index = "app";
+	$host = "localhost";
+	$port = "9200";
+
+	$es = Client::connection("http://$host:$port/$index/$index");
+	$res = $es->search(array(
+		'from' => $from,
+		'size' => $size,
+		'query' => array(
+			'match_all' => array()
+		),
+		'sort' => array(
+			'published' => array(
+				"order" => "desc"
+			)
+		)
+	));
+	
+	return $res;
+}
+
+function matchAll200($from){
+	$size = 200;
 
 	$index = "app";
 	$host = "localhost";

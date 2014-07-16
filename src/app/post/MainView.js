@@ -46,7 +46,8 @@ define(['dojo/_base/declare',
 		"dijit/Dialog",
 
 		'dojo/dom-construct',
-		'dojo/topic'
+		'dojo/topic',
+		'dojo/has'
 ], function(
 	declare, 
 	ModuleScrollableView,
@@ -71,7 +72,8 @@ define(['dojo/_base/declare',
 	Dialog,
 	
 	domConstruct, 
-	topic
+	topic,
+	has
 ) {
 	return declare([ModuleScrollableView], {		
 		buildMainList: function(){
@@ -92,6 +94,8 @@ define(['dojo/_base/declare',
 			});
 			this.mainList.addChild(item);
 			
+
+			console.log("THIS.AUTHOBJ IS: ", this.authObj);
 			this.checkArray = [];
 			for(var key in this.authObj){
 				if(key !== "login"){
@@ -129,7 +133,7 @@ define(['dojo/_base/declare',
 									}, checkBox);
 								}if(key == "facebook"){
 									var checkBox = new CheckBox({
-										leToken: accountArr[d]['accessToken']+":"+accountArr[d]['key']+":"+accountArr[d]['user'],
+										leToken: accountArr[d]['accessToken']+":"+this.authObj[key][0]['key']+":"+accountArr[d]['user'],
 										leKey: key,
 										style:"width:20px;height:20px"
 									});
@@ -203,243 +207,63 @@ define(['dojo/_base/declare',
 				}
 			});
 
-			var fileHolder = new ListItem({
-				variableHeight: true,
-				style: "border:none; margin-left: 7px"
-			});
-			this.mainList.addChild(fileHolder);
+			var fUploader = domConstruct.create("div", {});
 
-			var upDiv = domConstruct.create("div", {innerHTML: ""});
-			fileHolder.domNode.appendChild(upDiv);
-			var fDiv = domConstruct.create("div", {});
-			fileHolder.domNode.appendChild(fDiv);
+			var fileHolder = domConstruct.create("div", {style: "border:none; margin-left: 7px; margin-top: 14px; height: auto"});
+			this.mainList.domNode.appendChild(fileHolder);
 			
 			this.getDomain().then(lang.hitch(this, function(obj){
 				this.domain = obj.domain;
 				console.log("http://"+this.domain+"/app/post/UploadFiles.php");
 
-				var fUploader = new dojox.form.Uploader({
-					label: "Select a file",
-					name: "file[]",
-					multiple: false,
-					uploadOnSelect: true,
-					//onFocus: function(){
-					//	this.inherited(arguments);
-					//},
-					onComplete: lang.hitch(this, function(){
-						console.log("omComplete arguments are: ", arguments);
-						this.fileToUpload = arguments[0].fileName;
-						console.log("the file to upload is: ", this.fileToUpload);
-					}),
-					onBegin: lang.hitch(this, function(){
-						console.log("onBegin arguments are: ", arguments);
-						this.fileToUpload = arguments[0][0].name;
-						console.log("the file to upload is: ", this.fileToUpload);
-					}),
-					onChange: lang.hitch(this, function(){
-						console.log("onChange arguments are: ", arguments);
-					}),
-					onError: lang.hitch(this, function(){
-						console.log("onError arguments are: ", arguments);
-					}),
-					onLoad: lang.hitch(this, function(){
-						console.log("onLoad arguments are: ", arguments);
-					}),
-					onProgress: lang.hitch(this, function(){
-						console.log("onProgress arguments are: ", arguments);
-					}),
-					url: "http://"+this.domain+"/app/post/UploadFiles.php",
-					style: "background-image: linear-gradient(to bottom, #ffffff 0%, #e2e2e2 100%); border: 1px solid #c0c0c0; border-bottom-color: #9b9b9b; margin-bottom: 2px; font-size: 13px; font-weight: normal; height: 29px; line-height: 29px; margin-left: -8px"
-					}, upDiv);
+				var iframe = document.createElement("IFRAME");
+				iframe.setAttribute("src", "http://"+this.domain+"/upLoadPage.php");
+				iframe.setAttribute("name", "iframe");
+				iframe.style.width = 250+"px";
+				iframe.style.height = 110+"px";
+				fileHolder.appendChild(iframe);
 
-					var fileList = new FileList({
-					uploaderId: fUploader,
-					style: "margin-left: -8px; margin-bottom: -9px"
-				});
-				fDiv.appendChild(fileList.domNode);
+				this.iframeElements = '';
 
-				fUploader.startup();
+				iframe.onload = lang.hitch(this, function(){
+					this.iframeElements = iframe.contentWindow.document.body.getElementsByTagName("*");
 
-				fileList.startup();
+					console.log("THE IFRAME ELEMENTS ARE: ", this.iframeElements);
 
-				var postNow = new RadioButton({
-					checked: true,
-					name: "post",
-					onClick: lang.hitch(this, function(){
-						if(this.atDate){
-							this.atDate.destroyRecursive();
-							this.atDate = null;
-						}
-						if(this.nowList){
-							this.nowList.destroyRecursive();
-							this.nowList = null;
-						}
-						if(this.laterList){
-							this.laterList.destroyRecursive();
-							this.laterList = null;
-						}
-						if(this.calendarDialog){
-							this.calendarDialog.destroy();
-							this.calendarDialog = null;
-						}
-						this.nowList = new EdgeToEdgeList({style: "margin-top: 3px; margin-left: 8px"})
+					var postNow = new RadioButton({
+						checked: true,
+						name: "post",
+						onClick: lang.hitch(this, function(){
+							if(this.atDate){
+								this.atDate.destroyRecursive();
+								this.atDate = null;
+							}
+							if(this.nowList){
+								this.nowList.destroyRecursive();
+								this.nowList = null;
+							}
+							if(this.laterList){
+								this.laterList.destroyRecursive();
+								this.laterList = null;
+							}
+							if(this.calendarDialog){
+								this.calendarDialog.destroy();
+								this.calendarDialog = null;
+							}
+							this.nowList = new EdgeToEdgeList({style: "margin-top: 3px; margin-left: 8px"})
 
-						this.submitButton = new Button({
-							label: "Post",
-							style: "margin-left: 0px",
-							onClick: lang.hitch(this, function(fUploader){
-								if(this.errorDialog){
-									this.errorDialog.destroyRecursive();
-									this.errorDialog = null;
-								}
-
-								document.body.onkeyup = ""; 
-								var msg = this.textArea.get("value");
-								var file = '';
-								
-								var tokenArr = {};
-								for(x=0; x<this.checkArray.length; x++){
-									if(this.checkArray[x].checked == true){
-										if(tokenArr[this.checkArray[x]['leKey']]){
-											tokenArr[this.checkArray[x]['leKey']].push(this.checkArray[x]['leToken']);
-										}else{
-											tokenArr[this.checkArray[x]['leKey']] = [];
-											tokenArr[this.checkArray[x]['leKey']].push(this.checkArray[x]['leToken']);
-										}
-									}
-								}
-									
-								console.log("tokenArr is: ", tokenArr);
-								
-								if(fUploader.get('value') != ''){
-									fileType = fUploader.get("value")[0]['type'];
-								}else{
-									fileType = '?';
-								}
-								console.log("this.fileToUpload: ", this.fileToUpload);
-
-								if(this.fileToUpload == ""){
-									this.fileToUpload = "?";
-								}
-								
-								//this.sendPostFile(this.fileToUpload, fileType, tokenArr, msg).then(lang.hitch(this, this.handleResponse));
-
-								this.sendPostFile(this.fileToUpload, fileType, tokenArr, msg).then(lang.hitch(this, function(obj){
-									console.log("obj is: ", obj);
-
-									this.fileToUpload = "";
-
-									var returnStuff = obj['returnArray'];
-
-									this.failureFlag = "false";
-
-									for(var key in returnStuff){
-										for(var x = 0; x < returnStuff[key].length; x++){
-											if(returnStuff[key][x]['failure']){
-												this.failureFlag = "true";
-											}
-										}								
+							this.submitButton = new Button({
+								label: "Post",
+								style: "margin-left: 0px",
+								onClick: lang.hitch(this, function(){
+									if(this.errorDialog){
+										this.errorDialog.destroyRecursive();
+										this.errorDialog = null;
 									}
 
-									if(this.failureFlag == "false"){
-										if(this.mainList){
-											this.fileToUpload = "";
-											fUploader.destroyRecursive();
-											fUploader = null;
-											this.mainList.destroyRecursive();
-											this.mainList = null;
-										}
-										this.getServiceCreds().then(lang.hitch(this, function(obj){
-											console.log(obj);
-											this.authObj = obj;
-											this.buildMainList();
-										}));
-									}
-
-									var responseListItem = new ListItem({
-										variableHeight: true,
-										style: "border:none"
-									});
-
-									var div = domConstruct.create("div", {});
-
-									this.errorDialog = new Dialog({
-										title: "Error",
-										"class": "errorDijitDialog",
-										style: "top: 105px !important; width: 520px !important; padding: 10px !important; background-color: #FFE6E6",
-										draggable: false
-									});
-
-									this.errorHolderDiv = domConstruct.create("div", {style: "background-color: #FFE6E6"});
-
-									for(var key in returnStuff){
-										for(var x = 0; x < returnStuff[key].length; x++){
-											if(returnStuff[key][x]['failure']){
-												var errorDiv = domConstruct.create("div", {innerHTML: returnStuff[key][x]['msg'] + "<br/><br/>", style: "background-color: #FFE6E6"});
-
-												this.errorHolderDiv.appendChild(errorDiv);
-											}
-										}
-									}
-
-									for(var g = 0; g < this.errorDialog.domNode.children.length; g++){
-										if(domClass.contains(this.errorDialog.domNode.children[g], "dijitDialogPaneContent")){
-											domStyle.set(this.errorDialog.domNode.children[g], "padding", "0px");
-										}
-									}
-
-									if(errorDiv){
-										this.errorDialog.set("content", this.errorHolderDiv);
-										this.errorDialog.show();
-									}
-								}));
-							}, fUploader)
-						});
-						this.nowList.addChild(this.submitButton);
-						this.mainList.addChild(this.nowList);
-					})
-				});
-
-				postNow.onClick();
-
-				var postLater = new RadioButton({
-					checked: false,
-					name: "post",
-					"style": "margin-left: 6px",
-					onClick: lang.hitch(this, function(){
-						if(this.laterList){
-							this.laterList.destroyRecursive();
-							this.laterList = null;
-						}
-						if(this.nowList){
-							this.nowList.destroyRecursive();
-							this.nowList = null;
-						}
-						this.laterList = new EdgeToEdgeList({style: "margin-top: 3px; margin-left: 8px"})
-
-						this.atCommandButton = new Button({
-							label: "Post",
-							style: "margin-left: 0px",
-							onClick: lang.hitch(this, function(){
-								if(this.errorDialog){
-									this.errorDialog.destroyRecursive();
-									this.errorDialog = null;
-								}
-
-								if(chooseDateTextBox.get("value") != ""){
-									var date = this.formatDateAtCommand(chooseDateTextBox.get("value"));
-									console.log("DATE: ", date);
-
-									if(atBox.get("value") != "Example: 7:00 pm"){
-										var time = atBox.get("value");
-										console.log("TIME: ", time);
-									}
-
+									document.body.onkeyup = ""; 
 									var msg = this.textArea.get("value");
 									var file = '';
-									if(fUploader.get("value").length > 0){
-										var file = fUploader.get("value")[0]['name'];
-									}
 									
 									var tokenArr = {};
 									for(x=0; x<this.checkArray.length; x++){
@@ -452,125 +276,270 @@ define(['dojo/_base/declare',
 											}
 										}
 									}
-									
-									console.log(tokenArr);
-									
-									if(fUploader.get('value') != ''){
-										fileType = fUploader.get("value")[0]['type'];
-									}else{
-										fileType = '?';
-										file = '?';
+										
+									console.log("tokenArr is: ", tokenArr);
+
+									this.fileToUpload = this.iframeElements[2].files[0].name;
+
+									console.log("the file to upload isssssssssssssss: ", this.iframeElements[2].files[0]);
+
+									if(this.iframeElements[2].files[0]){
+										if(this.iframeElements[2].files[0] != '' && this.iframeElements[2].files[0] != 'undefined' && this.iframeElements[2].files[0] != null){
+											fileType = this.iframeElements[2].files[0].type;
+										}else{
+											fileType = '?';
+										}
+										console.log("this.fileToUpload: ", this.fileToUpload);
 									}
 
-									if(msg == ""){
-										msg = " ";
-									}
+									this.sendPostFile(this.fileToUpload, fileType, tokenArr, msg).then(lang.hitch(this, function(obj){
+										console.log("obj is: ", obj);
 
-									var slashDate = date.split("-");
-									slashDate = slashDate[2] + "/" + slashDate[0] + "/" + slashDate[1];
+										this.fileToUpload = "";
 
-									var postTime = atBox.get("value");
-									console.log("postTime is: ", postTime);
+										var returnStuff = obj['returnArray'];
 
-									var d = new Date(slashDate + " " + postTime);
-									var selectedTime = d.getTime();
-									selectedTime = selectedTime/1000;
-									console.log("selected time is: ", selectedTime);
+										this.failureFlag = "false";
 
-									
-									this.runAtCommand(selectedTime, file, fileType, tokenArr, msg).then(lang.hitch(this, this.handleResponse));
-								}else{
-									console.log("You must select a date first");
-								}
-							})
-						});
+										for(var key in returnStuff){
+											for(var x = 0; x < returnStuff[key].length; x++){
+												if(returnStuff[key][x]['failure']){
+													this.failureFlag = "true";
+												}
+											}								
+										}
 
-						var chooseDateTextBox = new TextBox({
-							style: "height: 24px; vertical-align: top",
-							placeHolder: "mm/dd/yyyy"
-						});
+										if(this.failureFlag == "false"){
+											if(this.mainList){
+												this.fileToUpload = "";
+												fUploader.destroyRecursive();
+												fUploader = null;
+												this.mainList.destroyRecursive();
+												this.mainList = null;
+											}
+											this.getServiceCreds().then(lang.hitch(this, function(obj){
+												console.log(obj);
+												this.authObj = obj;
+												this.buildMainList();
+											}));
+										}
 
-						chooseDateTextBox.on("click", lang.hitch(this, function(){
-							if(this.atDate){
-								var formatAtDate = this.formatDate(this.atDate.get("value"));
-								chooseDateTextBox.set("value", formatAtDate);
-								this.atDate.destroyRecursive();
-								this.atDate = null;
-								this.calendarDialog.destroy();
-								this.calendarDialog = null;
+										var responseListItem = new ListItem({
+											variableHeight: true,
+											style: "border:none"
+										});
+
+										var div = domConstruct.create("div", {});
+
+										this.errorDialog = new Dialog({
+											title: "Error",
+											"class": "errorDijitDialog",
+											style: "top: 105px !important; width: 520px !important; padding: 10px !important; background-color: #FFE6E6",
+											draggable: false
+										});
+
+										this.errorHolderDiv = domConstruct.create("div", {style: "background-color: #FFE6E6"});
+
+										for(var key in returnStuff){
+											for(var x = 0; x < returnStuff[key].length; x++){
+												if(returnStuff[key][x]['failure']){
+													var errorDiv = domConstruct.create("div", {innerHTML: returnStuff[key][x]['msg'] + "<br/><br/>", style: "background-color: #FFE6E6"});
+
+													this.errorHolderDiv.appendChild(errorDiv);
+												}
+											}
+										}
+
+										for(var g = 0; g < this.errorDialog.domNode.children.length; g++){
+											if(domClass.contains(this.errorDialog.domNode.children[g], "dijitDialogPaneContent")){
+												domStyle.set(this.errorDialog.domNode.children[g], "padding", "0px");
+											}
+										}
+
+										if(errorDiv){
+											this.errorDialog.set("content", this.errorHolderDiv);
+											this.errorDialog.show();
+										}
+									}));
+								}, fUploader)
+							});
+							this.nowList.addChild(this.submitButton);
+							this.mainList.addChild(this.nowList);
+						})
+					});
+
+					postNow.onClick();
+
+					var postLater = new RadioButton({
+						checked: false,
+						name: "post",
+						"style": "margin-left: 6px",
+						onClick: lang.hitch(this, function(){
+							if(this.laterList){
+								this.laterList.destroyRecursive();
+								this.laterList = null;
 							}
+							if(this.nowList){
+								this.nowList.destroyRecursive();
+								this.nowList = null;
+							}
+							this.laterList = new EdgeToEdgeList({style: "margin-top: 3px; margin-left: 8px"})
 
-							if(!this.atDate){
-								this.atDate = new Calendar({
+							this.atCommandButton = new Button({
+								label: "Post",
+								style: "margin-left: 0px",
+								onClick: lang.hitch(this, function(){
+									if(this.errorDialog){
+										this.errorDialog.destroyRecursive();
+										this.errorDialog = null;
+									}
 
-								});
+									if(chooseDateTextBox.get("value") != ""){
+										var date = this.formatDateAtCommand(chooseDateTextBox.get("value"));
+										console.log("DATE: ", date);
 
-								this.calendarDialog = new Dialog({
-									//title: "Select a date",
-									"class": "calendarDialog",
-									draggable: false
-								});
+										if(atBox.get("value") != "Example: 7:00 pm"){
+											var time = atBox.get("value");
+											console.log("TIME: ", time);
+										}
 
-								this.calendarDialog.set("content", this.atDate);
-								this.calendarDialog.show();
+										var msg = this.textArea.get("value");
 
-								this.atDate.startup();
+										var file = '';
+										if(this.iframeElements[2].files[0] != '' && this.iframeElements[2].files[0] != 'undefined' && this.iframeElements[2].files[0] != null){
+											var file = this.iframeElements[2].files[0].name;
+										}
+										
+										var tokenArr = {};
+										for(x=0; x<this.checkArray.length; x++){
+											if(this.checkArray[x].checked == true){
+												if(tokenArr[this.checkArray[x]['leKey']]){
+													tokenArr[this.checkArray[x]['leKey']].push(this.checkArray[x]['leToken']);
+												}else{
+													tokenArr[this.checkArray[x]['leKey']] = [];
+													tokenArr[this.checkArray[x]['leKey']].push(this.checkArray[x]['leToken']);
+												}
+											}
+										}
+										
+										console.log(tokenArr);
+										
+										if(this.iframeElements[2].files[0] != '' && this.iframeElements[2].files[0] != 'undefined' && this.iframeElements[2].files[0] != null){
+											fileType = this.iframeElements[2].files[0].type;
+										}else{
+											fileType = '?';
+											file = '?';
+										}
 
-								this.atDate.dateRowsNode.onclick = lang.hitch(this, function(){
-									console.log("atDate's value is: ", this.atDate.get("value"));
+										if(msg == ""){
+											msg = " ";
+										}
 
-									var formatStartDate = this.formatDate(this.atDate.get("value"));
+										var slashDate = date.split("-");
+										slashDate = slashDate[2] + "/" + slashDate[0] + "/" + slashDate[1];
 
-									chooseDateTextBox.set("value", formatStartDate);
+										var postTime = atBox.get("value");
+										console.log("postTime is: ", postTime);
 
+										var d = new Date(slashDate + " " + postTime);
+										var selectedTime = d.getTime();
+										selectedTime = selectedTime/1000;
+										console.log("selected time is: ", selectedTime);
+
+										this.runAtCommand(selectedTime, file, fileType, tokenArr, msg).then(lang.hitch(this, this.handleResponse));
+									}else{
+										console.log("You must select a date first");
+									}
+								})
+							});
+
+							var chooseDateTextBox = new TextBox({
+								style: "height: 24px; vertical-align: top",
+								placeHolder: "mm/dd/yyyy"
+							});
+
+							chooseDateTextBox.on("click", lang.hitch(this, function(){
+								if(this.atDate){
+									var formatAtDate = this.formatDate(this.atDate.get("value"));
+									chooseDateTextBox.set("value", formatAtDate);
 									this.atDate.destroyRecursive();
 									this.atDate = null;
 									this.calendarDialog.destroy();
 									this.calendarDialog = null;
-								});
-							}
-						}));
+								}
 
-						var atBox = new TextBox({
-							style: "height: 24px; vertical-align: top",
-							placeHolder: "Example: 7:00 pm"
-						});
-						this.laterList.addChild(this.atCommandButton);
-						this.laterList.addChild(chooseDateTextBox);
-						this.laterList.addChild(atBox);
-						this.mainList.addChild(this.laterList);
-					})
+								if(!this.atDate){
+									this.atDate = new Calendar({
+
+									});
+
+									this.calendarDialog = new Dialog({
+										//title: "Select a date",
+										"class": "calendarDialog",
+										draggable: false
+									});
+
+									this.calendarDialog.set("content", this.atDate);
+									this.calendarDialog.show();
+
+									this.atDate.startup();
+
+									this.atDate.dateRowsNode.onclick = lang.hitch(this, function(){
+										console.log("atDate's value is: ", this.atDate.get("value"));
+
+										var formatStartDate = this.formatDate(this.atDate.get("value"));
+
+										chooseDateTextBox.set("value", formatStartDate);
+
+										this.atDate.destroyRecursive();
+										this.atDate = null;
+										this.calendarDialog.destroy();
+										this.calendarDialog = null;
+									});
+								}
+							}));
+
+							var atBox = new TextBox({
+								style: "height: 24px; vertical-align: top",
+								placeHolder: "Example: 7:00 pm"
+							});
+							this.laterList.addChild(this.atCommandButton);
+							this.laterList.addChild(chooseDateTextBox);
+							this.laterList.addChild(atBox);
+							this.mainList.addChild(this.laterList);
+						})
+					});
+					
+					var postNowLabel = domConstruct.create("span", {innerHTML: "Post Now", "class": "radioButtonLabel"});
+					var postLaterLabel = domConstruct.create("span", {innerHTML: "Post Later", "class": "radioButtonLabel"});
+
+					postNowLabel.onclick = lang.hitch(this, function(){
+						if(postNow.get("checked") == false){
+							postNow.set("checked", true);
+						}
+						postNow.onClick();
+					});
+
+					postLaterLabel.onclick = lang.hitch(this, function(){
+						if(postLater.get("checked") == false){
+							postLater.set("checked", true);
+						}
+						postLater.onClick();
+					});
+
+					var myListItem = new ListItem({
+						variableHeight: true,
+						style: "border:none; padding: 0; margin-left: 2px; margin-bottom: -2px"
+					});
+
+					myListItem.addChild(postNow);
+					myListItem.domNode.appendChild(postNowLabel);
+					myListItem.addChild(postLater);
+					myListItem.domNode.appendChild(postLaterLabel);
+					
+					this.mainList.addChild(myListItem);
+					dojo.place(myListItem.domNode, this.nowList.domNode, "before");
 				});
-				
-				var postNowLabel = domConstruct.create("span", {innerHTML: "Post Now", "class": "radioButtonLabel"});
-				var postLaterLabel = domConstruct.create("span", {innerHTML: "Post Later", "class": "radioButtonLabel"});
-
-				postNowLabel.onclick = lang.hitch(this, function(){
-					if(postNow.get("checked") == false){
-						postNow.set("checked", true);
-					}
-					postNow.onClick();
-				});
-
-				postLaterLabel.onclick = lang.hitch(this, function(){
-					if(postLater.get("checked") == false){
-						postLater.set("checked", true);
-					}
-					postLater.onClick();
-				});
-
-				var myListItem = new ListItem({
-					variableHeight: true,
-					style: "border:none; padding: 0; margin-left: 2px; margin-bottom: -2px"
-				});
-
-				myListItem.addChild(postNow);
-				myListItem.domNode.appendChild(postNowLabel);
-				myListItem.addChild(postLater);
-				myListItem.domNode.appendChild(postLaterLabel);
-				
-				this.mainList.addChild(myListItem);
-				dojo.place(myListItem.domNode, this.nowList.domNode, "before");
 			}));
 		},
 

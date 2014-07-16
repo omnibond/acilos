@@ -377,7 +377,7 @@ class facebookNewsFeedObjectBuilder extends activityObjectBuilder{
     }
     public function buildPostLink($obj, $account){
     	//print_R($account);
-		$filename = "../../serviceCreds.json";
+		$filename = $_SERVER['SERVICECREDS'];
 		$file = file_get_contents($filename) or die("Cannot open the file: " . $filename);
 		$tok = json_decode($file, true);
 

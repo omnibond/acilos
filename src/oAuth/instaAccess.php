@@ -38,7 +38,7 @@ if(isset($_GET['code'])){
 	
 	$grant = "authorization_code";
 	
-	$credObj = file_get_contents("../serviceCreds.json");
+	$credObj = file_get_contents($_SERVER['SERVICECREDS']);
 	$credObj = json_decode($credObj, true);
 	
 	$app = $credObj['instagram'][0];
@@ -93,7 +93,6 @@ if(isset($_GET['code'])){
 		}
 					
 		$temp['accessToken'] = $obj['access_token'];
-		$temp['expiresAt'] = `date +%s`;
 		$temp['user'] = $obj['user']['id'];
 		$temp['image'] = $obj['user']['profile_picture'];
 		$temp['name'] =  $obj['user']['username'];
@@ -114,8 +113,8 @@ if(isset($_GET['code'])){
 			$credObj['instagram'][0]['accounts'][$j] = $temp;
 		}
 		
-		file_put_contents("../serviceCreds.json", json_encode($credObj));
-		
+		file_put_contents($_SERVER['SERVICECREDS'], json_encode($credObj));
+		$_SESSION['authed'] = true;
 		header('Location: ../login.php?instagram=true');
 	}else{
 		//setting a cookie to an expired time will trigger removal by the browser

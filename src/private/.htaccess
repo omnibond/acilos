@@ -1,0 +1,4 @@
+# This file just restricts access to the folders in this directory
+
+Order deny,allow
+Deny from all

@@ -27,6 +27,7 @@
 */
 
 require_once('../../oAuth/twitteroauth/twitteroauth.php');
+require_once('authCalls.php');
 
 use \ElasticSearch\Client;
 

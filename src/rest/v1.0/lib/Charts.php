@@ -28,6 +28,7 @@
 
 require_once('matchHelpers.php');
 require_once('clientHelpers.php');
+require_once('authCalls.php');
 
 use \ElasticSearch\Client;
 

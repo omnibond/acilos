@@ -38,7 +38,7 @@ $client->setClientSecret($_GET['secretKey']);
 $client->setRedirectUri($_GET['redirect_uri']);
 $client->setAccessType('offline');
 
-$credObj = file_get_contents("../serviceCreds.json");
+$credObj = file_get_contents($_SERVER['SERVICECREDS']);
 $credObj = json_decode($credObj, true);
 if(count($credObj['google']) > 0){
 	if(count($credObj['google'][0]['accounts']) > 0){
@@ -102,7 +102,7 @@ if(isset($_GET['code'])) {
 	$token = json_decode($tok, true);
 	$state = $json['state'];
 	
-	$credObj = file_get_contents("../serviceCreds.json");
+	$credObj = file_get_contents($_SERVER['SERVICECREDS']);
 	$credObj = json_decode($credObj, true);
 	$tempApp = $credObj['google'][0];
 	
@@ -170,8 +170,8 @@ if(isset($_GET['code'])) {
 			$credObj['google'][0]['accounts'][$j] = $temp;
 		}
 
-		file_put_contents("../serviceCreds.json", json_encode($credObj));
-		
+		file_put_contents($_SERVER['SERVICECREDS'], json_encode($credObj));
+		$_SESSION['authed'] = true;
 		header('Location: ../login.php?google=true');
 	}else{
 		setcookie ("googleCook", "", time() - 3600, $_SERVER['HTTP_HOST'], 'clemson.edu', false, false);
@@ -182,7 +182,7 @@ if(isset($_GET['code'])) {
 }
 
 function refreshGoogToken($uuid){
-	$credObj = file_get_contents("../serviceCreds.json");
+	$credObj = file_get_contents($_SERVER['SERVICECREDS']);
 	$credObj = json_decode($credObj, true);
 	
 	$obj = $credObj['google'][0]['accounts'];
@@ -222,11 +222,11 @@ function refreshGoogToken($uuid){
 	
 	$credObj['google'][0]['accounts'][$d]['accessToken'] = $obj['access_token'];
 	
-	file_put_contents("../serviceCreds.json", json_encode($credObj));
+	file_put_contents($_SERVER['SERVICECREDS'], json_encode($credObj));
 }
 
 function getTokenStatus($uuid){
-	$credObj = file_get_contents("../serviceCreds.json");
+	$credObj = file_get_contents($_SERVER['SERVICECREDS']);
 	$credObj = json_decode($credObj, true);
 	
 	$obj = $credObj['google'][0]['accounts'];

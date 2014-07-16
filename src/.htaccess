@@ -1,19 +1,8 @@
-# compress text, html, javascript, css, xml:
-# this file is copied by the build script to the release
-AddOutputFilterByType DEFLATE text/plain
-AddOutputFilterByType DEFLATE text/html
-AddOutputFilterByType DEFLATE text/xml
-AddOutputFilterByType DEFLATE text/css
-AddOutputFilterByType DEFLATE text/javascript
-AddOutputFilterByType DEFLATE application/xml
-AddOutputFilterByType DEFLATE application/xhtml+xml
-AddOutputFilterByType DEFLATE application/rss+xml
-AddOutputFilterByType DEFLATE application/javascript
-AddOutputFilterByType DEFLATE application/x-javascript
-AddOutputFilterByType DEFLATE application/json
-
-#RewriteEngine on
-# RewriteBase /
-#RewriteCond %{REQUEST_FILENAME}	!login\.php
-#RewriteCond %{REQUEST_FILENAME} !auth\.php
-#RewriteRule ^(.*)$ /socialreader/Branches/mobileFramework/src/auth.php?uri=$1 [PT,L]
+SetEnv SERVICECREDS /home/aaron/github/acilos/src/private/config/serviceCreds.json
+SetEnv PUBLICQUERYTERMOBJ /home/aaron/github/acilos/src/private/config/publicQueryTermObj.json
+SetEnv LOCALQUERYTERMOBJ /home/aaron/github/acilos/src/private/config/localQueryTermObj.json
+SetEnv APPSETTINGS /home/aaron/github/acilos/src/private/settings/appSettings.json
+SetEnv BACKUPDATA /home/aaron/github/acilos/src/private/config/backupData.json
+SetEnv SERVICECREDSBACKUP /home/aaron/github/acilos/src/private/config/serviceCredsBackup.json
+php_value session.cookie_lifetime 604800
+php_value session.gc_maxlifetime 10

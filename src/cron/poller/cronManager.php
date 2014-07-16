@@ -221,7 +221,7 @@ function getUserFeed(){
 	echo "get instagram stuff"; ?><br/><?php
 
 	//get the token from the file
-	$filename = "../../serviceCreds.json";
+	$filename = $_SERVER['SERVICECREDS'];
 	$file = file_get_contents($filename);
 
 	$tokenObject = json_decode($file, true);
@@ -299,7 +299,7 @@ function normalizeNewsFeedObj($objArray, $account){
 function getUserNewsFeed(){
 	echo "get facebook stuff"; 
 
-	$filename = "../../serviceCreds.json";
+	$filename = $_SERVER['SERVICECREDS'];
 
 	$file = file_get_contents($filename);
 
@@ -353,7 +353,7 @@ function normalizeTwitterObject($objArray, $account){
 
 function getUserTimeline(){
 	echo "get twitter stuff"; ?><br/><?php
-	$filename = "../../serviceCreds.json";
+	$filename = $_SERVER['SERVICECREDS'];
 	$file = file_get_contents($filename);
 
 	$tokenObject = json_decode($file, true);
@@ -393,7 +393,7 @@ function getGoogleFeed(){
 	echo "get google stuff"; ?><br/><?php
 
 	//get the token from the file
-	$filename = "../../serviceCreds.json";
+	$filename = $_SERVER['SERVICECREDS'];
 	$file = file_get_contents($filename);
 	
 	$tokenObject = json_decode($file, true);
@@ -602,7 +602,7 @@ function normalizeDiscussionObj($objArray, $account){
 function getPersonalFeed(){
 	echo "get linkedin objects"; ?><br/><?php
 
-	$filename = "../../serviceCreds.json";
+	$filename = $_SERVER['SERVICECREDS'];
 	$file = file_get_contents($filename);
 	
 	$tokenObject = json_decode($file, true);
@@ -627,7 +627,7 @@ function getPersonalFeed(){
 function getDiscussionObjects(){
 	echo "get linkedin discussion objects"; ?><br/><?php
 
-	$filename = "../../serviceCreds.json";
+	$filename = $_SERVER['SERVICECREDS'];
 	$file = file_get_contents($filename);
 
 	$tokenObject = json_decode($file, true);

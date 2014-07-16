@@ -105,13 +105,8 @@ cat > cron/callAmazonRebootManager.sh << 'EOF'
 EOF
 
 cat >> cron/callAmazonRebootManager.sh << 'EOF'
-echo "This is callAmazonRebootManager.sh, and it is being called by the cron" >> /var/log/myLogFile
 
-var=`uname -a | grep amzn1`
-
-if [ -n "$var" ]; then
-        `/sbin/shutdown -r now`
-fi
+#This setting can be changed from the app settings tab under Reset App
 
 EOF
 
@@ -146,6 +141,18 @@ else
 	echo "Socialreader crons already running"
 fi
 
+echo "writing src/.htaccess file"
+
+echo SetEnv SERVICECREDS $MAINPATH"/private/config/serviceCreds.json" > .htaccess
+echo SetEnv PUBLICQUERYTERMOBJ $MAINPATH"/private/config/publicQueryTermObj.json" >> .htaccess
+echo SetEnv LOCALQUERYTERMOBJ $MAINPATH"/private/config/localQueryTermObj.json" >> .htaccess
+echo SetEnv APPSETTINGS $MAINPATH"/private/settings/appSettings.json" >> .htaccess
+echo SetEnv BACKUPDATA $MAINPATH"/private/config/backupData.json" >> .htaccess
+echo SetEnv SERVICECREDSBACKUP $MAINPATH"/private/config/serviceCredsBackup.json" >> .htaccess
+
+echo "php_value session.cookie_lifetime 604800" >> .htaccess
+echo "php_value session.gc_maxlifetime 604800" >> .htaccess
+
 echo "Priming database and clearing data"
 php startES.php
 
@@ -155,5 +162,8 @@ echo "setting $running and 777 on all files"
 cd ..
 chown -R $running:$running *
 chmod -R 777 *
+
+#Restart apache so the changes to the .htaccess file will apply
+service apache2 restart
 	
 echo "Finshed, The app is ready to go"

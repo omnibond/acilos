@@ -30,6 +30,7 @@ use \ElasticSearch\Client;
 require_once('../../cron/objects/authObject.php');
 require_once('../../oAuth/twitteroauth/twitteroauth.php');
 require_once('RefreshGoogleToken.php');
+require_once('authCalls.php');
 
 class Credentials{
 	public function checkCredentials(){
@@ -58,7 +59,7 @@ class Credentials{
 	
 	public function checkForServiceCreds(){
 		try{
-			$credObj = file_get_contents("../../serviceCreds.json");
+			$credObj = file_get_contents($_SERVER['SERVICECREDS']);
 			$credObj = json_decode($credObj, true);
 			foreach($credObj as $key => $value){
 				if(count($credObj[$key]) > 0){
@@ -72,7 +73,7 @@ class Credentials{
 	}
 	
 	public function getServiceCreds(){
-		$file = "../../serviceCreds.json";
+		$file = $_SERVER['SERVICECREDS'];
 		$var = file_get_contents($file);
 
 		return $var;
@@ -87,7 +88,7 @@ class Credentials{
 			"google" => array()
 		);
 
-		$file = "../../serviceCreds.json";
+		$file = $_SERVER['SERVICECREDS'];
 		$var = file_get_contents($file);
 		$serviceCreds = json_decode($var, true);
 

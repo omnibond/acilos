@@ -153,7 +153,7 @@ function getFriendsList($service){
 	switch ($service){
 		case "Facebook":
 			echo "case \"Facebook\""; ?><br/><?php
-			$filename = "../../serviceCreds.json";
+			$filename = $_SERVER['SERVICECREDS'];
 			if(($file = file_get_contents($filename)) == false){
 				echo ("Cannot open the file: " . $filename);
 			}else{
@@ -207,7 +207,7 @@ function getFriendsList($service){
 		break;
 		case "Twitter":
 			echo "case \"Twitter\""; ?><br/><?php
-			$filename = "../../serviceCreds.json";
+			$filename = $_SERVER['SERVICECREDS'];
 			if(($file = file_get_contents($filename)) == false){
 				echo "Cannot open file $filename";
 			}else{
@@ -268,7 +268,7 @@ function getFriendsList($service){
 		break;
 		case "Instagram":
 		echo "case \"Instagram\""; ?><br/><?php
-			$filename = "../../serviceCreds.json";
+			$filename = $_SERVER['SERVICECREDS'];
 			if(($file = file_get_contents($filename)) == false){
 				echo(json_encode($returnArr['Instagram'] = array("false" =>"Cannot open the file")));
 			}else{
@@ -322,7 +322,7 @@ function getFriendsList($service){
 		break;
 		case "Linkedin":
 		echo "case \"Linkedin\""; ?><br/><?php
-			$filename = "../../serviceCreds.json";
+			$filename = $_SERVER['SERVICECREDS'];
 			if(($file = file_get_contents($filename)) == false){
 				echo("Cannot open the file: " . $filename);
 			}else{
@@ -369,7 +369,7 @@ function getFriendsList($service){
 			}
 		case "Google":
 		echo "case \"Google\""; ?><br/><?php
-			$filename = "../../serviceCreds.json";
+			$filename = $_SERVER['SERVICECREDS'];
 			if(($file = file_get_contents($filename)) == false){
 				echo("Cannot open the file: " . $filename);
 			}else{

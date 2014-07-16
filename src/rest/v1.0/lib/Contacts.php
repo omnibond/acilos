@@ -27,6 +27,7 @@
 */
 
 require_once('clientHelpers.php');
+require_once('authCalls.php');
 
 class Contacts{
 	

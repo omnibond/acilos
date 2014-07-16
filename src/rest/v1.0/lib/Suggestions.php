@@ -1,6 +1,7 @@
 <?php
 
 require_once('getSuggestionsFunc.php');
+require_once('authCalls.php');
 
 /****************************************************************************
 ** Acilos app: https://github.com/omnibond/acilos

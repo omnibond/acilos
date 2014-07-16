@@ -144,14 +144,21 @@ define(['dojo/_base/declare',
 			this.selectorItem.placeAt(this.domNode.parentNode);
 		},
 		
-		activate: function() {
-			topic.publish("/dojo-mama/updateSubNav", {back: '/settings', title: "Turn rebooting on or off"} );
+		activate: function(){
+			topic.publish("/dojo-mama/updateSubNav", {back: '/manDatabase', title: "Turn rebooting on or off"} );
 
 			this.checkRebootSetting().then(lang.hitch(this, function(obj){
 				var result = obj;
 
 				this.buildMainList(obj);
 			}));
+		},
+
+		deactivate: function(){
+			if(this.selectorItem){
+				this.selectorItem.destroyRecursive();
+				this.selectorItem = null;
+			}
 		}
 	})
 });

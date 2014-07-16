@@ -31,6 +31,10 @@ require_once('../../cron/objects/authObject.php');
 require_once('counts.php');
 require_once('S3Functions.php');
 require_once('EC2Functions.php');
+require_once('matchHelpers.php');
+require_once('authCalls.php');
+
+//include '../../hidden/settings'
 
 use \ElasticSearch\Client;
 
@@ -85,7 +89,7 @@ class Database{
 	}
 
 	public function checkRebootSetting(){
-		$fileName = "../../appSettings.json";
+		$fileName = $_SERVER['APPSETTINGS'];
 		
 		try{
 			$settingsList = file_get_contents($fileName);
@@ -109,7 +113,7 @@ class Database{
 		$var = file_get_contents("php://input");
 		$obj = json_decode($var, true);
 
-		$fileName = "../../appSettings.json";
+		$fileName = $_SERVER['APPSETTINGS'];
 
 		try{
 			$settingsList = file_get_contents($fileName);
@@ -201,6 +205,19 @@ class Database{
 		}
 	}
 
+	public function getObject($id){
+		//echo "getting object"; 
+
+		$index = "app";
+		$host = "localhost";
+		$port = "9200";
+
+		$es = Client::connection("http://$host:$port/$index/$index");
+		$res = $es->get($id);
+
+		return $res;
+	}
+
 	function deleteAll(){
 		$var = file_get_contents("php://input");
 		$obj = json_decode($var, true);
@@ -219,6 +236,120 @@ class Database{
 
 		return json_encode(array("success"));
 
+	}
+
+	public function checkForBackupData(){
+		try{
+			$check = file_get_contents($_SERVER['BACKUPDATA']);
+
+			if($check != false){
+				return json_encode(array("success" => "there is backup data"));
+			}else{
+				return json_encode(array("failure" => "there is no backup data"));
+			}
+		}catch(Exception $e){
+			return json_encode(array("failure" => $e->getMessage()));
+		}
+	}
+
+	public function saveBackupData(){
+		$var = file_get_contents("php://input");
+		$obj = json_decode($var, true);
+
+		$from = 0;
+
+		$keepGoing = "true";
+
+		$finalStuff = array();
+
+		while($keepGoing == "true"){
+			$results = matchAll200($from);
+
+			if(isset($results)){
+				if(isset($results['hits'])){
+					if(isset($results['hits']['hits']) && count($results['hits']['hits']) != 0){
+						$stuffToKeep = $results['hits']['hits'];
+
+						for($x = 0; $x < count($stuffToKeep); $x++){
+							array_push($finalStuff, $stuffToKeep[$x]['_source']);	
+						}
+
+						$from += 200;
+					}else{
+						$keepGoing = "false";
+					}
+				}else{
+					$keepGoing = "false";
+				}
+			}else{
+				$keepGoing = "false";
+			}
+		}
+
+		file_put_contents($_SERVER['BACKUPDATA'], json_encode($finalStuff));
+
+		$keepServiceCreds = $obj['keepServiceCreds'];
+
+		if($keepServiceCreds == "true"){
+			$stuff = file_get_contents($_SERVER['SERVICECREDS']);
+
+			file_put_contents($_SERVER['SERVICECREDSBACKUP'], $stuff);
+		}
+
+		$wipeCurrentData = $obj['wipeCurrentData'];
+
+		if($wipeCurrentData == "true"){
+			$es = Client::connection("http://localhost:9200/app/app");
+			$es->delete();
+
+			$mapCommand = "curl -XPUT 'http://localhost:9200/app' -d @../../app_mapping.json";
+			$output = shell_exec($mapCommand);
+		}
+	}
+
+	public function importBackupData(){
+		$var = file_get_contents("php://input");
+		$obj = json_decode($var, true);
+
+		if(isset($obj)){
+			if(isset($obj['restoreServiceCreds'])){
+				if($obj['restoreServiceCreds'] == "true"){
+					$backupServiceCreds = file_get_contents($_SERVER['SERVICECREDSBACKUP']);
+
+					file_put_contents($_SERVER['SERVICECREDS'], $backupServiceCreds);	
+
+					if(isset($obj['deleteBackupCredentials'])){
+						if($obj['deleteBackupCredentials'] == "true"){
+							unlink($_SERVER['SERVICECREDSBACKUP']);
+						}
+					}
+				}
+			}
+			if(isset($obj['wipeDBData'])){
+				if($obj['wipeDBData'] == "true"){
+					$es = Client::connection("http://localhost:9200/app/app");
+					$es->delete();
+
+					$mapCommand = "curl -XPUT 'http://localhost:9200/app' -d @../../app_mapping.json";
+					$output = shell_exec($mapCommand);
+				}
+			}
+		}
+
+		$data = file_get_contents($_SERVER['BACKUPDATA']);
+		$data = json_decode($data, true);
+
+		for($x = 0; $x < count($data); $x++){
+			$result = $this->writeObject($data[$x]);
+		}
+
+		if(isset($obj)){
+			if(isset($obj['deleteBackupFile'])){
+				if($obj['deleteBackupFile'] == "true"){
+					unlink($_SERVER['BACKUPDATA']);
+				}
+			}
+		}
 	}
 
 	function getBackUpCounts(){		
@@ -343,7 +474,7 @@ class Database{
 		$credObj;		
 
 		try{
-			$credObj = file_get_contents("../../serviceCreds.json");
+			$credObj = file_get_contents($_SERVER['SERVICECREDS']);
 			$credObj = json_decode($credObj, true);
 		}catch (Exception $e){
 			$credObj = array(
@@ -354,7 +485,7 @@ class Database{
 				"google" => array(),
 				"login" => "first"
 			);
-			file_put_contents("../../serviceCreds.json", json_encode($credObj));
+			file_put_contents($_SERVER['SERVICECREDS'], json_encode($credObj));
 		}
 		
 		$color = $obj['color'];
@@ -371,7 +502,7 @@ class Database{
 		);
 		array_push($credObj[$param][0]['accounts'], $temp);
 
-		file_put_contents("../../serviceCreds.json", json_encode($credObj));
+		file_put_contents($_SERVER['SERVICECREDS'], json_encode($credObj));
 
 		return json_encode(array("success" => "App Saved"));		
 	}
@@ -382,7 +513,7 @@ class Database{
 		$credObj;		
 
 		try{
-			$credObj = file_get_contents("../../serviceCreds.json");
+			$credObj = file_get_contents($_SERVER['SERVICECREDS']);
 			$credObj = json_decode($credObj, true);
 		}catch (Exception $e){
 			$credObj = array(
@@ -393,7 +524,7 @@ class Database{
 				"google" => array(),
 				"login" => "first"
 			);
-			file_put_contents("../../serviceCreds.json", json_encode($credObj));
+			file_put_contents($_SERVER['SERVICECREDS'], json_encode($credObj));
 		}
 
 		if(count($credObj[$obj['param']]) > 0){
@@ -438,7 +569,7 @@ class Database{
 		array_push($credObj[$obj['param']], $temp);
 
 
-		file_put_contents("../../serviceCreds.json", json_encode($credObj));
+		file_put_contents($_SERVER['SERVICECREDS'], json_encode($credObj));
 
 		return json_encode(array("success" => "App Saved"));
 	}
@@ -450,7 +581,7 @@ class Database{
 		$credObj;
 		
 		try{
-			$credObj = file_get_contents("../../serviceCreds.json");
+			$credObj = file_get_contents($_SERVER['SERVICECREDS']);
 			$credObj = json_decode($credObj, true);
 		}catch (Exception $e){
 			$credObj = array(
@@ -461,7 +592,7 @@ class Database{
 				"google" => array(),
 				"login" => "first"
 			);
-			file_put_contents("../../serviceCreds.json", json_encode($credObj));
+			file_put_contents($_SERVER['SERVICECREDS'], json_encode($credObj));
 		}
 		
 		if(count($credObj[$obj['param']]) > 0){
@@ -473,7 +604,7 @@ class Database{
 			}			
 		}
 
-		file_put_contents("../../serviceCreds.json", json_encode($credObj));
+		file_put_contents($_SERVER['SERVICECREDS'], json_encode($credObj));
 
 		return json_encode(array("success" => "Authenticator Deleted"));
 	}
@@ -485,7 +616,7 @@ class Database{
 		$credObj;		
 
 		try{
-			$credObj = file_get_contents("../../serviceCreds.json");
+			$credObj = file_get_contents($_SERVER['SERVICECREDS']);
 			$credObj = json_decode($credObj, true);
 		}catch (Exception $e){
 			$credObj = array(
@@ -496,7 +627,7 @@ class Database{
 				"google" => array(),
 				"login" => "first"
 			);
-			file_put_contents("../../serviceCreds.json", json_encode($credObj));
+			file_put_contents($_SERVER['SERVICECREDS'], json_encode($credObj));
 		}		
 		
 		$totalAccounts = 0;
@@ -523,7 +654,7 @@ class Database{
 				}
 			}
 		
-			file_put_contents("../../serviceCreds.json", json_encode($credObj));
+			file_put_contents($_SERVER['SERVICECREDS'], json_encode($credObj));
 
 			return json_encode(array("success" => "Account Deleted"));
 		}else{
@@ -542,7 +673,7 @@ class Database{
 		$credObj;		
 
 		try{
-			$credObj = file_get_contents("../../serviceCreds.json");
+			$credObj = file_get_contents($_SERVER['SERVICECREDS']);
 			$credObj = json_decode($credObj, true);
 		}catch (Exception $e){
 			$credObj = array(
@@ -553,7 +684,7 @@ class Database{
 				"google" => array(),
 				"login" => "first"
 			);
-			file_put_contents("../../serviceCreds.json", json_encode($credObj));
+			file_put_contents($_SERVER['SERVICECREDS'], json_encode($credObj));
 		}
 
 		if(count($credObj[$obj['param']]) > 0){
@@ -567,7 +698,7 @@ class Database{
 			}
 		}
 
-		file_put_contents("../../serviceCreds.json", json_encode($credObj));
+		file_put_contents($_SERVER['SERVICECREDS'], json_encode($credObj));
 
 		return json_encode(array("success" => "Account Edited"));
 	}
@@ -578,7 +709,7 @@ class Database{
 		$loginObj = $obj['obj'];
 
 		try{
-			$credObj = file_get_contents("../../serviceCreds.json");
+			$credObj = file_get_contents($_SERVER['SERVICECREDS']);
 			$credObj = json_decode($credObj, true);
 		}catch (Exception $e){
 			$credObj = array(
@@ -589,7 +720,7 @@ class Database{
 				"google" => array(),
 				"login" => "first"
 			);
-			file_put_contents("../../serviceCreds.json", json_encode($credObj));
+			file_put_contents($_SERVER['SERVICECREDS'], json_encode($credObj));
 		}
 		
 		$exists = false;
@@ -611,7 +742,7 @@ class Database{
 			}			
 		}
 
-		file_put_contents("../../serviceCreds.json", json_encode($credObj));	
+		file_put_contents($_SERVER['SERVICECREDS'], json_encode($credObj));	
 	}
 
 	public function saveServiceCredsFirstTime(){
@@ -704,7 +835,7 @@ class Database{
 			$finalObj['google'] = array();
 		}
 		
-		file_put_contents("../../serviceCreds.json", json_encode($finalObj));
+		file_put_contents($_SERVER['SERVICECREDS'], json_encode($finalObj));
 
 		return json_encode(array("success" => "App Saved"));
 	}

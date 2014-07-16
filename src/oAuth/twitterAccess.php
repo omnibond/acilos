@@ -26,7 +26,6 @@
 */
 
 require_once('../cron/logs/KLogger.php');
-
 require_once('../vendor/autoload.php');
 require_once('../cron/objects/authObject.php');
 
@@ -89,7 +88,7 @@ if(isset($_REQUEST['oauth_verifier'])){
 
 	$obj = json_decode($file, true);
 	
-	$credObj = file_get_contents("../serviceCreds.json");
+	$credObj = file_get_contents($_SERVER['SERVICECREDS']);
 	$credObj = json_decode($credObj, true);
 	
 	$tempApp;
@@ -145,7 +144,6 @@ if(isset($_REQUEST['oauth_verifier'])){
 		$temp['accessSecret'] = $access_token['oauth_token_secret'];
 		$temp['key'] = $obj['appKey'];
 		$temp['secret'] = $obj['appSecret'];
-		$temp['expiresAt'] = `date +%s`;
 		$temp['user'] = $account->id;
 		$temp['image'] = $account->profile_image_url;
 		$temp['name'] = $account->screen_name;
@@ -166,12 +164,10 @@ if(isset($_REQUEST['oauth_verifier'])){
 			$credObj['twitter'][0]['accounts'][$j] = $temp;
 		}
 		
-		file_put_contents("../serviceCreds.json", json_encode($credObj));
-		
-		header('Location: ../login.php?twitter=true');
-	}else{
-		setcookie ("facebookCook", "", time() - 3600, $_SERVER['HTTP_HOST'], 'clemson.edu', false, false);
-		
+		file_put_contents($_SERVER['SERVICECREDS'], json_encode($credObj));
+		$_SESSION['authed'] = true;
+		header('Location: ../login.php');
+	}else{	
 		header('Location: ../login.php?error=2&service=twitter');
 	}	
 }

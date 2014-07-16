@@ -36,7 +36,7 @@
 	
 	function getData(){
 		try{
-			$credObj = file_get_contents("serviceCreds.json");
+			$credObj = file_get_contents($_SERVER['SERVICECREDS']);
 			$credObj = json_decode($credObj, true);
 		}catch (Exception $e){
 			$credObj = array(
@@ -47,22 +47,23 @@
 				"google" => array(),
 				"login" => "first"
 			);
-			file_put_contents("serviceCreds.json", json_encode($credObj));
+			file_put_contents($_SERVER['SERVICECREDS'], json_encode($credObj));
 		}
 		return $credObj;
 	}
 	
 	if(isset($_GET['logout']) && $_GET['logout'] == "true"){
-		setcookie("facebookCook", $_COOKIE['PHPSESSID'], time()-3600, '/', $cookieDom, false, false);
-		setcookie("linkedinCook", $_COOKIE['PHPSESSID'], time()-3600, '/', $cookieDom, false, false);
-		setcookie("twitterCook", $_COOKIE['PHPSESSID'], time()-3600, '/', $cookieDom, false, false);
-		setcookie("instagramCook", $_COOKIE['PHPSESSID'], time()-3600, '/', $cookieDom, false, false);
-		setcookie("googleCook", $_COOKIE['PHPSESSID'], time()-3600, '/', $cookieDom, false, false);
-		header('Location: /auth.php');
+		session_start();
+		$_SESSION['authed'] = false;
+	    session_destroy();
+		//here we want to set authed to false and then end the session (which should delete the authed variable)
+		//the cookies wont exist anymore
+		header('Location: /login.php');
+		die();
 	}
 	
-	#print_r($_COOKIE);
 	$var = getData();
+	$alteredVar = getData();
 	$fCount = (string)count($var['facebook']);
 	$tCount = (string)count($var['twitter']);
 	$lCount = (string)count($var['linkedin']);
@@ -70,7 +71,7 @@
 	$gCount = (string)count($var['google']);
 	$login = $var['login'];
 
-	//print_r($var);
+	//print_r(session_id());
 
 	$goToManAccounts = "false";
 
@@ -89,6 +90,31 @@
 					}
 				}else{
 					$goToManAccounts = "true";
+				}
+			}
+		}
+	}
+
+	foreach($alteredVar as $key => $value){
+		if($key != "login"){			
+			for($x = 0; $x < count($alteredVar[$key]); $x++){
+				if(isset($alteredVar[$key][$x]['key'])){
+					$alteredVar[$key][$x]['key'] = '';
+				}
+
+				if(isset($alteredVar[$key][$x]['secret'])){
+					$alteredVar[$key][$x]['secret'] = '';
+				}
+				if(isset($alteredVar[$key][$x]['accounts']) && count($alteredVar[$key][$x]['accounts']) > 0){
+					for($y = 0; $y < count($alteredVar[$key][$x]['accounts']); $y++){
+						if(isset($alteredVar[$key][$x]['accounts'][$y]['accessToken'])){
+							$alteredVar[$key][$x]['accounts'][$y]['accessToken'] = '';
+						}
+
+						if(isset($alteredVar[$key][$x]['accounts'][$y]['refreshToken'])){
+							$alteredVar[$key][$x]['accounts'][$y]['refreshToken'] = '';
+						}
+					}
 				}
 			}
 		}
@@ -126,81 +152,17 @@
 		$gCook = "false";
 	}
 	
-	if(isset($_GET['facebook']) && $_GET['facebook'] == "true"){
-		setcookie("facebookCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', $cookieDom, false, false);
-		$ctx = stream_context_create(array(
-		    'http' => array(
-			'timeout' => 1
-			)
-		    )
-		);
-		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
-		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
-		if((isset($_GET['login']) && $_GET['login'] !== "second") || $goToManAccounts == "true"){
-			header('Location: /#/manAccounts/AuthAccounts');
-		}else{
-			header('Location: /#/mainFeed');
-		}
-	}
-	if(isset($_GET['linkedin']) && $_GET['linkedin'] == "true"){
-		setcookie("linkedinCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', $cookieDom, false, false);
-		$ctx = stream_context_create(array(
-		    'http' => array(
-			'timeout' => 1
-			)
-		    )
-		);
-		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
-		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
-		if((isset($_GET['login']) && $_GET['login'] !== "second") || $goToManAccounts == "true"){
-			header('Location: /#/manAccounts/AuthAccounts');
-		}else{	
-			header('Location: /#/mainFeed');
-		}
-	}
-	if(isset($_GET['twitter']) && $_GET['twitter'] == "true"){
-		setcookie("twitterCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', $cookieDom, false, false);
-		$ctx = stream_context_create(array(
-		    'http' => array(
-			'timeout' => 1
-			)
-		    )
-		);
-		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
-		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
-		if((isset($_GET['login']) && $_GET['login'] !== "second") || $goToManAccounts == "true"){
-			header('Location: /#/manAccounts/AuthAccounts');
-		}else{
-			header('Location: /#/mainFeed');
-		}
-	}
-	if(isset($_GET['instagram']) && $_GET['instagram'] == "true"){
-		setcookie("instagramCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', $cookieDom, false, false);
-		$ctx = stream_context_create(array(
-		    'http' => array(
-			'timeout' => 1
-			)
-		    )
-		);
-		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
-		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
-		if((isset($_GET['login']) && $_GET['login'] !== "second") || $goToManAccounts == "true"){
-			header('Location: /#/manAccounts/AuthAccounts');
-		}else{	
-			header('Location: /#/mainFeed');
-		}
-	}
-	if(isset($_GET['google']) && $_GET['google'] == "true"){
-		setcookie("googleCook", $_COOKIE['PHPSESSID'], time()+ (604800), '/', $cookieDom, false, false);
-			$ctx = stream_context_create(array(
+	if(isset($_SESSION['authed']) && $_SESSION['authed'] === true){
+		$ctx = stream_context_create(
+			array(
 			    'http' => array(
-				'timeout' => 1
+					'timeout' => 1
 				)
-			    )
-			);
-			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
-			file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
-		if((isset($_GET['login']) && $_GET['login'] !== "second") || $goToManAccounts == "true"){
+		    )
+		);
+		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php", 0, $ctx);
+		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/clientManager.php", 0, $ctx);
+		if(isset($goToManAccounts) && $goToManAccounts == "true"){
 			header('Location: /#/manAccounts/AuthAccounts');
 		}else{
 			header('Location: /#/mainFeed');
@@ -274,78 +236,71 @@
 				){
 					window.location = "credentials.php";
 				}else{
-					xhr.get({
-						url: 'serviceCreds.json',
-						handleAs: 'json',
-						async: false,
-						preventCache: true,
-						content: { },
-						error: function(error){
-							console.log("Error has occurred: " + error);
+					var data = '<?php echo json_encode($alteredVar); ?>';
+					var serviceCreds = JSON.parse(data);
+
+
+					var leftPane = new Container({
+						style: "text-align: center"
+					});
+					domWindow.body().appendChild(leftPane.domNode);
+
+					if(has('iphone') != undefined){
+						domWindow.body().style.overflow = "scroll";
+					}
+
+					if(has('android' < 4)){
+						domWindow.body().style.overflow = "scroll";
+					}
+
+					document.body.style.backgroundColor = "#d0d3d4";
+
+					console.log("document.body: ", document.body.style);
+					
+					var item = new ListItem({
+						label: "Welcome to",
+						style: "border:none;height:35px;font-size;font-family:arial;font-size:20px; background-color: #d0d3d4"
+					});
+					leftPane.addChild(item);
+
+					var acilosLoginDiv = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/acilosLoginLogo.png>"});
+					leftPane.domNode.appendChild(acilosLoginDiv);
+
+					var item = new ListItem({
+						label: "Please Log In To Continue",
+						style: "border:none;height:35px;font-size;font-family:arial;font-size:20px; background-color: #d0d3d4"
+					});
+					leftPane.addChild(item);
+					
+					if('<?php echo $errorCode; ?>' != ""){
+						var list = new RoundRectList({	})
+						if('<?php echo $errorCode; ?>' == "1"){
+							var item = new ListItem({
+								variableHeight: true,
+								label: "Failed to authenticate user",
+								style: "border:none;height:30px;padding-left:4px;background-color:inherit"
+							});
+							var button = new Button({
+								label: "Change accounts",
+								style: "margin-left:5px;margin-bottom:10px",
+								onClick: function(){
+									var newWin = window.open();
+									newWin.location = "https://"+'<?php echo $errorService; ?>'+".com";
+								}
+							});
+							leftPane.addChild(item);
+							leftPane.addChild(button);
 						}
-					}).then(lang.hitch(this, function(serviceCreds){
-						var leftPane = new Container({
-							style: "text-align: center"
-						});
-						domWindow.body().appendChild(leftPane.domNode);
+						if('<?php echo $errorCode; ?>' == "2"){
+							var item = new ListItem({
+								label: "Error logging in to " + '<?php echo $errorService; ?>',
+								style: "background-color:inherit"
+							});
+							leftPane.addChild(item);
+						}						
+					}
 
-						if(has('iphone') != undefined){
-							domWindow.body().style.overflow = "scroll";
-						}
-
-						if(has('android' < 4)){
-							domWindow.body().style.overflow = "scroll";
-						}
-
-						document.body.style.backgroundColor = "#d0d3d4";
-
-						console.log("document.body: ", document.body.style);
-						
-						var item = new ListItem({
-							label: "Welcome to",
-							style: "border:none;height:35px;font-size;font-family:arial;font-size:20px; background-color: #d0d3d4"
-						});
-						leftPane.addChild(item);
-
-						var acilosLoginDiv = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/acilosLoginLogo.png>"});
-						leftPane.domNode.appendChild(acilosLoginDiv);
-
-						var item = new ListItem({
-							label: "Please Log In To Continue",
-							style: "border:none;height:35px;font-size;font-family:arial;font-size:20px; background-color: #d0d3d4"
-						});
-						leftPane.addChild(item);
-						
-						if('<?php echo $errorCode; ?>' != ""){
-							var list = new RoundRectList({	})
-							if('<?php echo $errorCode; ?>' == "1"){
-								var item = new ListItem({
-									variableHeight: true,
-									label: "Failed to authenticate user",
-									style: "border:none;height:30px;padding-left:4px;background-color:inherit"
-								});
-								var button = new Button({
-									label: "Change accounts",
-									style: "margin-left:5px;margin-bottom:10px",
-									onClick: function(){
-										var newWin = window.open();
-										newWin.location = "https://"+'<?php echo $errorService; ?>'+".com";
-									}
-								});
-								leftPane.addChild(item);
-								leftPane.addChild(button);
-							}
-							if('<?php echo $errorCode; ?>' == "2"){
-								var item = new ListItem({
-									label: "Error logging in to " + '<?php echo $errorService; ?>',
-									style: "background-color:inherit"
-								});
-								leftPane.addChild(item);
-							}						
-						}
-
-						loginPart(leftPane, serviceCreds);
-					}));
+					loginPart(leftPane, serviceCreds);
 				}
 			},
 			
