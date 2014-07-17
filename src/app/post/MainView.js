@@ -207,8 +207,6 @@ define(['dojo/_base/declare',
 				}
 			});
 
-			var fUploader = domConstruct.create("div", {});
-
 			var fileHolder = domConstruct.create("div", {style: "border:none; margin-left: 7px; margin-top: 14px; height: auto"});
 			this.mainList.domNode.appendChild(fileHolder);
 			
@@ -279,18 +277,29 @@ define(['dojo/_base/declare',
 										
 									console.log("tokenArr is: ", tokenArr);
 
-									this.fileToUpload = this.iframeElements[2].files[0].name;
+									if(this.iframeElements[2]){
+										if(this.iframeElements[2].files[0]){
+											if(this.iframeElements[2].files[0].name){
+												this.fileToUpload = this.iframeElements[2].files[0].name;
+											}else{
+												this.fileToUpload = "?";
+											}
 
-									console.log("the file to upload isssssssssssssss: ", this.iframeElements[2].files[0]);
-
-									if(this.iframeElements[2].files[0]){
-										if(this.iframeElements[2].files[0] != '' && this.iframeElements[2].files[0] != 'undefined' && this.iframeElements[2].files[0] != null){
-											fileType = this.iframeElements[2].files[0].type;
+											if(this.iframeElements[2].files[0].type){
+												var fileType = this.iframeElements[2].files[0].type;
+											}else{
+												var fileType = '?';
+											}
 										}else{
-											fileType = '?';
+											this.fileToUpload = "?";
+											var fileType = '?';
 										}
-										console.log("this.fileToUpload: ", this.fileToUpload);
+									}else{
+										this.fileToUpload = "?";
+										var fileType = '?';
 									}
+
+									console.log("the file to upload isssssssssssssss: ", this.fileToUpload);
 
 									this.sendPostFile(this.fileToUpload, fileType, tokenArr, msg).then(lang.hitch(this, function(obj){
 										console.log("obj is: ", obj);
@@ -312,8 +321,6 @@ define(['dojo/_base/declare',
 										if(this.failureFlag == "false"){
 											if(this.mainList){
 												this.fileToUpload = "";
-												fUploader.destroyRecursive();
-												fUploader = null;
 												this.mainList.destroyRecursive();
 												this.mainList = null;
 											}
@@ -361,7 +368,7 @@ define(['dojo/_base/declare',
 											this.errorDialog.show();
 										}
 									}));
-								}, fUploader)
+								})
 							});
 							this.nowList.addChild(this.submitButton);
 							this.mainList.addChild(this.nowList);
@@ -404,11 +411,6 @@ define(['dojo/_base/declare',
 										}
 
 										var msg = this.textArea.get("value");
-
-										var file = '';
-										if(this.iframeElements[2].files[0] != '' && this.iframeElements[2].files[0] != 'undefined' && this.iframeElements[2].files[0] != null){
-											var file = this.iframeElements[2].files[0].name;
-										}
 										
 										var tokenArr = {};
 										for(x=0; x<this.checkArray.length; x++){
@@ -423,13 +425,6 @@ define(['dojo/_base/declare',
 										}
 										
 										console.log(tokenArr);
-										
-										if(this.iframeElements[2].files[0] != '' && this.iframeElements[2].files[0] != 'undefined' && this.iframeElements[2].files[0] != null){
-											fileType = this.iframeElements[2].files[0].type;
-										}else{
-											fileType = '?';
-											file = '?';
-										}
 
 										if(msg == ""){
 											msg = " ";
@@ -445,6 +440,28 @@ define(['dojo/_base/declare',
 										var selectedTime = d.getTime();
 										selectedTime = selectedTime/1000;
 										console.log("selected time is: ", selectedTime);
+
+										if(this.iframeElements[2]){
+											if(this.iframeElements[2].files[0]){
+												if(this.iframeElements[2].files[0].name){
+													var file = this.iframeElements[2].files[0].name;
+												}else{
+													var file = '?';
+												}
+
+												if(this.iframeElements[2].files[0].type){
+													var fileType = this.iframeElements[2].files[0].type;
+												}else{
+													var fileType = '?';
+												}
+											}else{
+												var file = '?';
+												var fileType = '?';
+											}
+										}else{
+											var file = '?';
+											var fileType = '?';
+										}
 
 										this.runAtCommand(selectedTime, file, fileType, tokenArr, msg).then(lang.hitch(this, this.handleResponse));
 									}else{
