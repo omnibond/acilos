@@ -40,7 +40,7 @@ define(['dojo/_base/declare',
 		"dojox/mobile/ListItem",
 		"dojox/mobile/ToolBarButton",
 		"dojox/mobile/EdgeToEdgeCategory",
-		"dojox/mobile/RadioButton",
+		"dojox/mobile/RadioButton"
 ], function(
 	declare, 
 	ModuleScrollableView, 

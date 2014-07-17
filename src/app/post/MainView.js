@@ -217,8 +217,11 @@ define(['dojo/_base/declare',
 				var iframe = document.createElement("IFRAME");
 				iframe.setAttribute("src", "http://"+this.domain+"/upLoadPage.php");
 				iframe.setAttribute("name", "iframe");
-				iframe.style.width = 250+"px";
+				iframe.style.width = 275+"px";
 				iframe.style.height = 110+"px";
+				iframe.style.border = "none";
+				iframe.style.marginLeft = "-10px";
+				iframe.style.marginBottom = "-5px";
 				fileHolder.appendChild(iframe);
 
 				this.iframeElements = '';

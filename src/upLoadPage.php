@@ -83,6 +83,8 @@
 				this.fUploader.setAttribute("type", "file");
 				this.fUploader.setAttribute("accept", "image/*");
 				this.fUploader.setAttribute("name", "file[]");
+				this.fUploader.style.marginLeft = "-5px";
+				this.fUploader.style.class = "roundedBorder5pxClass";
 
 				leftPane.domNode.appendChild(this.fUploader);
 
@@ -91,7 +93,7 @@
 
 				var myButton = new Button({
 					label: "Upload",
-					style: "float: left; margin-top: 10px",
+					style: "float: left; margin-top: 10px; margin-left: 7px",
 					onClick: lang.hitch(this, function(){
 						if(this.responseDiv){
 							this.responseDiv.innerHTML = '';

@@ -36,7 +36,7 @@ define(['dojo/_base/declare',
 		'app/manDatabase/restartDB',
 		'app/manDatabase/RebootSetting',
 		'app/manDatabase/BackupData',
-		'app/manDatabase/RestoreData',
+		'app/manDatabase/RestoreData'
 ], function(
 	declare, 
 	Module, 
