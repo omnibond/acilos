@@ -519,7 +519,7 @@ Class Post{
 		$var = file_get_contents("php://input");
 		$varObj = json_decode($var, true);
 
-		if(isset($varObj['msg'])){
+		if(isset($varObj['msg']) && $varObj['msg'] !== " "){
 			$msg = $varObj['msg'];
 		}else{
 			$msg = "";
@@ -533,14 +533,14 @@ Class Post{
 		}
 
 
-		if(isset($varObj['file'])){
+		if(isset($varObj['file']) && $varObj['file'] !== "?"){
 			$fileName = $varObj['file'];
 		}else{
 			$fileName = "";
 		}
 
 
-		if(isset($varObj['fileType'])){
+		if(isset($varObj['fileType']) && $varObj['fileType'] !== "?"){
 			$fileType = $varObj['fileType'];
 		}else{
 			$fileType = "";
@@ -595,6 +595,8 @@ Class Post{
 								$url = $photoURL;
 							}
 						}
+
+						//print_r($url);
 
 						$ch = curl_init($url);
 

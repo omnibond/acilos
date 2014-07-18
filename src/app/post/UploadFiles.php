@@ -23,9 +23,7 @@
 ** Omnibond Systems -  www.omnibond.com
 **
 ** $QT_END_LICENSE$
-*/
-	phpinfo();
-	
+*/	
 	$target = "tmpUpload";
 
 	if(isset($_FILES['fUploader'])){
