@@ -156,7 +156,7 @@ echo "php_value upload_max_filesize 30M" >> .htaccess
 echo "php_value post_max_size 30M" >> .htaccess
 
 echo "Priming database and clearing data"
-#php startES.php
+php startES.php
 
 running=$(ps axho user,comm|grep -E "httpd|apache"|uniq|grep -v "root"|awk 'END {if ($1) print $1}')
 

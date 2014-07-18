@@ -49,11 +49,36 @@
 	}
 	
 	$var = getData();
-	$fCount = (string)count($var['facebook']);
-	$lCount = (string)count($var['twitter']);
-	$iCount = (string)count($var['linkedin']);
-	$tCount = (string)count($var['instagram']);
-	$gCount = (string)count($var['google']);
+	if(isset($var['facebook'])){
+		$fCount = (string)count($var['facebook']);
+	}else{
+		$fCount = 0;
+	}
+	if(isset($var['twitter'])){
+		$tCount = (string)count($var['twitter']);
+	}else{
+		$tCount = 0;
+	}
+	if(isset($var['linkedin'])){
+		$lCount = (string)count($var['linkedin']);
+	}else{
+		$lCount = 0;
+	}
+	if(isset($var['instagram'])){
+		$iCount = (string)count($var['instagram']);
+	}else{
+		$iCount = 0;
+	}
+	if(isset($var['google'])){
+		$gCount = (string)count($var['google']);
+	}else{
+		$gCount = 0;
+	}
+	if(isset($var['login'])){
+		$login = $var['login'];
+	}else{
+		$login = "first";
+	}
 	
 	if(isset($_GET['error'])){
 		$errorCode = $_GET['error'];

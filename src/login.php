@@ -64,12 +64,36 @@
 	
 	$var = getData();
 	$alteredVar = getData();
-	$fCount = (string)count($var['facebook']);
-	$tCount = (string)count($var['twitter']);
-	$lCount = (string)count($var['linkedin']);
-	$iCount = (string)count($var['instagram']);
-	$gCount = (string)count($var['google']);
-	$login = $var['login'];
+	if(isset($var['facebook'])){
+		$fCount = (string)count($var['facebook']);
+	}else{
+		$fCount = 0;
+	}
+	if(isset($var['twitter'])){
+		$tCount = (string)count($var['twitter']);
+	}else{
+		$tCount = 0;
+	}
+	if(isset($var['linkedin'])){
+		$lCount = (string)count($var['linkedin']);
+	}else{
+		$lCount = 0;
+	}
+	if(isset($var['instagram'])){
+		$iCount = (string)count($var['instagram']);
+	}else{
+		$iCount = 0;
+	}
+	if(isset($var['google'])){
+		$gCount = (string)count($var['google']);
+	}else{
+		$gCount = 0;
+	}
+	if(isset($var['login'])){
+		$login = $var['login'];
+	}else{
+		$login = "first";
+	}
 
 	//print_r(session_id());
 
@@ -126,28 +150,69 @@
 	}else{
 		$errorCode = "";
 	}	
-	if(count($var['facebook'][0]['accounts']) > 0){
-		$fCook = "true";
+	
+	if(isset($var['facebook'])){
+		if(isset($var['facebook'][0])){
+			if(isset($var['facebook'][0]['accounts'])){
+				$fCook = "true";
+			}else{
+				$fCook = "false";
+			}
+		}else{
+			$fCook = "false";
+		}
 	}else{
 		$fCook = "false";
 	}
-	if(count($var['linkedin'][0]['accounts']) > 0){
-		$lCook = "true";
+	if(isset($var['linkedin'])){
+		if(isset($var['linkedin'][0])){
+			if(isset($var['linkedin'][0]['accounts'])){
+				$lCook = "true";
+			}else{
+				$lCook = "false";
+			}
+		}else{
+			$lCook = "false";
+		}
 	}else{
 		$lCook = "false";
 	}
-	if(count($var['instagram'][0]['accounts']) > 0){
-		$iCook = "true";
+	if(isset($var['instagram'])){
+		if(isset($var['instagram'][0])){
+			if(isset($var['instagram'][0]['accounts'])){
+				$iCook = "true";
+			}else{
+				$iCook = "false";
+			}
+		}else{
+			$iCook = "false";
+		}
 	}else{
 		$iCook = "false";
 	}
-	if(count($var['twitter'][0]['accounts']) > 0){
-		$tCook = "true";
+	if(isset($var['twitter'])){
+		if(isset($var['twitter'][0])){
+			if(isset($var['twitter'][0]['accounts'])){
+				$tCook = "true";
+			}else{
+				$tCook = "false";
+			}
+		}else{
+			$tCook = "false";
+		}
 	}else{
 		$tCook = "false";
 	}
-	if(count($var['google'][0]['accounts']) > 0){
-		$gCook = "true";
+	if(isset($var['google'])){
+		if(isset($var['google'][0])){
+			if(isset($var['google'][0]['accounts'])){
+				$gCook = "true";
+			}else{
+				$gCook = "false";
+			}
+		}else{
+			$gCook = "false";
+		}
 	}else{
 		$gCook = "false";
 	}
@@ -238,7 +303,6 @@
 				}else{
 					var data = '<?php echo json_encode($alteredVar); ?>';
 					var serviceCreds = JSON.parse(data);
-
 
 					var leftPane = new Container({
 						style: "text-align: center"
