@@ -98,6 +98,7 @@ rsync -av --exclude .svn $SRCDIR/elasticSearch/ $DISTDIR/elasticSearch/
 rsync -av --exclude .svn $SRCDIR/oAuth/ $DISTDIR/oAuth/
 rsync -av --exclude .svn $SRCDIR/rest/ $DISTDIR/rest/
 rsync -av --exclude .svn $SRCDIR/vendor/ $DISTDIR/vendor/
+rsync -av --exclude .svn $SRCDIR/private/ $DISTDIR/private/
 
 # Copy & minify production.html
 # sed s/{{APP}}/$APP/g $SRCDIR/$TIER.html | tr -d '\n' > $DISTDIR/index.html

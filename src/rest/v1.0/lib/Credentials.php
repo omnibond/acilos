@@ -328,7 +328,7 @@ class Credentials{
 						$account = array(
 							"status" => "unauthorized",
 							"auth" => $serviceCreds['twitter'][$a]['auth'],
-							"auth" => $serviceCreds['twitter'][$a]['accounts'][0]['color']
+							"color" => $serviceCreds['twitter'][$a]['accounts'][0]['color']
 						);
 						array_push($returnArr['twitter'], $account);
 					}
