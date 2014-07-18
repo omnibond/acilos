@@ -166,6 +166,11 @@ chown -R $running:$running *
 chmod -R 777 *
 
 #Restart apache so the changes to the .htaccess file will apply
-service apache2 restart
+if [ "$running" == "apache" ]; then
+        service httpd restart
+else
+        service apache2 restart
+fi
+
 	
 echo "Finshed, The app is ready to go"
