@@ -280,6 +280,10 @@ define(['dojo/_base/declare',
 										
 									console.log("tokenArr is: ", tokenArr);
 
+									if(msg == ""){
+										msg = " ";
+									}
+
 									if(this.iframeElements[2]){
 										if(this.iframeElements[2].files[0]){
 											if(this.iframeElements[2].files[0].name){
