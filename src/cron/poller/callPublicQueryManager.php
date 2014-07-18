@@ -225,14 +225,14 @@ function queryFacebook($queryStr, $account){
 }
 
 //600 = 10 mins
-if(!file_exists("../../lockFiles/publicManager.lock") || (time() > filemtime("../../lockFiles/publicManager.lock") + 600)){
-	touch("../../lockFiles/publicManager.lock");
+//if(!file_exists("../../lockFiles/publicManager.lock") || (time() > filemtime("../../lockFiles/publicManager.lock") + 600)){
+//	touch("../../lockFiles/publicManager.lock");
 
 	echo "mining public search term data"; ?><br/><?php
 	minePublicQueryTerms();
 
-	unlink("../../lockFiles/publicManager.lock");
-}
+//	unlink("../../lockFiles/publicManager.lock");
+//}
 
 
 

@@ -179,7 +179,8 @@ define(['dojo/_base/declare',
 
 			this.NewCreateFeedView = new NewCreateFeedView({
 				route: '/NewCreateFeedView',
-
+				
+				publicQueryTime: lang.hitch(this, this.publicQueryTime),
 				getFeedList: lang.hitch(this, this.getFeedList),
 				getServiceCreds: lang.hitch(this, this.getServiceCreds),
 				getPublicQueryObjects: lang.hitch(this, this.getPublicQueryObjects),
@@ -340,6 +341,11 @@ define(['dojo/_base/declare',
 			params = {feedName: feedName, queryString: queryString};
 			console.log("writeQueryTerm params are: ", params);
 			return xhrManager.send('POST', 'rest/v1.0/FeedData/writeLocalFeed', params);
+		},
+		
+		publicQueryTime: function(){
+			params = {};
+			return xhrManager.send('GET', 'rest/v1.0/FeedData/publicQueryTime', params);
 		}
 	})
 });

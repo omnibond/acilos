@@ -305,11 +305,24 @@ class FeedData{
 		$var = file_get_contents("php://input");
 		$param = json_decode($var, true);
 		$serviceObj = $param['serviceObj'];
-
+		
 		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/cronManager.php?ServiceObj=".json_encode($serviceObj));
 
 		return json_encode(array("success" => $serviceObj));
 	}	
+	
+	function publicQueryTime(){
+		$ctx = stream_context_create(
+			array(
+			    'http' => array(
+					'timeout' => 1
+				)
+		    )
+		);
+		
+		file_get_contents("http://".$_SERVER['HTTP_HOST']."/cron/poller/callPublicQueryManager.php", 0, $ctx);
+		return json_encode(array("success" => "sure"));
+	}
 }
 
 ?>

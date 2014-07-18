@@ -80,6 +80,7 @@ define(['dojo/_base/declare',
 			this.rootView = new MainView({
 				route: '/',
 				blastView: this.blastView,
+				publicQueryTime: lang.hitch(this, this.publicQueryTime),
 				getPublicQueryObjects: lang.hitch(this, this.getPublicQueryObjects),
 				getServiceCreds: lang.hitch(this, this.getServiceCreds),
 				getPublicDBObjects: lang.hitch(this, this.getPublicDBObjects),
@@ -138,6 +139,11 @@ define(['dojo/_base/declare',
 		getPublicQueryObject: function(){
 			params = {};
 			return xhrManager.send('GET', 'rest/v1.0/PublicQuery/getPublicQueryObject', params);
+		},
+		
+		publicQueryTime: function(){
+			params = {};
+			return xhrManager.send('GET', 'rest/v1.0/FeedData/publicQueryTime', params);
 		}
 	})
 });

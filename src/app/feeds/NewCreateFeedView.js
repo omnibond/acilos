@@ -110,60 +110,56 @@ define([
 
 			activate: function() {				
 				topic.publish("/dojo-mama/updateSubNav", {back: '/feeds/PublicMainView', title: "Search Public Data"} );
-
+				
 				if(this.infoList){
 					this.infoList.destroyRecursive();
 					this.infoList = null;
 				}
-
-				if(this.list){
-					this.list.destroyRecursive();
-					this.postAddArray = [];
-					this.buildList();
-				}else{
-					this.buildList();
-				}
-			},
-
-			postCreate: function(){
-				this.inherited(arguments);
-
+				
 				this.fromVar = 0;
 				
 				on(this.domNode, "scroll", lang.hitch(this, this.dataPoints));
 				
 				this.getServiceCreds().then(lang.hitch(this, function(obj){
 					this.authObj = obj;
-
+					console.log(this.authObj);
 					this.exists = {};
 					for(var key in this.authObj){	
-						if(key == "facebook" && this.authObj[key][0]['accounts'].length > 0){
+						if(key == "facebook" && this.authObj[key].length > 0 && this.authObj[key][0]['accounts'].length > 0){
 							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
 								this.exists['Facebook'] = false;
 							}
 						}
-						if(key == "twitter" && this.authObj[key][0]['accounts'].length > 0){
+						if(key == "twitter" && this.authObj[key].length > 0 && this.authObj[key][0]['accounts'].length > 0){
 							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
 								this.exists['Twitter'] = false;
 							}
 						}
-						if(key == "google" && this.authObj[key][0]['accounts'].length > 0){
+						if(key == "google" && this.authObj[key].length > 0 && this.authObj[key][0]['accounts'].length > 0){
 							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
 								this.exists['Google'] = false;
 							}
 						}
 						/*
-						if(key == "instagram" && this.authObj[key][0]['accounts'].length > 0){
+						if(key == "instagram" && this.authObj[key].length > 0 && this.authObj[key][0]['accounts'].length > 0){
 							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
 								this.exists['Instagram'] = true;
 							}
 						}
-						if(key == "linkedin" && this.authObj[key][0]['accounts'].length > 0){
+						if(key == "linkedin" && this.authObj[key].length > 0 && this.authObj[key][0]['accounts'].length > 0){
 							if(this.authObj[key][0]['accounts'][0]['accessToken'] != undefined){
 								this.exists['Linkedin'] = true;
 							}
 						}
 						*/
+					}
+					
+					if(this.list){
+						this.list.destroyRecursive();
+						this.postAddArray = [];
+						this.buildList();
+					}else{
+						this.buildList();
 					}
 				}))
 			},
@@ -270,11 +266,11 @@ define([
 										feedArr.push("app");
 									}
 	
-									this.writeQueryTerm(feedNameTextBox.get("value"), this.checked, this.queryBox.get("value"), feedArr);
-
-									dialog.hide();
-
-									this.router.goToAbsoluteRoute("/feeds/PublicMainView");
+									this.writeQueryTerm(feedNameTextBox.get("value"), this.checked, this.queryBox.get("value"), feedArr).then(lang.hitch(this, function(){
+										this.publicQueryTime();
+										dialog.hide();
+										this.router.goToAbsoluteRoute("/feeds/PublicMainView");
+									}))
 								}else{
 									console.log("you must enter a name for your feed");
 								}	

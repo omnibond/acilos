@@ -236,11 +236,11 @@ define([
 										feedArr.push("app");
 									}
 	
-									this.writeQueryTerm(feedNameTextBox.get("value"), this.checked, this.queryBox.get("value"), feedArr);
-
-									dialog.hide();
-
-									this.router.goToAbsoluteRoute("/feeds");
+									this.writeQueryTerm(feedNameTextBox.get("value"), this.checked, this.queryBox.get("value"), feedArr).then(lang.hitch(this, function(){
+										this.publicQueryTime();
+										dialog.hide();
+										this.router.goToAbsoluteRoute("/feeds");
+									}))
 								}else{
 									console.log("you must enter a name for your feed");
 								}	

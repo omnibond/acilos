@@ -181,10 +181,6 @@
 						style: "background-color:inherit;border:none;height:35px;font-size;font-family:arial;font-size:20px; text-align: center"
 					});
 					leftPane.addChild(item);
-					/*var item = new ListItem({
-						label: "Please enter social media app accounts",
-						style: "border:none;height:35px;font-size;font-family:arial;font-size:20px"
-					});*/
 
 					var acilosLoginDiv = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/acilosLoginLogo.png>", style: "text-align: center; width: 220px; margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto"});
 					leftPane.domNode.appendChild(acilosLoginDiv);
