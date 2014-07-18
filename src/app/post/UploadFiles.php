@@ -24,6 +24,8 @@
 **
 ** $QT_END_LICENSE$
 */
+	phpinfo();
+	
 	$target = "tmpUpload";
 
 	if(isset($_FILES['fUploader'])){
@@ -45,7 +47,7 @@
 	$ok = 1;
 	
 	//This is our size condition 10megs
-	if($size > 10000000){
+	if($size > 30000000){
 		$ok = 0;
 
 		print_r(json_encode(array("error" => "Sorry, your file is too large to upload.")));
