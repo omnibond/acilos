@@ -78,6 +78,8 @@ require_once('authCalls.php');
 			$count = $f;
 		}
 	}
+
+	global $returnArray;
 	
 	if($service == "facebook"){
 		if(isset($argv[6])){
@@ -135,11 +137,17 @@ require_once('authCalls.php');
 						
 		$res = json_decode($response, true);
 
-		if(isset($res['error'])){
-			$returnArr['Facebook'] = array("success" => 'false', "msg" => $res['error']['message']);
+		if(isset($res)){
+			if(isset($res['error'])){
+				$returnArray['Facebook'][$x] = array("failure" => 'true', "msg" => "Your Facebook status could not be posted - " . $res['error']['message']);
+			}else{
+				$returnArray['Facebook'][$x] = array("success" => 'true', "msg" => "Your Facebook status was posted successfully");
+			}
 		}else{
-			$returnArr['Facebook'] = array("success" => 'true', "msg" => $res['id']);
+			$returnArray['Facebook'][$x] = array("failure" => 'true', "msg" => "Your Facebook status could not be posted - no response from Facebook");
 		}
+
+		print_r(json_encode(array("returnArray" => $returnArray))); 
 	}
 
 	if($service == "linkedin"){
@@ -200,16 +208,22 @@ require_once('authCalls.php');
 		if($code == "201"){
 			$returnArray['Linkedin'][$x] = array("success" => "true", "msg" => "Your LinkedIn status was posted successfully");
 		}else{
-			$xml = (array)($xml);
-			if(isset($xml['error-code'])){
-				$linkCode = $xml['error-code'];
-				if($linkCode == "0"){
-					$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - Status is a duplicate.");
-				}else{
-					$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - " . $xml['message']);
+			if(isset($xml)){
+				$xml = (array)($xml);
+				if(isset($xml['error-code'])){
+					$linkCode = $xml['error-code'];
+					if($linkCode == "0"){
+						$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - Status is a duplicate.");
+					}else{
+						$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - " . $xml['message']);
+					}
 				}
+			}else{
+				$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - no response from LinkedIn.");
 			}
 		}
+
+		print_r(json_encode(array("returnArray" => $returnArray)));
 	}
 
 	if($service == "twitter"){
@@ -254,13 +268,17 @@ require_once('authCalls.php');
 
 		//print_r($status);
 
-		if(isset($status->errors[0]->message)){
-			global $returnArray;
-			$returnArray['twitterFailure'] =  "Your message could not be posted. Twitter said: " . $status->errors[0]->message;
+		if(isset($status)){
+			if(isset($status->errors[0]->message)){
+				$returnArray['Twitter'][$x] =  array("failure" => "true", "msg" => "Your Twitter status could not be posted - " . $status->errors[0]->message);
+			}else{
+				$returnArray['Twitter'][$x] =  array("success" => "true", "msg" => "Your Twitter status was posted successfully");
+			}
 		}else{
-			global $returnArray;
-			$returnArray['twitterSuccess'] =  "Your Twitter message was posted successfully";
+			$returnArray['Twitter'][$x] =  array("failure" => "true", "msg" => "Your Twitter status could not be posted - no response from Twitter	");
 		}
+
+		print_r(json_encode(array("returnArray" => $returnArray)));
 	}
 
 	if($service == "instagram"){
