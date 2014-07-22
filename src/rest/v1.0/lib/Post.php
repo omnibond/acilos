@@ -869,6 +869,8 @@ function postFilesHandler($obj){
 
 	$server = $_SERVER['HTTP_REFERER'];
 
+	$postID = uniqid();
+
 	foreach($tokenArr as $key => $value){
 		switch($key){
 			case "facebook": 
@@ -887,7 +889,7 @@ function postFilesHandler($obj){
 
 					$service = "facebook";
 
-					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $access_token" . " $app_id" . " $user_id" . " >> {$_SERVER['POSTLOG']}";
+					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $access_token" . " $app_id" . " $user_id" . " $postID" . " >> {$_SERVER['POSTLOG']}";
 
 					$atCommand = "echo" . " \"$command\"" . " |" . " at" . " $time" . " $date";
 
@@ -922,7 +924,7 @@ function postFilesHandler($obj){
 
 					$service = "twitter";
 
-					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $access_token" . " $access_secret" . " $appKey" . " $appSecret" . " >> {$_SERVER['POSTLOG']}";
+					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $access_token" . " $access_secret" . " $appKey" . " $appSecret" . " $postID" . " >> {$_SERVER['POSTLOG']}";
 
 					$atCommand = "echo" . " \"$command\"" . " |" . " at" . " $time" . " $date";
 
@@ -942,7 +944,7 @@ function postFilesHandler($obj){
 
 					$service = "linkedin";
 
-					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $access_token" . " >> {$_SERVER['POSTLOG']}";
+					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $access_token" . " $postID" . " >> {$_SERVER['POSTLOG']}";
 
 					$atCommand = "echo" . " \"$command\"" . " |" . " at" . " $time" . " $date";
 
