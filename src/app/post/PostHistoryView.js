@@ -77,39 +77,20 @@ define(['dojo/_base/declare',
 ) {
 	return declare([ModuleScrollableView], {		
 		activate: function(){
-			topic.publish("/dojo-mama/updateSubNav", {back: "/", title: "Post"} );
+			topic.publish("/dojo-mama/updateSubNav", {back: "/post", title: "See a list of your scheduled posts"} );
 
 			if(this.mainList){
 				this.mainList.destroyRecursive();
 				this.mainList = null;
 			}
-
+			
 			this.mainList = new RoundRectList({
 				style: "margin:none;border:none"
 			});
 
-			this.postListItem = new ListItem({
-				label: "Post, Tweet, Blog",
-				variableHeight: true,
-				clickable: true,
-				noArrow: true,
-				onClick: lang.hitch(this, function(){
-					this.router.go("/PostView");
-				})
-			});
+			this.blah = domConstruct.create("div", {innerHTML: "blah test"});
 
-			this.postHistoryListItem = new ListItem({
-				label: "See a list of your scheduled posts",
-				variableHeight: true,
-				clickable: true,
-				noArrow: true,
-				onClick: lang.hitch(this, function(){
-					this.router.go("/PostHistoryView");
-				})
-			});
-
-			this.mainList.addChild(this.postListItem);
-			this.mainList.addChild(this.postHistoryListItem);
+			this.mainList.domNode.appendChild(this.blah);
 
 			this.addChild(this.mainList);
 			this.resize();

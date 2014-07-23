@@ -30,7 +30,9 @@ define(['dojo/_base/declare',
 
 		'app/util/xhrManager',
 
-		'app/post/MainView'
+		'app/post/PostView',
+		'app/post/MainView',
+		'app/post/PostHistoryView'
 ], function(
 	declare, 
 	Module, 
@@ -39,7 +41,9 @@ define(['dojo/_base/declare',
 
 	xhrManager,
 
-	MainView
+	PostView,
+	MainView,
+	PostHistoryView
 ) {
 	return declare([Module], {
 		
@@ -47,16 +51,25 @@ define(['dojo/_base/declare',
 			this.inherited(arguments);
 			
 			this.rootView = new MainView({
-				route: '/',
+				route: '/'
+			});
+
+			this.postView = new PostView({
+				route: '/PostView',
 				
 				sendPostFile: lang.hitch(this, this.sendPostFile),
 				runAtCommand: lang.hitch(this, this.runAtCommand),
 				getServiceCreds: lang.hitch(this, this.getServiceCreds),
 				getDomain: lang.hitch(this, this.getDomain)
 			});
+
+			this.postHistoryView = new PostHistoryView({
+				route: '/PostHistoryView'
+			});
 			
 			this.registerView(this.rootView);
-
+			this.registerView(this.postView);
+			this.registerView(this.postHistoryView);
 		},
 
 		sendPostFile: function(file, fileType, tokenArr, msg){

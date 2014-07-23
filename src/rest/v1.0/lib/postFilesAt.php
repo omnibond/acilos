@@ -36,8 +36,6 @@ require_once('authCalls.php');
 	$msg = $argv[4];*/
 
 	$saveObject = array();
-	$postID = 'placeholder';
-	$saveObject['postID'] = array();
 
 	if(isset($argv[1]) && $argv[1] !== "?"){
 		$fileName = $argv[1];
@@ -106,10 +104,10 @@ require_once('authCalls.php');
 		}
 
 		$saveObject['fileName'] = $fileName;
-		$saveObject['fileName'] = $fileType;
-		$saveObject['fileName'] = $service;
-		$saveObject['fileName'] = $msg;
-		$saveObject['fileName'] = $server;
+		$saveObject['fileType'] = $fileType;
+		$saveObject['service'] = $service;
+		$saveObject['msg'] = $msg;
+		$saveObject['server'] = $server;
 		$saveObject['facebook'] = array();
 		$saveObject['facebook']['access_token'] = $access_token;
 		$saveObject['facebook']['app_id'] = $app_id;
@@ -149,8 +147,12 @@ require_once('authCalls.php');
 		curl_close($ch);
 
 		//print_r($response);
-						
-		$res = json_decode($response, true);
+					
+		if(isset($response))	{
+			$res = json_decode($response, true);
+		}else{
+			$saveObject['facebook']['response'] = array("failure" => 'true', "msg" => "Your Facebook status could not be posted - no response from Facebook");
+		}
 
 		if(isset($res)){
 			if(isset($res['error'])){
@@ -174,10 +176,10 @@ require_once('authCalls.php');
 		}
 
 		$saveObject['fileName'] = $fileName;
-		$saveObject['fileName'] = $fileType;
-		$saveObject['fileName'] = $service;
-		$saveObject['fileName'] = $msg;
-		$saveObject['fileName'] = $server;
+		$saveObject['fileType'] = $fileType;
+		$saveObject['service'] = $service;
+		$saveObject['msg'] = $msg;
+		$saveObject['server'] = $server;
 		$saveObject['linkedin'] = array();
 		$saveObject['linkedin']['access_token'] = $access_token;
 
@@ -227,7 +229,12 @@ require_once('authCalls.php');
 		$code = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
 
 		curl_close($ch2);
-		$xml = simplexml_load_string($response);
+
+		if(isset($response)){
+			$xml = simplexml_load_string($response);
+		}else{
+			$saveObject['linkedin']['response'] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - no response from LinkedIn.");
+		}
 
 		if($code == "201"){
 			$saveObject['linkedin']['response'] = array("success" => "true", "msg" => "Your LinkedIn status was posted successfully");
@@ -278,10 +285,10 @@ require_once('authCalls.php');
 		}
 
 		$saveObject['fileName'] = $fileName;
-		$saveObject['fileName'] = $fileType;
-		$saveObject['fileName'] = $service;
-		$saveObject['fileName'] = $msg;
-		$saveObject['fileName'] = $server;
+		$saveObject['fileType'] = $fileType;
+		$saveObject['service'] = $service;
+		$saveObject['msg'] = $msg;
+		$saveObject['server'] = $server;
 		$saveObject['twitter'] = array();
 		$saveObject['twitter']['access_token'] = $access_token;
 		$saveObject['twitter']['access_secret'] = $access_secret;
@@ -300,7 +307,11 @@ require_once('authCalls.php');
 			$stuff = array('status' => $msg);
 		}
 
-		$status = $connection->upload($url, $stuff);
+		if(isset($connection)){
+			$status = $connection->upload($url, $stuff);
+		}else{
+			$saveObject['twitter']['response'] =  array("failure" => "true", "msg" => "Your Twitter status could not be posted - no response from Twitter");
+		}
 
 		//print_r($status);
 
@@ -311,20 +322,34 @@ require_once('authCalls.php');
 				$saveObject['twitter']['response'] =  array("success" => "true", "msg" => "Your Twitter status was posted successfully");
 			}
 		}else{
-			$saveObject['twitter']['response'] =  array("failure" => "true", "msg" => "Your Twitter status could not be posted - no response from Twitter	");
+			$saveObject['twitter']['response'] =  array("failure" => "true", "msg" => "Your Twitter status could not be posted - no response from Twitter");
 		}
 	}
 
+	print_R($saveObject);
+
 	try{
-		$fileObj = file_get_contents($_SERVER['POSTLOG']);
+		$fileObj = file_get_contents("../../private/config/postLog.json");
 		$fileObj = json_decode($fileObj, true);
 
-		$fileObj[$postID] = $saveObject;
+		if(isset($fileObj[$postID])){
+			if(isset($saveObject['facebook'])){
+				$fileObj[$postID]['facebook'] = $saveObject['facebook'];
+			}
+			if(isset($saveObject['linkedin'])){
+				$fileObj[$postID]['linkedin'] = $saveObject['linkedin'];
+			}
+			if(isset($saveObject['twitter'])){
+				$fileObj[$postID]['twitter'] = $saveObject['twitter'];
+			}
+		}else{
+			$fileObj[$postID] = $saveObject;
+		}
 
-		file_put_contents($_SERVER['POSTLOG'], json_encode($fileObj));
+		file_put_contents("../../private/config/postLog.json", json_encode($fileObj));
 	}catch (Exception $e){
 		$fileObj[$postID] = $saveObject;
-		file_put_contents($_SERVER['POSTLOG'], json_encode($fileObj));
+		file_put_contents("../../private/config/postLog.json", json_encode($fileObj));
 	}	
 
 	//print_r(json_encode(array("returnArray" => $returnArray)));

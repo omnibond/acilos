@@ -150,6 +150,7 @@ echo SetEnv APPSETTINGS $MAINPATH"/private/settings/appSettings.json" >> .htacce
 echo SetEnv BACKUPDATA $MAINPATH"/private/config/backupData.json" >> .htaccess
 echo SetEnv SERVICECREDSBACKUP $MAINPATH"/private/config/serviceCredsBackup.json" >> .htaccess
 echo SetEnv POSTLOG $MAINPATH"/private/config/postLog.json" >> .htaccess
+echo SetEnv POSTREPORT $MAINPATH"/private/config/postReport.txt" >> .htaccess
 
 echo "php_value session.cookie_lifetime 604800" >> .htaccess
 echo "php_value session.gc_maxlifetime 604800" >> .htaccess

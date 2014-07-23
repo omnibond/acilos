@@ -889,7 +889,7 @@ function postFilesHandler($obj){
 
 					$service = "facebook";
 
-					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $access_token" . " $app_id" . " $user_id" . " $postID" . " >> {$_SERVER['POSTLOG']}";
+					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $access_token" . " $app_id" . " $user_id" . " $postID" . " >> {$_SERVER['POSTREPORT']}";
 
 					$atCommand = "echo" . " \"$command\"" . " |" . " at" . " $time" . " $date";
 
@@ -924,7 +924,7 @@ function postFilesHandler($obj){
 
 					$service = "twitter";
 
-					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $access_token" . " $access_secret" . " $appKey" . " $appSecret" . " $postID" . " >> {$_SERVER['POSTLOG']}";
+					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $access_token" . " $access_secret" . " $appKey" . " $appSecret" . " $postID" . " >> {$_SERVER['POSTREPORT']}";
 
 					$atCommand = "echo" . " \"$command\"" . " |" . " at" . " $time" . " $date";
 
@@ -944,7 +944,7 @@ function postFilesHandler($obj){
 
 					$service = "linkedin";
 
-					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $access_token" . " $postID" . " >> {$_SERVER['POSTLOG']}";
+					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $access_token" . " $postID" . " >> {$_SERVER['POSTREPORT']}";
 
 					$atCommand = "echo" . " \"$command\"" . " |" . " at" . " $time" . " $date";
 
