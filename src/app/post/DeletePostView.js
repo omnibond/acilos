@@ -111,7 +111,34 @@ define(['dojo/_base/declare',
 				for(var key in successObj){
 					console.log("the key's value is: ", successObj[key]);
 
+					var color = 'white';
+
+					if(successObj[key]['facebook']){
+						if(successObj[key]['facebook']['result']){
+							if(successObj[key]['facebook']['result'] == 'failure'){
+								color = '#FF9494';
+							}
+						}
+					}
+
+					if(successObj[key]['linkedin']){
+						if(successObj[key]['linkedin']['result']){
+							if(successObj[key]['linkedin']['result'] == 'failure'){
+								color = '#FF9494';
+							}
+						}
+					}
+
+					if(successObj[key]['twitter']){
+						if(successObj[key]['twitter']['result']){
+							if(successObj[key]['twitter']['result'] == 'failure'){
+								color = '#FF9494';
+							}
+						}
+					}
+
 					var listItem = new ListItem({
+						style: "background-color: " + color,
 						label: successObj[key]['msg'],
 						variableHeight: true,
 						clickable: true,
