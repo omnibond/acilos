@@ -335,12 +335,32 @@ require_once('authCalls.php');
 		if(isset($fileObj[$postID])){
 			if(isset($saveObject['facebook'])){
 				$fileObj[$postID]['facebook'] = $saveObject['facebook'];
+
+				if(isset($saveObject['facebook']['response'])){
+					if(isset($saveObject['facebook']['response']['failure'])){
+						$fileObj[$postID]['result'] = 'failure';
+					}
+				}
 			}
+			
 			if(isset($saveObject['linkedin'])){
 				$fileObj[$postID]['linkedin'] = $saveObject['linkedin'];
+
+				if(isset($saveObject['linkedin']['response'])){
+					if(isset($saveObject['linkedin']['response']['failure'])){
+						$fileObj[$postID]['result'] = 'failure';
+					}
+				}
 			}
+
 			if(isset($saveObject['twitter'])){
 				$fileObj[$postID]['twitter'] = $saveObject['twitter'];
+
+				if(isset($saveObject['twitter']['response'])){
+					if(isset($saveObject['twitter']['response']['failure'])){
+						$fileObj[$postID]['result'] = 'failure';
+					}
+				}
 			}
 		}else{
 			$fileObj[$postID] = $saveObject;

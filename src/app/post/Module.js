@@ -32,7 +32,8 @@ define(['dojo/_base/declare',
 
 		'app/post/PostView',
 		'app/post/MainView',
-		'app/post/PostHistoryView'
+		'app/post/PostHistoryView',
+		'app/post/DeletePostView'
 ], function(
 	declare, 
 	Module, 
@@ -43,7 +44,8 @@ define(['dojo/_base/declare',
 
 	PostView,
 	MainView,
-	PostHistoryView
+	PostHistoryView,
+	DeletePostView
 ) {
 	return declare([Module], {
 		
@@ -64,33 +66,53 @@ define(['dojo/_base/declare',
 			});
 
 			this.postHistoryView = new PostHistoryView({
-				route: '/PostHistoryView'
+				route: '/PostHistoryView',
+
+				getPostHistory: lang.hitch(this, this.getPostHistory)
+			});
+
+			this.deletePostView = new DeletePostView({
+				route: '/DeletePostView',
+
+				getPostHistory: lang.hitch(this, this.getPostHistory),
+				deleteScheduledPost: lang.hitch(this, this.deleteScheduledPost)
 			});
 			
 			this.registerView(this.rootView);
 			this.registerView(this.postView);
 			this.registerView(this.postHistoryView);
+			this.registerView(this.deletePostView);
 		},
 
 		sendPostFile: function(file, fileType, tokenArr, msg){
-			params = {file: file, fileType: fileType, tokenArr: tokenArr, msg: msg};
+			var params = {file: file, fileType: fileType, tokenArr: tokenArr, msg: msg};
 			console.log("Module.js: Params for sendPostFile are: ", params);
 			return xhrManager.send('POST', 'rest/v1.0/Post/postFiles', params);
 		},
 
 		runAtCommand: function(time, file, fileType, tokenArr, msg){
-			params = {time: time, file: file, fileType: fileType, tokenArr: tokenArr, msg: msg};
+			var params = {time: time, file: file, fileType: fileType, tokenArr: tokenArr, msg: msg};
 			return xhrManager.send('POST', 'rest/v1.0/Post/runAtCommand', params);
 		},
 		
 		getServiceCreds: function(){
-			params = {};
+			var params = {};
 			return xhrManager.send('POST', 'rest/v1.0/Credentials/getServiceCreds', params);
 		},
 		
 		getDomain: function(){
 			var params = {};
 			return xhrManager.send('GET', 'rest/v1.0/Database/getDomain', params);
+		},
+
+		getPostHistory: function(){
+			var params = {};
+			return xhrManager.send('GET', 'rest/v1.0/Database/getPostHistory');
+		},
+
+		deleteScheduledPost: function(key){
+			var params = {key: key};
+			return xhrManager.send('POST', 'rest/v1.0/Database/deleteScheduledPost', params);
 		}
 	});
 });

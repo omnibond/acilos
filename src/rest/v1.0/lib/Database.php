@@ -88,6 +88,42 @@ class Database{
 		return json_encode($var);
 	}
 
+	public function getPostHistory(){
+		try{
+			$postObj = file_get_contents($_SERVER['POSTLOG']);
+			
+			return json_encode(array("success" => $postObj));
+		}catch(Exception $e){
+			return json_encode(array("error" => "Sorry, an error occurred while trying to open the file."));
+		}
+	}
+
+	public function deleteScheduledPost(){
+		$var = file_get_contents("php://input");
+		$obj = json_decode($var, true);
+
+		$keyToDelete = $obj['key'];
+
+		try{
+			$postHistory = file_get_contents($_SERVER['POSTLOG']);
+			$postHistory = json_decode($postHistory, true);
+
+			$keepObj = array();
+
+			foreach($postHistory as $key => $value){
+				if($key !== $keyToDelete){
+					$keepObj[$key] = $postHistory[$key];
+				}
+			}
+
+			file_put_contents($_SERVER['POSTLOG'], json_encode($keepObj));
+
+			return json_encode(array("success" => "The post was deleted successfully"));
+		}catch(Exception $e){
+			return json_encode(array("failure" => "An error occurred while trying to delete the post"));
+		}
+	}
+
 	public function checkRebootSetting(){
 		$fileName = $_SERVER['APPSETTINGS'];
 		

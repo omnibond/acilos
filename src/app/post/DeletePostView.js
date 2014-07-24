@@ -79,7 +79,12 @@ define(['dojo/_base/declare',
 ) {
 	return declare([ModuleScrollableView], {		
 		activate: function(){
-			topic.publish("/dojo-mama/updateSubNav", {back: "/post", title: "Your scheduled posts"} );
+			topic.publish("/dojo-mama/updateSubNav", {back: "/post/PostHistoryView", title: "Delete a scheduled post"} );
+
+			if(this.errorDialog){
+				this.errorDialog.destroyRecursive();
+				this.errorDialog = null;
+			}
 
 			this.getPostHistory().then(lang.hitch(this, function(obj){
 				if(obj['success']){
@@ -98,18 +103,9 @@ define(['dojo/_base/declare',
 				this.mainList = null;
 			}
 
-			if(this.selectorItem){
-				this.selectorItem.destroyRecursive();
-				this.selectorItem = null;
-			}
-
 			this.mainList = new RoundRectList({
-				style: "margin: none; margin-top: 50px; border: none"
+				style: "margin: none; border: none"
 			});
-
-			this.helpDiv = domConstruct.create("div", {innerHTML: "This is a list of your scheduled posts. Successful posts will be white, and posts that failed on one or more services will be red. Clicking on one of the posts will take you to a page where you can send the post again if you want.", style: "color: black; margin-bottom: 10px"});
-
-			this.mainList.domNode.appendChild(this.helpDiv);
 
 			if(successObj != '' && successObj != "undefined" && successObj != null){
 				for(var key in successObj){
@@ -119,7 +115,41 @@ define(['dojo/_base/declare',
 						label: successObj[key]['msg'],
 						variableHeight: true,
 						clickable: true,
-						noArrow: true
+						noArrow: true,
+						onClick: lang.hitch(this, function(){
+							if(this.errorDialog){
+								this.errorDialog.destroyRecursive();
+								this.errorDialog = null;
+							}
+
+							this.deleteScheduledPost(key).then(lang.hitch(this, function(obj){
+								if(obj){
+									if(obj['success']){
+										this.activate();
+									}else if(obj['failure']){
+										this.errorDialog = new Dialog({
+											title: "Error",
+											"class": "errorDijitDialog",
+											style: "top: 105px !important; width: 520px !important; padding: 10px !important; background-color: #FFE6E6",
+											draggable: false
+										});
+
+										var errorDiv = domConstruct.create("div", {innerHTML: obj['failure'], style: "background-color: #FFE6E6"});
+
+										for(var g = 0; g < this.errorDialog.domNode.children.length; g++){
+											if(domClass.contains(this.errorDialog.domNode.children[g], "dijitDialogPaneContent")){
+												domStyle.set(this.errorDialog.domNode.children[g], "padding", "0px");
+											}
+										}
+
+										if(errorDiv){
+											this.errorDialog.set("content", errorDiv);
+											this.errorDialog.show();
+										}
+									}
+								}
+							}));
+						})
 					});
 
 					this.mainList.addChild(listItem);
@@ -129,28 +159,14 @@ define(['dojo/_base/declare',
 				this.mainList.domNode.appendChild(errorDiv);
 			}
 
-			this.deletePostButton = new Button({
-				"name": "deleteFeedButton",
-				"right": "true",
-				onClick: lang.hitch(this, function(){
-					this.router.go("/DeletePostView");
-				})
-			});
-
-			this.selectorItem = new SelectorBar({
-				buttons: [this.deletePostButton],
-				style: "text-align: center"
-			});
-			this.selectorItem.placeAt(this.domNode.parentNode);
-
 			this.addChild(this.mainList);
 			this.resize();
 		},
 
 		deactivate: function(){
-			if(this.selectorItem){
-				this.selectorItem.destroyRecursive();
-				this.selectorItem = null;
+			if(this.errorDialog){
+				this.errorDialog.destroyRecursive();
+				this.errorDialog = null;
 			}
 		}
 	});
