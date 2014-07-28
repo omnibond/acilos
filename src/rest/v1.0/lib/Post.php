@@ -784,6 +784,103 @@ Class Post{
 	}
 }
 
+function saveAtCommandFacebook($postID, $file, $fileType, $msg, $server, $access_token, $app_id, $user_id){
+	try{
+		$fileObj = file_get_contents($_SERVER['POSTLOG']);
+		$fileObj = json_decode($fileObj, true);
+
+		$fileObj[$postID]['fileName'] = $file;
+		$fileObj[$postID]['fileType'] = $fileType;
+		$fileObj[$postID]['service'] = "facebook";
+		$fileObj[$postID]['msg'] = $msg;
+		$fileObj[$postID]['server'] = $server;
+		$fileObj[$postID]['facebook'] = array();
+		$fileObj[$postID]['facebook']['access_token'] = $access_token;
+		$fileObj[$postID]['facebook']['app_id'] = $app_id;
+		$fileObj[$postID]['facebook']['user_id'] = $user_id;
+
+		file_put_contents($_SERVER['POSTLOG']), json_encode($fileObj);
+	}catch(Exception $e){
+		$fileObj = array();
+
+		$fileObj[$postID]['fileName'] = $file;
+		$fileObj[$postID]['fileType'] = $fileType;
+		$fileObj[$postID]['service'] = "facebook";
+		$fileObj[$postID]['msg'] = $msg;
+		$fileObj[$postID]['server'] = $server;
+		$fileObj[$postID]['facebook'] = array();
+		$fileObj[$postID]['facebook']['access_token'] = $access_token;
+		$fileObj[$postID]['facebook']['app_id'] = $app_id;
+		$fileObj[$postID]['facebook']['user_id'] = $user_id;
+
+		file_put_contents($_SERVER['POSTLOG']), json_encode($fileObj);
+	}
+}
+
+function saveAtCommandLinkedIn($postID, $file, $fileType, $msg, $server, $access_token){
+	try{
+		$fileObj = file_get_contents($_SERVER['POSTLOG']);
+		$fileObj = json_decode($fileObj, true);
+
+		$fileObj[$postID]['fileName'] = $file;
+		$fileObj[$postID]['fileType'] = $fileType;
+		$fileObj[$postID]['service'] = "linkedin";
+		$fileObj[$postID]['msg'] = $msg;
+		$fileObj[$postID]['server'] = $server;
+		$fileObj[$postID]['linkedin'] = array();
+		$fileObj[$postID]['linkedin']['access_token'] = $access_token;
+		
+		file_put_contents($_SERVER['POSTLOG']), json_encode($fileObj);
+	}catch(Exception $e){
+		$fileObj = array();
+
+		$fileObj[$postID]['fileName'] = $file;
+		$fileObj[$postID]['fileType'] = $fileType;
+		$fileObj[$postID]['service'] = "linkedin";
+		$fileObj[$postID]['msg'] = $msg;
+		$fileObj[$postID]['server'] = $server;
+		$fileObj[$postID]['linkedin'] = array();
+		$fileObj[$postID]['linkedin']['access_token'] = $access_token;
+
+		file_put_contents($_SERVER['POSTLOG']), json_encode($fileObj);
+	}
+}
+
+function saveAtCommandTwitter($postID, $file, $fileType, $msg, $server, $access_token, $access_secret, $appKey, $appSecret){
+	try{
+		$fileObj = file_get_contents($_SERVER['POSTLOG']);
+		$fileObj = json_decode($fileObj, true);
+
+		$fileObj[$postID]['fileName'] = $file;
+		$fileObj[$postID]['fileType'] = $fileType;
+		$fileObj[$postID]['service'] = "twitter";
+		$fileObj[$postID]['msg'] = $msg;
+		$fileObj[$postID]['server'] = $server;
+		$fileObj[$postID]['twitter'] = array();
+		$fileObj[$postID]['twitter']['access_token'] = $access_token;
+		$fileObj[$postID]['twitter']['access_secret'] = $access_secret;
+		$fileObj[$postID]['twitter']['appKey'] = $appKey;
+		$fileObj[$postID]['twitter']['appSecret'] = $appSecret;
+		
+		file_put_contents($_SERVER['POSTLOG']), json_encode($fileObj);
+	}catch(Exception $e){
+		$fileObj = array();
+
+		$fileObj[$postID]['fileName'] = $file;
+		$fileObj[$postID]['fileType'] = $fileType;
+		$fileObj[$postID]['service'] = "twitter";
+		$fileObj[$postID]['msg'] = $msg;
+		$fileObj[$postID]['server'] = $server;
+		$fileObj[$postID]['twitter'] = array();
+		$fileObj[$postID]['twitter']['access_token'] = $access_token;
+		$fileObj[$postID]['twitter']['access_secret'] = $access_secret;
+		$fileObj[$postID]['twitter']['appKey'] = $appKey;
+		$fileObj[$postID]['twitter']['appSecret'] = $appSecret;
+
+		file_put_contents($_SERVER['POSTLOG']), json_encode($fileObj);
+	}
+}
+
 function postFilesHandler($obj){
 	if(isset($obj['time'])){
 		$timeStamp = $obj['time'];
@@ -895,6 +992,8 @@ function postFilesHandler($obj){
 
 					$atCommand = "$atCommand";
 
+					$this->saveAtCommandFacebook($postID, $file, $fileType, $msg, $server, $access_token, $app_id, $user_id);
+
 					print_r($atCommand); ?><br/><?php
 
 					exec($atCommand);
@@ -930,6 +1029,8 @@ function postFilesHandler($obj){
 
 					$atCommand = "$atCommand";
 
+					$this->saveAtCommandTwitter($postID, $file, $fileType, $msg, $server, $access_token, $access_secret, $appKey, $appSecret);
+
 					print_r($atCommand); ?><br/><?php
 
 					exec($atCommand);
@@ -949,6 +1050,8 @@ function postFilesHandler($obj){
 					$atCommand = "echo" . " \"$command\"" . " |" . " at" . " $time" . " $date";
 
 					$atCommand = "$atCommand";
+
+					$this->saveAtCommandLinkedIn($postID, $file, $fileType, $msg, $server, $access_token);
 
 					print_r($atCommand); ?><br/><?php
 
