@@ -862,6 +862,7 @@ function saveFacebookPost($response, $postType, $postID, $file, $fileType, $msg,
 		$fileObj[$postID]['facebook']['access_token'] = $access_token;
 		$fileObj[$postID]['facebook']['app_id'] = $app_id;
 		$fileObj[$postID]['facebook']['user_id'] = $user_id;
+		$fileObj[$postID]['facebook']['response'] = $response;
 
 		file_put_contents($_SERVER['POSTLOG'], json_encode($fileObj));
 	}catch(Exception $e){
@@ -876,6 +877,7 @@ function saveFacebookPost($response, $postType, $postID, $file, $fileType, $msg,
 		$fileObj[$postID]['facebook']['access_token'] = $access_token;
 		$fileObj[$postID]['facebook']['app_id'] = $app_id;
 		$fileObj[$postID]['facebook']['user_id'] = $user_id;
+		$fileObj[$postID]['facebook']['response'] = $response;
 
 		file_put_contents($_SERVER['POSTLOG'], json_encode($fileObj));
 	}
@@ -935,6 +937,7 @@ function saveLinkedInPost($response, $postType, $postID, $file, $fileType, $msg,
 		$fileObj[$postID]['server'] = $server;
 		$fileObj[$postID]['linkedin'] = array();
 		$fileObj[$postID]['linkedin']['access_token'] = $access_token;
+		$fileObj[$postID]['linkedin']['response'] = $response;
 		
 		file_put_contents($_SERVER['POSTLOG'], json_encode($fileObj));
 	}catch(Exception $e){
@@ -947,6 +950,7 @@ function saveLinkedInPost($response, $postType, $postID, $file, $fileType, $msg,
 		$fileObj[$postID]['server'] = $server;
 		$fileObj[$postID]['linkedin'] = array();
 		$fileObj[$postID]['linkedin']['access_token'] = $access_token;
+		$fileObj[$postID]['linkedin']['response'] = $response;
 
 		file_put_contents($_SERVER['POSTLOG'], json_encode($fileObj));
 	}
@@ -1027,6 +1031,7 @@ function saveTwitterPost($response, $postType, $postID, $file, $fileType, $msg, 
 		$fileObj[$postID]['twitter']['access_secret'] = $access_secret;
 		$fileObj[$postID]['twitter']['appKey'] = $appKey;
 		$fileObj[$postID]['twitter']['appSecret'] = $appSecret;
+		$fileObj[$postID]['twitter']['response'] = $response;
 		
 		file_put_contents($_SERVER['POSTLOG'], json_encode($fileObj));
 	}catch(Exception $e){
@@ -1042,6 +1047,7 @@ function saveTwitterPost($response, $postType, $postID, $file, $fileType, $msg, 
 		$fileObj[$postID]['twitter']['access_secret'] = $access_secret;
 		$fileObj[$postID]['twitter']['appKey'] = $appKey;
 		$fileObj[$postID]['twitter']['appSecret'] = $appSecret;
+		$fileObj[$postID]['twitter']['response'] = $response;
 
 		file_put_contents($_SERVER['POSTLOG'], json_encode($fileObj));
 	}
