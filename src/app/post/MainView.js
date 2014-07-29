@@ -99,7 +99,7 @@ define(['dojo/_base/declare',
 			});
 
 			this.postHistoryListItem = new ListItem({
-				label: "See a list of your scheduled posts",
+				label: "See a list of your posts",
 				variableHeight: true,
 				clickable: true,
 				noArrow: true,

@@ -79,7 +79,7 @@ define(['dojo/_base/declare',
 ) {
 	return declare([ModuleScrollableView], {		
 		activate: function(){
-			topic.publish("/dojo-mama/updateSubNav", {back: "/post", title: "Your scheduled posts"} );
+			topic.publish("/dojo-mama/updateSubNav", {back: "/post", title: "Your posts"} );
 
 			this.getPostHistory().then(lang.hitch(this, function(obj){
 				if(obj['success']){
@@ -107,7 +107,7 @@ define(['dojo/_base/declare',
 				style: "margin: none; margin-top: 50px; border: none"
 			});
 
-			this.helpDiv = domConstruct.create("div", {innerHTML: "This is a list of your scheduled posts. Successful posts will be white, and posts that failed on one or more services will be red. Clicking on one of the posts will take you to a page where you can send the post again if you want.", style: "color: black; margin-bottom: 10px"});
+			this.helpDiv = domConstruct.create("div", {innerHTML: "This is a list of your posts. Successful posts will be white, and posts that failed on one or more services will be red. Clicking on one of the posts will take you to a page where you can send the post again if you want.", style: "color: black; margin-bottom: 10px"});
 
 			this.mainList.domNode.appendChild(this.helpDiv);
 
