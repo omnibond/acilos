@@ -123,8 +123,6 @@ require_once('authCalls.php');
 			$url = $photoURL;
 		}
 
-		$ch = curl_init($url);
-
 		$params = array();
 
 		if(isset($fileName) && $fileName != ""){
@@ -140,29 +138,7 @@ require_once('authCalls.php');
 			);
 		}
 
-		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$response = curl_exec($ch);
-		curl_close($ch);
-
-		//print_r($response);
-					
-		if(isset($response))	{
-			$res = json_decode($response, true);
-		}else{
-			$saveObject['facebook']['response'] = array("failure" => 'true', "msg" => "Your Facebook status could not be posted - no response from Facebook");
-		}
-
-		if(isset($res)){
-			if(isset($res['error'])){
-				$saveObject['facebook']['response'] = array("failure" => 'true', "msg" => "Your Facebook status could not be posted - " . $res['error']['message']);
-			}else{
-				$saveObject['facebook']['response'] = array("success" => 'true', "msg" => "Your Facebook status was posted successfully");
-			}
-		}else{
-			$saveObject['facebook']['response'] = array("failure" => 'true', "msg" => "Your Facebook status could not be posted - no response from Facebook");
-		}
+		postToFacebook($url, $params);
 	}
 
 	if($service == "linkedin"){
@@ -336,6 +312,8 @@ require_once('authCalls.php');
 			if(isset($saveObject['facebook'])){
 				$fileObj[$postID]['facebook'] = $saveObject['facebook'];
 
+				$fileObj[$postID]['postStatus'] = "completed";
+
 				if(isset($saveObject['facebook']['response'])){
 					if(isset($saveObject['facebook']['response']['failure'])){
 						$fileObj[$postID]['facebook']['result'] = 'failure';
@@ -346,6 +324,8 @@ require_once('authCalls.php');
 			if(isset($saveObject['linkedin'])){
 				$fileObj[$postID]['linkedin'] = $saveObject['linkedin'];
 
+				$fileObj[$postID]['postStatus'] = "completed";
+
 				if(isset($saveObject['linkedin']['response'])){
 					if(isset($saveObject['linkedin']['response']['failure'])){
 						$fileObj[$postID]['linkedin']['result'] = 'failure';
@@ -355,6 +335,8 @@ require_once('authCalls.php');
 
 			if(isset($saveObject['twitter'])){
 				$fileObj[$postID]['twitter'] = $saveObject['twitter'];
+
+				$fileObj[$postID]['postStatus'] = "completed";
 
 				if(isset($saveObject['twitter']['response'])){
 					if(isset($saveObject['twitter']['response']['failure'])){
@@ -377,6 +359,33 @@ require_once('authCalls.php');
 	//get rid of the file after we try and do something with it
 	if(isset($fileName) && $fileName != ""){
 		//unlink("../../app/post/tmpUpload/" . $fileName);
+	}
+
+	function postToFacebook($url, $params){
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$response = curl_exec($ch);
+		curl_close($ch);
+
+		//print_r($response);
+					
+		if(isset($response)){
+			$res = json_decode($response, true);
+		}else{
+			$saveObject['facebook']['response'] = array("failure" => 'true', "msg" => "Your Facebook status could not be posted - no response from Facebook");
+		}
+
+		if(isset($res)){
+			if(isset($res['error'])){
+				$saveObject['facebook']['response'] = array("failure" => 'true', "msg" => "Your Facebook status could not be posted - " . $res['error']['message']);
+			}else{
+				$saveObject['facebook']['response'] = array("success" => 'true', "msg" => "Your Facebook status was posted successfully");
+			}
+		}else{
+			$saveObject['facebook']['response'] = array("failure" => 'true', "msg" => "Your Facebook status could not be posted - no response from Facebook");
+		}
 	}
 //}
 

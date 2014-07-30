@@ -137,9 +137,23 @@ define(['dojo/_base/declare',
 						}
 					}
 
+					var labelValue = "";
+
+					if(successObj[key]){
+						if(successObj[key]['msg']){
+							var labelValue = successObj[key]['msg'];
+
+							if(successObj[key]['postStatus']){
+								if(successObj[key]['postStatus'] == "pending") {
+									var labelValue = successObj[key]['msg'] + " (Pending)";
+								}
+							}
+						}
+					}
+
 					var listItem = new ListItem({
 						style: "background-color: " + color,
-						label: successObj[key]['msg'],
+						label: labelValue,
 						variableHeight: true,
 						clickable: true,
 						noArrow: true,
