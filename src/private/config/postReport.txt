@@ -612,3 +612,47 @@ Array
         )
 
 )
+Array
+(
+    [fileName] => Acilos_Close.png
+    [fileType] => image/png
+    [service] => twitter
+    [msg] => test atCommand with back end rewrite
+    [server] => http://shaaron.clemson.edu/
+    [twitter] => Array
+        (
+            [access_token] => 703369349-bAGSO43Xb11nPRLsOaAsuDanXzECadFqf8rjW7VR
+            [access_secret] => LSrD2Ry8203XUU8lpHAs9oqZbERifEauARND6PdWMKJzI
+            [appKey] => 5uZ72lPEuq0LsA5exOTjrw
+            [appSecret] => w4g4mx6gPREEDkHhw0VoMJMF9aSZ0YwDRyy3dDYw
+        )
+
+)
+Array
+(
+    [fileName] => Acilos_Close.png
+    [fileType] => image/png
+    [service] => linkedin
+    [msg] => test atCommand with back end rewrite
+    [server] => http://shaaron.clemson.edu/
+    [linkedin] => Array
+        (
+            [access_token] => AQW64gu-ZYi5L2QZvQ_bqAXZKShJOjs9W8VBkbxXxT31gcOfcRZZAGwdOL89x5hMs6RuZAfbX0akrpTXR4zjLNy4dbnVY-XXrw-6dIQxxkzBNlxWt66eWyf2IiElkEVP0hgx6lm2v7caBqKLvmUZVWSrH6XN3oT4p7gwjcK3jY434CvF8b8
+        )
+
+)
+Array
+(
+    [fileName] => Acilos_Close.png
+    [fileType] => image/png
+    [service] => facebook
+    [msg] => test atCommand with back end rewrite
+    [server] => http://shaaron.clemson.edu/
+    [facebook] => Array
+        (
+            [access_token] => CAAHit99S3B0BAEQExDfDJJSjZCSG81j2ZADFBKCU8xtiJMNlv6MZBZBEtQipisVThyZB7p4a4zIGZB9eJ8ofczZAv4HwfeUK972LZCVMpJqcp0SZBQ2YN3finTwrIytGBgAM9nM3DnEmkwdPnuJjFSnZC0obDISc0GZCTMKKtdSRNZBfDBRraMpymve5Bt3jL2YwOT4ZD
+            [app_id] => 530754330352669
+            [user_id] => 100007411123165
+        )
+
+)
