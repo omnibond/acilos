@@ -35,6 +35,8 @@ require_once('authCalls.php');
 	$service = $argv[3];
 	$msg = $argv[4];*/
 
+	print_r("top of the file");
+
 	$saveObject = array();
 
 	if(isset($argv[1]) && $argv[1] !== "?"){
@@ -144,9 +146,7 @@ require_once('authCalls.php');
 			if(isset($saveObject['facebook'])){
 				if(isset($saveObject['facebook']['response'])){
 					if(isset($saveObject['facebook']['response']['success'])){
-						$faceCounter = 3;
-					}else{
-						$faceCounter += 1;
+						break;
 					}
 				}else{
 					$saveObject['facebook']['response'] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - no response from LinkedIn.");
@@ -155,6 +155,8 @@ require_once('authCalls.php');
 				$saveObject['facebook']['response'] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - no response from LinkedIn.");
 			}
 		}
+
+		$saveObject['facebook']['faceCounter'] = $faceCounter;
 	}
 
 	if($service == "linkedin"){
@@ -218,9 +220,7 @@ require_once('authCalls.php');
 			if(isset($saveObject['linkedin'])){
 				if(isset($saveObject['linkedin']['response'])){
 					if(isset($saveObject['linkedin']['response']['success'])){
-						$linkCounter = 3;
-					}else{
-						$linkCounter += 1;
+						break;
 					}
 				}else{
 					$saveObject['linkedin']['response'] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - no response from LinkedIn.");
@@ -229,6 +229,8 @@ require_once('authCalls.php');
 				$saveObject['linkedin']['response'] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - no response from LinkedIn.");
 			}
 		}
+
+		$saveObject['linkedin']['linkCounter'] = $linkCounter;
 	}
 
 	if($service == "twitter"){
@@ -286,9 +288,7 @@ require_once('authCalls.php');
 			if(isset($saveObject['twitter'])){
 				if(isset($saveObject['twitter']['response'])){
 					if(isset($saveObject['twitter']['response']['success'])){
-						$twitterCounter = 3;
-					}else{
-						$twitterCounter += 1;
+						break;
 					}
 				}else{
 					$saveObject['twitter']['response'] =  array("failure" => "true", "msg" => "Your Twitter status could not be posted - no response from Twitter");
@@ -297,6 +297,8 @@ require_once('authCalls.php');
 				$saveObject['twitter']['response'] =  array("failure" => "true", "msg" => "Your Twitter status could not be posted - no response from Twitter");
 			}
 		}
+
+		$saveObject['twitter']['twitterCounter'] = $twitterCounter;
 	}
 
 	print_R($saveObject);
@@ -424,7 +426,7 @@ require_once('authCalls.php');
 					if($linkCode == "0"){
 						$saveObject['linkedin']['response'] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - Status is a duplicate.");
 
-						return "failure";
+						return $saveObject;
 					}else{
 						$saveObject['linkedin']['response'] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - " . $xml['message']);
 

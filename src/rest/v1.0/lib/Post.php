@@ -1182,7 +1182,7 @@ function postFilesHandler($obj){
 
 					$service = "facebook";
 
-					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $access_token" . " $app_id" . " $user_id" . " $postID" . " >> {$_SERVER['POSTREPORT']}";
+					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $access_token" . " $app_id" . " $user_id" . " $postID";
 
 					$atCommand = "echo" . " \"$command\"" . " |" . " at" . " $time" . " $date";
 
@@ -1221,7 +1221,7 @@ function postFilesHandler($obj){
 
 					$service = "twitter";
 
-					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $access_token" . " $access_secret" . " $appKey" . " $appSecret" . " $postID" . " >> {$_SERVER['POSTREPORT']}";
+					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $access_token" . " $access_secret" . " $appKey" . " $appSecret" . " $postID";
 
 					$atCommand = "echo" . " \"$command\"" . " |" . " at" . " $time" . " $date";
 
@@ -1245,7 +1245,7 @@ function postFilesHandler($obj){
 
 					$service = "linkedin";
 
-					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $access_token" . " $postID" . " >> {$_SERVER['POSTREPORT']}";
+					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $access_token" . " $postID";
 
 					$atCommand = "echo" . " \"$command\"" . " |" . " at" . " $time" . " $date";
 
@@ -1266,20 +1266,6 @@ function postFilesHandler($obj){
 			break;
 		}
 	}
-
-	/*$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server";
-
-	$atCommand = "echo" . " \"$command\"" . " |" . " at" . " $time" . " $date";
-
-	$atCommand = "$atCommand";
-
-	//$atCommand = "echo" . " \"touch bob.php\"" . " |" . " at" . " $time" . " $date"; <--- JUST FOR TESTING
-
-	print_r($atCommand);
-
-	$result = exec($atCommand);
-
-	print_r($result);*/
 
 	return json_encode(array("success" => "true"));
 }
