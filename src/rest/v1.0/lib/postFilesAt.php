@@ -424,7 +424,7 @@ require_once('authCalls.php');
 				if(isset($xml['error-code'])){
 					$linkCode = $xml['error-code'];
 					if($linkCode == "0"){
-						$saveObject['linkedin']['response'] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - Status is a duplicate.");
+						$saveObject['linkedin']['response'] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - " . $xml['message']);
 
 						return $saveObject;
 					}else{
