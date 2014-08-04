@@ -4,6 +4,7 @@ vendor/
 log/
 logs/
 nodes/
+postLog.json
 serviceCreds.json
 publicQueryTermObj.json
 localQueryTermObj.json
