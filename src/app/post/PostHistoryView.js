@@ -111,7 +111,7 @@ define(['dojo/_base/declare',
 				style: "margin: none; margin-top: 50px; border: none"
 			});
 
-			this.helpDiv = domConstruct.create("div", {innerHTML: "This is a list of your posts. Successful posts will be white, and posts that failed on one or more services will be red. Clicking on one of the posts will take you to a page where you can send the post again if you want.", style: "color: black; margin-bottom: 10px"});
+			this.helpDiv = domConstruct.create("div", {innerHTML: "This is a list of your posts. Successful posts will be white, and posts that failed on one or more services will be red. Clicking on one of the failed posts will expand an accordion that will show more details about the post's failure.", style: "color: black; margin-bottom: 10px"});
 
 			this.mainList.domNode.appendChild(this.helpDiv);
 
@@ -161,27 +161,23 @@ define(['dojo/_base/declare',
 						}	
 					}
 
-					//var accordionHolder = domConstruct.create("div", {});
-					//this.mainList.domNode.appendChild(accordionHolder);
-
 					console.log("WOOO - " + labelValue);
 
 					var accordion = new Accordion({
 						"class": "feedAccordionClass postAccordionClass",
-						style: "background-color: " + color
+						style: "background-color: " + color + "; padding: 5px"
 					});
 					accordion.startup();
 
 					var pane = new ContentPane({
 						label: labelValue
-						//style: "background-color: " + color
 					});					
 					var list = new EdgeToEdgeList({	});
 
 					if(facebookFailure && (facebookFailure == "true")){
 						var facebookFailureListItem = new ListItem({
 							label: "Facebook failure - " + successObj[key]['facebook']['response']['msg'] + '<br>' + "We tried to post this status for you " + (successObj[key]['facebook']['faceCounter'] - 1) + " additional times.",
-							style: "background-color: " + color,
+							style: "background-color: " + color + "; border: none",
 							variableHeight: true
 						});
 
@@ -191,7 +187,7 @@ define(['dojo/_base/declare',
 					if(linkedinFailure && (linkedinFailure == "true")){
 						var linkedinFailureListItem = new ListItem({
 							label: "LinkedIn failure - " + successObj[key]['linkedin']['response']['msg'] + '<br>' + "We tried to post this status for you " + (successObj[key]['linkedin']['linkCounter'] - 1) + " additional times.",
-							style: "background-color: " + color,
+							style: "background-color: " + color + "; border: none",
 							variableHeight: true
 						});
 
@@ -201,7 +197,7 @@ define(['dojo/_base/declare',
 					if(twitterFailure && (twitterFailure == "true")){
 						var twitterFailureListItem = new ListItem({
 							label: "Twitter failure - " + successObj[key]['twitter']['response']['msg'] + '<br>' + "We tried to post this status for you " + (successObj[key]['twitter']['twitterCounter'] - 1) + " additional times.",
-							style: "background-color: " + color,
+							style: "background-color: " + color + "; border: none",
 							variableHeight: true
 						});
 
