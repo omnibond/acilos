@@ -301,7 +301,7 @@ require_once('authCalls.php');
 		$saveObject['twitter']['twitterCounter'] = $twitterCounter;
 	}
 
-	print_R($saveObject);
+	//print_R($saveObject);
 
 	try{
 		$fileObj = file_get_contents("../../private/config/postLog.json");
@@ -312,36 +312,18 @@ require_once('authCalls.php');
 				$fileObj[$postID]['facebook'] = $saveObject['facebook'];
 
 				$fileObj[$postID]['postStatus'] = "completed";
-
-				if(isset($saveObject['facebook']['response'])){
-					if(isset($saveObject['facebook']['response']['failure'])){
-						$fileObj[$postID]['facebook']['result'] = 'failure';
-					}
-				}
 			}
 
 			if(isset($saveObject['linkedin'])){
 				$fileObj[$postID]['linkedin'] = $saveObject['linkedin'];
 
 				$fileObj[$postID]['postStatus'] = "completed";
-
-				if(isset($saveObject['linkedin']['response'])){
-					if(isset($saveObject['linkedin']['response']['failure'])){
-						$fileObj[$postID]['linkedin']['result'] = 'failure';
-					}
-				}
 			}
 
 			if(isset($saveObject['twitter'])){
 				$fileObj[$postID]['twitter'] = $saveObject['twitter'];
 
 				$fileObj[$postID]['postStatus'] = "completed";
-
-				if(isset($saveObject['twitter']['response'])){
-					if(isset($saveObject['twitter']['response']['failure'])){
-						$fileObj[$postID]['twitter']['result'] = 'failure';
-					}
-				}
 			}
 		}else{
 			$fileObj[$postID] = $saveObject;
