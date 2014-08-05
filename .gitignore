@@ -5,6 +5,7 @@ log/
 logs/
 nodes/
 postLog.json
+postReport.txt
 serviceCreds.json
 publicQueryTermObj.json
 localQueryTermObj.json

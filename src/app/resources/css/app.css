@@ -3969,11 +3969,9 @@ select {
 .postAccordionClass .mblAccordionTitleLabel {
   color: black !important;
 }
-.mblAccordionTitleLabel a:hover,
-a:visited,
-a:link,
-a:active {
+.postAccordionClass .mblAccordionTitleAnchor {
   text-decoration: none !important;
+  border: none !important;
 }
 .feedCommentPaneLabelClass > .mblRoundRectList {
   background: #FFFFFF;
