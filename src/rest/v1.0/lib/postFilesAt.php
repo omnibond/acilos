@@ -35,8 +35,6 @@ require_once('authCalls.php');
 	$service = $argv[3];
 	$msg = $argv[4];*/
 
-	print_r("top of the file");
-
 	$saveObject = array();
 
 	if(isset($argv[1]) && $argv[1] !== "?"){
@@ -69,6 +67,18 @@ require_once('authCalls.php');
 	}else{
 		$server = "";
 	}
+
+	if(isset($argv[6]) && $argv[6] !== "?"){
+		$date = $argv[6];
+	}else{
+		$date = "";
+	}
+
+	if(isset($argv[7]) && $argv[7] !== "?"){
+		$time = str_replace("+", " ", $argv[7]);
+	}else{
+		$time = "";
+	}
 	
 	$thing = getcwd();
 	$thingArr = explode("/", $thing);
@@ -86,23 +96,23 @@ require_once('authCalls.php');
 	}
 	
 	if($service == "facebook"){
-		if(isset($argv[6])){
-			$access_token = $argv[6];
+		if(isset($argv[8])){
+			$access_token = $argv[8];
 		}else{
 			$access_token = "";
 		}
-		if(isset($argv[7])){
-			$app_id = $argv[7];
+		if(isset($argv[9])){
+			$app_id = $argv[9];
 		}else{
 			$app_id = "";
 		}
-		if(isset($argv[8])){
-			$user_id = $argv[8];
+		if(isset($argv[10])){
+			$user_id = $argv[10];
 		}else{
 			$user_id = "";
 		}
-		if(isset($argv[9])){
-			$postID = $argv[9];
+		if(isset($argv[11])){
+			$postID = $argv[11];
 		}
 
 		$saveObject['fileName'] = $fileName;
@@ -114,6 +124,8 @@ require_once('authCalls.php');
 		$saveObject['facebook']['access_token'] = $access_token;
 		$saveObject['facebook']['app_id'] = $app_id;
 		$saveObject['facebook']['user_id'] = $user_id;
+		$saveObject['date'] = $date;
+		$saveObject['time'] = $time;
 
 		$photoURL = 'https://graph.facebook.com/me/photos?access_token='.$access_token;
 
@@ -160,13 +172,13 @@ require_once('authCalls.php');
 	}
 
 	if($service == "linkedin"){
-		if(isset($argv[6])){
-			$access_token = $argv[6];
+		if(isset($argv[8])){
+			$access_token = $argv[8];
 		}else{
 			$access_token = "";
 		}
-		if(isset($argv[7])){
-			$postID = $argv[7];
+		if(isset($argv[9])){
+			$postID = $argv[9];
 		}
 
 		$saveObject['fileName'] = $fileName;
@@ -176,6 +188,8 @@ require_once('authCalls.php');
 		$saveObject['server'] = $server;
 		$saveObject['linkedin'] = array();
 		$saveObject['linkedin']['access_token'] = $access_token;
+		$saveObject['date'] = $date;
+		$saveObject['time'] = $time;
 
 		$headerOptions = array(
 			"Content-Type: text/xml;charset=utf-8"
@@ -234,32 +248,32 @@ require_once('authCalls.php');
 	}
 
 	if($service == "twitter"){
-		if(isset($argv[6])){
+		if(isset($argv[8])){
 			//accessToken
-			$access_token = $argv[6];
+			$access_token = $argv[8];
 		}else{
 			$access_token = "";
 		}
-		if(isset($argv[7])){
+		if(isset($argv[9])){
 			//accessSecret
-			$access_secret = $argv[7];
+			$access_secret = $argv[9];
 		}else{
 			$access_secret = "";
 		}
-		if(isset($argv[8])){
+		if(isset($argv[10])){
 			//key
-			$appKey = $argv[8];
+			$appKey = $argv[10];
 		}else{
 			$appKey = "";
 		}
-		if(isset($argv[9])){
+		if(isset($argv[11])){
 			//secret
-			$appSecret = $argv[9];
+			$appSecret = $argv[11];
 		}else{
 			$appSecret = "";
 		}
-		if(isset($argv[10])){
-			$postID = $argv[10];
+		if(isset($argv[12])){
+			$postID = $argv[12];
 		}
 
 		$saveObject['fileName'] = $fileName;
@@ -272,6 +286,8 @@ require_once('authCalls.php');
 		$saveObject['twitter']['access_secret'] = $access_secret;
 		$saveObject['twitter']['appKey'] = $appKey;
 		$saveObject['twitter']['appSecret'] = $appSecret;
+		$saveObject['date'] = $date;
+		$saveObject['time'] = $time;
 
 		$path = $thing . "app/post/tmpUpload/" . $fileName;
 
