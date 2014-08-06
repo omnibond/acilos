@@ -144,8 +144,8 @@ define(['dojo/_base/declare',
 			return xhrManager.send('POST', 'rest/v1.0/Database/saveRebootSetting', params);
 		},
 
-		saveBackupData: function(keepServiceCreds, wipeCurrentData){
-			var params = {keepServiceCreds: keepServiceCreds, wipeCurrentData: wipeCurrentData};
+		saveBackupData: function(wipeCurrentData){
+			var params = {wipeCurrentData: wipeCurrentData};
 			return xhrManager.send('POST', 'rest/v1.0/Database/saveBackupData', params);
 		},
 

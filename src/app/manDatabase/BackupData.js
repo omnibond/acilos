@@ -69,24 +69,14 @@ define(['dojo/_base/declare',
 		buildMainList: function(){
 			this.mainList = new EdgeToEdgeList({ });
 
-			this.instructionDiv = domConstruct.create("div", {innerHTML: "This page will allow you to back up the items in your database. You can also choose to back up your service credentials.", style: "margin-bottom: 10px"});
+			this.instructionDiv = domConstruct.create("div", {innerHTML: "This page will allow you to back up the items in your database. Your service credentials will also be backed up.", style: "margin-bottom: 10px"});
 
-			this.selectOptionsDiv = domConstruct.create("div", {innerHTML: "You may select any of the following options that apply to you.", style: "margin-bottom: 10px; font-weight: bold"});
-
-			this.credentialsBox = new CheckBox({
-				checked: false,
-				style: "-webkit-transform: scale(1.4); -moz-transform: scale(1.4); -ms-transform: scale(1.4); -o-transform: scale(1.4)"
-			});
-
-			this.credentialsWrapperDiv = domConstruct.create("div", {});
 			this.wipeDataWrapperDiv = domConstruct.create("div", {});
 
 			this.wipeDataBox = new CheckBox({
 				checked: false,
 				style: "-webkit-transform: scale(1.4); -moz-transform: scale(1.4); -ms-transform: scale(1.4); -o-transform: scale(1.4)"
 			});
-
-			this.credsOptionDiv = domConstruct.create("div", {innerHTML: "Check this box to back up your service credentials in addition to your other data.", style: "display: inline-block; margin-left: 5px"});
 
 			this.wipeDataDiv = domConstruct.create("div", {innerHTML: "Check this box to also wipe the data you are backing up from the database.", style: "display: inline-block; margin-left: 5px"});
 
@@ -98,19 +88,13 @@ define(['dojo/_base/declare',
 					this.pi.placeAt(document.body);
 					this.pi.start();
 
-					if(this.credentialsBox.get("checked") == false){
-						var saveServiceCreds = "false";
-					}else if(this.credentialsBox.get("checked") == true){
-						var saveServiceCreds = "true";
-					}
-
 					if(this.wipeDataBox.get("checked") == false){
 						var wipeCurrentData = "false";
 					}else if(this.wipeDataBox.get("checked") == true){
 						var wipeCurrentData = "true";
 					}
 
-					this.saveBackupData(saveServiceCreds, wipeCurrentData).then(lang.hitch(this, function(obj){
+					this.saveBackupData(wipeCurrentData).then(lang.hitch(this, function(obj){
 						console.log("obj is: ", obj);
 
 						this.pi.stop();
@@ -120,15 +104,10 @@ define(['dojo/_base/declare',
 				})
 			});
 
-			this.credentialsWrapperDiv.appendChild(this.credentialsBox.domNode);
-			this.credentialsWrapperDiv.appendChild(this.credsOptionDiv);
-
 			this.wipeDataWrapperDiv.appendChild(this.wipeDataBox.domNode);
 			this.wipeDataWrapperDiv.appendChild(this.wipeDataDiv);
 
 			this.mainList.domNode.appendChild(this.instructionDiv);
-			this.mainList.domNode.appendChild(this.selectOptionsDiv);
-			this.mainList.domNode.appendChild(this.credentialsWrapperDiv);
 			this.mainList.domNode.appendChild(this.wipeDataWrapperDiv);
 			this.mainList.addChild(this.backupButton);
 

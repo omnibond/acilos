@@ -296,7 +296,15 @@ class Database{
 
 		$keepGoing = "true";
 
-		$finalStuff = array();
+		// read the file if present
+		$handle = @fopen($_SERVER['BACKUPDATA'], 'r+');
+
+		// create the file if needed
+		if($handle === null || $handle === false){
+		    $handle = fopen($_SERVER['BACKUPDATA'], 'w+');
+		}
+
+		var_dump($handle);
 
 		while($keepGoing == "true"){
 			$results = matchAll200($from);
@@ -307,7 +315,29 @@ class Database{
 						$stuffToKeep = $results['hits']['hits'];
 
 						for($x = 0; $x < count($stuffToKeep); $x++){
-							array_push($finalStuff, $stuffToKeep[$x]['_source']);	
+							if($handle){
+							    // seek to the end
+							    fseek($handle, 0, SEEK_END);
+
+							    // are we at the end of is the file empty
+							    if(ftell($handle) > 0){
+							        // move back a byte
+							        fseek($handle, -1, SEEK_END);
+
+							        // add the trailing comma
+							        fwrite($handle, ',', 1);
+
+							        // add the new json string
+							        fwrite($handle, json_encode($stuffToKeep[$x]['_source']) . ']');
+							    }
+							    else{
+							        // write the first event inside an array
+							        fwrite($handle, json_encode(array($stuffToKeep[$x]['_source'])));
+							    }
+
+						        // close the handle on the file
+						        fclose($handle);
+							}
 						}
 
 						$from += 200;
@@ -322,15 +352,11 @@ class Database{
 			}
 		}
 
-		file_put_contents($_SERVER['BACKUPDATA'], json_encode($finalStuff));
+		//file_put_contents($_SERVER['BACKUPDATA'], json_encode($finalStuff));
 
-		$keepServiceCreds = $obj['keepServiceCreds'];
+		$stuff = file_get_contents($_SERVER['SERVICECREDS']);
 
-		if($keepServiceCreds == "true"){
-			$stuff = file_get_contents($_SERVER['SERVICECREDS']);
-
-			file_put_contents($_SERVER['SERVICECREDSBACKUP'], $stuff);
-		}
+		file_put_contents($_SERVER['SERVICECREDSBACKUP'], $stuff);
 
 		$wipeCurrentData = $obj['wipeCurrentData'];
 
