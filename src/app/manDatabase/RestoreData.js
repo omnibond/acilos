@@ -40,6 +40,7 @@ define(['dojo/_base/declare',
 		"dojox/mobile/ListItem",
 		"dojox/mobile/ToolBarButton",
 		"dojox/mobile/CheckBox",
+		"dojox/mobile/ComboBox",
 		'dojox/mobile/ProgressIndicator',
 		"dojox/mobile/EdgeToEdgeCategory"
 ], function(
@@ -60,6 +61,7 @@ define(['dojo/_base/declare',
 	ListItem, 
 	ToolBarButton, 
 	CheckBox,
+	ComboBox,
 	ProgressIndicator,
 	EdgeToEdgeCategory
 ) {
@@ -72,7 +74,13 @@ define(['dojo/_base/declare',
 				this.mainList = null;
 			}
 
+			
+
 			this.mainList = new EdgeToEdgeList({ });
+
+			this.backupFileComboBox = new ComboBox({
+
+			});
 
 			this.instructionDiv = domConstruct.create("div", {innerHTML: "This page will allow you to restore backed up items to your database. You can also choose to restore your backed up service credentials.", style: "margin-bottom: 10px"});
 

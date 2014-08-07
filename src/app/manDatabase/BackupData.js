@@ -38,6 +38,7 @@ define(['dojo/_base/declare',
 		"app/SelEdgeToEdgeList",
 		"dojox/mobile/Button",
 		"dojox/mobile/ListItem",
+		"dojox/mobile/TextBox",
 		"dojox/mobile/ToolBarButton",
 		"dojox/mobile/CheckBox",
 		'dojox/mobile/ProgressIndicator',
@@ -58,6 +59,7 @@ define(['dojo/_base/declare',
 	EdgeToEdgeList, 
 	Button, 
 	ListItem, 
+	TextBox,
 	ToolBarButton, 
 	CheckBox,
 	ProgressIndicator,
@@ -80,27 +82,41 @@ define(['dojo/_base/declare',
 
 			this.wipeDataDiv = domConstruct.create("div", {innerHTML: "Check this box to also wipe the data you are backing up from the database.", style: "display: inline-block; margin-left: 5px"});
 
+			this.nameBackupWrapperDiv = domConstruct.create("div", {});
+
+			this.nameBackupTextBox = new TextBox({
+				placeholder: "Backup name"
+			});
+
+			this.nameBackupDiv = domConstruct.create("div", {innerHTML: "Please enter a name for your backup file.", style: "display: inline-block; margin-left: 5px"});
+
 			this.backupButton = new Button({
 				label: "Back up data",
 				style: "display: block; margin-top: 10px",
 				onClick: lang.hitch(this, function(){
-					this.pi = new ProgressIndicator();
-					this.pi.placeAt(document.body);
-					this.pi.start();
+					var fileName = this.nameBackupTextBox.get("value");
 
-					if(this.wipeDataBox.get("checked") == false){
-						var wipeCurrentData = "false";
-					}else if(this.wipeDataBox.get("checked") == true){
-						var wipeCurrentData = "true";
+					if(fileName == ""){
+						alert("You must enter a name for your backup file");
+					}else{
+						this.pi = new ProgressIndicator();
+						this.pi.placeAt(document.body);
+						this.pi.start();
+
+						if(this.wipeDataBox.get("checked") == false){
+							var wipeCurrentData = "false";
+						}else if(this.wipeDataBox.get("checked") == true){
+							var wipeCurrentData = "true";
+						}
+
+						this.saveBackupData(fileName, wipeCurrentData).then(lang.hitch(this, function(obj){
+							console.log("obj is: ", obj);
+
+							this.pi.stop();
+
+							this.router.goToAbsoluteRoute("/manDatabase");
+						}));
 					}
-
-					this.saveBackupData(wipeCurrentData).then(lang.hitch(this, function(obj){
-						console.log("obj is: ", obj);
-
-						this.pi.stop();
-
-						this.router.goToAbsoluteRoute("/manDatabase");
-					}));
 				})
 			});
 
@@ -109,6 +125,11 @@ define(['dojo/_base/declare',
 
 			this.mainList.domNode.appendChild(this.instructionDiv);
 			this.mainList.domNode.appendChild(this.wipeDataWrapperDiv);
+
+			this.nameBackupWrapperDiv.appendChild(this.nameBackupTextBox.domNode);
+			this.nameBackupWrapperDiv.appendChild(this.nameBackupDiv);
+			this.mainList.domNode.appendChild(this.nameBackupWrapperDiv);
+
 			this.mainList.addChild(this.backupButton);
 
 			this.addChild(this.mainList);

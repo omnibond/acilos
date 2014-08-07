@@ -2,7 +2,7 @@ SetEnv SERVICECREDS /home/aaron/github/acilos/src/private/config/serviceCreds.js
 SetEnv PUBLICQUERYTERMOBJ /home/aaron/github/acilos/src/private/config/publicQueryTermObj.json
 SetEnv LOCALQUERYTERMOBJ /home/aaron/github/acilos/src/private/config/localQueryTermObj.json
 SetEnv APPSETTINGS /home/aaron/github/acilos/src/private/settings/appSettings.json
-SetEnv BACKUPDATA /home/aaron/github/acilos/src/private/config/backupData.json
+SetEnv BACKUPJSONPATH /home/aaron/github/acilos/src/private/config/
 SetEnv SERVICECREDSBACKUP /home/aaron/github/acilos/src/private/config/serviceCredsBackup.json
 SetEnv POSTLOG /home/aaron/github/acilos/src/private/config/postLog.json
 php_value session.cookie_lifetime 604800

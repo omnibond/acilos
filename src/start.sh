@@ -147,7 +147,7 @@ echo SetEnv SERVICECREDS $MAINPATH"/private/config/serviceCreds.json" > .htacces
 echo SetEnv PUBLICQUERYTERMOBJ $MAINPATH"/private/config/publicQueryTermObj.json" >> .htaccess
 echo SetEnv LOCALQUERYTERMOBJ $MAINPATH"/private/config/localQueryTermObj.json" >> .htaccess
 echo SetEnv APPSETTINGS $MAINPATH"/private/settings/appSettings.json" >> .htaccess
-echo SetEnv BACKUPDATA $MAINPATH"/private/config/backupData.json" >> .htaccess
+echo SetEnv BACKUPJSONPATH $MAINPATH"/private/config/" >> .htaccess
 echo SetEnv SERVICECREDSBACKUP $MAINPATH"/private/config/serviceCredsBackup.json" >> .htaccess
 echo SetEnv POSTLOG $MAINPATH"/private/config/postLog.json" >> .htaccess
 
