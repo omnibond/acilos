@@ -30,6 +30,7 @@ define(['dojo/_base/declare',
 		"dojo/_base/lang",
 		"dojo/on",
 		'dojo/dom-geometry',
+		"dojo/store/Memory",
 		
 		'app/util/xhrManager',
 		'app/SelectorBar',
@@ -51,6 +52,7 @@ define(['dojo/_base/declare',
 	lang,
 	on,
 	domGeom,
+	Memory,
 
 	xhrManager, 
 	SelectorBar, 
@@ -68,19 +70,38 @@ define(['dojo/_base/declare',
 	return declare([ModuleScrollableView], {		
 		style: "overflow:scroll",
 			
-		buildDataList: function(){
+		buildDataList: function(obj){
 			if(this.mainList){
 				this.mainList.destroyRecursive();
 				this.mainList = null;
 			}
 
-			
+			obj = obj['success'];
 
 			this.mainList = new EdgeToEdgeList({ });
 
-			this.backupFileComboBox = new ComboBox({
+			console.log("obj is: ", obj);
 
+			this.backupList = [];
+
+			for(var x = 0; x < obj.length; x++){
+				this.backupList[x] = {'name': obj[x]};
+			}
+
+			this.backupStore = new Memory({
+				idProperty: "name",
+				data: this.backupList
 			});
+
+			console.log("this.backupList is: ", this.backupList);
+
+			this.backupFileComboBox = new ComboBox({
+				store: this.backupStore,
+				placeholder: "Select a backup file",
+				style: "margin-bottom: 10px"
+			});
+
+			console.log("this.backupFileComboBox is: ", this.backupFileComboBox);
 
 			this.instructionDiv = domConstruct.create("div", {innerHTML: "This page will allow you to restore backed up items to your database. You can also choose to restore your backed up service credentials.", style: "margin-bottom: 10px"});
 
@@ -126,41 +147,56 @@ define(['dojo/_base/declare',
 				label: "Restore data from backup",
 				style: "margin-top: 10px",
 				onClick: lang.hitch(this, function(){
-					this.pi = new ProgressIndicator();
-					this.pi.placeAt(document.body);
-					this.pi.start();
+					console.log("this.backupFileComboBox is: ", this.backupFileComboBox);
+					var fileName = this.backupFileComboBox.textbox.value;
 
-					if(this.credentialsBox.get("checked") == false){
-						var restoreServiceCreds = "false";
-					}else if(this.credentialsBox.get("checked") == true){
-						var restoreServiceCreds = "true";
+					console.log("fileName is: ", fileName);
+
+					var re = /^[a-zA-Z0-9-]+$/;
+
+					if(fileName == ""){
+						alert("You must enter a name for your backup file");
+					}else{
+						if(!re.test(fileName)){
+							alert("The name may only contain letters, numbers, and dashes.");
+						}else{
+							this.pi = new ProgressIndicator();
+							this.pi.placeAt(document.body);
+							this.pi.start();
+
+							if(this.credentialsBox.get("checked") == false){
+								var restoreServiceCreds = "false";
+							}else if(this.credentialsBox.get("checked") == true){
+								var restoreServiceCreds = "true";
+							}
+
+							if(this.wipeDataBox.get("checked") == false){
+								var wipeDBData = "false";
+							}else if(this.wipeDataBox.get("checked") == true){
+								var wipeDBData = "true";
+							}
+
+							if(this.wipeBackupFileBox.get("checked") == false){
+								var deleteBackupFile = "false";
+							}else if(this.wipeBackupFileBox.get("checked") == true){
+								var deleteBackupFile = "true";
+							}
+
+							if(this.wipeCredentialsBackupBox.get("checked") == false){
+								var deleteBackupCredentials = "false";
+							}else if(this.wipeCredentialsBackupBox.get("checked") == true){
+								var deleteBackupCredentials = "true";
+							}
+
+							this.importBackupData(fileName, restoreServiceCreds, wipeDBData, deleteBackupFile, deleteBackupCredentials).then(lang.hitch(this, function(obj){
+								console.log("obj is: ", obj);
+
+								this.pi.stop();
+
+								this.router.goToAbsoluteRoute("/manDatabase");
+							}));
+						}
 					}
-
-					if(this.wipeDataBox.get("checked") == false){
-						var wipeDBData = "false";
-					}else if(this.wipeDataBox.get("checked") == true){
-						var wipeDBData = "true";
-					}
-
-					if(this.wipeBackupFileBox.get("checked") == false){
-						var deleteBackupFile = "false";
-					}else if(this.wipeBackupFileBox.get("checked") == true){
-						var deleteBackupFile = "true";
-					}
-
-					if(this.wipeCredentialsBackupBox.get("checked") == false){
-						var deleteBackupCredentials = "false";
-					}else if(this.wipeCredentialsBackupBox.get("checked") == true){
-						var deleteBackupCredentials = "true";
-					}
-
-					this.importBackupData(restoreServiceCreds, wipeDBData, deleteBackupFile, deleteBackupCredentials).then(lang.hitch(this, function(obj){
-						console.log("obj is: ", obj);
-
-						this.pi.stop();
-
-						this.router.goToAbsoluteRoute("/manDatabase");
-					}));
 				})
 			});
 
@@ -178,6 +214,7 @@ define(['dojo/_base/declare',
 
 			this.mainList.domNode.appendChild(this.instructionDiv);
 			this.mainList.domNode.appendChild(this.selectOptionsDiv);
+			this.mainList.addChild(this.backupFileComboBox);
 			this.mainList.domNode.appendChild(this.credentialsWrapperDiv);
 			this.mainList.domNode.appendChild(this.wipeDataWrapperDiv);
 			this.mainList.domNode.appendChild(this.wipeBackupFileWrapperDiv);
@@ -207,11 +244,9 @@ define(['dojo/_base/declare',
 			topic.publish("/dojo-mama/updateSubNav", {back: '/manDatabase', title: "Restore backed up data"} );		
 
 			this.checkForBackupData().then(lang.hitch(this, function(obj){
-				console.log("obj is: ", obj);
-
 				if(obj){
 					if(obj['success']){
-						this.buildDataList();
+						this.buildDataList(obj);
 					}else{
 						this.buildNoDataList();
 					}

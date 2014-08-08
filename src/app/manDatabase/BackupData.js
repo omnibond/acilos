@@ -96,26 +96,32 @@ define(['dojo/_base/declare',
 				onClick: lang.hitch(this, function(){
 					var fileName = this.nameBackupTextBox.get("value");
 
+					var re = /^[a-zA-Z0-9-]+$/;
+
 					if(fileName == ""){
 						alert("You must enter a name for your backup file");
 					}else{
-						this.pi = new ProgressIndicator();
-						this.pi.placeAt(document.body);
-						this.pi.start();
+						if(!re.test(fileName)){
+							alert("The name may only contain letters, numbers, and dashes.");
+						}else{
+							this.pi = new ProgressIndicator();
+							this.pi.placeAt(document.body);
+							this.pi.start();
 
-						if(this.wipeDataBox.get("checked") == false){
-							var wipeCurrentData = "false";
-						}else if(this.wipeDataBox.get("checked") == true){
-							var wipeCurrentData = "true";
+							if(this.wipeDataBox.get("checked") == false){
+								var wipeCurrentData = "false";
+							}else if(this.wipeDataBox.get("checked") == true){
+								var wipeCurrentData = "true";
+							}
+
+							this.saveBackupData(fileName, wipeCurrentData).then(lang.hitch(this, function(obj){
+								console.log("obj is: ", obj);
+
+								this.pi.stop();
+
+								this.router.goToAbsoluteRoute("/manDatabase");
+							}));	
 						}
-
-						this.saveBackupData(fileName, wipeCurrentData).then(lang.hitch(this, function(obj){
-							console.log("obj is: ", obj);
-
-							this.pi.stop();
-
-							this.router.goToAbsoluteRoute("/manDatabase");
-						}));
 					}
 				})
 			});

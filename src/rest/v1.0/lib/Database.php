@@ -275,16 +275,21 @@ class Database{
 	}
 
 	public function checkForBackupData(){
-		try{
-			$check = file_get_contents($_SERVER['BACKUPDATA']);
+		$backupFiles = glob("../../private/config/*-backup.json");
 
-			if($check != false){
-				return json_encode(array("success" => "there is backup data"));
-			}else{
+		if(isset($backupFiles)){
+			if(empty($backupFiles) === true){
 				return json_encode(array("failure" => "there is no backup data"));
+			}else{
+				for($x = 0; $x < count($backupFiles); $x++){
+					$backupFiles[$x] = explode("/", $backupFiles[$x]);
+					$backupFiles[$x] = end($backupFiles[$x]);
+					$backupFiles[$x] = explode("-backup.json", $backupFiles[$x]);
+					$backupFiles[$x] = $backupFiles[$x][0];
+				}
+
+				return json_encode(array("success" => $backupFiles));
 			}
-		}catch(Exception $e){
-			return json_encode(array("failure" => $e->getMessage()));
 		}
 	}
 
@@ -294,23 +299,67 @@ class Database{
 
 		$from = 0;
 
+		$counter = 0;
+
 		$keepGoing = "true";
 
 		$fileName = $obj['fileName'];
 
-		$finalStuff = array();
+	    $handle = fopen($_SERVER['BACKUPJSONPATH'] . $fileName . "-backup.json", 'w+');
+
+		var_dump($handle);
 
 		while($keepGoing == "true"){
 			$results = matchAll200($from);
+
+			$finalStuff = array();
 
 			if(isset($results)){
 				if(isset($results['hits'])){
 					if(isset($results['hits']['hits']) && count($results['hits']['hits']) != 0){
 						$stuffToKeep = $results['hits']['hits'];
 
-						for($x = 0; $x < count($stuffToKeep); $x++){
-							array_push($finalStuff, $stuffToKeep[$x]['_source']);	
+						print_r(count($stuffToKeep));
+
+						for($x = $counter; $x < ($counter + 200); $x++){
+							if($x < count($stuffToKeep)){
+								if($handle){
+							        array_push($finalStuff, $stuffToKeep[$x]['_source']);
+								}
+							}
 						}
+
+						//echo "printing finalStuff";
+						//print_R($finalStuff);
+
+						$counter += 200;
+
+						// seek to the end
+					    fseek($handle, 0, SEEK_END);
+
+					    if(isset($handle)){
+					    	if(!empty($finalStuff)){
+					    		// are we at the end of is the file empty
+						    	if(ftell($handle) > 0){
+						    		echo "we're inside the if";
+						    		// move back a byte
+							        fseek($handle, -1, SEEK_END);
+
+							        // add the trailing comma
+							        fwrite($handle, ',', 1);
+
+							        $written = fwrite($handle, json_encode($finalStuff));
+							        echo "wrote" . $written . "bytes";
+						    	}else{
+						    		echo "we're inside the if";
+						    		// move back a byte
+							        fseek($handle, -1, SEEK_END);
+
+							        $written = fwrite($handle, json_encode($finalStuff));
+							        echo "wrote" . $written . "bytes";
+						    	}
+					    	}
+					    }
 
 						$from += 200;
 					}else{
@@ -324,15 +373,14 @@ class Database{
 			}
 		}
 
-		file_put_contents($_SERVER['BACKUPJSONPATH'] . $fileName . " - backup", json_encode($finalStuff));
+		// close the handle on the file
+	    if(isset($handle)){
+	    	fclose($handle);
+	    }
 
-		$keepServiceCreds = $obj['keepServiceCreds'];
+		$stuff = file_get_contents($_SERVER['SERVICECREDS']);
 
-		if($keepServiceCreds == "true"){
-			$stuff = file_get_contents($_SERVER['SERVICECREDS']);
-
-			file_put_contents($_SERVER['SERVICECREDSBACKUP'], $stuff);
-		}
+		file_put_contents($_SERVER['SERVICECREDSBACKUP'], $stuff);
 
 		$wipeCurrentData = $obj['wipeCurrentData'];
 
@@ -349,47 +397,53 @@ class Database{
 		$var = file_get_contents("php://input");
 		$obj = json_decode($var, true);
 
-		if(isset($obj)){
-			if(isset($obj['restoreServiceCreds'])){
-				if($obj['restoreServiceCreds'] == "true"){
-					$backupServiceCreds = file_get_contents($_SERVER['SERVICECREDSBACKUP']);
+		$fileName = $obj['fileName'];
 
-					file_put_contents($_SERVER['SERVICECREDS'], $backupServiceCreds);	
+		$result = is_file($_SERVER['BACKUPJSONPATH'] . $fileName . "-backup.json");
 
-					if(isset($obj['deleteBackupCredentials'])){
-						if($obj['deleteBackupCredentials'] == "true"){
-							unlink($_SERVER['SERVICECREDSBACKUP']);
+		if(isset($result)){
+			if($result === true){
+				if(isset($obj)){
+					if(isset($obj['restoreServiceCreds'])){
+						if($obj['restoreServiceCreds'] == "true"){
+							$backupServiceCreds = file_get_contents($_SERVER['SERVICECREDSBACKUP']);
+
+							file_put_contents($_SERVER['SERVICECREDS'], $backupServiceCreds);	
+
+							if(isset($obj['deleteBackupCredentials'])){
+								if($obj['deleteBackupCredentials'] == "true"){
+									unlink($_SERVER['SERVICECREDSBACKUP']);
+								}
+							}
+						}
+					}
+					if(isset($obj['wipeDBData'])){
+						if($obj['wipeDBData'] == "true"){
+							$es = Client::connection("http://localhost:9200/app/app");
+							$es->delete();
+
+							$mapCommand = "curl -XPUT 'http://localhost:9200/app' -d @../../app_mapping.json";
+							$output = shell_exec($mapCommand);
 						}
 					}
 				}
-			}
-			if(isset($obj['wipeDBData'])){
-				if($obj['wipeDBData'] == "true"){
-					$es = Client::connection("http://localhost:9200/app/app");
-					$es->delete();
 
-					$mapCommand = "curl -XPUT 'http://localhost:9200/app' -d @../../app_mapping.json";
-					$output = shell_exec($mapCommand);
+				$data = file_get_contents($_SERVER['BACKUPJSONPATH'] . $fileName . "-backup.json");
+				$data = json_decode($data, true);
+
+				for($x = 0; $x < count($data); $x++){
+					$result = $this->writeObject($data[$x]);
 				}
-			}
-		}
 
-		$data = file_get_contents($_SERVER['BACKUPDATA']);
-		$data = json_decode($data, true);
-
-		foreach($data as $key => $value){
-			$result = $this->writeObject($data[$key]);
-		}
-
-		/*for($x = 0; $x < count($data); $x++){
-			$result = $this->writeObject($data[$x]);
-		}*/
-
-		if(isset($obj)){
-			if(isset($obj['deleteBackupFile'])){
-				if($obj['deleteBackupFile'] == "true"){
-					unlink($_SERVER['BACKUPDATA']);
+				if(isset($obj)){
+					if(isset($obj['deleteBackupFile'])){
+						if($obj['deleteBackupFile'] == "true"){
+							unlink($_SERVER['BACKUPDATA']);
+						}
+					}
 				}
+			}else{
+				return json_encode(array("failure" => "there is no backup file with that name"));
 			}
 		}
 	}

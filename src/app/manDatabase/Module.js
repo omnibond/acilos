@@ -153,8 +153,8 @@ define(['dojo/_base/declare',
 			return xhrManager.send('GET', 'rest/v1.0/Database/checkForBackupData', {});
 		},
 
-		importBackupData: function(restoreServiceCreds, wipeDBData, deleteBackupFile, deleteBackupCredentials){
-			var params = {restoreServiceCreds: restoreServiceCreds, wipeDBData: wipeDBData, deleteBackupFile: deleteBackupFile, deleteBackupCredentials: deleteBackupCredentials};
+		importBackupData: function(fileName, restoreServiceCreds, wipeDBData, deleteBackupFile, deleteBackupCredentials){
+			var params = {fileName: fileName, restoreServiceCreds: restoreServiceCreds, wipeDBData: wipeDBData, deleteBackupFile: deleteBackupFile, deleteBackupCredentials: deleteBackupCredentials};
 			return xhrManager.send('POST', 'rest/v1.0/Database/importBackupData', params);
 		}
 	})
