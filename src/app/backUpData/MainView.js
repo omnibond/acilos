@@ -119,7 +119,7 @@ define(['dojo/_base/declare',
 
 								this.pi.stop();
 
-								this.router.goToAbsoluteRoute("/manDatabase");
+								this.router.goToAbsoluteRoute("/settings");
 							}));	
 						}
 					}
@@ -142,7 +142,7 @@ define(['dojo/_base/declare',
 		},
 		
 		activate: function() {
-			topic.publish("/dojo-mama/updateSubNav", {back: '/manDatabase', title: "Back up data"} );
+			topic.publish("/dojo-mama/updateSubNav", {back: '/settings', title: "Back up data"} );
 
 			if(this.mainList){
 				this.mainList.destroyRecursive();

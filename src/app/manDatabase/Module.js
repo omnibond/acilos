@@ -34,9 +34,7 @@ define(['dojo/_base/declare',
 		'app/manDatabase/RestartAmazon',
 		'app/manDatabase/RestoreDB',
 		'app/manDatabase/restartDB',
-		'app/manDatabase/RebootSetting',
-		'app/manDatabase/BackupData',
-		'app/manDatabase/RestoreData'
+		'app/manDatabase/RebootSetting'
 ], function(
 	declare, 
 	Module, 
@@ -49,9 +47,7 @@ define(['dojo/_base/declare',
 	RestartHost,
 	RestoreDB,
 	restartDB,
-	RebootSetting,
-	BackupData,
-	RestoreData
+	RebootSetting
 ) {
 	return declare([Module], {
 		
@@ -76,21 +72,6 @@ define(['dojo/_base/declare',
 				checkRebootSetting: lang.hitch(this, this.checkRebootSetting),
 				saveRebootSetting: lang.hitch(this, this.saveRebootSetting)
 			});
-
-			this.backupData = new BackupData({
-				route: '/BackupData',
-
-				saveBackupData: lang.hitch(this, this.saveBackupData),
-				checkForBackupData: lang.hitch(this, this.checkForBackupData),
-				importBackupData: lang.hitch(this, this.importBackupData)
-			});
-
-			this.restoreData = new RestoreData({
-				route: '/RestoreData',
-
-				checkForBackupData: lang.hitch(this, this.checkForBackupData),
-				importBackupData: lang.hitch(this, this.importBackupData)
-			});
 			
 			this.rootView = new MainView({
 				route: '/',
@@ -103,8 +84,6 @@ define(['dojo/_base/declare',
 			this.registerView(this.restartHost);
 			this.registerView(this.restartDB);
 			this.registerView(this.rebootSetting);
-			this.registerView(this.backupData);
-			this.registerView(this.restoreData);
 		},
 		
 		getBackUpList: function(){
@@ -142,20 +121,6 @@ define(['dojo/_base/declare',
 		saveRebootSetting: function(reboot){
 			var params = {reboot: reboot};
 			return xhrManager.send('POST', 'rest/v1.0/Database/saveRebootSetting', params);
-		},
-
-		saveBackupData: function(fileName, wipeCurrentData){
-			var params = {fileName: fileName, wipeCurrentData: wipeCurrentData};
-			return xhrManager.send('POST', 'rest/v1.0/Database/saveBackupData', params);
-		},
-
-		checkForBackupData: function(){
-			return xhrManager.send('GET', 'rest/v1.0/Database/checkForBackupData', {});
-		},
-
-		importBackupData: function(fileName, restoreServiceCreds, wipeDBData, deleteBackupFile, deleteBackupCredentials){
-			var params = {fileName: fileName, restoreServiceCreds: restoreServiceCreds, wipeDBData: wipeDBData, deleteBackupFile: deleteBackupFile, deleteBackupCredentials: deleteBackupCredentials};
-			return xhrManager.send('POST', 'rest/v1.0/Database/importBackupData', params);
 		}
 	})
 });

@@ -125,24 +125,6 @@ define(['dojo/_base/declare',
 
 			this.wipeDataWrapperDiv = domConstruct.create("div", {});
 
-			this.wipeBackupFileBox = new CheckBox({
-				checked: false,
-				style: "-webkit-transform: scale(1.4); -moz-transform: scale(1.4); -ms-transform: scale(1.4); -o-transform: scale(1.4)"
-			});
-
-			this.wipeBackupFileDiv = domConstruct.create("div", {innerHTML: "Check this box to also delete the backup file you just restored from.", style: "display: inline-block; margin-left: 5px"});
-
-			this.wipeBackupFileWrapperDiv = domConstruct.create("div", {});
-
-			this.wipeCredentialsBackupBox = new CheckBox({
-				checked: false,
-				style: "-webkit-transform: scale(1.4); -moz-transform: scale(1.4); -ms-transform: scale(1.4); -o-transform: scale(1.4)"
-			});
-
-			this.wipeCredentialsBackupDiv = domConstruct.create("div", {innerHTML: "Check this box to also delete the service credentials backup file if you are restoring from one.", style: "display: inline-block; margin-left: 5px"});
-
-			this.wipeCredentialsBackupWrapperDiv = domConstruct.create("div", {});
-
 			this.restoreButton = new Button({
 				label: "Restore data from backup",
 				style: "margin-top: 10px",
@@ -176,24 +158,12 @@ define(['dojo/_base/declare',
 								var wipeDBData = "true";
 							}
 
-							if(this.wipeBackupFileBox.get("checked") == false){
-								var deleteBackupFile = "false";
-							}else if(this.wipeBackupFileBox.get("checked") == true){
-								var deleteBackupFile = "true";
-							}
-
-							if(this.wipeCredentialsBackupBox.get("checked") == false){
-								var deleteBackupCredentials = "false";
-							}else if(this.wipeCredentialsBackupBox.get("checked") == true){
-								var deleteBackupCredentials = "true";
-							}
-
-							this.importBackupData(fileName, restoreServiceCreds, wipeDBData, deleteBackupFile, deleteBackupCredentials).then(lang.hitch(this, function(obj){
+							this.importBackupData(fileName, restoreServiceCreds, wipeDBData).then(lang.hitch(this, function(obj){
 								console.log("obj is: ", obj);
 
 								this.pi.stop();
 
-								this.router.goToAbsoluteRoute("/manDatabase");
+								this.router.goToAbsoluteRoute("/settings");
 							}));
 						}
 					}
@@ -206,19 +176,11 @@ define(['dojo/_base/declare',
 			this.wipeDataWrapperDiv.appendChild(this.wipeDataBox.domNode);
 			this.wipeDataWrapperDiv.appendChild(this.wipeDataDiv);
 
-			this.wipeBackupFileWrapperDiv.appendChild(this.wipeBackupFileBox.domNode);
-			this.wipeBackupFileWrapperDiv.appendChild(this.wipeBackupFileDiv);
-
-			this.wipeCredentialsBackupWrapperDiv.appendChild(this.wipeCredentialsBackupBox.domNode);
-			this.wipeCredentialsBackupWrapperDiv.appendChild(this.wipeCredentialsBackupDiv);
-
 			this.mainList.domNode.appendChild(this.instructionDiv);
 			this.mainList.domNode.appendChild(this.selectOptionsDiv);
 			this.mainList.addChild(this.backupFileComboBox);
 			this.mainList.domNode.appendChild(this.credentialsWrapperDiv);
 			this.mainList.domNode.appendChild(this.wipeDataWrapperDiv);
-			this.mainList.domNode.appendChild(this.wipeBackupFileWrapperDiv);
-			this.mainList.domNode.appendChild(this.wipeCredentialsBackupWrapperDiv);
 
 			this.mainList.addChild(this.restoreButton);
 
@@ -241,7 +203,7 @@ define(['dojo/_base/declare',
 		},
 		
 		activate: function() {
-			topic.publish("/dojo-mama/updateSubNav", {back: '/manDatabase', title: "Restore backed up data"} );		
+			topic.publish("/dojo-mama/updateSubNav", {back: '/settings', title: "Restore backed up data"} );		
 
 			this.checkForBackupData().then(lang.hitch(this, function(obj){
 				if(obj){
