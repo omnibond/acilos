@@ -57,8 +57,8 @@ define(['dojo/_base/declare',
 			this.registerView(this.rootView);
 		},
 
-		saveBackupData: function(fileName, wipeCurrentData){
-			var params = {fileName: fileName, wipeCurrentData: wipeCurrentData};
+		saveBackupData: function(wipeCurrentData){
+			var params = {wipeCurrentData: wipeCurrentData};
 			return xhrManager.send('POST', 'rest/v1.0/Database/saveBackupData', params);
 		}
 	})

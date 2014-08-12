@@ -297,86 +297,53 @@ class Database{
 		$var = file_get_contents("php://input");
 		$obj = json_decode($var, true);
 
+		$count = json_decode(countAll(), true);
+
 		$from = 0;
 
-		$counter = 0;
+		$objectsPerFile = 10000;
 
-		$keepGoing = "true";
+		$x = 0;
 
-		$fileName = $obj['fileName'];
+		echo "x is: " . $x;
 
-	    $handle = fopen($_SERVER['BACKUPJSONPATH'] . $fileName . "-backup.json", 'w+');
+		echo "count is: " . $count['count'];
 
-		var_dump($handle);
+		while($x < $count){
+			echo "x is less than count";
+			for($y = 0; ($y < $objectsPerFile) && ($y < $count); $y += 200){
+				echo "y is less than objectsPerFile";
+				$finalStuff = array();
 
-		while($keepGoing == "true"){
-			$results = matchAll200($from);
+				$timeStamp = time();
 
-			$finalStuff = array();
+				$results = matchAll200($from);
 
-			if(isset($results)){
-				if(isset($results['hits'])){
-					if(isset($results['hits']['hits']) && count($results['hits']['hits']) != 0){
-						$stuffToKeep = $results['hits']['hits'];
+				if(isset($results)){
+					echo "results is set";
+					if(isset($results['hits'])){
+						if(isset($results['hits']['hits']) && count($results['hits']['hits'] != 0)){
+							echo "we're in the result loop";
+							$stuffToKeep = $results['hits']['hits'];
 
-						print_r(count($stuffToKeep));
-
-						for($x = $counter; $x < ($counter + 200); $x++){
-							if($x < count($stuffToKeep)){
-								if($handle){
-							        array_push($finalStuff, $stuffToKeep[$x]['_source']);
-								}
+							for($q = 0; ($q < count($results['hits']['hits'])) && ($q < 200); $q++){
+								array_push($finalStuff, $stuffToKeep[$q]['_source']);
 							}
 						}
-
-						//echo "printing finalStuff";
-						//print_R($finalStuff);
-
-						$counter += 200;
-
-						// seek to the end
-					    fseek($handle, 0, SEEK_END);
-
-					    if(isset($handle)){
-					    	if(!empty($finalStuff)){
-					    		// are we at the end of is the file empty
-						    	if(ftell($handle) > 0){
-						    		echo "we're inside the if";
-						    		// move back a byte
-							        fseek($handle, -1, SEEK_END);
-
-							        // add the trailing comma
-							        fwrite($handle, ',', 1);
-
-							        $written = fwrite($handle, json_encode($finalStuff));
-							        echo "wrote" . $written . "bytes";
-						    	}else{
-						    		echo "we're inside the if";
-						    		// move back a byte
-							        fseek($handle, -1, SEEK_END);
-
-							        $written = fwrite($handle, json_encode($finalStuff));
-							        echo "wrote" . $written . "bytes";
-						    	}
-					    	}
-					    }
-
-						$from += 200;
-					}else{
-						$keepGoing = "false";
 					}
-				}else{
-					$keepGoing = "false";
 				}
-			}else{
-				$keepGoing = "false";
+
+				if(isset($finalStuff)){
+					echo "it's set";
+					if(count($finalStuff) > 0){
+						echo "the count is greater than 0";
+						$fileName = $_SERVER['BACKUPJSONPATH'] . (string)$timeStamp . "-backup.json";
+
+						file_put_contents($fileName, json_encode($finalStuff));
+					}
+				}
 			}
 		}
-
-		// close the handle on the file
-	    if(isset($handle)){
-	    	fclose($handle);
-	    }
 
 		$stuff = file_get_contents($_SERVER['SERVICECREDS']);
 
@@ -430,6 +397,9 @@ class Database{
 
 				$data = file_get_contents($_SERVER['BACKUPJSONPATH'] . $fileName . "-backup.json");
 				$data = json_decode($data, true);
+
+				echo "the count is: ";
+				print_R(count($data));
 
 				for($x = 0; $x < count($data); $x++){
 					$result = $this->writeObject($data[$x]);
