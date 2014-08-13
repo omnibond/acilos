@@ -30,7 +30,6 @@ define(['dojo/_base/declare',
 
 		'app/util/xhrManager',
 
-		'app/post/PostView',
 		'app/post/MainView',
 		'app/post/PostHistoryView',
 		'app/post/DeletePostView'
@@ -42,7 +41,6 @@ define(['dojo/_base/declare',
 
 	xhrManager,
 
-	PostView,
 	MainView,
 	PostHistoryView,
 	DeletePostView
@@ -53,12 +51,8 @@ define(['dojo/_base/declare',
 			this.inherited(arguments);
 			
 			this.rootView = new MainView({
-				route: '/'
-			});
+				route: '/',
 
-			this.postView = new PostView({
-				route: '/PostView',
-				
 				sendPostFile: lang.hitch(this, this.sendPostFile),
 				runAtCommand: lang.hitch(this, this.runAtCommand),
 				getServiceCreds: lang.hitch(this, this.getServiceCreds),
@@ -79,13 +73,12 @@ define(['dojo/_base/declare',
 			});
 			
 			this.registerView(this.rootView);
-			this.registerView(this.postView);
 			this.registerView(this.postHistoryView);
 			this.registerView(this.deletePostView);
 		},
 
-		sendPostFile: function(file, fileType, tokenArr, msg){
-			var params = {file: file, fileType: fileType, tokenArr: tokenArr, msg: msg};
+		sendPostFile: function(time, file, fileType, tokenArr, msg){
+			var params = {time: time, file: file, fileType: fileType, tokenArr: tokenArr, msg: msg};
 			console.log("Module.js: Params for sendPostFile are: ", params);
 			return xhrManager.send('POST', 'rest/v1.0/Post/postFiles', params);
 		},

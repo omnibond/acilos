@@ -85,7 +85,11 @@ define(['dojo/_base/declare',
 			this.backupList = [];
 
 			for(var x = 0; x < obj.length; x++){
-				this.backupList[x] = {'name': obj[x]};
+				var date = new Date(obj[x] * 1000);
+
+				date = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + " on " + (date.getMonth() - 1) + "-" + date.getDate() +  "-" + date.getFullYear();
+
+				this.backupList[x] = {'name': date};
 			}
 
 			this.backupStore = new Memory({

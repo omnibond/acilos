@@ -181,19 +181,37 @@ define(['dojo/_base/declare',
 					var list = new EdgeToEdgeList({	});
 
 					if(facebookFailure && (facebookFailure == "true")){
-						var facebookFailureDiv = domConstruct.create("div", {innerHTML: "Facebook failure - " + successObj[key]['facebook']['response']['msg'] + "<br>" + "We tried to post this status for you " + (successObj[key]['facebook']['faceCounter'] - 1) + " additional times." + "<br><br>", style: "background-color: " + color + "; border: none; height: auto"});
+						if(successObj[key]['postType'] == "scheduled"){
+							var text = "Facebook failure - " + successObj[key]['facebook']['response']['msg'] + "<br>" + "We tried to post this status for you " + (successObj[key]['facebook']['faceCounter'] - 1) + " additional times." + "<br><br>";
+						}else{
+							var text = "Facebook failure - " + successObj[key]['facebook']['response']['msg'] + "<br>";
+						}
+
+						var facebookFailureDiv = domConstruct.create("div", {innerHTML: text, style: "background-color: " + color + "; border: none; height: auto"});
 
 						list.domNode.appendChild(facebookFailureDiv);
 					}
 
 					if(linkedinFailure && (linkedinFailure == "true")){
-						var linkedinFailureDiv = domConstruct.create("div", {innerHTML: "LinkedIn failure - " + successObj[key]['linkedin']['response']['msg'] + "<br>" + "We tried to post this status for you " + (successObj[key]['linkedin']['linkCounter'] - 1) + " additional times." + "<br><br>", style: "background-color: " + color + "; border: none; height: auto"});
+						if(successObj[key]['postType'] == "scheduled"){
+							var text = "LinkedIn failure - " + successObj[key]['linkedin']['response']['msg'] + "<br>" + "We tried to post this status for you " + (successObj[key]['linkedin']['linkCounter'] - 1) + " additional times." + "<br><br>";
+						}else{
+							var text = "LinkedIn failure - " + successObj[key]['linkedin']['response']['msg'] + "<br>";
+						}
+
+						var linkedinFailureDiv = domConstruct.create("div", {innerHTML: text, style: "background-color: " + color + "; border: none; height: auto"});
 
 						list.domNode.appendChild(linkedinFailureDiv);
 					}
 
 					if(twitterFailure && (twitterFailure == "true")){
-						var twitterFailureDiv = domConstruct.create("div", {innerHTML: "Twitter failure - " + successObj[key]['twitter']['response']['msg'] + "<br>" + "We tried to post this status for you " + (successObj[key]['twitter']['twitterCounter'] - 1) + " additional times." + "<br><br>", style: "background-color: " + color + "; border: none; height: auto"});
+						if(successObj[key]['postType'] == "scheduled"){
+							var text = "Twitter failure - " + successObj[key]['twitter']['response']['msg'] + "<br>" + "We tried to post this status for you " + (successObj[key]['twitter']['twitterCounter'] - 1) + " additional times." + "<br><br>";
+						}else{
+							var text = "Twitter failure - " + successObj[key]['twitter']['response']['msg'] + "<br>";
+						}
+						
+						var twitterFailureDiv = domConstruct.create("div", {innerHTML: text, style: "background-color: " + color + "; border: none; height: auto"});
 
 						list.domNode.appendChild(twitterFailureDiv);
 					}

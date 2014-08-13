@@ -298,51 +298,60 @@ class Database{
 		$obj = json_decode($var, true);
 
 		$count = json_decode(countAll(), true);
+		$count = $count['count'];
 
 		$from = 0;
 
-		$objectsPerFile = 10000;
+		$objectsPerFile = 2000;
 
 		$x = 0;
 
-		echo "x is: " . $x;
-
-		echo "count is: " . $count['count'];
-
 		while($x < $count){
-			echo "x is less than count";
-			for($y = 0; ($y < $objectsPerFile) && ($y < $count); $y += 200){
-				echo "y is less than objectsPerFile";
-				$finalStuff = array();
+			echo "x is " . $x; ?><br/><br/><?php
 
-				$timeStamp = time();
+			$finalStuff = array();
+
+			$timeStamp = time();
+
+			for($y = 0; ($y < $objectsPerFile) && ($y < $count); $y += 200){
+				echo "y is " . $y; ?><br/><br/><?php
 
 				$results = matchAll200($from);
 
 				if(isset($results)){
-					echo "results is set";
 					if(isset($results['hits'])){
 						if(isset($results['hits']['hits']) && count($results['hits']['hits'] != 0)){
-							echo "we're in the result loop";
 							$stuffToKeep = $results['hits']['hits'];
 
 							for($q = 0; ($q < count($results['hits']['hits'])) && ($q < 200); $q++){
 								array_push($finalStuff, $stuffToKeep[$q]['_source']);
 							}
+						}else{
+							break 2;
 						}
+					}else{
+						break 2;
 					}
+				}else{
+					break 2;
 				}
 
 				if(isset($finalStuff)){
-					echo "it's set";
+					echo "the count of finalStuff is: " . count($finalStuff); ?><br/><br/><?php
 					if(count($finalStuff) > 0){
-						echo "the count is greater than 0";
 						$fileName = $_SERVER['BACKUPJSONPATH'] . (string)$timeStamp . "-backup.json";
 
 						file_put_contents($fileName, json_encode($finalStuff));
 					}
 				}
+
+				$from += 200;
 			}
+
+			//sleep for 1/2 second to ensure multiple chunks of data aren't overwritten with the same filename due to the process happening too quickly
+			usleep(500000);
+
+			$x += $y;
 		}
 
 		$stuff = file_get_contents($_SERVER['SERVICECREDS']);
@@ -405,13 +414,7 @@ class Database{
 					$result = $this->writeObject($data[$x]);
 				}
 
-				if(isset($obj)){
-					if(isset($obj['deleteBackupFile'])){
-						if($obj['deleteBackupFile'] == "true"){
-							unlink($_SERVER['BACKUPDATA']);
-						}
-					}
-				}
+				unlink($_SERVER['BACKUPJSONPATH'] . $fileName . "-backup.json");
 			}else{
 				return json_encode(array("failure" => "there is no backup file with that name"));
 			}

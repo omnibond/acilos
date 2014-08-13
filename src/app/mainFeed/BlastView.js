@@ -255,8 +255,10 @@ define(['dojo/_base/declare',
 					console.log("tokenArr is: ", tokenArr);
 
 					console.log("this.blastObj is: ", this.blastObj);
+
+					time = Date.now() / 1000;
 					
-					this.sendPostFile(this.blastObj.imgName, tokenArr, msg).then(lang.hitch(this, function(obj){
+					this.sendPostFile(time, this.blastObj.imgName, tokenArr, msg).then(lang.hitch(this, function(obj){
 						console.log("obj is: ", obj);
 
 						var returnStuff = obj['returnArray'];

@@ -27,6 +27,7 @@
 */
 require_once('../../oAuth/twitteroauth/twitteroauth.php');
 require_once('authCalls.php');
+require_once('saveServiceCalls.php');
 
 class Blast{
 
@@ -98,6 +99,49 @@ class Blast{
 			$fileName = "";
 		}
 
+		if(isset($varObj['time']) && $varObj['time'] != "" && $varObj['time'] != "?"){
+			$timeStamp = $varObj['time'];
+
+			$cTime = @date('Y-m-d H:i:s e', $timeStamp);
+
+			$timeArr1 = explode(" ", $cTime);
+			$timeArr2 = explode("-", $timeArr1[0]);
+
+			$month = $timeArr2[1];
+			$day = $timeArr2[2];
+			$year = $timeArr2[0];
+			$preTime = $timeArr1[1];
+
+			$hoursTimeArr = explode(":", $preTime);
+			$preHours = $hoursTimeArr[0];
+			$minutes = $hoursTimeArr[1];
+			$seconds = $hoursTimeArr[2];
+
+			if(intval($preHours) > 12 || intval($preHours) == 12){
+	            $hours = intval($preHours) - 12;
+
+	            if($hours == 0){
+	                    $hours = 12;
+	            }
+
+	            $suffix = "pm";
+		    }else{
+	            $hours = intval($preHours);
+
+	            if($hours == 0){
+	                    $hours = 12;
+	            }
+	            
+	            $suffix = "am";
+		    }
+
+			$time = $hours . ":" . $minutes . " " . $suffix;
+			$date = $month . "/" . $day . "/" . $year;
+		}else{
+			$time = "?";
+			$date = "?";
+		}
+
 		//print_r($tokenArr);
 
 		$thing = getcwd();
@@ -116,6 +160,10 @@ class Blast{
 		}
 
 		global $returnArray;
+
+		$postID = uniqid();
+
+		$server = $_SERVER['HTTP_REFERER'];
 
 		//print_r($thing);
 
@@ -184,6 +232,8 @@ class Blast{
 						}else{
 							$returnArray['Facebook'][$x] = array("failure" => 'true', "msg" => "Your Facebook status could not be posted - no response from Facebook");
 						}
+
+						saveFacebookPost($returnArray['Facebook'][$x], "blast", "completed", $postID, $fileName, "?", $msg, $server, $access_token, $app_id, $user_id, $date, $time);
 					}
 
 					break;
@@ -232,6 +282,8 @@ class Blast{
 						}else{
 							$returnArray['Twitter'][$x] =  array("failure" => "true", "msg" => "Your Twitter status could not be posted - no response from Twitter	");
 						}
+
+						saveTwitterPost($returnArray['Twitter'][$x], "blast", "completed", $postID, $fileName, "?", $msg, $server, $access_token, $access_secret, $appKey, $appSecret, $date, $time);
 					}
 
 					break;
@@ -320,6 +372,8 @@ class Blast{
 								$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - no response from LinkedIn.");
 							}
 						}
+
+						saveLinkedInPost($returnArray['Linkedin'][$x], "blast", "completed", $postID, $fileName, "?", $msg, $server, $access_token, $date, $time);
 					}
 
 					break;

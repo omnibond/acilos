@@ -184,8 +184,8 @@ define(['dojo/_base/declare',
 			return xhrManager.send('GET', 'rest/v1.0/Search/sendSearchString', params);
 		},
 		
-		sendPostFile: function(file, tokenArr, msg){
-			params = {file: file, tokenArr: tokenArr, msg: msg};
+		sendPostFile: function(time, file, tokenArr, msg){
+			params = {time: time, file: file, tokenArr: tokenArr, msg: msg};
 			console.log("Module.js: Params for sendPostFile are: ", params);
 			return xhrManager.send('POST', 'rest/v1.0/Blast/blastFiles', params);
 		},

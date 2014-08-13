@@ -28,6 +28,7 @@
 
 require_once('../../oAuth/twitteroauth/twitteroauth.php');
 require_once('authCalls.php');
+require_once('saveServiceCalls.php');
 
 use \ElasticSearch\Client;
 
@@ -519,6 +520,49 @@ Class Post{
 		$var = file_get_contents("php://input");
 		$varObj = json_decode($var, true);
 
+		if(isset($varObj['time']) && $varObj['time'] != "" && $varObj['time'] != "?"){
+			$timeStamp = $varObj['time'];
+
+			$cTime = @date('Y-m-d H:i:s e', $timeStamp);
+
+			$timeArr1 = explode(" ", $cTime);
+			$timeArr2 = explode("-", $timeArr1[0]);
+
+			$month = $timeArr2[1];
+			$day = $timeArr2[2];
+			$year = $timeArr2[0];
+			$preTime = $timeArr1[1];
+
+			$hoursTimeArr = explode(":", $preTime);
+			$preHours = $hoursTimeArr[0];
+			$minutes = $hoursTimeArr[1];
+			$seconds = $hoursTimeArr[2];
+
+			if(intval($preHours) > 12 || intval($preHours) == 12){
+	            $hours = intval($preHours) - 12;
+
+	            if($hours == 0){
+	                    $hours = 12;
+	            }
+
+	            $suffix = "pm";
+		    }else{
+	            $hours = intval($preHours);
+
+	            if($hours == 0){
+	                    $hours = 12;
+	            }
+	            
+	            $suffix = "am";
+		    }
+
+			$time = $hours . ":" . $minutes . " " . $suffix;
+			$date = $month . "/" . $day . "/" . $year;
+		}else{
+			$time = "?";
+			$date = "?";
+		}
+
 		if(isset($varObj['msg']) && $varObj['msg'] !== " "){
 			$msg = $varObj['msg'];
 		}else{
@@ -639,7 +683,7 @@ Class Post{
 							$returnArray['Facebook'][$x] = array("failure" => 'true', "msg" => "Your Facebook status could not be posted - no response from Facebook");
 						}
 
-						saveFacebookPost($returnArray['Facebook'][$x], "completed", $postID, $fileName, $fileType, $msg, $server, $access_token, $app_id, $user_id, $date, $time);
+						saveFacebookPost($returnArray['Facebook'][$x], "normal", "completed", $postID, $fileName, $fileType, $msg, $server, $access_token, $app_id, $user_id, $date, $time);
 					}
 
 					break;
@@ -689,7 +733,7 @@ Class Post{
 							$returnArray['Twitter'][$x] =  array("failure" => "true", "msg" => "Your Twitter status could not be posted - no response from Twitter	");
 						}
 
-						saveTwitterPost($returnArray['Twitter'][$x], "completed", $postID, $fileName, $fileType, $msg, $server, $access_token, $access_secret, $appKey, $appSecret, $date, $time);
+						saveTwitterPost($returnArray['Twitter'][$x], "normal", "completed", $postID, $fileName, $fileType, $msg, $server, $access_token, $access_secret, $appKey, $appSecret, $date, $time);
 					}
 
 					break;
@@ -780,7 +824,7 @@ Class Post{
 							}
 						}
 
-						saveLinkedInPost($returnArray['Linkedin'][$x], "completed", $postID, $fileName, $fileType, $msg, $server, $access_token, $date, $time);
+						saveLinkedInPost($returnArray['Linkedin'][$x], "normal", "completed", $postID, $fileName, $fileType, $msg, $server, $access_token, $date, $time);
 					}
 
 					break;
@@ -794,339 +838,8 @@ Class Post{
 	}
 }
 
-function saveFacebookPost($response, $postStatus, $postID, $file, $fileType, $msg, $server, $access_token, $app_id, $user_id, $date, $time){
-	if(isset($response)){
-		$response = $response;
-	}else{
-		$response = "";
-	}
-
-	if(isset($postStatus)){
-		$postStatus = $postStatus;
-	}else{
-		$postStatus = "";
-	}
-
-	if(isset($postID)){
-		$postID = $postID;
-	}else{
-		$postID = "";
-	}
-
-	if(isset($file)){
-		$file = $file;
-	}else{
-		$file = "";
-	}
-
-	if(isset($fileType)){
-		$fileType = $fileType;
-	}else{
-		$fileType = "";
-	}
-
-	if(isset($msg)){
-		$msg = $msg;
-	}else{
-		$msg = "";
-	}
-
-	if(isset($server)){
-		$server = $server;
-	}else{
-		$server = "";
-	}
-
-	if(isset($access_token)){
-		$access_token = $access_token;
-	}else{
-		$access_token = "";
-	}
-
-	if(isset($app_id)){
-		$app_id = $app_id;
-	}else{
-		$app_id = "";
-	}
-
-	if(isset($user_id)){
-		$user_id = $user_id;
-	}else{
-		$user_id = "";
-	}
-
-	if(isset($date)){
-		$date = $date;
-	}else{
-		$date = "";
-	}
-
-	if(isset($time)){
-		$time = $time;
-	}else{
-		$time = "";
-	}
-
-	try{
-		$fileObj = file_get_contents($_SERVER['POSTLOG']);
-		$fileObj = json_decode($fileObj, true);
-
-		$fileObj[$postID]['fileName'] = $file;
-		$fileObj[$postID]['fileType'] = $fileType;
-		$fileObj[$postID]['service'] = "facebook";
-		$fileObj[$postID]['msg'] = $msg;
-		$fileObj[$postID]['server'] = $server;
-		$fileObj[$postID]['facebook'] = array();
-		$fileObj[$postID]['facebook']['access_token'] = $access_token;
-		$fileObj[$postID]['facebook']['app_id'] = $app_id;
-		$fileObj[$postID]['facebook']['user_id'] = $user_id;
-		$fileObj[$postID]['facebook']['response'] = $response;
-		$fileObj[$postID]['postStatus'] = $postStatus;
-		$fileObj[$postID]['date'] = $date;
-		$fileObj[$postID]['time'] = $time;
-
-		file_put_contents($_SERVER['POSTLOG'], json_encode($fileObj));
-	}catch(Exception $e){
-		$fileObj = array();
-
-		$fileObj[$postID]['fileName'] = $file;
-		$fileObj[$postID]['fileType'] = $fileType;
-		$fileObj[$postID]['service'] = "facebook";
-		$fileObj[$postID]['msg'] = $msg;
-		$fileObj[$postID]['server'] = $server;
-		$fileObj[$postID]['facebook'] = array();
-		$fileObj[$postID]['facebook']['access_token'] = $access_token;
-		$fileObj[$postID]['facebook']['app_id'] = $app_id;
-		$fileObj[$postID]['facebook']['user_id'] = $user_id;
-		$fileObj[$postID]['facebook']['response'] = $response;
-		$fileObj[$postID]['postStatus'] = $postStatus;
-		$fileObj[$postID]['date'] = $date;
-		$fileObj[$postID]['time'] = $time;
-
-		file_put_contents($_SERVER['POSTLOG'], json_encode($fileObj));
-	}
-}
-
-function saveLinkedInPost($response, $postStatus, $postID, $file, $fileType, $msg, $server, $access_token, $date, $time){
-	if(isset($response)){
-		$response = $response;
-	}else{
-		$response = "";
-	}
-
-	if(isset($postStatus)){
-		$postStatus = $postStatus;
-	}else{
-		$postStatus = "";
-	}
-
-	if(isset($postID)){
-		$postID = $postID;
-	}else{
-		$postID = "";
-	}
-
-	if(isset($file)){
-		$file = $file;
-	}else{
-		$file = "";
-	}
-
-	if(isset($fileType)){
-		$fileType = $fileType;
-	}else{
-		$fileType = "";
-	}
-
-	if(isset($msg)){
-		$msg = $msg;
-	}else{
-		$msg = "";
-	}
-
-	if(isset($server)){
-		$server = $server;
-	}else{
-		$server = "";
-	}
-
-	if(isset($access_token)){
-		$access_token = $access_token;
-	}else{
-		$access_token = "";
-	}
-
-	if(isset($date)){
-		$date = $date;
-	}else{
-		$date = "";
-	}
-
-	if(isset($time)){
-		$time = $time;
-	}else{
-		$time = "";
-	}
-
-	try{
-		$fileObj = file_get_contents($_SERVER['POSTLOG']);
-		$fileObj = json_decode($fileObj, true);
-
-		$fileObj[$postID]['fileName'] = $file;
-		$fileObj[$postID]['fileType'] = $fileType;
-		$fileObj[$postID]['service'] = "linkedin";
-		$fileObj[$postID]['msg'] = $msg;
-		$fileObj[$postID]['server'] = $server;
-		$fileObj[$postID]['linkedin'] = array();
-		$fileObj[$postID]['linkedin']['access_token'] = $access_token;
-		$fileObj[$postID]['linkedin']['response'] = $response;
-		$fileObj[$postID]['postStatus'] = $postStatus;
-		$fileObj[$postID]['date'] = $date;
-		$fileObj[$postID]['time'] = $time;
-		
-		file_put_contents($_SERVER['POSTLOG'], json_encode($fileObj));
-	}catch(Exception $e){
-		$fileObj = array();
-
-		$fileObj[$postID]['fileName'] = $file;
-		$fileObj[$postID]['fileType'] = $fileType;
-		$fileObj[$postID]['service'] = "linkedin";
-		$fileObj[$postID]['msg'] = $msg;
-		$fileObj[$postID]['server'] = $server;
-		$fileObj[$postID]['linkedin'] = array();
-		$fileObj[$postID]['linkedin']['access_token'] = $access_token;
-		$fileObj[$postID]['linkedin']['response'] = $response;
-		$fileObj[$postID]['postStatus'] = $postStatus;
-		$fileObj[$postID]['date'] = $date;
-		$fileObj[$postID]['time'] = $time;
-
-		file_put_contents($_SERVER['POSTLOG'], json_encode($fileObj));
-	}
-}
-
-function saveTwitterPost($response, $postStatus, $postID, $file, $fileType, $msg, $server, $access_token, $access_secret, $appKey, $appSecret, $date, $time){
-	if(isset($response)){
-		$response = $response;
-	}else{
-		$response = "";
-	}
-
-	if(isset($postStatus)){
-		$postStatus = $postStatus;
-	}else{
-		$postStatus = "";
-	}
-
-	if(isset($postID)){
-		$postID = $postID;
-	}else{
-		$postID = "";
-	}
-
-	if(isset($file)){
-		$file = $file;
-	}else{
-		$file = "";
-	}
-
-	if(isset($fileType)){
-		$fileType = $fileType;
-	}else{
-		$fileType = "";
-	}
-
-	if(isset($msg)){
-		$msg = $msg;
-	}else{
-		$msg = "";
-	}
-
-	if(isset($server)){
-		$server = $server;
-	}else{
-		$server = "";
-	}
-
-	if(isset($access_token)){
-		$access_token = $access_token;
-	}else{
-		$access_token = "";
-	}
-
-	if(isset($access_secret)){
-		$access_secret = $access_secret;
-	}else{
-		$access_secret = "";
-	}
-
-	if(isset($appKey)){
-		$appKey = $appKey;
-	}else{
-		$appKey = "";
-	}
-
-	if(isset($appSecret)){
-		$appSecret = $appSecret;
-	}else{
-		$appSecret = "";
-	}
-
-	if(isset($date)){
-		$date = $date;
-	}else{
-		$date = "";
-	}
-
-	if(isset($time)){
-		$time = $time;
-	}else{
-		$time = "";
-	}
-
-	try{
-		$fileObj = file_get_contents($_SERVER['POSTLOG']);
-		$fileObj = json_decode($fileObj, true);
-
-		$fileObj[$postID]['fileName'] = $file;
-		$fileObj[$postID]['fileType'] = $fileType;
-		$fileObj[$postID]['service'] = "twitter";
-		$fileObj[$postID]['msg'] = $msg;
-		$fileObj[$postID]['server'] = $server;
-		$fileObj[$postID]['twitter'] = array();
-		$fileObj[$postID]['twitter']['access_token'] = $access_token;
-		$fileObj[$postID]['twitter']['access_secret'] = $access_secret;
-		$fileObj[$postID]['twitter']['appKey'] = $appKey;
-		$fileObj[$postID]['twitter']['appSecret'] = $appSecret;
-		$fileObj[$postID]['twitter']['response'] = $response;
-		$fileObj[$postID]['postStatus'] = $postStatus;
-		$fileObj[$postID]['date'] = $date;
-		$fileObj[$postID]['time'] = $time;
-		
-		file_put_contents($_SERVER['POSTLOG'], json_encode($fileObj));
-	}catch(Exception $e){
-		$fileObj = array();
-
-		$fileObj[$postID]['fileName'] = $file;
-		$fileObj[$postID]['fileType'] = $fileType;
-		$fileObj[$postID]['service'] = "twitter";
-		$fileObj[$postID]['msg'] = $msg;
-		$fileObj[$postID]['server'] = $server;
-		$fileObj[$postID]['twitter'] = array();
-		$fileObj[$postID]['twitter']['access_token'] = $access_token;
-		$fileObj[$postID]['twitter']['access_secret'] = $access_secret;
-		$fileObj[$postID]['twitter']['appKey'] = $appKey;
-		$fileObj[$postID]['twitter']['appSecret'] = $appSecret;
-		$fileObj[$postID]['twitter']['response'] = $response;
-		$fileObj[$postID]['postStatus'] = $postStatus;
-		$fileObj[$postID]['date'] = $date;
-		$fileObj[$postID]['time'] = $time;
-
-		file_put_contents($_SERVER['POSTLOG'], json_encode($fileObj));
-	}
-}
-
 function postFilesHandler($obj){
-	if(isset($obj['time'])){
+	if(isset($obj['time']) && $obj['time'] != "" && $obj['time'] != "?"){
 		$timeStamp = $obj['time'];
 
 		$cTime = @date('Y-m-d H:i:s e', $timeStamp);
@@ -1240,7 +953,7 @@ function postFilesHandler($obj){
 
 					$msgWithoutPlusSign = str_replace("+", " ", $msg);
 
-					saveFacebookPost("", "pending", $postID, $file, $fileType, $msgWithoutPlusSign, $server, $access_token, $app_id, $user_id, $date, $time);
+					saveFacebookPost("", "scheduled", "pending", $postID, $file, $fileType, $msgWithoutPlusSign, $server, $access_token, $app_id, $user_id, $date, $time);
 
 					print_r($atCommand); ?><br/><?php
 
@@ -1279,7 +992,7 @@ function postFilesHandler($obj){
 
 					$msgWithoutPlusSign = str_replace("+", " ", $msg);
 
-					saveTwitterPost("", "pending", $postID, $file, $fileType, $msgWithoutPlusSign, $server, $access_token, $access_secret, $appKey, $appSecret, $date, $time);
+					saveTwitterPost("", "scheduled", "pending", $postID, $file, $fileType, $msgWithoutPlusSign, $server, $access_token, $access_secret, $appKey, $appSecret, $date, $time);
 
 					print_r($atCommand); ?><br/><?php
 
@@ -1303,7 +1016,7 @@ function postFilesHandler($obj){
 
 					$msgWithoutPlusSign = str_replace("+", " ", $msg);
 
-					saveLinkedInPost("", "pending", $postID, $file, $fileType, $msgWithoutPlusSign, $server, $access_token, $date, $time);
+					saveLinkedInPost("", "scheduled", "pending", $postID, $file, $fileType, $msgWithoutPlusSign, $server, $access_token, $date, $time);
 
 					print_r($atCommand); ?><br/><?php
 
