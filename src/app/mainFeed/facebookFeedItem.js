@@ -422,44 +422,64 @@ define([
 				
 				this.roundRight.addChild(this.dateServItem);
 				
-				//PIC ITEM ----------------------
+				//PIC OR VIDEO ITEM ----------------------
 				if(obj.content.picture != null && obj.content.picture != "undefined" && obj.content.picture != "" && obj.content.picture != "N/A" && obj.content.url != null && obj.content.url != "" && obj.content.url!= "undefined" && obj.content.url != "N/A"){
 					this.picContent = new ListItem({
 						variableHeight: true,
 						"class": "feedPicContentItemClass"
 					});
 
-					if(obj.content.objectType == "photo"){
-						var div = domConstruct.create("div", {innerHTML: '<span><img src="'+obj.content.picture+'" style="max-width:90%;max-height:90%;" /></a></span>'});
-					}else{
-						var div = domConstruct.create("div", {innerHTML: '<span><a href="'+obj.content.url+'" target="_blank"><img src="'+obj.content.picture+'" style="max-width:90%;max-height:90%;" /></a></span>'});
-					}
+					if(obj.content.url.indexOf("youtube") > -1){
+						if(obj.content.url.indexOf("watch?v=") > -1){
+							var result = obj.content.url.split("watch?v=");
+							var normalVidStuff = result[0];
+							var vidID = result[1];
 
-					div.onclick = lang.hitch(this, function(){
-						var dialog = new Dialog({
-							title: "Click to close ->",
-							"class": "blackBackDijitDialog",
-							onHide: lang.hitch(this, function(){
-								if(blackoutDiv){
-									document.body.removeChild(blackoutDiv);
-								}
-							})
+							if(vidID.indexOf("&") > -1){
+								vidID = vidID.split("&");
+								vidID = vidID[0];
+							}
+
+							var whatWeWant = normalVidStuff + "embed/" + vidID;
+
+							var div = domConstruct.create("div", {innerHTML: '<iframe src="'+whatWeWant+'"style="max-width:90%;height:200px;"></iframe>'});
+
+							this.picContent.domNode.appendChild(div);
+							this.roundRight.addChild(this.picContent);
+						}
+					}else{
+						if(obj.content.objectType == "photo"){
+							var div = domConstruct.create("div", {innerHTML: '<span><img src="'+obj.content.picture+'" style="max-width:90%;max-height:90%;" /></a></span>'});
+						}else{
+							var div = domConstruct.create("div", {innerHTML: '<span><a href="'+obj.content.url+'" target="_blank"><img src="'+obj.content.picture+'" style="max-width:90%;max-height:90%;" /></a></span>'});
+						}
+
+						div.onclick = lang.hitch(this, function(){
+							var dialog = new Dialog({
+								title: "Click to close ->",
+								"class": "blackBackDijitDialog",
+								onHide: lang.hitch(this, function(){
+									if(blackoutDiv){
+										document.body.removeChild(blackoutDiv);
+									}
+								})
+							});
+
+							if(obj.content.objectType == "photo"){
+								var dialogDiv = domConstruct.create("div", {innerHTML: '<span><img src="'+obj.content.picture+'" style="" /></a></span>'});
+
+								var blackoutDiv = domConstruct.create("div", {"class": "blackoutDiv"});
+
+								dialog.set("content", dialogDiv);
+								dialog.show();
+
+								document.body.appendChild(blackoutDiv);
+							}
 						});
 
-						if(obj.content.objectType == "photo"){
-							var dialogDiv = domConstruct.create("div", {innerHTML: '<span><img src="'+obj.content.picture+'" style="" /></a></span>'});
-
-							var blackoutDiv = domConstruct.create("div", {"class": "blackoutDiv"});
-
-							dialog.set("content", dialogDiv);
-							dialog.show();
-
-							document.body.appendChild(blackoutDiv);
-						}
-					});
-
-					this.picContent.domNode.appendChild(div);
-					this.roundRight.addChild(this.picContent);
+						this.picContent.domNode.appendChild(div);
+						this.roundRight.addChild(this.picContent);
+					}
 				}else{
 					if(obj.content.objectType == "photo" && (obj.content.picture == null || obj.content.picture == "" || obj.content.picture == "undefined" || obj.content.picture == "N/A") && obj.content.url != null && obj.content.url != "undefined" && obj.content.url != "" && obj.content.url != "N/A"){
 
