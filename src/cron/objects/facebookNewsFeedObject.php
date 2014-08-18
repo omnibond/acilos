@@ -283,46 +283,62 @@ class facebookNewsFeedObjectBuilder extends activityObjectBuilder{
         	if(isset($obj['actions'][0])){
         		if(isset($obj['actions'][0]['link'])){
         			$content->setCommentURL($obj['actions'][0]['link']);
-				$content->setLikeURL($obj['actions'][0]['link']);
+					$content->setLikeURL($obj['actions'][0]['link']);
         		}
         	}
         }
 
        if(isset($obj['type'])){									//ADDED BLOCK HERE TO GET BIG PICTURES
            if($obj['type'] == "photo"){
-                $url = 'https://graph.facebook.com/' . $obj['object_id'];
+                $url = 'http://graph.facebook.com/' . $obj['object_id'] . "?fields=images";
 				$ch = curl_init($url);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				$response = curl_exec($ch);
 				curl_close($ch);
 				$res = json_decode($response, TRUE);
 
-				//print_r($res);
-
-				if(isset($res['error'])){
-					// This is what we want to insert in place of the s.
-					$letter = "n.";
-					// Explode the picture url into an array
-					$source = explode("_", $obj['picture']);
-					// This is the part of the array we want to modify
-					$modifyPart = $source[count($source) - 1];
-					// Explode the part we want to modify into an array
-					$modifyPart = explode(".", $modifyPart);
-					// Here's where we do the replacement
-					$modifyFirst = $letter;
-					// Store the second part so we don't lose it
-					$modifySecond = $modifyPart[1];
-					// Put the part we are modifying back together
-					$modifyPart = $modifyFirst . $modifySecond;
-					// Replace the part we modified in the original url array
-					$source[count($source) - 1] = $modifyPart;
-					// Put the array back together into a link
-					$source = implode("_", $source);
-					// Set the content
-					$content->setPicture($source);
+				if(isset($res)){
+					if(isset($res['error'])){
+						// This is what we want to insert in place of the s.
+						$letter = "n.";
+						// Explode the picture url into an array
+						$source = explode("_", $obj['picture']);
+						// This is the part of the array we want to modify
+						$modifyPart = $source[count($source) - 1];
+						// Explode the part we want to modify into an array
+						$modifyPart = explode(".", $modifyPart);
+						// Here's where we do the replacement
+						$modifyFirst = $letter;
+						// Store the second part so we don't lose it
+						$modifySecond = $modifyPart[1];
+						// Put the part we are modifying back together
+						$modifyPart = $modifyFirst . $modifySecond;
+						// Replace the part we modified in the original url array
+						$source[count($source) - 1] = $modifyPart;
+						// Put the array back together into a link
+						$source = implode("_", $source);
+						// Set the content
+						$content->setPicture($source);
+					}else{
+						if(isset($res['images'])){
+							if(isset($res['images'][0])){
+								$content->setPicture($res['images'][0]['source']);
+							}else{
+								if(isset($obj['picture'])){
+					           		$content->setPicture($obj['picture']);
+					           	}
+							}
+						}else{
+							if(isset($obj['picture'])){
+				           		$content->setPicture($obj['picture']);
+				           	}
+						}	
+					}
 				}else{
-					$content->setPicture($res['source']);
-				}	
+					if(isset($obj['picture'])){
+		           		$content->setPicture($obj['picture']);
+		           	}
+				}
            }else{
 	           	if(isset($obj['picture'])){
 	           		$content->setPicture($obj['picture']);

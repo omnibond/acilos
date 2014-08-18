@@ -447,6 +447,15 @@ define([
 							this.picContent.domNode.appendChild(div);
 							this.roundRight.addChild(this.picContent);
 						}
+					}else if(obj.content.url.indexOf("youtu.be") > -1){
+						var result = obj.content.url.split("/");
+						result = result[result.length - 1];
+						var whatWeWant = "https://youtube.com/embed/" + result;
+
+						var div = domConstruct.create("div", {innerHTML: '<iframe src="'+whatWeWant+'"style="max-width:90%;height:200px;"></iframe>'});
+
+						this.picContent.domNode.appendChild(div);
+						this.roundRight.addChild(this.picContent);
 					}else{
 						if(obj.content.objectType == "photo"){
 							var div = domConstruct.create("div", {innerHTML: '<span><img src="'+obj.content.picture+'" style="max-width:90%;max-height:90%;" /></a></span>'});
