@@ -242,21 +242,21 @@ define([
 				var obj = this.data.hits.hits[this.counter]._source;
 
 				if(obj.title){
-					if(obj.title.search("commented on a photo") != -1 || obj.title.search("commented on a post") != -1 || obj.title.search("likes a link") != -1 || obj.title.search("commented on a link") != -1 || obj.title.search("likes a photo") != -1 || obj.title.search("own photo") != -1 || obj.title.search("own link") != -1 || obj.title.search("own video") != -1 || obj.title.search("likes a post") != -1 || obj.title.search("commented on a status") != -1 || obj.title.search("likes a video") != -1 || obj.title.search("commented on a video") != -1 || obj.title.search("own status") != -1 || obj.title.search("likes a status") != -1){
+					if(obj.title.search("commented on a photo") != -1 || obj.title.search("commented on a post") != -1 || obj.title.search("likes a link") != -1 || obj.title.search("commented on a link") != -1 || obj.title.search("likes a photo") != -1 || obj.title.search("own photo") != -1 || obj.title.search("own link") != -1 || obj.title.search("own video") != -1 || obj.title.search("likes a post") != -1 || obj.title.search("commented on a status") != -1 || obj.title.search("likes a video") != -1 || obj.title.search("commented on a video") != -1 || obj.title.search("own status") != -1 || obj.title.search("likes a status") != -1 || obj.title.search("like a video") != -1 || obj.title.search("own post") != -1){
 						return;
 					}
 				}
 
 				if(obj.content){
 					if(obj.content.queryString){
-						if(obj.content.queryString.search("commented on a photo") != -1 || obj.content.queryString.search("commented on a post") != -1 || obj.content.queryString.search("likes a link") != -1 || obj.content.queryString.search("commented on a link") != -1 || obj.content.queryString.search("likes a photo") != -1 || obj.content.queryString.search("own photo") != -1 || obj.content.queryString.search("own link") != -1 || obj.content.queryString.search("own video") != -1 || obj.content.queryString.search("likes a post") != -1 || obj.content.queryString.search("commented on a status") != -1 || obj.content.queryString.search("likes a video") != -1 || obj.content.queryString.search("commented on a video") != -1 || obj.content.queryString.search("own status") != -1 || obj.content.queryString.search("likes a status") != -1){
+						if(obj.content.queryString.search("commented on a photo") != -1 || obj.content.queryString.search("commented on a post") != -1 || obj.content.queryString.search("likes a link") != -1 || obj.content.queryString.search("commented on a link") != -1 || obj.content.queryString.search("likes a photo") != -1 || obj.content.queryString.search("own photo") != -1 || obj.content.queryString.search("own link") != -1 || obj.content.queryString.search("own video") != -1 || obj.content.queryString.search("likes a post") != -1 || obj.content.queryString.search("commented on a status") != -1 || obj.content.queryString.search("likes a video") != -1 || obj.content.queryString.search("commented on a video") != -1 || obj.content.queryString.search("own status") != -1 || obj.content.queryString.search("likes a status") != -1 || obj.content.queryString.search("like a video") != -1 || obj.content.queryString.search("own post") != -1){
 							return;
 						}
 					}
 
 					if(obj.content.story){
 						if(obj.content.story.text){
-							if(obj.content.story.text.search("commented on a photo") != -1 || obj.content.story.text.search("commented on a post") != -1 || obj.content.story.text.search("likes a link") != -1 || obj.content.story.text.search("commented on a link") != -1 || obj.content.story.text.search("likes a photo") != -1 || obj.content.story.text.search("own photo") != -1 || obj.content.story.text.search("own link") != -1 || obj.content.story.text.search("own video") != -1 || obj.content.story.text.search("likes a post") != -1 || obj.content.story.text.search("commented on a status") != -1 || obj.content.story.text.search("likes a video") != -1 || obj.content.story.text.search("commented on a video") != -1 || obj.content.story.text.search("own status") != -1 || obj.content.story.text.search("likes a status") != -1){
+							if(obj.content.story.text.search("commented on a photo") != -1 || obj.content.story.text.search("commented on a post") != -1 || obj.content.story.text.search("likes a link") != -1 || obj.content.story.text.search("commented on a link") != -1 || obj.content.story.text.search("likes a photo") != -1 || obj.content.story.text.search("own photo") != -1 || obj.content.story.text.search("own link") != -1 || obj.content.story.text.search("own video") != -1 || obj.content.story.text.search("likes a post") != -1 || obj.content.story.text.search("commented on a status") != -1 || obj.content.story.text.search("likes a video") != -1 || obj.content.story.text.search("commented on a video") != -1 || obj.content.story.text.search("own status") != -1 || obj.content.story.text.search("likes a status") != -1 || obj.content.story.text.search("like a video") != -1 || obj.content.story.text.search("own post") != -1){
 								return;
 							}
 						}
@@ -264,7 +264,7 @@ define([
 
 					if(obj.content.text){
 						if(obj.content.text.text){
-							if(obj.content.text.text.search("commented on a photo") != -1 || obj.content.text.text.search("commented on a post") != -1 || obj.content.text.text.search("likes a link") != -1 || obj.content.text.text.search("commented on a link") != -1 || obj.content.text.text.search("likes a photo") != -1 || obj.content.text.text.search("own photo") != -1 || obj.content.text.text.search("own link") != -1 || obj.content.text.text.search("own video") != -1 || obj.content.text.text.search("likes a post") != -1 || obj.content.text.text.search("commented on a status") != -1 || obj.content.text.text.search("likes a video") != -1 || obj.content.text.text.search("commented on a video") != -1 || obj.content.text.text.search("own status") != -1 || obj.content.text.text.search("likes a status") != -1){
+							if(obj.content.text.text.search("commented on a photo") != -1 || obj.content.text.text.search("commented on a post") != -1 || obj.content.text.text.search("likes a link") != -1 || obj.content.text.text.search("commented on a link") != -1 || obj.content.text.text.search("likes a photo") != -1 || obj.content.text.text.search("own photo") != -1 || obj.content.text.text.search("own link") != -1 || obj.content.text.text.search("own video") != -1 || obj.content.text.text.search("likes a post") != -1 || obj.content.text.text.search("commented on a status") != -1 || obj.content.text.text.search("likes a video") != -1 || obj.content.text.text.search("commented on a video") != -1 || obj.content.text.text.search("own status") != -1 || obj.content.text.text.search("likes a status") != -1 || obj.content.text.text.search("like a video") != -1 || obj.content.text.text.search("own post") != -1){
 								return;
 							}
 						}
@@ -456,11 +456,20 @@ define([
 
 						this.picContent.domNode.appendChild(div);
 						this.roundRight.addChild(this.picContent);
+					}else if(obj.content.objectType == "video"){
+						//var playButtonDiv = domConstruct.create("div", {style: "background: url('/app/resources/img/playButton.png')"});
+
+						var picDiv = domConstruct.create("div", {innerHTML: '<span><a href="'+obj.content.url+'" target="_blank"><img src="/app/resources/img/playButton.png" style="min-width: 200px; max-width: 90% !important; max-height: 90% !important; background-size: contain !important; background-position: center center !important; background: no-repeat url('+obj.content.picture+')" /></a></span>'});
+
+						//playButtonDiv.appendChild(picDiv);
+
+						this.picContent.domNode.appendChild(picDiv);
+						this.roundRight.addChild(this.picContent);
 					}else{
 						if(obj.content.objectType == "photo"){
-							var div = domConstruct.create("div", {innerHTML: '<span><img src="'+obj.content.picture+'" style="max-width:90%;max-height:90%;" /></a></span>'});
+							var div = domConstruct.create("div", {innerHTML: '<span><img src="'+obj.content.picture+'" style="max-width:90%;max-height:90%;min-width:200px;" /></a></span>'});
 						}else{
-							var div = domConstruct.create("div", {innerHTML: '<span><a href="'+obj.content.url+'" target="_blank"><img src="'+obj.content.picture+'" style="max-width:90%;max-height:90%;" /></a></span>'});
+							var div = domConstruct.create("div", {innerHTML: '<span><a href="'+obj.content.url+'" target="_blank"><img src="'+obj.content.picture+'" style="max-width:90%;max-height:90%;min-width:200px;" /></a></span>'});
 						}
 
 						div.onclick = lang.hitch(this, function(){
@@ -497,7 +506,7 @@ define([
 							"class": "feedPicContentItemClass"
 						});
 
-						var div = domConstruct.create("div", {innerHTML: '<span><img src="'+obj.content.url+'" style="max-width:90%;max-height:90%;" /></a></span>'});
+						var div = domConstruct.create("div", {innerHTML: '<span><img src="'+obj.content.url+'" style="max-width:90%;max-height:90%;min-width:200px;" /></a></span>'});
 
 						div.onclick = lang.hitch(this, function(){
 							var dialog = new Dialog({
