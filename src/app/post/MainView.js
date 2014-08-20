@@ -114,7 +114,6 @@ define(['dojo/_base/declare',
 			});
 			this.mainList.addChild(item);
 			
-
 			console.log("THIS.AUTHOBJ IS: ", this.authObj);
 			this.checkArray = [];
 			for(var key in this.authObj){
@@ -126,8 +125,11 @@ define(['dojo/_base/declare',
 								var divHolder = domConstruct.create("span", {style: "float: left"});
 								if(key == "twitter"){
 									var checkBox = new CheckBox({
-										leToken: accountArr[d]['accessToken']+":"+accountArr[d]['accessSecret']+":"+accountArr[d]['key']+":"+accountArr[d]['secret'],
+										leToken: accountArr[d]['accessToken']+":"+accountArr[d]['accessSecret']+":"+accountArr[d]['key']+":"+accountArr[d]['secret']+":"+accountArr[d]['user']+":"+accountArr[d]['name'],
 										leKey: key,
+										accessToken: accountArr[d]['accessSecret'],
+										leUser: accountArr[d]['user'],
+										leName: accountArr[d]['name'],
 										style:"width:20px;height:20px"
 									});
 									//var picUrl = accountArr[d].image;
@@ -153,16 +155,22 @@ define(['dojo/_base/declare',
 									}, checkBox);
 								}if(key == "facebook"){
 									var checkBox = new CheckBox({
-										leToken: accountArr[d]['accessToken']+":"+this.authObj[key][0]['key']+":"+accountArr[d]['user'],
+										leToken: accountArr[d]['accessToken']+":"+this.authObj[key][0]['key']+":"+accountArr[d]['user']+":"+accountArr[d]['name'],
 										leKey: key,
+										accessToken: accountArr[d]['accessToken'],
+										leUser: accountArr[d]['user'],
+										leName: accountArr[d]['name'],
 										style:"width:20px;height:20px"
 									});
 									//var picUrl = "https://graph.facebook.com/"+accountArr[d].image+"/picture";
 									var serviceUrl = "app/resources/img/Facebook_logo.png";
 								}if(key == "linkedin"){
 									var checkBox = new CheckBox({
-										leToken: accountArr[d]['accessToken'],
+										leToken: accountArr[d]['accessToken']+":"+accountArr[d]['user']+":"+accountArr[d]['name'],
 										leKey: key,
+										accessToken: accountArr[d]['accessToken'],
+										leUser: accountArr[d]['user'],
+										leName: accountArr[d]['name'],
 										style:"width:20px;height:20px"
 									});
 									var serviceUrl = "app/resources/img/LinkedIn_logo.png";
@@ -203,13 +211,10 @@ define(['dojo/_base/declare',
 			textHolder.addChild(this.textArea);
 			textHolder.domNode.appendChild(this.textAreaCountDiv);
 
-			console.log("this.checkArray is: ", this.checkArray);
-
 			document.body.onkeyup = lang.hitch(this, function(event){
 				var flag = 0;
 				for(var x = 0; x < this.checkArray.length; x++){
 					if((this.checkArray[x].params.leKey == "twitter") && (this.checkArray[x].checked == true)){
-						console.log("it's 1");
 						flag = 1;
 					}
 				}
@@ -337,6 +342,8 @@ define(['dojo/_base/declare',
 
 										var returnStuff = obj['returnArray'];
 
+										console.log("this.checkArray is: ", this.checkArray);
+
 										this.failureFlag = "false";
 
 										for(var key in returnStuff){
@@ -376,12 +383,22 @@ define(['dojo/_base/declare',
 
 										this.errorHolderDiv = domConstruct.create("div", {style: "background-color: #FFE6E6"});
 
+										console.log("returnStuff is: ", returnStuff);
+
 										for(var key in returnStuff){
 											for(var x = 0; x < returnStuff[key].length; x++){
 												if(returnStuff[key][x]['failure']){
 													var errorDiv = domConstruct.create("div", {innerHTML: returnStuff[key][x]['msg'] + "<br/><br/>", style: "background-color: #FFE6E6"});
 
 													this.errorHolderDiv.appendChild(errorDiv);
+												}
+
+												if(returnStuff[key][x]['success']){
+													for(var b = 0; b < this.checkArray.length; b++){
+														if(this.checkArray[b]['accessToken'] === returnStuff[key][x]['accessToken']){
+															this.checkArray[b].set("checked", false);
+														}
+													}
 												}
 											}
 										}

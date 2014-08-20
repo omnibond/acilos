@@ -457,11 +457,7 @@ define([
 						this.picContent.domNode.appendChild(div);
 						this.roundRight.addChild(this.picContent);
 					}else if(obj.content.objectType == "video"){
-						//var playButtonDiv = domConstruct.create("div", {style: "background: url('/app/resources/img/playButton.png')"});
-
 						var picDiv = domConstruct.create("div", {innerHTML: '<span><a href="'+obj.content.url+'" target="_blank"><img src="/app/resources/img/playButton.png" style="min-width: 200px; max-width: 90% !important; max-height: 90% !important; background-size: contain !important; background-position: center center !important; background: no-repeat url('+obj.content.picture+')" /></a></span>'});
-
-						//playButtonDiv.appendChild(picDiv);
 
 						this.picContent.domNode.appendChild(picDiv);
 						this.roundRight.addChild(this.picContent);

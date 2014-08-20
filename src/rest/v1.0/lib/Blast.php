@@ -183,6 +183,9 @@ class Blast{
 						if(isset($leStuff[2])){
 							$user_id = $leStuff[2];
 						}
+						if(isset($leStuff[3])){
+							$name = $leStuff[3];
+						}
 
 						$photoURL = 'https://graph.facebook.com/me/photos?access_token='.$access_token;
 
@@ -225,15 +228,15 @@ class Blast{
 
 						if(isset($res)){
 							if(isset($res['error'])){
-								$returnArray['Facebook'][$x] = array("failure" => 'true', "msg" => "Your Facebook status could not be posted - " . $res['error']['message']);
+								$returnArray['Facebook'][$x] = array("failure" => 'true', "msg" => "The Facebook status for " . $name . " could not be posted - " . $res['error']['message'], "accessToken" => $access_token, "user" => $user_id, "name" => $name);
 							}else{
-								$returnArray['Facebook'][$x] = array("success" => 'true', "msg" => "Your Facebook status was posted successfully");
+								$returnArray['Facebook'][$x] = array("success" => 'true', "msg" => "The Facebook status for " . $name . " was posted successfully", "accessToken" => $access_token, "user" => $user_id, "name" => $name);
 							}
 						}else{
-							$returnArray['Facebook'][$x] = array("failure" => 'true', "msg" => "Your Facebook status could not be posted - no response from Facebook");
+							$returnArray['Facebook'][$x] = array("failure" => 'true', "msg" => "The Facebook status for " . $name . " could not be posted - no response from Facebook", "accessToken" => $access_token, "user" => $user_id, "name" => $name);
 						}
 
-						saveFacebookPost($returnArray['Facebook'][$x], "blast", "completed", $postID, $fileName, "?", $msg, $server, $access_token, $app_id, $user_id, $date, $time);
+						saveFacebookPost($returnArray['Facebook'][$x], "normal", "completed", $postID, $fileName, $fileType, $msg, $server, $access_token, $app_id, $user_id, $date, $time, $name);
 					}
 
 					break;
@@ -256,6 +259,12 @@ class Blast{
 							//secret
 							$appSecret = $leStuff[3];
 						}
+						if(isset($leStuff[4])){
+							$user = $leStuff[4];
+						}
+						if(isset($leStuff[5])){
+							$name = $leStuff[5];
+						}
 
 						$path = $thing . "app/post/tmpUpload/" . $fileName;
 
@@ -275,15 +284,15 @@ class Blast{
 
 						if(isset($status)){
 							if(isset($status->errors[0]->message)){
-								$returnArray['Twitter'][$x] =  array("failure" => "true", "msg" => "Your Twitter status could not be posted - " . $status->errors[0]->message);
+								$returnArray['Twitter'][$x] =  array("failure" => "true", "msg" => "The Twitter status for " . $name . " could not be posted - " . $status->errors[0]->message, "accessToken" => $access_secret, "user" => $user, "name" => $name);
 							}else{
-								$returnArray['Twitter'][$x] =  array("success" => "true", "msg" => "Your Twitter status was posted successfully");
+								$returnArray['Twitter'][$x] =  array("success" => "true", "msg" => "The Twitter status for " . $name . " was posted successfully", "accessToken" => $access_secret, "user" => $user, "name" => $name);
 							}
 						}else{
-							$returnArray['Twitter'][$x] =  array("failure" => "true", "msg" => "Your Twitter status could not be posted - no response from Twitter	");
+							$returnArray['Twitter'][$x] =  array("failure" => "true", "msg" => "The Twitter status for " . $name . " could not be posted - no response from Twitter", "accessToken" => $access_secret, "user" => $user, "name" => $name);
 						}
 
-						saveTwitterPost($returnArray['Twitter'][$x], "blast", "completed", $postID, $fileName, "?", $msg, $server, $access_token, $access_secret, $appKey, $appSecret, $date, $time);
+						saveTwitterPost($returnArray['Twitter'][$x], "normal", "completed", $postID, $fileName, $fileType, $msg, $server, $access_token, $access_secret, $appKey, $appSecret, $date, $time, $name);
 					}
 
 					break;
@@ -292,8 +301,15 @@ class Blast{
 					break;
 				case "linkedin":
 					for($x = 0; $x < count($tokenArr[$key]); $x++){
-						if(isset($tokenArr[$key][$x])){
-							$access_token = $tokenArr[$key][$x];
+						$leStuff = explode(":", $tokenArr[$key][$x]);
+						if(isset($leStuff[0])){
+							$access_token = $leStuff[0];
+						}
+						if(isset($leStuff[1])){
+							$user = $leStuff[1];
+						}
+						if(isset($leStuff[2])){
+							$name = $leStuff[2];
 						}
 
 						/*$url = 'https://api.linkedin.com/v1/people/~:(id,first-name,last-name,site-standard-profile-request)?format=json&oauth2_access_token=' . $access_token;
@@ -356,24 +372,24 @@ class Blast{
 						$xml = simplexml_load_string($response);
 
 						if($code == "201"){
-							$returnArray['Linkedin'][$x] = array("success" => "true", "msg" => "Your LinkedIn status was posted successfully");
+							$returnArray['Linkedin'][$x] = array("success" => "true", "msg" => "The LinkedIn status for " . $name . " was posted successfully", "accessToken" => $access_token, "user" => $user, "name" => $name);
 						}else{
 							if(isset($xml)){
 								$xml = (array)($xml);
 								if(isset($xml['error-code'])){
 									$linkCode = $xml['error-code'];
 									if($linkCode == "0"){
-										$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - Status is a duplicate.");
+										$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "The LinkedIn status for " . $name . " could not be posted - Status is a duplicate.", "accessToken" => $access_token, "user" => $user, "name" => $name);
 									}else{
-										$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - " . $xml['message']);
+										$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "The LinkedIn status for " . $name . " could not be posted - " . $xml['message'], "accessToken" => $access_token, "user" => $user, "name" => $name);
 									}
 								}
 							}else{
-								$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - no response from LinkedIn.");
+								$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "The LinkedIn status for " . $name . " could not be posted - no response from LinkedIn.", "accessToken" => $access_token, "user" => $user, "name" => $name);
 							}
 						}
 
-						saveLinkedInPost($returnArray['Linkedin'][$x], "blast", "completed", $postID, $fileName, "?", $msg, $server, $access_token, $date, $time);
+						saveLinkedInPost($returnArray['Linkedin'][$x], "normal", "completed", $postID, $fileName, $fileType, $msg, $server, $access_token, $date, $time, $name);
 					}
 
 					break;

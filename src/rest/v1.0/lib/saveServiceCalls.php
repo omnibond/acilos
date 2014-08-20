@@ -26,7 +26,7 @@
 ** $QT_END_LICENSE$
 */
 
-function saveFacebookPost($response, $postType, $postStatus, $postID, $file, $fileType, $msg, $server, $access_token, $app_id, $user_id, $date, $time){
+function saveFacebookPost($response, $postType, $postStatus, $postID, $file, $fileType, $msg, $server, $access_token, $app_id, $user_id, $date, $time, $name){
 	if(isset($response)){
 		$response = $response;
 	}else{
@@ -99,6 +99,12 @@ function saveFacebookPost($response, $postType, $postStatus, $postID, $file, $fi
 		$time = "";
 	}
 
+	if(isset($name)){
+		$name = $name;
+	}else{
+		$name = "";
+	}
+
 	try{
 		$fileObj = file_get_contents($_SERVER['POSTLOG']);
 		$fileObj = json_decode($fileObj, true);
@@ -116,6 +122,7 @@ function saveFacebookPost($response, $postType, $postStatus, $postID, $file, $fi
 		$fileObj[$postID]['postStatus'] = $postStatus;
 		$fileObj[$postID]['date'] = $date;
 		$fileObj[$postID]['time'] = $time;
+		$fileObj[$postID]['name'] = $name;
 
 		file_put_contents($_SERVER['POSTLOG'], json_encode($fileObj));
 	}catch(Exception $e){
@@ -134,12 +141,13 @@ function saveFacebookPost($response, $postType, $postStatus, $postID, $file, $fi
 		$fileObj[$postID]['postStatus'] = $postStatus;
 		$fileObj[$postID]['date'] = $date;
 		$fileObj[$postID]['time'] = $time;
+		$fileObj[$postID]['name'] = $name;
 
 		file_put_contents($_SERVER['POSTLOG'], json_encode($fileObj));
 	}
 }
 
-function saveLinkedInPost($response, $postType, $postStatus, $postID, $file, $fileType, $msg, $server, $access_token, $date, $time){
+function saveLinkedInPost($response, $postType, $postStatus, $postID, $file, $fileType, $msg, $server, $access_token, $date, $time, $name){
 	if(isset($response)){
 		$response = $response;
 	}else{
@@ -200,6 +208,12 @@ function saveLinkedInPost($response, $postType, $postStatus, $postID, $file, $fi
 		$time = "";
 	}
 
+	if(isset($name)){
+		$name = $name;
+	}else{
+		$name = "";
+	}
+
 	try{
 		$fileObj = file_get_contents($_SERVER['POSTLOG']);
 		$fileObj = json_decode($fileObj, true);
@@ -215,6 +229,7 @@ function saveLinkedInPost($response, $postType, $postStatus, $postID, $file, $fi
 		$fileObj[$postID]['postStatus'] = $postStatus;
 		$fileObj[$postID]['date'] = $date;
 		$fileObj[$postID]['time'] = $time;
+		$fileObj[$postID]['name'] = $name;
 		
 		file_put_contents($_SERVER['POSTLOG'], json_encode($fileObj));
 	}catch(Exception $e){
@@ -231,12 +246,13 @@ function saveLinkedInPost($response, $postType, $postStatus, $postID, $file, $fi
 		$fileObj[$postID]['postStatus'] = $postStatus;
 		$fileObj[$postID]['date'] = $date;
 		$fileObj[$postID]['time'] = $time;
+		$fileObj[$postID]['name'] = $name;
 
 		file_put_contents($_SERVER['POSTLOG'], json_encode($fileObj));
 	}
 }
 
-function saveTwitterPost($response, $postType, $postStatus, $postID, $file, $fileType, $msg, $server, $access_token, $access_secret, $appKey, $appSecret, $date, $time){
+function saveTwitterPost($response, $postType, $postStatus, $postID, $file, $fileType, $msg, $server, $access_token, $access_secret, $appKey, $appSecret, $date, $time, $name){
 	if(isset($response)){
 		$response = $response;
 	}else{
@@ -315,6 +331,12 @@ function saveTwitterPost($response, $postType, $postStatus, $postID, $file, $fil
 		$time = "";
 	}
 
+	if(isset($name)){
+		$name = $name;
+	}else{
+		$name = "";
+	}
+
 	try{
 		$fileObj = file_get_contents($_SERVER['POSTLOG']);
 		$fileObj = json_decode($fileObj, true);
@@ -333,6 +355,7 @@ function saveTwitterPost($response, $postType, $postStatus, $postID, $file, $fil
 		$fileObj[$postID]['postStatus'] = $postStatus;
 		$fileObj[$postID]['date'] = $date;
 		$fileObj[$postID]['time'] = $time;
+		$fileObj[$postID]['name'] = $name;
 		
 		file_put_contents($_SERVER['POSTLOG'], json_encode($fileObj));
 	}catch(Exception $e){
@@ -352,6 +375,7 @@ function saveTwitterPost($response, $postType, $postStatus, $postID, $file, $fil
 		$fileObj[$postID]['postStatus'] = $postStatus;
 		$fileObj[$postID]['date'] = $date;
 		$fileObj[$postID]['time'] = $time;
+		$fileObj[$postID]['name'] = $name;
 
 		file_put_contents($_SERVER['POSTLOG'], json_encode($fileObj));
 	}
