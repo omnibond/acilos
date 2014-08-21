@@ -83,7 +83,7 @@ define(['dojo/_base/declare',
 ) {
 	return declare([ModuleScrollableView], {		
 		activate: function(){
-			topic.publish("/dojo-mama/updateSubNav", {back: "/post", title: "Your posts"} );
+			topic.publish("/dojo-mama/updateSubNav", {back: "/post", title: "Your post history"} );
 
 			this.getPostHistory().then(lang.hitch(this, function(obj){
 				if(obj['success']){
@@ -111,13 +111,13 @@ define(['dojo/_base/declare',
 				style: "margin: none; margin-top: 50px; border: none"
 			});
 
-			this.helpDiv = domConstruct.create("div", {innerHTML: "This is a list of your posts. Successful posts will be white, and posts that failed on one or more services will be red. Clicking on one of the failed posts will expand an accordion that will show more details about the post's failure.", style: "color: black; margin-bottom: 10px"});
-
-			this.mainList.domNode.appendChild(this.helpDiv);
-
 			console.log("successObj is: ", successObj);
 
 			if(successObj != '' && successObj != "undefined" && successObj != null){
+				this.helpDiv = domConstruct.create("div", {innerHTML: "This is a list of your posts. Successful posts will be white, and posts that failed on one or more services will be red. Clicking on one of the failed posts will expand an accordion that will show more details about the post's failure.", style: "color: black; margin-bottom: 10px"});
+
+				this.mainList.domNode.appendChild(this.helpDiv);
+
 				for(var key in successObj){
 					//console.log("the key's value is: ", successObj[key]);
 
@@ -159,11 +159,11 @@ define(['dojo/_base/declare',
 						if(successObj[key]['msg']){
 							if(successObj[key]['postStatus']){
 								if(twitterFailure == "true" || facebookFailure == "true" || linkedinFailure == "true"){
-									labelValue = successObj[key]['msg'] + " --> " + "attempted on " + successObj[key]['date'] + " at " + successObj[key]['time'];
+									labelValue = successObj[key]['msg'].bold() + " (" + "attempted on " + successObj[key]['date'] + " at " + successObj[key]['time'] + ")";
 								}else if(successObj[key]['postStatus'] == "completed"){
-									labelValue = successObj[key]['msg'] + " --> " + "completed on " + successObj[key]['date'] + " at " + successObj[key]['time'];
+									labelValue = successObj[key]['msg'].bold() + " (" + "completed on " + successObj[key]['date'] + " at " + successObj[key]['time'] + ")";
 								}else if(successObj[key]['postStatus'] == "pending"){
-									labelValue = successObj[key]['msg'] + " --> " + "pending for " + successObj[key]['date'] + " at " + successObj[key]['time'];
+									labelValue = successObj[key]['msg'].bold() + " (" + "pending for " + successObj[key]['date'] + " at " + successObj[key]['time'] + ")";
 								}
 							}
 						}	
@@ -221,14 +221,14 @@ define(['dojo/_base/declare',
 
 					var item = new ListItem({
 						variableHeight: true
-					})
+					});
 
 					item.domNode.appendChild(accordion.domNode);										
 
 					this.mainList.addChild(item);
 				}
 			}else{
-				var errorDiv = domConstruct.create("div", {innerHTML: "You don't have any scheduled posts.", style: "color: black"});
+				var errorDiv = domConstruct.create("div", {innerHTML: "Your post history is empty.", style: "color: black"});
 				this.mainList.domNode.appendChild(errorDiv);
 			}
 

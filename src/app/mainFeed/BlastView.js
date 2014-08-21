@@ -84,13 +84,7 @@ define(['dojo/_base/declare',
 			this.resize();
 		},
 		
-		buildUploadBar: function(){
-			var item = new ListItem({
-				variableHeight: true,
-				style: "border:none"
-			});
-			this.mainList.addChild(item);
-			
+		buildUploadBar: function(){			
 			this.checkArray = [];
 			for(var key in this.authObj){
 				if(key !== "login"){
@@ -98,7 +92,7 @@ define(['dojo/_base/declare',
 						var accountArr = this.authObj[key][0]['accounts'];
 						for(var d = 0; d < accountArr.length; d++){	
 							if(accountArr[d].accessToken != undefined){
-								var divHolder = domConstruct.create("span", {style: "float: left"});
+								var divHolder = domConstruct.create("span", {"class": "displayBlockPhone", style: "white-space: nowrap; border-left:5px solid "+accountArr[d]['color']});
 								if(key == "twitter"){
 									var checkBox = new CheckBox({
 										leToken: accountArr[d]['accessToken']+":"+accountArr[d]['accessSecret']+":"+accountArr[d]['key']+":"+accountArr[d]['secret']+":"+accountArr[d]['user']+":"+accountArr[d]['name'],
@@ -106,7 +100,7 @@ define(['dojo/_base/declare',
 										accessToken: accountArr[d]['accessSecret'],
 										leUser: accountArr[d]['user'],
 										leName: accountArr[d]['name'],
-										style:"width:20px;height:20px"
+										style:"width: 20px; height: 20px"
 									});
 									//var picUrl = accountArr[d].image;
 									var serviceUrl = "app/resources/img/Twitter_logo_blue_small.png";
@@ -162,12 +156,14 @@ define(['dojo/_base/declare',
 								divHolder.appendChild(checkBox.domNode);
 								//For profile picture
 								/*var picSpan = domConstruct.create("span", {innerHTML: '<img src='+serviceUrl+' height=20px width=20px/>', style: "margin-left: 10px; margin-right: 5px; height: 20px; width: 20px"});*/
-								var picSpan = domConstruct.create("span", {innerHTML: '<img src='+serviceUrl+'>', style: "margin-left: 10px; margin-right: 5px; height: 20px; width: 24px"});
-								var div = domConstruct.create("span", {style:"margin-right: 5px; float:left;border-left:5px solid "+accountArr[d]['color'], innerHTML: accountArr[d]['name']});
-								div.appendChild(picSpan);
-								div.appendChild(divHolder);
+								var picSpan = domConstruct.create("span", {innerHTML: '<img src='+serviceUrl+'>', style: "margin-left: 10px; margin-right: 5px; height: 20px; width: 24px; vertical-align: -4px"});
+								var div = domConstruct.create("span", {style:"margin-right: 5px; vertical-align: -1px", innerHTML: accountArr[d]['name']});
+								divHolder.appendChild(div);
+								divHolder.appendChild(picSpan);
 								this.checkArray.push(checkBox);
-								this.mainList.domNode.appendChild(div);
+								this.mainList.domNode.appendChild(divHolder);
+
+								checkBox.domNode.style.verticalAlign = "-5px";
 							}
 						}
 					}
@@ -176,7 +172,7 @@ define(['dojo/_base/declare',
 			
 			var textHolder = new ListItem({
 				variableHeight: true,
-				style: "border:none; margin-top: -12px; margin-bottom: -14px; margin-left: -1px"
+				style: "border:none; margin-bottom: -14px; margin-left: -1px"
 			});
 			this.mainList.addChild(textHolder);
 			
@@ -312,12 +308,18 @@ define(['dojo/_base/declare',
 									var errorDiv = domConstruct.create("div", {innerHTML: returnStuff[key][x]['msg'] + "<br/><br/>", style: "background-color: #FFE6E6"});
 
 									this.errorHolderDiv.appendChild(errorDiv);
+
+									var reauthNotification = "true";
 								}
 
 								if(returnStuff[key][x]['success']){
 									for(var b = 0; b < this.checkArray.length; b++){
 										if(this.checkArray[b]['accessToken'] === returnStuff[key][x]['accessToken']){
 											this.checkArray[b].set("checked", false);
+
+											var postedDiv = domConstruct.create("span", {innerHTML: "-Posted", style: "font-weight: bold; margin-top: 5px; text-align: left; margin-left: 5px; margin-right: 5px; vertical-align: -1px"});
+
+											this.checkArray[b].domNode.parentNode.parentNode.appendChild(postedDiv);
 										}
 									}
 								}
@@ -331,6 +333,10 @@ define(['dojo/_base/declare',
 						}
 
 						if(errorDiv){
+							var reauthDiv = domConstruct.create("div", {innerHTML: "Try reauthenticating the account(s) that failed"});
+
+							this.errorHolderDiv.appendChild(reauthDiv);
+							
 							this.errorDialog.set("content", this.errorHolderDiv);
 							this.errorDialog.show();
 						}

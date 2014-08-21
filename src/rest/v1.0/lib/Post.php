@@ -678,12 +678,12 @@ Class Post{
 
 						if(isset($res)){
 							if(isset($res['error'])){
-								$returnArray['Facebook'][$x] = array("failure" => 'true', "msg" => "The Facebook status for " . $name . " could not be posted - " . $res['error']['message'], "accessToken" => $access_token, "user" => $user_id, "name" => $name);
+								$returnArray['Facebook'][$x] = array("failure" => 'true', "msg" => "The Facebook status for " . $name . " could not be posted --> " . $res['error']['message'], "accessToken" => $access_token, "user" => $user_id, "name" => $name);
 							}else{
 								$returnArray['Facebook'][$x] = array("success" => 'true', "msg" => "The Facebook status for " . $name . " was posted successfully", "accessToken" => $access_token, "user" => $user_id, "name" => $name);
 							}
 						}else{
-							$returnArray['Facebook'][$x] = array("failure" => 'true', "msg" => "The Facebook status for " . $name . " could not be posted - no response from Facebook", "accessToken" => $access_token, "user" => $user_id, "name" => $name);
+							$returnArray['Facebook'][$x] = array("failure" => 'true', "msg" => "The Facebook status for " . $name . " could not be posted --> no response from Facebook", "accessToken" => $access_token, "user" => $user_id, "name" => $name);
 						}
 
 						saveFacebookPost($returnArray['Facebook'][$x], "normal", "completed", $postID, $fileName, $fileType, $msg, $server, $access_token, $app_id, $user_id, $date, $time, $name);
@@ -734,12 +734,12 @@ Class Post{
 
 						if(isset($status)){
 							if(isset($status->errors[0]->message)){
-								$returnArray['Twitter'][$x] =  array("failure" => "true", "msg" => "The Twitter status for " . $name . " could not be posted - " . $status->errors[0]->message, "accessToken" => $access_secret, "user" => $user, "name" => $name);
+								$returnArray['Twitter'][$x] =  array("failure" => "true", "msg" => "The Twitter status for " . $name . " could not be posted --> " . $status->errors[0]->message, "accessToken" => $access_secret, "user" => $user, "name" => $name);
 							}else{
 								$returnArray['Twitter'][$x] =  array("success" => "true", "msg" => "The Twitter status for " . $name . " was posted successfully", "accessToken" => $access_secret, "user" => $user, "name" => $name);
 							}
 						}else{
-							$returnArray['Twitter'][$x] =  array("failure" => "true", "msg" => "The Twitter status for " . $name . " could not be posted - no response from Twitter", "accessToken" => $access_secret, "user" => $user, "name" => $name);
+							$returnArray['Twitter'][$x] =  array("failure" => "true", "msg" => "The Twitter status for " . $name . " could not be posted --> no response from Twitter", "accessToken" => $access_secret, "user" => $user, "name" => $name);
 						}
 
 						saveTwitterPost($returnArray['Twitter'][$x], "normal", "completed", $postID, $fileName, $fileType, $msg, $server, $access_token, $access_secret, $appKey, $appSecret, $date, $time, $name);
@@ -830,13 +830,13 @@ Class Post{
 								if(isset($xml['error-code'])){
 									$linkCode = $xml['error-code'];
 									if($linkCode == "0"){
-										$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "The LinkedIn status for " . $name . " could not be posted - Status is a duplicate.", "accessToken" => $access_token, "user" => $user, "name" => $name);
+										$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "The LinkedIn status for " . $name . " could not be posted --> Status is a duplicate", "accessToken" => $access_token, "user" => $user, "name" => $name);
 									}else{
-										$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "The LinkedIn status for " . $name . " could not be posted - " . $xml['message'], "accessToken" => $access_token, "user" => $user, "name" => $name);
+										$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "The LinkedIn status for " . $name . " could not be posted --> " . $xml['message'], "accessToken" => $access_token, "user" => $user, "name" => $name);
 									}
 								}
 							}else{
-								$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "The LinkedIn status for " . $name . " could not be posted - no response from LinkedIn.", "accessToken" => $access_token, "user" => $user, "name" => $name);
+								$returnArray['Linkedin'][$x] = array("failure" => "true", "msg" => "The LinkedIn status for " . $name . " could not be posted --> no response from LinkedIn", "accessToken" => $access_token, "user" => $user, "name" => $name);
 							}
 						}
 
@@ -964,7 +964,7 @@ function postFilesHandler($obj){
 
 					$service = "facebook";
 
-					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $date" . " $saveTime" . " $access_token" . " $app_id" . " $user_id" . " $postID";
+					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $date" . " $saveTime" . " $access_token" . " $app_id" . " $user_id" . " $postID" . " $name";
 
 					$atCommand = "echo" . " \"$command\"" . " |" . " at" . " $time" . " $date";
 
@@ -1009,7 +1009,7 @@ function postFilesHandler($obj){
 
 					$service = "twitter";
 
-					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $date" . " $saveTime" . " $access_token" . " $access_secret" . " $appKey" . " $appSecret" . " $postID";
+					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $date" . " $saveTime" . " $access_token" . " $access_secret" . " $appKey" . " $appSecret" . " $postID" . " $name";
 
 					$atCommand = "echo" . " \"$command\"" . " |" . " at" . " $time" . " $date";
 
@@ -1040,7 +1040,7 @@ function postFilesHandler($obj){
 
 					$service = "linkedin";
 
-					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $date" . " $saveTime" . " $access_token" . " $postID";
+					$command = "php" . " $path" .  " $file" .  " $fileType" .  " $service" . " $msg" . " $server" . " $date" . " $saveTime" . " $access_token" . " $postID" . " $name";
 
 					$atCommand = "echo" . " \"$command\"" . " |" . " at" . " $time" . " $date";
 

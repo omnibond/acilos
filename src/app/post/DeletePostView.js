@@ -79,7 +79,7 @@ define(['dojo/_base/declare',
 ) {
 	return declare([ModuleScrollableView], {		
 		activate: function(){
-			topic.publish("/dojo-mama/updateSubNav", {back: "/post/PostHistoryView", title: "Delete a scheduled post"} );
+			topic.publish("/dojo-mama/updateSubNav", {back: "/post/PostHistoryView", title: "Delete a post"} );
 
 			if(this.errorDialog){
 				this.errorDialog.destroyRecursive();
@@ -109,8 +109,6 @@ define(['dojo/_base/declare',
 
 			if(successObj != '' && successObj != "undefined" && successObj != null){
 				for(var key in successObj){
-					console.log("the key's value is: ", successObj[key]);
-
 					var color = 'white';
 
 					if(successObj[key]['facebook']){
@@ -170,7 +168,8 @@ define(['dojo/_base/declare',
 								if(obj){
 									if(obj['success']){
 										this.activate();
-									}else if(obj['failure']){
+										console.log("SUCCESS");
+									}else{
 										this.errorDialog = new Dialog({
 											title: "Error",
 											"class": "errorDijitDialog",
@@ -199,7 +198,7 @@ define(['dojo/_base/declare',
 					this.mainList.addChild(listItem);
 				}
 			}else{
-				var errorDiv = domConstruct.create("div", {innerHTML: "You don't have any scheduled posts.", style: "color: black"});
+				var errorDiv = domConstruct.create("div", {innerHTML: "Your post history is empty.", style: "color: black"});
 				this.mainList.domNode.appendChild(errorDiv);
 			}
 

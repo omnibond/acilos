@@ -3769,6 +3769,12 @@ select {
 .barGraph .x.axis path {
   display: none;
 }
+.displayBlockPhone {
+  display: inline-block;
+}
+.dj_phone .displayBlockPhone {
+  display: block;
+}
 .lineGraph .axis path,
 .lineGraph .axis line {
   fill: none;
@@ -3956,13 +3962,13 @@ select {
 }
 .feedAccordionClass > .mblAccordionTitle {
   position: relative;
-  height: 30px;
+  height: auto;
   width: 100%;
   font-family: Helvetica;
   font-size: 17px;
   line-height: 30px;
   vertical-align: middle;
-  white-space: nowrap;
+  white-space: normal;
   border-top: none;
   background: inherit;
 }

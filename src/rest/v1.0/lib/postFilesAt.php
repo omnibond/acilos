@@ -114,6 +114,9 @@ require_once('authCalls.php');
 		if(isset($argv[11])){
 			$postID = $argv[11];
 		}
+		if(isset($argv[12])){
+			$name = $argv[12];
+		}
 
 		$saveObject['fileName'] = $fileName;
 		$saveObject['fileType'] = $fileType;
@@ -126,6 +129,7 @@ require_once('authCalls.php');
 		$saveObject['facebook']['user_id'] = $user_id;
 		$saveObject['date'] = $date;
 		$saveObject['time'] = $time;
+		$saveObject['name'] = $name;
 
 		$photoURL = 'https://graph.facebook.com/me/photos?access_token='.$access_token;
 
@@ -153,7 +157,7 @@ require_once('authCalls.php');
 		}
 
 		for($faceCounter = 0; $faceCounter < 3; $faceCounter++){
-			$saveObject = postToFacebook($url, $params, $saveObject);
+			$saveObject = postToFacebook($url, $params, $saveObject, $name);
 
 			if(isset($saveObject['facebook'])){
 				if(isset($saveObject['facebook']['response'])){
@@ -161,10 +165,10 @@ require_once('authCalls.php');
 						break;
 					}
 				}else{
-					$saveObject['facebook']['response'] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - no response from LinkedIn.");
+					$saveObject['facebook']['response'] = array("failure" => "true", "msg" => "The Facebook status for " . $name . " could not be posted --> no response from Facebook");
 				}
 			}else{
-				$saveObject['facebook']['response'] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - no response from LinkedIn.");
+				$saveObject['facebook']['response'] = array("failure" => "true", "msg" => "The Facebook status for " . $name . " could not be posted --> no response from Facebook");
 			}
 		}
 
@@ -180,6 +184,9 @@ require_once('authCalls.php');
 		if(isset($argv[9])){
 			$postID = $argv[9];
 		}
+		if(isset($argv[10])){
+			$name = $argv[10];
+		}
 
 		$saveObject['fileName'] = $fileName;
 		$saveObject['fileType'] = $fileType;
@@ -190,6 +197,7 @@ require_once('authCalls.php');
 		$saveObject['linkedin']['access_token'] = $access_token;
 		$saveObject['date'] = $date;
 		$saveObject['time'] = $time;
+		$saveObject['name'] = $name;
 
 		$headerOptions = array(
 			"Content-Type: text/xml;charset=utf-8"
@@ -229,7 +237,7 @@ require_once('authCalls.php');
 		}
 
 		for($linkCounter = 0; $linkCounter < 3; $linkCounter++){
-			$saveObject = postToLinkedIn($url, $xml, $headerOptions, $saveObject);
+			$saveObject = postToLinkedIn($url, $xml, $headerOptions, $saveObject, $name);
 
 			if(isset($saveObject['linkedin'])){
 				if(isset($saveObject['linkedin']['response'])){
@@ -237,10 +245,10 @@ require_once('authCalls.php');
 						break;
 					}
 				}else{
-					$saveObject['linkedin']['response'] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - no response from LinkedIn.");
+					$saveObject['linkedin']['response'] = array("failure" => "true", "msg" => "The LinkedIn status for " . $name . " could not be posted --> no response from LinkedIn");
 				}
 			}else{
-				$saveObject['linkedin']['response'] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - no response from LinkedIn.");
+				$saveObject['linkedin']['response'] = array("failure" => "true", "msg" => "The LinkedIn status for " . $name . " could not be posted --> no response from LinkedIn");
 			}
 		}
 
@@ -275,6 +283,9 @@ require_once('authCalls.php');
 		if(isset($argv[12])){
 			$postID = $argv[12];
 		}
+		if(isset($argv[13])){
+			$name = $argv[13];
+		}
 
 		$saveObject['fileName'] = $fileName;
 		$saveObject['fileType'] = $fileType;
@@ -288,6 +299,7 @@ require_once('authCalls.php');
 		$saveObject['twitter']['appSecret'] = $appSecret;
 		$saveObject['date'] = $date;
 		$saveObject['time'] = $time;
+		$saveObject['name'] = $name;
 
 		$path = $thing . "app/post/tmpUpload/" . $fileName;
 
@@ -300,17 +312,17 @@ require_once('authCalls.php');
 		}
 
 		for($twitterCounter = 0; $twitterCounter < 3; $twitterCounter++){
-			$saveObject = postToTwitter($appKey, $appSecret, $access_token, $access_secret, $url, $stuff, $saveObject);
+			$saveObject = postToTwitter($appKey, $appSecret, $access_token, $access_secret, $url, $stuff, $saveObject, $name);
 			if(isset($saveObject['twitter'])){
 				if(isset($saveObject['twitter']['response'])){
 					if(isset($saveObject['twitter']['response']['success'])){
 						break;
 					}
 				}else{
-					$saveObject['twitter']['response'] =  array("failure" => "true", "msg" => "Your Twitter status could not be posted - no response from Twitter");
+					$saveObject['twitter']['response'] =  array("failure" => "true", "msg" => "The Twitter status for " . $name . " could not be posted --> no response from Twitter");
 				}
 			}else{
-				$saveObject['twitter']['response'] =  array("failure" => "true", "msg" => "Your Twitter status could not be posted - no response from Twitter");
+				$saveObject['twitter']['response'] =  array("failure" => "true", "msg" => "The Twitter status for " . $name . " could not be posted --> no response from Twitter");
 			}
 		}
 
@@ -358,7 +370,7 @@ require_once('authCalls.php');
 		//unlink("../../app/post/tmpUpload/" . $fileName);
 	}
 
-	function postToFacebook($url, $params, $saveObject){
+	function postToFacebook($url, $params, $saveObject, $name){
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
@@ -371,29 +383,29 @@ require_once('authCalls.php');
 		if(isset($response)){
 			$res = json_decode($response, true);
 		}else{
-			$saveObject['facebook']['response'] = array("failure" => 'true', "msg" => "Your Facebook status could not be posted - no response from Facebook");
+			$saveObject['facebook']['response'] = array("failure" => 'true', "msg" => "The Facebook status for " . $name . " could not be posted --> no response from Facebook");
 
 			return $saveObject;
 		}
 
 		if(isset($res)){
 			if(isset($res['error'])){
-				$saveObject['facebook']['response'] = array("failure" => 'true', "msg" => "Your Facebook status could not be posted - " . $res['error']['message']);
+				$saveObject['facebook']['response'] = array("failure" => 'true', "msg" => "The Facebook status for " . $name . " could not be posted --> " . $res['error']['message']);
 
 				return $saveObject;
 			}else{
-				$saveObject['facebook']['response'] = array("success" => 'true', "msg" => "Your Facebook status was posted successfully");
+				$saveObject['facebook']['response'] = array("success" => 'true', "msg" => "The Facebook status for " . $name . " was posted successfully");
 
 				return $saveObject;
 			}
 		}else{
-			$saveObject['facebook']['response'] = array("failure" => 'true', "msg" => "Your Facebook status could not be posted - no response from Facebook");
+			$saveObject['facebook']['response'] = array("failure" => 'true', "msg" => "The Facebook status for " . $name . " could not be posted --> no response from Facebook");
 
 			return $saveObject;
 		}
 	}
 
-	function postToLinkedIn($url, $xml, $headerOptions, $saveObject){
+	function postToLinkedIn($url, $xml, $headerOptions, $saveObject, $name){
 		$ch2 = curl_init($url);
 		curl_setopt($ch2, CURLOPT_POST, 1);
 		curl_setopt($ch2, CURLOPT_POSTFIELDS, $xml);
@@ -407,13 +419,13 @@ require_once('authCalls.php');
 		if(isset($response)){
 			$xml = simplexml_load_string($response);
 		}else{
-			$saveObject['linkedin']['response'] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - no response from LinkedIn.");
+			$saveObject['linkedin']['response'] = array("failure" => "true", "msg" => "The LinkedIn status for " . $name . " could not be posted --> no response from LinkedIn");
 
 			return $saveObject;
 		}
 
 		if($code == "201"){
-			$saveObject['linkedin']['response'] = array("success" => "true", "msg" => "Your LinkedIn status was posted successfully");
+			$saveObject['linkedin']['response'] = array("success" => "true", "msg" => "The LinkedIn status for " . $name . " was posted successfully");
 
 			return $saveObject;
 		}else{
@@ -422,24 +434,24 @@ require_once('authCalls.php');
 				if(isset($xml['error-code'])){
 					$linkCode = $xml['error-code'];
 					if($linkCode == "0"){
-						$saveObject['linkedin']['response'] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - " . $xml['message']);
+						$saveObject['linkedin']['response'] = array("failure" => "true", "msg" => "The LinkedIn status for " . $name . " could not be posted --> " . $xml['message']);
 
 						return $saveObject;
 					}else{
-						$saveObject['linkedin']['response'] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - " . $xml['message']);
+						$saveObject['linkedin']['response'] = array("failure" => "true", "msg" => "The LinkedIn status for " . $name . " could not be posted --> " . $xml['message']);
 
 						return $saveObject;
 					}
 				}
 			}else{
-				$saveObject['linkedin']['response'] = array("failure" => "true", "msg" => "Your LinkedIn update could not be posted - no response from LinkedIn.");
+				$saveObject['linkedin']['response'] = array("failure" => "true", "msg" => "The LinkedIn status for " . $name . " could not be posted --> no response from LinkedIn");
 
 				return $saveObject;
 			}
 		}
 	}
 
-	function postToTwitter($appKey, $appSecret, $access_token, $access_secret, $url, $stuff, $saveObject){
+	function postToTwitter($appKey, $appSecret, $access_token, $access_secret, $url, $stuff, $saveObject, $name){
 		$connection = new TwitterOAuth($appKey, $appSecret, $access_token, $access_secret);
 
 		if(isset($connection)){
@@ -454,16 +466,16 @@ require_once('authCalls.php');
 
 		if(isset($status)){
 			if(isset($status->errors[0]->message)){
-				$saveObject['twitter']['response'] =  array("failure" => "true", "msg" => "Your Twitter status could not be posted - " . $status->errors[0]->message);
+				$saveObject['twitter']['response'] =  array("failure" => "true", "msg" => "The Twitter status for " . $name . " could not be posted --> " . $status->errors[0]->message);
 
 				return $saveObject;
 			}else{
-				$saveObject['twitter']['response'] =  array("success" => "true", "msg" => "Your Twitter status was posted successfully");
+				$saveObject['twitter']['response'] =  array("success" => "true", "msg" => "The Twitter status for " . $name . " was posted successfully");
 
 				return $saveObject;
 			}
 		}else{
-			$saveObject['twitter']['response'] =  array("failure" => "true", "msg" => "Your Twitter status could not be posted - no response from Twitter");
+			$saveObject['twitter']['response'] =  array("failure" => "true", "msg" => "The Twitter status for " . $name . " could not be posted --> no response from Twitter");
 
 			return $saveObject;
 		}
