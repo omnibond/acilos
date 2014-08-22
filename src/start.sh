@@ -25,8 +25,8 @@ if [ $running = 1 ]; then
 	echo "Elasticsearch is already running"
 else
 	echo "Starting elasticsearch"
-	export ES_MIN_MEM="128m"
-	export ES_MAX_MEM="128m"
+	export ES_MIN_MEM="256m"
+	export ES_MAX_MEM="256m"
 	elasticSearch/bin/elasticsearch
 	echo "Done"
 fi
@@ -52,8 +52,8 @@ if [ $running = 1 ]; then
 	echo "Elasticsearch is already running"
 else
 	echo "Starting elasticsearch"
-	export ES_MIN_MEM="128m"
-	export ES_MAX_MEM="128m"
+	export ES_MIN_MEM="256m"
+	export ES_MAX_MEM="256m"
 	../elasticSearch/bin/elasticsearch
 	echo "Done"
 	
