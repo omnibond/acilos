@@ -118,6 +118,11 @@ define([
 				this.objects = obj;
 			},
 
+			mineFacebookCommentPics: function(databasePostId, facebookPostId, comments, accessToken){
+				var params = {databasePostId: databasePostId, facebookPostId: facebookPostId, comments: comments, accessToken: accessToken};
+				return xhrManager.send('POST', 'rest/v1.0/Post/mineFacebookCommentPics', params);
+			},
+
 			parseSpecialChars: function(str) {
 				//var stringArr = str.split(" ");
 				var regex = /([ \n])/;
@@ -617,18 +622,49 @@ define([
 				
 				this.commentCounter = 0;
 				this.likeCounter = 0;
+
+				var commentPicsMined = "false";
+				var commentArr = [];
+				var facebookPostId = id;
+				var databasePostId = this.data.hits.hits[this.counter]._source.id;
+
+				for(var x = 0; x < comments.length; x++){
+					commentArr.push(comments[x].commentId);
+				}
 				
 				commentDiv.onclick = lang.hitch(this, function(){
 					if(!this.pane){
-						this.pane = new DataObjPane({
-							data: this.data,
-							authObj: this.authObj,
-							type: 'faceComment',
-							counter: this.counter,
-							parseSpecialChars: this.parseSpecialChars,
-							isURL: this.isURL
-						});
-						this.addChild(this.pane);
+						console.log("the comments are: ", commentArr);
+
+						for(var key in this.authObj){
+							if(key !== "login"){
+								if(this.authObj[key].length > 0){
+									var accountArr = this.authObj[key][0]['accounts'];
+									for(var d = 0; d < accountArr.length; d++){
+										if(accountArr[d].accessToken != undefined){
+											if(source.mainAccountID == accountArr[d].user){
+
+												var accessToken = accountArr[d].accessToken;
+
+												this.mineFacebookCommentPics(databasePostId, facebookPostId, commentArr, accessToken).then(lang.hitch(this, function(obj){
+													console.log("the returned obj is: ", obj);
+
+													this.pane = new DataObjPane({
+														data: this.data,
+														authObj: this.authObj,
+														type: 'faceComment',
+														counter: this.counter,
+														parseSpecialChars: this.parseSpecialChars,
+														isURL: this.isURL
+													});
+													this.addChild(this.pane);
+												}));
+											}
+										}
+									}
+								}
+							}
+						}
 					}else{
 						if(this.commentCounter%2 === 0){
 							this.pane.destroyRecursive();

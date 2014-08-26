@@ -314,18 +314,35 @@ function getUserNewsFeed(){
 	}
 	
 	for($h=0; $h < count($accts); $h++){
-		$url = 'https://graph.facebook.com/me/home?&access_token=' . $accts[$h]['accessToken'];
+		$url = 'https://graph.facebook.com/me/home?access_token=' . $accts[$h]['accessToken'];
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$response = curl_exec($ch);
 		curl_close($ch);
 
-		$var = json_decode($response, true);	
+		$var = json_decode($response, true);
+		//print_r($var);
 
-		#print_r($var);
+		if(isset($var)){
+			#take off the data layer so that 90% of the obj is top level
+			normalizeNewsFeedObj($var['data'], $accts[$h]);
 
-		#take off the data layer so that 90% of the obj is top level
-		normalizeNewsFeedObj($var['data'], $accts[$h]);
+			if(isset($var['paging'])){
+				if(isset($var['paging']['next'])){
+					$url = $var['paging']['next'];
+					$ch = curl_init($url);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+					$response = curl_exec($ch);
+					curl_close($ch);
+
+					$var = json_decode($response, true);
+					//print_r($var);
+
+					#take off the data layer so that 90% of the obj is top level
+					normalizeNewsFeedObj($var['data'], $accts[$h]);
+				}
+			}
+		}
 	}
 }
 //FACEBOOK STOP ----------------------------------------------------------------------------
@@ -783,23 +800,23 @@ if(!file_exists("../../lockFiles/cronManager.lock") || (time() > filemtime("../.
 			$total = json_decode($totes, true);	
 
 		}		
-		echo "linkedin feed"; ?><br/><?php
-		getPersonalFeed();
+		//echo "linkedin feed"; ?><br/><?php
+		//getPersonalFeed();
 
 		echo "facebook feed"; ?><br/><?php
 		getUserNewsFeed();
 
-		echo "calling twitter stuff";?><br/><?php
-		getUserTimeline();
+		//echo "calling twitter stuff";?><br/><?php
+		//getUserTimeline();
 
-		echo "instagram feed"; ?><br/><?php
-		getUserFeed();
+		//echo "instagram feed"; ?><br/><?php
+		//getUserFeed();
 
-		echo "linkedin feed"; ?><br/><?php
-		getDiscussionObjects();
+		//echo "linkedin feed"; ?><br/><?php
+		//getDiscussionObjects();
 		
-		echo "google feed"; ?><br/><?php
-		getGoogleFeed();
+		//echo "google feed"; ?><br/><?php
+		//getGoogleFeed();
 
 	}
 	unlink("../../lockFiles/cronManager.lock");

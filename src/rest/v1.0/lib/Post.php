@@ -29,6 +29,7 @@
 require_once('../../oAuth/twitteroauth/twitteroauth.php');
 require_once('authCalls.php');
 require_once('saveServiceCalls.php');
+require_once('../../cron/objects/activityObject.php');
 
 use \ElasticSearch\Client;
 
@@ -47,6 +48,64 @@ Class Post{
 		$varObj = json_decode($var, true);
 
 		postFilesHandler($varObj);
+	}
+
+	function getObject($id){
+		#echo "getting object"; 
+
+		$index = "app";
+		$host = "localhost";
+		$port = "9200";
+
+		$es = Client::connection("http://$host:$port/$index/$index");
+		$res = $es->get($id);
+
+		return $res;
+	}
+
+	function writeObject($obj, $id){
+		$index = "app";
+		$host = "localhost";
+		$port = "9200";
+
+		$es = Client::connection("http://$host:$port/$index/$index/");
+
+		$grr = $es->index($obj, $id);
+		//print_r($grr); ?><br/><?php ?><br/><?php ?><br/><?php
+	}
+
+	function mineFacebookCommentPics(){
+		$var = file_get_contents("php://input");
+		$varObj = json_decode($var, true);
+
+		$comments = $varObj['comments'];
+		$access_token = $varObj['accessToken'];
+		$postId = $varObj['facebookPostId'];
+		$databaseId = $varObj['databasePostId'];
+
+		$object = $this->getObject($databaseId);
+
+		print_r($object);
+
+		for($x = 0; $x < count($comments); $x++){
+			$url = 'https://graph.facebook.com/' . $comments[$x] . '?fields=attachment&access_token=' . $access_token;
+			$ch = curl_init($url);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			$response = curl_exec($ch);
+			curl_close($ch);
+
+			$var = json_decode($response, true);
+
+			if(isset($var)){
+				if(isset($var['attachment'])){
+					echo "here's an attachment object!";
+
+					$object['content']['comments'][$x]['attachment'] = $var['attachment'];
+				}
+			}
+		}
+
+		$this->writeObject($object, $databaseId);
 	}
 	
 	function sendInstaLike(){
