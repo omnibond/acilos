@@ -211,6 +211,8 @@ define([
 					this.list.resize();
 					
 					var comLength = x.length;
+
+					console.log("the commments are: ", x);
 					
 					for(var m = 0; m < comLength; m++){
 						var string = this.parseSpecialChars(x[m].text.text);
@@ -223,11 +225,46 @@ define([
 
 						var picDiv = domConstruct.create("div", {innerHTML: '<img src="https://graph.facebook.com/'+x[m].userId+'/picture" width="60px" height="60px" />'});
 
-						var itemText = new ListItem({
+						var itemText = domConstruct.create("div", {innerHTML: '<span><a href="https://facebook.com/'+x[m].userId+'" target="_blank">'+x[m].name.bold()+'</a></span>' + "<br/>" + "<br/>" + string, "class": "reworkedCommentClass commenterName", style: "height: auto; line-height: normal"});
+
+						/*var itemText = new ListItem({
 							variableHeight: true,
-							label: x[m].name + "<br/>" + "<br/>" + string,
-							"class": "reworkedCommentClass"
-						});
+							label: '<span><a href="' + x[m].name.bold() +'" target="_blank">' + "<br/>" + "<br/>" + string,
+							"class": "reworkedCommentClass commenterName"
+						});*/
+
+						if(x[m].attachment && x[m].attachment != "" && x[m].attachment != "undefined" && x[m].attachment != null){
+							if(x[m].attachment.type == "photo"){
+								if(x[m].attachment.media){
+									if(x[m].attachment.media.image){
+										if(x[m].attachment.media.image.src){
+											var attachmentDiv = domConstruct.create("div", {innerHTML: '<span><img src="'+x[m].attachment.media.image.src+'" style="max-width:90%;max-height:90%;min-width:200px;" /></a></span>', style: "margin-top: -20px"});
+
+											attachmentDiv.onclick = lang.hitch(this, function(event, m){
+												var dialog = new Dialog({
+													title: "Click to close ->",
+													"class": "blackBackDijitDialog",
+													onHide: lang.hitch(this, function(){
+														if(blackoutDiv){
+															document.body.removeChild(blackoutDiv);
+														}
+													})
+												});
+
+												var dialogDiv = domConstruct.create("div", {innerHTML: '<span><img src="'+x[m].attachment.media.image.src+'" style="" /></a></span>'});
+
+												var blackoutDiv = domConstruct.create("div", {"class": "blackoutDiv"});
+
+												dialog.set("content", dialogDiv);
+												dialog.show();
+
+												document.body.appendChild(blackoutDiv);
+											}, event, m);
+										}
+									}
+								}
+							}
+						}
 						
 						var paneLeft = new Pane({
 							"class": "paneLeftClass"
@@ -244,7 +281,12 @@ define([
 						paneLeft.addChild(roundLeft);
 						paneRight.addChild(roundRight);
 						roundLeft.domNode.appendChild(picDiv);
-						roundRight.addChild(itemText);
+						roundRight.domNode.appendChild(itemText);
+
+						if(attachmentDiv){
+							roundRight.domNode.appendChild(attachmentDiv);
+						}
+
 						item.addChild(paneLeft);
 						item.addChild(paneRight);
 

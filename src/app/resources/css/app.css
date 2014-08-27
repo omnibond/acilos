@@ -4208,6 +4208,15 @@ select {
   border: none;
   width: 95.6%;
 }
+.commenterName {
+  margin-top: -12px;
+}
+.dj_iphone .commenterName {
+  margin-top: -2px;
+}
+.dj_phone .commenterName {
+  margin-top: -4px;
+}
 .reworkedCommentClass {
   top: -22px;
   font-weight: normal;

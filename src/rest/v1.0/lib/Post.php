@@ -71,7 +71,6 @@ Class Post{
 		$es = Client::connection("http://$host:$port/$index/$index/");
 
 		$grr = $es->index($obj, $id);
-		//print_r($grr); ?><br/><?php ?><br/><?php ?><br/><?php
 	}
 
 	function mineFacebookCommentPics(){
@@ -83,9 +82,13 @@ Class Post{
 		$postId = $varObj['facebookPostId'];
 		$databaseId = $varObj['databasePostId'];
 
-		$object = $this->getObject($databaseId);
+		try{
+			$object = $this->getObject($databaseId);
+		}catch(Exception $e){
+			return json_encode(array("failure" => "Could not retrieve object from database"));
+		}
 
-		print_r($object);
+		//print_r($object);
 
 		for($x = 0; $x < count($comments); $x++){
 			$url = 'https://graph.facebook.com/' . $comments[$x] . '?fields=attachment&access_token=' . $access_token;
@@ -98,14 +101,22 @@ Class Post{
 
 			if(isset($var)){
 				if(isset($var['attachment'])){
-					echo "here's an attachment object!";
-
 					$object['content']['comments'][$x]['attachment'] = $var['attachment'];
 				}
 			}
 		}
 
-		$this->writeObject($object, $databaseId);
+		try{
+			$object['content']['commentsMined'] = "true";
+
+			//print_r($object);
+
+			$this->writeObject($object, $databaseId);
+		}catch(Exception $e){
+			return json_encode(array("failure" => "Could not write object to database"));
+		}
+
+		return json_encode(array("success" => $object));
 	}
 	
 	function sendInstaLike(){
