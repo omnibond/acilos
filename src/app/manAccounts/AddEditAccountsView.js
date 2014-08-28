@@ -122,19 +122,25 @@ define([
 				var item = new ListItem({
 					variableHeight: true,
 					label: "Edit or delete your app keys and accounts",
-					style: "border:none;font-size;font-family:arial;font-size:20px"
+					style: "border:none;font-size;font-family:arial;font-size:18px"
 				})
 				this.mainList.addChild(item);
 				var item = new ListItem({
 					variableHeight: true,
 					label: "First add an app key for any service and then you can create different accounts for that service",
-					style: "border:none;font-size;font-family:arial;font-size:20px"
+					style: "border:none;font-size;font-family:arial;font-size:18px"
+				})
+				this.mainList.addChild(item);
+				var item = new ListItem({
+					variableHeight: true,
+					label: "If you change the IP address of your acilos instance, you will need to go to the service developer websites and modify the app redirect urls to match the new acilos IP",
+					style: "border:none;font-size;font-family:arial;font-size:18px"
 				})
 				this.mainList.addChild(item);
 				this.errorItem = new ListItem({
 					label: "",
 					variableHeight:true,
-					style: "border:none;font-size;font-family:arial;font-size:20px"
+					style: "border:none;font-size;font-family:arial;font-size:18px"
 				})
 				this.mainList.addChild(this.errorItem);				
 				

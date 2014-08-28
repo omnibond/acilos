@@ -185,16 +185,18 @@
 					var acilosLoginDiv = domConstruct.create("div", {innerHTML: "<img src=app/resources/img/acilosLoginLogo.png>", style: "text-align: center; width: 220px; margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto"});
 					leftPane.domNode.appendChild(acilosLoginDiv);
 
-					var item1 = domConstruct.create("div", {innerHTML: "To set up Acilos for the first time you will need to go to each social media website and set up an app as if you were a developer.", style: "border:none;height:35px;font-size;font-family:arial;font-size:20px; text-align: center; height: auto; max-width: 70%; margin-right: auto; margin-left: auto"});
-					var item2 = domConstruct.create("div", {innerHTML: "Please enter the app keys and secrets obtained by following the walkthrough below.", style: "border:none;height:35px;font-size;font-family:arial;font-size:20px; text-align: center; height: auto; max-width: 70%; margin-right: auto; margin-left: auto"});
-					var item3 = domConstruct.create("div", {innerHTML: 'You can enter one or more accounts now, and more later from the settings tab in the app.', style: "border:none;height:35px;font-size;font-family:arial;font-size:20px; text-align: center; height: auto; max-width: 70%; margin-right: auto; margin-left: auto"});
-					var item4 = domConstruct.create("div", {innerHTML: '<span><a href="http://www.acilos.com/apphelp" target="_blank">App creation walkthrough</a></span>'});
+					var item1 = domConstruct.create("div", {innerHTML: "To set up Acilos for the first time you will need to go to each social media website and set up an app as if you were a developer.", style: "border:none;height:35px;font-family:arial;font-size:20px; text-align: center; height: auto; max-width: 70%; margin-right: auto; margin-left: auto"});
+					var item2 = domConstruct.create("div", {innerHTML: "Please enter the app keys and secrets obtained by following the walkthrough below.", style: "border:none;height:35px;font-family:arial;font-size:20px; text-align: center; height: auto; max-width: 70%; margin-right: auto; margin-left: auto"});
+					var item3 = domConstruct.create("div", {innerHTML: 'You can enter one or more accounts now, and more later from the settings tab in the app.', style: "border:none;height:35px;font-family:arial;font-size:20px; text-align: center; height: auto; max-width: 70%; margin-right: auto; margin-left: auto"});
+					var item4 = domConstruct.create("div", {innerHTML: '<br>If you change the IP address of your acilos instance, you will need to go to the service developer websites and modify the app redirect urls to match the new acilos IP', style: "border:none;height:35px;font-family:arial;font-size:20px; text-align: center; height: auto; max-width: 70%; margin-right: auto; margin-left: auto"});
+					var item5 = domConstruct.create("div", {innerHTML: '<span><a href="http://www.acilos.com/apphelp" target="_blank">App creation walkthrough</a></span>'});
 					leftPane.domNode.appendChild(item1);
 					leftPane.domNode.appendChild(item3);
 					leftPane.domNode.appendChild(item2);
 					leftPane.domNode.appendChild(item4);
+					leftPane.domNode.appendChild(item5);
 					var errorItem = new ListItem({
-						style: "border:none;height:auto;font-size;font-family:arial;font-size:20px;background-color:inherit"
+						style: "border:none;height:auto;font-family:arial;font-size:20px;background-color:inherit"
 					});
 					leftPane.addChild(errorItem);
 					

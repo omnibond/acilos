@@ -92,7 +92,8 @@ define(['dojo/_base/declare',
 				label: "Post Log",
 				onClick: lang.hitch(this, function(){
 					this.router.go("/PostHistoryView");
-				})
+				}),
+				"right": "true"
 			});
 
 			this.selectorItem = new SelectorBar({
