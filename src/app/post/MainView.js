@@ -117,7 +117,7 @@ define(['dojo/_base/declare',
 						var accountArr = this.authObj[key][0]['accounts'];	
 						for(var d = 0; d < accountArr.length; d++){	
 							if(accountArr[d].accessToken != undefined){
-								var divHolder = domConstruct.create("span", {"class": "displayBlockPhone", style: "white-space: nowrap; border-left:5px solid "+accountArr[d]['color']});
+								var divHolder = domConstruct.create("span", {"class": "displayBlockPhone", style: "white-space: nowrap; margin-left: 6px; border-left: 5px solid "+accountArr[d]['color']});
 								if(key == "twitter"){
 									var checkBox = new CheckBox({
 										leToken: accountArr[d]['accessToken']+":"+accountArr[d]['accessSecret']+":"+accountArr[d]['key']+":"+accountArr[d]['secret']+":"+accountArr[d]['user']+":"+accountArr[d]['name'],

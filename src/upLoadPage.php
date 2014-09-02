@@ -79,12 +79,21 @@
 				});
 				domWindow.body().appendChild(leftPane.domNode);
 
+				var isFirefox = typeof InstallTrigger !== 'undefined';   // Firefox 1.0+
+
+				console.log("isFirefox is: ", isFirefox);
+
 				this.fUploader = document.createElement("input");
 				this.fUploader.setAttribute("type", "file");
 				this.fUploader.setAttribute("accept", "image/*");
 				this.fUploader.setAttribute("name", "file[]");
-				this.fUploader.style.marginLeft = "-5px";
 				this.fUploader.style.class = "roundedBorder5pxClass";
+
+				if(isFirefox === true){
+					this.fUploader.style.marginLeft = "5px";
+				}else{
+					this.fUploader.style.marginLeft = "-5px";
+				}
 
 				leftPane.domNode.appendChild(this.fUploader);
 

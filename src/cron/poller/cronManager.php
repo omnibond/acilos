@@ -168,7 +168,7 @@ function writeClient($obj){
 function updateRecentPost($post){
 	global $clientObject;
 	//Dont count CONN objects as posts
-	if($post['title'] != "CONN"){
+	if($post['title'] != "CONN" && count($post['actor']) != 0){
 		//if that poster is a client then update most recent
 		if(isset($clientObject[$post['actor']->id])){
 			$tempClientObj = $clientObject[$post['actor']->id];
@@ -458,8 +458,10 @@ function getGoogleFeed(){
 			}
 		}else{
 			$returnArr = array();
-			for($x = 0; $x < count($var['items']); $x++){
-				array_push($idArr, $var['items'][$x]['id']);
+			if(isset($var['items'])){
+				for($x = 0; $x < count($var['items']); $x++){
+					array_push($idArr, $var['items'][$x]['id']);
+				}
 			}
 		}
 		//print "items in idArr" . count($idArr); ?><br/><?php
@@ -475,9 +477,13 @@ function getGoogleFeed(){
 			//print_r($res);
 			curl_close($ch);
 			$var = json_decode($res, true);
-			
-			for($k=0; $k < count($var['items']); $k++){
-				array_push($dataArr, $var['items'][$k]);
+
+			if(isset($var)){
+				if(isset($var['items'])){
+					for($k=0; $k < count($var['items']); $k++){
+						array_push($dataArr, $var['items'][$k]);
+					}
+				}
 			}
 		}
 		//print "items in dataArr" . count($dataArr); ?><br/><?php
@@ -511,8 +517,6 @@ function normalizeGoogObject($objArray, $account){
 //LINKEDIN GOOOOOOOOOOOOOO -----------------------------------------------------
 function linkedInFetch($method, $resource, $token) {
 	echo "linkedin fetch"; ?><br/><?php
-	//global //$log;
-	//global //?$logPrefix;
     $params = array('oauth2_access_token' => $token,
 		    'format' => 'json',
 	      );
@@ -537,8 +541,6 @@ function linkedInFetch($method, $resource, $token) {
 
 function linkedInFetchWithParams($method, $resource, $token, $start, $count) {
 	echo "linkedin fetch with params"; ?><br/><?php
-	//global //$log;
-	//global //?$logPrefix;
     $params = array('oauth2_access_token' => $token,
 		    'format' => 'json',
 		    'start' => $start,
@@ -799,25 +801,25 @@ if(!file_exists("../../lockFiles/cronManager.lock") || (time() > filemtime("../.
 			$totes = countAll();
 			$total = json_decode($totes, true);	
 
-		}		
-		//echo "linkedin feed"; ?><br/><?php
-		//getPersonalFeed();
+		}
+
+		echo "linkedin feed"; ?><br/><?php
+		getPersonalFeed();
 
 		echo "facebook feed"; ?><br/><?php
 		getUserNewsFeed();
 
-		//echo "calling twitter stuff";?><br/><?php
-		//getUserTimeline();
+		echo "calling twitter stuff";?><br/><?php
+		getUserTimeline();
 
-		//echo "instagram feed"; ?><br/><?php
-		//getUserFeed();
+		echo "instagram feed"; ?><br/><?php
+		getUserFeed();
 
-		//echo "linkedin feed"; ?><br/><?php
-		//getDiscussionObjects();
+		echo "linkedin feed"; ?><br/><?php
+		getDiscussionObjects();
 		
-		//echo "google feed"; ?><br/><?php
-		//getGoogleFeed();
-
+		echo "google feed"; ?><br/><?php
+		getGoogleFeed();
 	}
 	unlink("../../lockFiles/cronManager.lock");
 }

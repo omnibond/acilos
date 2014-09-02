@@ -33,12 +33,14 @@
 	// check cookie and session
 	if(isset($_SESSION['authed']) && $_SESSION['authed'] === true) {
 		//if logged in..
-		if($is_xhr) {
-			echo json_encode(array("status" => "true"));
-		} else {
-			//for all other browsers than firefox, go to the redirect
-			if(!preg_match("/Firefox/", $browser)){
-				header('Location: ' . $_SERVER['REDIRECT_URL']);
+		if(isset($is_xhr)){
+			if($is_xhr) {
+				echo json_encode(array("status" => "true"));
+			} else {
+				//for all other browsers than firefox, go to the redirect
+				if(!preg_match("/Firefox/", $browser)){
+					header('Location: ' . $_SERVER['REDIRECT_URL']);
+				}
 			}
 		}
 	}else{

@@ -25,8 +25,8 @@ if [ $running = 1 ]; then
 	echo "Elasticsearch is already running"
 else
 	echo "Starting elasticsearch"
-	export ES_MIN_MEM="256m"
-	export ES_MAX_MEM="256m"
+	export ES_MIN_MEM="128m"
+	export ES_MAX_MEM="128m"
 	elasticSearch/bin/elasticsearch
 	echo "Done"
 fi
@@ -52,8 +52,8 @@ if [ $running = 1 ]; then
 	echo "Elasticsearch is already running"
 else
 	echo "Starting elasticsearch"
-	export ES_MIN_MEM="256m"
-	export ES_MAX_MEM="256m"
+	export ES_MIN_MEM="128m"
+	export ES_MAX_MEM="128m"
 	../elasticSearch/bin/elasticsearch
 	echo "Done"
 	
@@ -124,6 +124,26 @@ eval /usr/bin/wget -q -O /dev/null http://'$HOST'/cron/poller/callPublicQueryMan
 
 EOF
 
+echo "Writing The Httpd Reboot Manager"
+cat > cron/callHttpdRebootManager.sh << 'EOF'
+#!/bin/bash
+#this script will be called every morning at 3:30 am to reboot httpd and free up
+#some of the memory
+	
+EOF
+
+cat >> cron/callHttpdRebootManager.sh << 'EOF'
+
+running=$(ps axho user,comm|grep -E "httpd|apache"|uniq|grep -v "root"|awk 'END {if ($1) print $1}')
+
+if [ "$running" == "apache" ]; then
+        service httpd restart
+else
+        service apache2 restart
+fi
+
+EOF
+
 CRONGREP=`crontab -l | grep /cron/`
 if [ "$CRONGREP" = "" ]; then
 	echo "no socialreader crons were found... adding cronjobs"
@@ -135,6 +155,7 @@ if [ "$CRONGREP" = "" ]; then
 	(crontab -l 2>/dev/null; echo "*/3 * * * * sh "$MAINPATH"/cron/esHeartbeat.sh") | crontab -
 	#should run every day at 3:30am
 	(crontab -l 2>/dev/null; echo "30 3 * * * sh "$MAINPATH"/cron/callAmazonRebootManager.sh") | crontab -
+	(crontab -l 2>/dev/null; echo "30 3 * * * sh "$MAINPATH"/cron/callHttpdRebootManager.sh") | crontab -
 	
 	echo "\nDone"
 else 
@@ -157,7 +178,7 @@ echo "php_value upload_max_filesize 30M" >> .htaccess
 echo "php_value post_max_size 30M" >> .htaccess
 
 echo "Priming database and clearing data"
-php startES.php
+#php startES.php
 
 running=$(ps axho user,comm|grep -E "httpd|apache"|uniq|grep -v "root"|awk 'END {if ($1) print $1}')
 
