@@ -107,62 +107,64 @@ function writeObject($obj, $query, $feeds){
 function minePublicQueryTerms(){
 	$credObj = file_get_contents($_SERVER['SERVICECREDS']);
 	$credObj = json_decode($credObj, true);
-	
-	$queryTermObj = file_get_contents($_SERVER['PUBLICQUERYTERMOBJ']);
-	$queryTermObj = json_decode($queryTermObj, true);
-	
-	foreach($queryTermObj as $key => $value){
-		print_r($key); ?><br/><?php ?><br/><?php
 
-		$services = $value['Services'];
-		$query = $value['terms'];
-		$feeds = $value['feeds'];
-		
-		for($f = 0; $f < count($services); $f++){
-			switch($services[$f]){
-				case "Facebook":
-					$accountNum = count($credObj['facebook'][0]['accounts']);
-					$RNG = rand(0, $accountNum-1);
+	if(file_exists($_SERVER['PUBLICQUERYTERMOBJ']) === true){
+		$queryTermObj = file_get_contents($_SERVER['PUBLICQUERYTERMOBJ']);
+		$queryTermObj = json_decode($queryTermObj, true);
 
-					$account = $credObj['facebook'][0]['accounts'][$RNG];
-					$responseObj = queryFacebook($query, $account);
-					if(isset($responseObj['data'])){
-						$builder = new facebookNewsFeedObjectBuilder();
-						normalizeActivityObjects($responseObj['data'], $builder, $account, $feeds, $query);
-					}
-				break;
-				case "Google":
-					$accountNum = count($credObj['google'][0]['accounts']);
-					$RNG = rand(0, $accountNum-1);
-					
-					$account = $credObj['google'][0]['accounts'][$RNG];
-					$responseObj = queryGoogle($query, $account);
-					//print_r($responseObj);
-					if(isset($responseObj['items'])){
-						$builder = new googleObjectBuilder();
-						normalizeActivityObjects($responseObj['items'], $builder, $account, $feeds, $query);
-					}
-				break;
-				case "Twitter":
-					$accountNum = count($credObj['twitter'][0]['accounts']);
-					$RNG = rand(0, $accountNum-1);
-					
-					$account = $credObj['twitter'][0]['accounts'][$RNG];
-					$responseObj = queryTwitter($query, $account);
-					if(isset($responseObj['statuses'])){
-						$builder = new twitterObjectBuilder();
-						normalizeActivityObjects($responseObj['statuses'], $builder, $account, $feeds, $query);
-					}
-				break;
-				case "Instagram":
-					return json_encode(array("error" => "service has not been activated yet"));
-				break;
-				case "Linkedin":
-					return json_encode(array("error" => "service has not been activated yet"));
-				break;
-				default:
-					return json_encode(array("error" => "should not have gotten here"));
-				break;
+		foreach($queryTermObj as $key => $value){
+			print_r($key); ?><br/><?php ?><br/><?php
+
+			$services = $value['Services'];
+			$query = $value['terms'];
+			$feeds = $value['feeds'];
+			
+			for($f = 0; $f < count($services); $f++){
+				switch($services[$f]){
+					case "Facebook":
+						$accountNum = count($credObj['facebook'][0]['accounts']);
+						$RNG = rand(0, $accountNum-1);
+
+						$account = $credObj['facebook'][0]['accounts'][$RNG];
+						$responseObj = queryFacebook($query, $account);
+						if(isset($responseObj['data'])){
+							$builder = new facebookNewsFeedObjectBuilder();
+							normalizeActivityObjects($responseObj['data'], $builder, $account, $feeds, $query);
+						}
+					break;
+					case "Google":
+						$accountNum = count($credObj['google'][0]['accounts']);
+						$RNG = rand(0, $accountNum-1);
+						
+						$account = $credObj['google'][0]['accounts'][$RNG];
+						$responseObj = queryGoogle($query, $account);
+						//print_r($responseObj);
+						if(isset($responseObj['items'])){
+							$builder = new googleObjectBuilder();
+							normalizeActivityObjects($responseObj['items'], $builder, $account, $feeds, $query);
+						}
+					break;
+					case "Twitter":
+						$accountNum = count($credObj['twitter'][0]['accounts']);
+						$RNG = rand(0, $accountNum-1);
+						
+						$account = $credObj['twitter'][0]['accounts'][$RNG];
+						$responseObj = queryTwitter($query, $account);
+						if(isset($responseObj['statuses'])){
+							$builder = new twitterObjectBuilder();
+							normalizeActivityObjects($responseObj['statuses'], $builder, $account, $feeds, $query);
+						}
+					break;
+					case "Instagram":
+						return json_encode(array("error" => "service has not been activated yet"));
+					break;
+					case "Linkedin":
+						return json_encode(array("error" => "service has not been activated yet"));
+					break;
+					default:
+						return json_encode(array("error" => "should not have gotten here"));
+					break;
+				}
 			}
 		}
 	}

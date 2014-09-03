@@ -391,15 +391,19 @@ function getUserTimeline(){
 		#took this down to 40 to see if it would improve the load on elasticsearch
 		$var = $connection->get($method, array("count" => 40));
 
-		$array = objectToArray($var);
+		if(isset($var)){
+			$array = objectToArray($var);	
+		}
 
-		if($array['errors']){
-			//print_r($array['errors'][0]['message']);
-			//print_r($array['errors'][0]['code']);
-			//refresh token or call get new token again
-			//file_get_contents("../../oAuth/twitterAccess.php?appKey=" + $obj['appKey'] + "&appSecret=" + $obj['appSecret']);
-		}else{
-			normalizeTwitterObject($array, $accts[$h]);	    
+		if(isset($array)){
+			if(isset($array['errors'])){
+				//print_r($array['errors'][0]['message']);
+				//print_r($array['errors'][0]['code']);
+				//refresh token or call get new token again
+				//file_get_contents("../../oAuth/twitterAccess.php?appKey=" + $obj['appKey'] + "&appSecret=" + $obj['appSecret']);
+			}else{
+				normalizeTwitterObject($array, $accts[$h]);	    
+			}
 		}
 	}
 }
@@ -424,70 +428,72 @@ function getGoogleFeed(){
 	}
 	
 	for($h=0; $h < count($accts); $h++){
-		$url = "https://www.googleapis.com/plus/v1/people/me/people/visible";
-		$ch = curl_init($url);
-		$headers = array('Authorization: Bearer ' . $accts[$h]['accessToken']);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$res = curl_exec($ch);
-		curl_close($ch);
-		$var = json_decode($res, true);
-		
-		$idArr = array();
-		if(isset($var['error'])){
-			if($error = $var['error']['errors'][0]['message'] == "Invalid Credentials"){
-				$accts[$h]['accessToken'] =  refreshGoogToken($accts[$h]['uuid']);
-				$url = "https://www.googleapis.com/plus/v1/people/me/people/visible";
-				$ch = curl_init($url);
-				$headers = array('Authorization: Bearer ' . $accts[$h]['accessToken']);
-				curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-				$res = curl_exec($ch);
-				curl_close($ch);
-				$var = json_decode($res, true);
-				$returnArr = array();
-				if(isset($var['error'])){
-					return "error";
-				}else{
-					for($x = 0; $x < count($var['items']); $x++){
-						array_push($idArr, $var['items'][$x]['id']);
-					}
-				}
-			}else{
-				return "error";
-			}
-		}else{
-			$returnArr = array();
-			if(isset($var['items'])){
-				for($x = 0; $x < count($var['items']); $x++){
-					array_push($idArr, $var['items'][$x]['id']);
-				}
-			}
-		}
-		//print "items in idArr" . count($idArr); ?><br/><?php
-		
-		$dataArr = array();
-		for($t=0; $t < count($idArr); $t++){
-			$url = "https://www.googleapis.com/plus/v1/people/".$idArr[$t]."/activities/public";
+		if(isset($accts[$h]['accessToken'])){
+			$url = "https://www.googleapis.com/plus/v1/people/me/people/visible";
 			$ch = curl_init($url);
 			$headers = array('Authorization: Bearer ' . $accts[$h]['accessToken']);
 			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			$res = curl_exec($ch);
-			//print_r($res);
 			curl_close($ch);
 			$var = json_decode($res, true);
-
-			if(isset($var)){
+			
+			$idArr = array();
+			if(isset($var['error'])){
+				if($error = $var['error']['errors'][0]['message'] == "Invalid Credentials"){
+					$accts[$h]['accessToken'] =  refreshGoogToken($accts[$h]['uuid']);
+					$url = "https://www.googleapis.com/plus/v1/people/me/people/visible";
+					$ch = curl_init($url);
+					$headers = array('Authorization: Bearer ' . $accts[$h]['accessToken']);
+					curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+					$res = curl_exec($ch);
+					curl_close($ch);
+					$var = json_decode($res, true);
+					$returnArr = array();
+					if(isset($var['error'])){
+						return "error";
+					}else{
+						for($x = 0; $x < count($var['items']); $x++){
+							array_push($idArr, $var['items'][$x]['id']);
+						}
+					}
+				}else{
+					return "error";
+				}
+			}else{
+				$returnArr = array();
 				if(isset($var['items'])){
-					for($k=0; $k < count($var['items']); $k++){
-						array_push($dataArr, $var['items'][$k]);
+					for($x = 0; $x < count($var['items']); $x++){
+						array_push($idArr, $var['items'][$x]['id']);
 					}
 				}
 			}
+			//print "items in idArr" . count($idArr); ?><br/><?php
+			
+			$dataArr = array();
+			for($t=0; $t < count($idArr); $t++){
+				$url = "https://www.googleapis.com/plus/v1/people/".$idArr[$t]."/activities/public";
+				$ch = curl_init($url);
+				$headers = array('Authorization: Bearer ' . $accts[$h]['accessToken']);
+				curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$res = curl_exec($ch);
+				//print_r($res);
+				curl_close($ch);
+				$var = json_decode($res, true);
+
+				if(isset($var)){
+					if(isset($var['items'])){
+						for($k=0; $k < count($var['items']); $k++){
+							array_push($dataArr, $var['items'][$k]);
+						}
+					}
+				}
+			}
+			//print "items in dataArr" . count($dataArr); ?><br/><?php
+			normalizeGoogObject($dataArr, $accts[$h]);
 		}
-		//print "items in dataArr" . count($dataArr); ?><br/><?php
-		normalizeGoogObject($dataArr, $accts[$h]);
 	}
 }
 
@@ -671,52 +677,177 @@ function getDiscussionObjects(){
 				$groupPost = linkedInFetch('GET', '/v1/groups/'.$user['values'][$z]['group']['id'].'/posts:(creator:(first-name,last-name,picture-url,id,headline),title,summary,creation-timestamp,id,likes,comments,attachment:(image-url,content-domain,content-url,title,summary))', $accts[$h]['accessToken']);
 				$thing = objectToArray($groupPost);
 
-				for($t = 0; $t < count($thing['values']); $t++){
-					$groupArr[$counter]['networkObjectType'] = "DISCUSS";
-					$groupArr[$counter]['timestamp'] = $thing['values'][$t]['creationTimestamp'];
-					$groupArr[$counter]['id'] = $thing['values'][$t]['id'];
+				if(isset($thing)){
+					if(isset($thing['values'])){
+						for($t = 0; $t < count($thing['values']); $t++){
+							$groupArr[$counter]['networkObjectType'] = "DISCUSS";
 
-					$groupArr[$counter]['group']['name'] = $user['values'][$z]['group']['name'];
-					$groupArr[$counter]['group']['id'] = $user['values'][$z]['group']['id'];
-					$groupArr[$counter]['group']['status'] =  $user['values'][$z]['membershipState']['code'];
+							if(isset($thing['values'][$t])){
+								if(isset($thing['values'][$t]['creationTimestamp'])){
+									$groupArr[$counter]['timestamp'] = $thing['values'][$t]['creationTimestamp'];	
+								}
 
-					$groupArr[$counter]['title'] = $thing['values'][$t]['title'];
-					$groupArr[$counter]['summary'] = $thing['values'][$t]['summary'];
-					$groupArr[$counter]['creator']['firstName'] = $thing['values'][$t]['creator']['firstName'];
-					$groupArr[$counter]['creator']['lastName'] = $thing['values'][$t]['creator']['lastName'];
-					$groupArr[$counter]['creator']['pictureUrl'] = $thing['values'][$t]['creator']['pictureUrl'];
-					$groupArr[$counter]['creator']['headline'] = $thing['values'][$t]['creator']['headline'];
-					$groupArr[$counter]['creator']['id'] = $thing['values'][$t]['creator']['id'];
+								if(isset($thing['values'][$t]['id'])){
+									$groupArr[$counter]['id'] = $thing['values'][$t]['id'];
+								}
 
-					if($thing['values'][$t]['attachment'] != null){
-						$groupArr[$counter]['attachment'][0]['contentDomain'] = $thing['values'][$t]['attachment']['contentDomain'];
-						$groupArr[$counter]['attachment'][0]['contentUrl'] = $thing['values'][$t]['attachment']['contentUrl'];
-						$groupArr[$counter]['attachment'][0]['imageUrl'] = $thing['values'][$t]['attachment']['imageUrl'];
-						$groupArr[$counter]['attachment'][0]['summary'] = $thing['values'][$t]['attachment']['summary'];
-						$groupArr[$counter]['attachment'][0]['title'] = $thing['values'][$t]['attachment']['title'];
-					}else{
-						$groupArr[$counter]['attachment'] = array();
+								if(isset($thing['values'][$t]['title'])){
+									$groupArr[$counter]['title'] = $thing['values'][$t]['title'];
+								}
+
+								if(isset($thing['values'][$t]['summary'])){
+									$groupArr[$counter]['summary'] = $thing['values'][$t]['summary'];
+								}
+
+								if(isset($thing['values'][$t]['creator'])){
+									if(isset($thing['values'][$t]['creator']['firstName'])){
+										$groupArr[$counter]['creator']['firstName'] = $thing['values'][$t]['creator']['firstName'];
+									}
+
+									if(isset($thing['values'][$t]['creator']['lastName'])){
+										$groupArr[$counter]['creator']['lastName'] = $thing['values'][$t]['creator']['lastName'];
+									}
+
+									if(isset($thing['values'][$t]['creator']['pictureUrl'])){
+										$groupArr[$counter]['creator']['pictureUrl'] = $thing['values'][$t]['creator']['pictureUrl'];
+									}
+
+									if(isset($thing['values'][$t]['creator']['headline'])){
+										$groupArr[$counter]['creator']['headline'] = $thing['values'][$t]['creator']['headline'];
+									}
+
+									if(isset($thing['values'][$t]['creator']['thing'])){
+										$groupArr[$counter]['creator']['id'] = $thing['values'][$t]['creator']['id'];
+									}
+								}
+
+								if(isset($thing['values'][$t]['attachment'])){
+									if($thing['values'][$t]['attachment'] != null){
+										if(isset($thing['values'][$t]['attachment']['contentDomain'])){
+											$groupArr[$counter]['attachment'][0]['contentDomain'] = $thing['values'][$t]['attachment']['contentDomain'];
+										}
+
+										if(isset($thing['values'][$t]['attachment']['contentUrl'])){
+											$groupArr[$counter]['attachment'][0]['contentUrl'] = $thing['values'][$t]['attachment']['contentUrl'];
+										}
+
+										if(isset($thing['values'][$t]['attachment']['imageUrl'])){
+											$groupArr[$counter]['attachment'][0]['imageUrl'] = $thing['values'][$t]['attachment']['imageUrl'];
+										}
+
+										if(isset($thing['values'][$t]['attachment']['summary'])){
+											$groupArr[$counter]['attachment'][0]['summary'] = $thing['values'][$t]['attachment']['summary'];
+										}
+
+										if(isset($thing['values'][$t]['attachment']['title'])){
+											$groupArr[$counter]['attachment'][0]['title'] = $thing['values'][$t]['attachment']['title'];
+										}
+									}else{
+										$groupArr[$counter]['attachment'] = array();
+									}
+								}
+
+								$groupArr[$counter]['comments'] = array();
+
+								if(isset($thing['values'][$t]['comments'])){
+									if(isset($thing['values'][$t]['comments']['_total'])){
+										for($x = 0; $x < $thing['values'][$t]['comments']['_total']; $x++){
+											if(isset($thing['values'][$t]['comments']['values'])){
+												if(isset($thing['values'][$t]['comments']['values'][$x])){
+													if(isset($thing['values'][$t]['comments']['values'][$x]['creator'])){
+														if(isset($thing['values'][$t]['comments']['values'][$x]['creator']['firstName'])){
+															$groupArr[$counter]['comments'][$x]['person']['firstName'] = $thing['values'][$t]['comments']['values'][$x]['creator']['firstName'];
+														}
+
+														if(isset($thing['values'][$t]['comments']['values'][$x]['creator']['lastName'])){
+															$groupArr[$counter]['comments'][$x]['person']['lastName'] = $thing['values'][$t]['comments']['values'][$x]['creator']['lastName'];
+														}
+
+														if(isset($thing['values'][$t]['comments']['values'][$x]['creator']['id'])){
+															$groupArr[$counter]['comments'][$x]['person']['id'] = $thing['values'][$t]['comments']['values'][$x]['creator']['id'];
+														}
+
+														if(isset($thing['values'][$t]['comments']['values'][$x]['creator']['headline'])){
+															$groupArr[$counter]['comments'][$x]['person']['headline'] = $thing['values'][$t]['comments']['values'][$x]['creator']['headline'];
+														}
+
+														if(isset($thing['values'][$t]['comments']['values'][$x]['creator']['pictureUrl'])){
+															$groupArr[$counter]['comments'][$x]['person']['pictureUrl'] = $thing['values'][$t]['comments']['values'][$x]['creator']['pictureUrl'];
+														}
+													}
+
+													if(isset($thing['values'][$t]['comments']['values'][$x]['id'])){
+														$groupArr[$counter]['comments'][$x]['id'] = $thing['values'][$t]['comments']['values'][$x]['id'];
+													}
+
+													if(isset($thing['values'][$t]['comments']['values'][$x]['text'])){
+														$groupArr[$counter]['comments'][$x]['text'] = $thing['values'][$t]['comments']['values'][$x]['text'];
+													}
+												}
+											}
+										}
+									}
+								}
+
+								$groupArr[$counter]['likes'] = array();
+
+								if(isset($thing['values'][$t]['likes'])){
+									if(isset($thing['values'][$t]['likes']['_total'])){
+										for($x = 0; $x < $thing['values'][$t]['likes']['_total']; $x++){
+											if(isset($thing['values'][$t]['likes']['values'])){
+												if(isset($thing['values'][$t]['likes']['values'][$x])){
+													if(isset($thing['values'][$t]['likes']['values'][$x]['person'])){
+														if(isset($thing['values'][$t]['likes']['values'][$x]['person']['firstName'])){
+															$groupArr[$counter]['likes'][$x]['person']['firstName'] = $thing['values'][$t]['likes']['values'][$x]['person']['firstName'];
+														}
+
+														if(isset($thing['values'][$t]['likes']['values'][$x]['person']['lastName'])){
+															$groupArr[$counter]['likes'][$x]['person']['lastName'] = $thing['values'][$t]['likes']['values'][$x]['person']['lastName'];
+														}
+
+														if(isset($thing['values'][$t]['likes']['values'][$x]['person']['id'])){
+															$groupArr[$counter]['likes'][$x]['person']['id'] = $thing['values'][$t]['likes']['values'][$x]['person']['id'];
+														}
+
+														if(isset($thing['values'][$t]['likes']['values'][$x]['person']['headline'])){
+															$groupArr[$counter]['likes'][$x]['person']['headline'] = $thing['values'][$t]['likes']['values'][$x]['person']['headline'];
+														}
+
+														if(isset($thing['values'][$t]['likes']['values'][$x]['person']['pictureUrl'])){
+															$groupArr[$counter]['likes'][$x]['person']['pictureUrl'] = $thing['values'][$t]['likes']['values'][$x]['person']['pictureUrl'];
+														}
+													}	
+												}
+											}
+										}
+									}
+								}
+							}
+						$counter++;
+						}
 					}
+				}
 
-					$groupArr[$counter]['comments'] = array();
-					for($x = 0; $x < $thing['values'][$t]['comments']['_total']; $x++){
-						$groupArr[$counter]['comments'][$x]['person']['firstName'] = $thing['values'][$t]['comments']['values'][$x]['creator']['firstName'];
-						$groupArr[$counter]['comments'][$x]['person']['lastName'] = $thing['values'][$t]['comments']['values'][$x]['creator']['lastName'];
-						$groupArr[$counter]['comments'][$x]['person']['id'] = $thing['values'][$t]['comments']['values'][$x]['creator']['id'];
-						$groupArr[$counter]['comments'][$x]['person']['headline'] = $thing['values'][$t]['comments']['values'][$x]['creator']['headline'];
-						$groupArr[$counter]['comments'][$x]['person']['pictureUrl'] = $thing['values'][$t]['comments']['values'][$x]['creator']['pictureUrl'];
-						$groupArr[$counter]['comments'][$x]['id'] = $thing['values'][$t]['comments']['values'][$x]['id'];
-						$groupArr[$counter]['comments'][$x]['text'] = $thing['values'][$t]['comments']['values'][$x]['text'];
+				if(isset($user)){
+					if(isset($user['values'])){
+						if(isset($user['values'][$z])){
+							if(isset($user['values'][$z]['group'])){
+								if(isset($user['values'][$z]['group']['name'])){
+									$groupArr[$counter]['group']['name'] = $user['values'][$z]['group']['name'];
+								}
+
+								if(isset($user['values'][$z]['group']['id'])){
+									$groupArr[$counter]['group']['id'] = $user['values'][$z]['group']['id'];
+								}
+							}
+
+							if(isset($user['values'][$z]['membershipState'])){
+								if(isset($user['values'][$z]['membershipState']['code'])){
+									$groupArr[$counter]['group']['status'] =  $user['values'][$z]['membershipState']['code'];
+								}	
+							}
+						}
 					}
-					$groupArr[$counter]['likes'] = array();
-					for($x = 0; $x < $thing['values'][$t]['likes']['_total']; $x++){
-						$groupArr[$counter]['likes'][$x]['person']['firstName'] = $thing['values'][$t]['likes']['values'][$x]['person']['firstName'];
-						$groupArr[$counter]['likes'][$x]['person']['lastName'] = $thing['values'][$t]['likes']['values'][$x]['person']['lastName'];
-						$groupArr[$counter]['likes'][$x]['person']['id'] = $thing['values'][$t]['likes']['values'][$x]['person']['id'];
-						$groupArr[$counter]['likes'][$x]['person']['headline'] = $thing['values'][$t]['likes']['values'][$x]['person']['headline'];
-						$groupArr[$counter]['likes'][$x]['person']['pictureUrl'] = $thing['values'][$t]['likes']['values'][$x]['person']['pictureUrl'];
-					}
-				$counter++;
 				}
 			}
 			normalizeDiscussionObj($groupArr, $accts[$h]);

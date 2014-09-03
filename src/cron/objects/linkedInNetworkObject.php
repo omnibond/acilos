@@ -1454,7 +1454,7 @@ class linkedInNetworkObjectBuilder extends activityObjectBuilder{
 									$like->setHeadline($obj['likes'][$k]['person']['headline']);
 								}
 
-								if(isset($obj['likes'][$k]['person']['headline'])){
+								if(isset($obj['likes'][$k]['person']['pictureUrl'])){
 									$like->setPictureURL($obj['likes'][$k]['person']['pictureUrl']);
 								}
 							}
