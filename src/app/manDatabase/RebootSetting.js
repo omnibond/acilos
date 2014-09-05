@@ -40,7 +40,8 @@ define(['dojo/_base/declare',
 		"dojox/mobile/ListItem",
 		"dojox/mobile/ToolBarButton",
 		"dojox/mobile/EdgeToEdgeCategory",
-		"dojox/mobile/RadioButton"
+		"dojox/mobile/RadioButton",
+		"dojox/mobile/CheckBox"
 ], function(
 	declare, 
 	ModuleScrollableView, 
@@ -59,7 +60,8 @@ define(['dojo/_base/declare',
 	ListItem, 
 	ToolBarButton, 
 	EdgeToEdgeCategory,
-	RadioButton
+	RadioButton,
+	CheckBox
 ) {
 	return declare([ModuleScrollableView], {		
 		style: "overflow:scroll",
@@ -72,68 +74,78 @@ define(['dojo/_base/declare',
 				this.mainList = null;
 			}
 
-			this.checkObj = {};
-
-			if(obj['Response']){
-				if(obj['Response'] == "true"){
-					this.checkObj['on'] = true;
-					this.checkObj['off'] = false;
-				}else if(obj['Response'] == "false"){
-					this.checkObj['on'] = false;
-					this.checkObj['off'] = true;
-				}else{
-					this.checkObj['on'] = false;
-					this.checkObj['off'] = true;
-				}
-			}
-
 			this.mainList = new EdgeToEdgeList({ 
 				style: "margin-top: 50px"
 			});
 
-			var onDiv = domConstruct.create("span", {innerHTML: "Select this option to have your computer reboot every day at 3:30 am" + "<br>"});
+			if(obj){
+				if(obj['Response']){
+					if(obj['Response']['system'] && obj['Response']['system'] === true){
+						var systemCheckStatus = true
+					}
+				}
+			}
 
-			var offDiv = domConstruct.create("span", {innerHTML: "Select this option and acilos will not reboot your computer", style: "margin-top: 10px"});
+			if(obj){
+				if(obj['Response']){
+					if(obj['Response']['apache'] && obj['Response']['apache'] === true){
+						var apacheCheckStatus = true
+					}
+				}
+			}
 
-			var onRadioButton = new RadioButton({
-				checked: this.checkObj['on'],
-				"class": "slightlyLargerCheckBox"
+			var systemCheckBox = new CheckBox({
+				checked: systemCheckStatus,
+				style: "height: 20px; width: 20px"
 			});
 
-			var offRadioButton = new RadioButton({
-				checked: this.checkObj['off'],
-				"class": "slightlyLargerCheckBox",
-				style: "margin-top: 10px"
+			var systemCheckBoxLabel = domConstruct.create("span", {innerHTML: "Check this box to have your computer reboot every day at 3:30 am", style: "vertical-align: 4px"});
+
+			var systemHolder = domConstruct.create("div", {});
+
+			var apacheCheckBox = new CheckBox({
+				checked: apacheCheckStatus,
+				style: "height: 20px; width: 20px"
 			});
+
+			var apacheCheckBoxLabel = domConstruct.create("span", {innerHTML: "Check this box to have apache restarted to free up memory if available memory falls below a certain level", style: "vertical-align: 4px"});
+
+			var apacheHolder = domConstruct.create("div", {});
 
 			this.saveBut = new Button({
 				"name": "saveButton",
 				"right": "true",
 				onClick: lang.hitch(this, function(){
-					console.log("clickky");
+					var rebootOptions = {};
 
-					var rebootOption = {};
+					console.log("the system check box is: ", systemCheckBox.checked);
+					console.log("the apache check box is: ", apacheCheckBox.checked);
 
-					console.log("button checked state ", onRadioButton.checked);
-
-					if(onRadioButton.checked == true){
-						console.log("it's true");
-						rebootOption['reboot'] = "true";
+					if(systemCheckBox.checked === true){
+						rebootOptions['system'] = true;
 					}else{
-						console.log("it's false");
-						rebootOption['reboot'] = "false";
+						rebootOptions['system'] = false;
 					}
 
-					this.saveRebootSetting(rebootOption['reboot']).then(lang.hitch(this, function(obj){
+					if(apacheCheckBox.checked === true){
+						rebootOptions['apache'] = true;
+					}else{
+						rebootOptions['apache'] = false;
+					}
+
+					this.saveRebootSettings(rebootOptions).then(lang.hitch(this, function(obj){
 						console.log("obj is: ", obj);
 					}));
 				})
 			});
 
-			this.mainList.addChild(onRadioButton);
-			this.mainList.domNode.appendChild(onDiv);
-			this.mainList.addChild(offRadioButton);
-			this.mainList.domNode.appendChild(offDiv);
+			systemHolder.appendChild(systemCheckBox.domNode);
+			systemHolder.appendChild(systemCheckBoxLabel);
+			this.mainList.domNode.appendChild(systemHolder);
+
+			apacheHolder.appendChild(apacheCheckBox.domNode);
+			apacheHolder.appendChild(apacheCheckBoxLabel);
+			this.mainList.domNode.appendChild(apacheHolder);
 
 			this.addChild(this.mainList);
 

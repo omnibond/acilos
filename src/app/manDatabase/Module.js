@@ -70,7 +70,7 @@ define(['dojo/_base/declare',
 				route: '/RebootSetting',
 
 				checkRebootSetting: lang.hitch(this, this.checkRebootSetting),
-				saveRebootSetting: lang.hitch(this, this.saveRebootSetting)
+				saveRebootSettings: lang.hitch(this, this.saveRebootSettings)
 			});
 			
 			this.rootView = new MainView({
@@ -118,9 +118,9 @@ define(['dojo/_base/declare',
 			return xhrManager.send('GET', 'rest/v1.0/Database/checkRebootSetting', {});
 		},
 
-		saveRebootSetting: function(reboot){
-			var params = {reboot: reboot};
-			return xhrManager.send('POST', 'rest/v1.0/Database/saveRebootSetting', params);
+		saveRebootSettings: function(rebootOptions){
+			var params = {rebootOptions: rebootOptions};
+			return xhrManager.send('POST', 'rest/v1.0/Database/saveRebootSettings', params);
 		}
 	})
 });

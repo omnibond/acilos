@@ -127,19 +127,36 @@ EOF
 echo "Writing The Httpd Reboot Manager"
 cat > cron/callHttpdRebootManager.sh << 'EOF'
 #!/bin/bash
-#this script will be called every morning at 3:30 am to reboot httpd and free up
-#some of the memory
+#this script will be called every 10 minutes to check the available memory on the system... if it's below a certain #amount the script will reboot apache/httpd
 	
+EOF
+
+cat >> cron/callHttpdRebootManager.sh << EOF
+logFile='$MAINPATH/cron/apacheRebootLog.log'
 EOF
 
 cat >> cron/callHttpdRebootManager.sh << 'EOF'
 
 running=$(ps axho user,comm|grep -E "httpd|apache"|uniq|grep -v "root"|awk 'END {if ($1) print $1}')
 
-if [ "$running" == "apache" ]; then
-        service httpd restart
+freeMem=$(free -m | awk '/^Mem/ {print $4}')
+
+timestamp=$(date +"%m-%d-%y %H:%M:%S")
+
+echo ""$timestamp" there are "$freeMem" megabytes of free memory" >> "$logFile"
+
+if [ "$freeMem" -lt 200 ]; then
+        if [ "$running" == "apache" ]; then
+                echo ""$timestamp" rebooting apache" >> "$logFile"
+                command=$(/sbin/service httpd restart)
+                echo "$command" >> "$logFile"            
+        else
+                echo ""$timestamp" rebooting apache" >> "$logFile"
+                command=$(/sbin/service apache2 restart)
+                echo "$command" >> "$logFile"
+        fi
 else
-        service apache2 restart
+        echo ""$timestamp" memory level still ok" >> "$logFile"
 fi
 
 EOF
@@ -155,7 +172,7 @@ if [ "$CRONGREP" = "" ]; then
 	(crontab -l 2>/dev/null; echo "*/3 * * * * sh "$MAINPATH"/cron/esHeartbeat.sh") | crontab -
 	#should run every day at 3:30am
 	(crontab -l 2>/dev/null; echo "30 3 * * * sh "$MAINPATH"/cron/callAmazonRebootManager.sh") | crontab -
-	(crontab -l 2>/dev/null; echo "30 3 * * * sh "$MAINPATH"/cron/callHttpdRebootManager.sh") | crontab -
+	(crontab -l 2>/dev/null; echo "*/10 * * * * sh "$MAINPATH"/cron/callHttpdRebootManager.sh") | crontab -
 	
 	echo "\nDone"
 else 
