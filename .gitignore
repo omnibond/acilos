@@ -32,3 +32,4 @@ elasticsearch.yml
 *.yml
 *-backup.json
 src/cron/poller/companyObj.json
+appSettings.json
