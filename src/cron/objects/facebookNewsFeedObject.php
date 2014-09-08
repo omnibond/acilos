@@ -399,15 +399,25 @@ class facebookNewsFeedObjectBuilder extends activityObjectBuilder{
 					$response = file_get_contents($url);
 					$var = json_decode($response, true);
 
-					if($var['data'][0]['attachment']['media'][0]['href'] == null){
-						if(isset($obj['link'])){
-							$link = $obj['link'];
+					if(isset($var['data'][0]['attachment'])){
+						if(isset($var['data'][0]['attachment']['media'])){
+							if(isset($var['data'][0]['attachment']['media'][0])){
+								if(isset($var['data'][0]['attachment']['media'][0]['href'])){
+									if($var['data'][0]['attachment']['media'][0]['href'] == null){
+										if(isset($obj['link'])){
+											$link = $obj['link'];
+										}
+									}else{
+										$link = $var['data'][0]['attachment']['media'][0]['href'];
+									}			
+								}
+							}
 						}
-					}else{
-						$link = $var['data'][0]['attachment']['media'][0]['href'];
 					}
 				}else{
-					$link = $var['data'][0]['permalink'];
+					if(isset($var['data'][0]['permalink'])){
+						$link = $var['data'][0]['permalink'];
+					}
 				}
 			}
 		}

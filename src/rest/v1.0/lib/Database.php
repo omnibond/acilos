@@ -34,8 +34,6 @@ require_once('EC2Functions.php');
 require_once('matchHelpers.php');
 require_once('authCalls.php');
 
-//include '../../hidden/settings'
-
 use \ElasticSearch\Client;
 
 class Database{
@@ -145,6 +143,21 @@ class Database{
 
 		$fileName = $_SERVER['APPSETTINGS'];
 
+		$thing = getcwd();
+		$thingArr = explode("/", $thing);
+		$thing = '';
+		$count = 0;
+		for($f = 0; $f < count($thingArr); $f++){
+			if($thingArr[$f] == "src" || $thingArr[$f] == "app-production"){
+				$thing = $thing.$thingArr[$f]."/";
+				$count = -1;
+			}
+			if($count >= 0){
+				$thing = $thing.$thingArr[$f]."/";
+				$count = $f;
+			}
+		}
+
 		try{
 			if(file_exists($fileName) === true){
 				$settingsList = file_get_contents($fileName);
@@ -153,13 +166,9 @@ class Database{
 				if($obj['rebootOptions']['system'] === true){
 					$settingsObj['rebootOptions']['system'] = true;
 
-					$handle = fopen("../../cron/callAmazonRebootManager.sh", 'w');
-					fwrite($handle, "#!/bin/bash" . "\n");
-					fwrite($handle, "#this script will be called by the cron every 5 minutes which" . "\n");
-					fwrite($handle, "#will in turn call the actual poller to go get new contact lists" . "\n");
-					fwrite($handle, "echo 'This is callAmazonRebootManager.sh, and it is being called by the cron' >> /var/log/myLogFile" . "\n");
-					fwrite($handle, "`/sbin/shutdown -r now`");
-					fclose($handle);
+					$file = $thing."cron/createAmazonRebootScript.sh";
+
+					$output = exec("sh " . $file . " " . $thing . "cron/callAmazonRebootManager.sh " . $thing . "cron/instanceRebootLog.log");
 				}else{
 					$settingsObj['rebootOptions']['system'] = false;
 
@@ -169,24 +178,9 @@ class Database{
 				if($obj['rebootOptions']['apache'] === true){
 					$settingsObj['rebootOptions']['apache'] = true;
 
-					$thing = getcwd();
-					$thingArr = explode("/", $thing);
-					$thing = '';
-					$count = 0;
-					for($f = 0; $f < count($thingArr); $f++){
-						if($thingArr[$f] == "src" || $thingArr[$f] == "app-production"){
-							$thing = $thing.$thingArr[$f]."/";
-							$count = -1;
-						}
-						if($count >= 0){
-							$thing = $thing.$thingArr[$f]."/";
-							$count = $f;
-						}
-					}
-
 					$file = $thing."cron/createHttpdRebootScript.sh";
 
-					$output = exec("sh ". $file . " " . $thing."cron/callHttpdRebootManager.sh");
+					$output = exec("sh " . $file . " " . $thing."cron/callHttpdRebootManager.sh " . $thing . "cron/apacheRebootLog.log");
 				}else{
 					$settingsObj['rebootOptions']['apache'] = false;
 

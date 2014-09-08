@@ -99,14 +99,13 @@ EOF
 echo "Writing The Amazon Reboot Manager"
 cat > cron/callAmazonRebootManager.sh << 'EOF'
 #!/bin/bash
-#this script will be called by the cron every 5 minutes which
-#will in turn call the actual poller to go get new contact lists
+#this script will be called by the cron every morning at 3:30 am to reboot the computer to free up resources
 	
 EOF
 
 cat >> cron/callAmazonRebootManager.sh << 'EOF'
 
-#This setting can be changed from the app settings tab under Reset App
+#This setting is currently disabled and can be changed from the app settings tab under Reset App
 
 EOF
 
@@ -131,34 +130,10 @@ cat > cron/callHttpdRebootManager.sh << 'EOF'
 	
 EOF
 
-cat >> cron/callHttpdRebootManager.sh << EOF
-logFile='$MAINPATH/cron/apacheRebootLog.log'
-EOF
-
 cat >> cron/callHttpdRebootManager.sh << 'EOF'
 
-running=$(ps axho user,comm|grep -E "httpd|apache"|uniq|grep -v "root"|awk 'END {if ($1) print $1}')
-
-freeMem=$(free -m | awk '/^Mem/ {print $4}')
-
-timestamp=$(date +"%m-%d-%y %H:%M:%S")
-
-echo ""$timestamp" there are "$freeMem" megabytes of free memory" >> "$logFile"
-
-if [ "$freeMem" -lt 200 ]; then
-        if [ "$running" == "apache" ]; then
-                echo ""$timestamp" rebooting apache" >> "$logFile"
-                command=$(/sbin/service httpd restart)
-                echo "$command" >> "$logFile"            
-        else
-                echo ""$timestamp" rebooting apache" >> "$logFile"
-                command=$(/sbin/service apache2 restart)
-                echo "$command" >> "$logFile"
-        fi
-else
-        echo ""$timestamp" memory level still ok" >> "$logFile"
-fi
-
+#This setting is currently disabled and can be changed from the app settings tab under Reset App
+	
 EOF
 
 CRONGREP=`crontab -l | grep /cron/`
@@ -196,6 +171,9 @@ echo "php_value post_max_size 30M" >> .htaccess
 
 echo "Priming database and clearing data"
 #php startES.php
+
+echo "Resetting reboot settings"
+php resetRebootSettings.php
 
 running=$(ps axho user,comm|grep -E "httpd|apache"|uniq|grep -v "root"|awk 'END {if ($1) print $1}')
 
