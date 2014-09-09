@@ -89,7 +89,7 @@ define(['dojo/_base/declare',
 			}
 
 			this.goToPostLogButton = new Button({
-				label: "Post Log",
+				"name": "postHistoryButton",
 				onClick: lang.hitch(this, function(){
 					this.router.go("/PostHistoryView");
 				}),

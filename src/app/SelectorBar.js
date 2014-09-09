@@ -209,6 +209,12 @@ define(['dojo/_base/declare',
 						this.buttons[x].domNode.appendChild(divHelpButton);	
 					}
 
+					if(this.buttons[x]['name'] == "postHistoryButton"){
+						var divHelpButton = domConstruct.create("div", {"class": "icon-barcode fontSize25 fontDiv30", title: "Help"});
+
+						this.buttons[x].domNode.appendChild(divHelpButton);	
+					}
+
 					if(this.buttons[x]['name'] == "publicButton"){
 						var divPublicButton = domConstruct.create("div", {innerHTML: "P", "class": "fontSize25 fontDiv30", title: "View your local feeds"});
 
