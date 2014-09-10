@@ -107,7 +107,7 @@ define(['dojo/_base/declare',
 				style: "height: 20px; width: 20px"
 			});
 
-			var systemCheckBoxLabel = domConstruct.create("span", {innerHTML: "Check this box to have your computer reboot every day at 3:30 am", style: "vertical-align: 4px"});
+			var systemCheckBoxLabel = domConstruct.create("span", {innerHTML: "Check this box to have your computer reboot every day at 4:30 am", style: "vertical-align: 4px"});
 
 			var systemHolder = domConstruct.create("div", {});
 
