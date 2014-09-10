@@ -26,9 +26,18 @@
 ** $QT_END_LICENSE$
 */
 
-$settingsObj = file_get_contents("private/settings/appSettings.json");
-$settingsObj = json_decode($settingsObj, true);
-$settingsObj['rebootOptions']['system'] = false;
-$settingsObj['rebootOptions']['apache'] = false;
-file_put_contents("private/settings/appSettings.json", json_encode($settingsObj));
+$dir = getcwd();
+
+if(file_exists($dir . "/private/settings/appSettings.json") === true){
+        $settingsObj = file_get_contents($dir . "/private/settings/appSettings.json");
+        $settingsObj = json_decode($settingsObj, true);
+        $settingsObj['rebootOptions']['system'] = false;
+        $settingsObj['rebootOptions']['apache'] = false;
+        file_put_contents($dir . "/private/settings/appSettings.json", json_encode($settingsObj));
+}else{
+        $settingsObj = array();
+        $settingsObj['rebootOptions']['system'] = false;
+        $settingsObj['rebootOptions']['apache'] = false;
+        file_put_contents($dir . "/private/settings/appSettings.json", json_encode($settingsObj));
+}
 ?>
