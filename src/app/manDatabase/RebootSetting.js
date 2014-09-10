@@ -94,6 +94,14 @@ define(['dojo/_base/declare',
 				}
 			}
 
+			if(obj){
+				if(obj['Response']){
+					if(obj['Response']['cache'] && obj['Response']['cache'] === true){
+						var cacheCheckStatus = true
+					}
+				}
+			}
+
 			var systemCheckBox = new CheckBox({
 				checked: systemCheckStatus,
 				style: "height: 20px; width: 20px"
@@ -112,14 +120,20 @@ define(['dojo/_base/declare',
 
 			var apacheHolder = domConstruct.create("div", {});
 
+			var cacheCheckBox = new CheckBox({
+				checked: cacheCheckStatus,
+				style: "height: 20px; width: 20px"
+			});
+
+			var cacheCheckBoxLabel = domConstruct.create("span", {innerHTML: "Check this box to have the memory cache emptied to free up available memory", style: "vertical-align: 4px"});
+
+			var cacheHolder = domConstruct.create("div", {});
+
 			this.saveBut = new Button({
 				"name": "saveButton",
 				"right": "true",
 				onClick: lang.hitch(this, function(){
 					var rebootOptions = {};
-
-					console.log("the system check box is: ", systemCheckBox.checked);
-					console.log("the apache check box is: ", apacheCheckBox.checked);
 
 					if(systemCheckBox.checked === true){
 						rebootOptions['system'] = true;
@@ -133,6 +147,12 @@ define(['dojo/_base/declare',
 						rebootOptions['apache'] = false;
 					}
 
+					if(cacheCheckBox.checked === true){
+						rebootOptions['cache'] = true;
+					}else{
+						rebootOptions['cache'] = false;
+					}
+
 					this.saveRebootSettings(rebootOptions).then(lang.hitch(this, function(obj){
 						console.log("obj is: ", obj);
 					}));
@@ -142,6 +162,10 @@ define(['dojo/_base/declare',
 			systemHolder.appendChild(systemCheckBox.domNode);
 			systemHolder.appendChild(systemCheckBoxLabel);
 			this.mainList.domNode.appendChild(systemHolder);
+
+			cacheHolder.appendChild(cacheCheckBox.domNode);
+			cacheHolder.appendChild(cacheCheckBoxLabel);
+			this.mainList.domNode.appendChild(cacheHolder);
 
 			apacheHolder.appendChild(apacheCheckBox.domNode);
 			apacheHolder.appendChild(apacheCheckBoxLabel);
@@ -157,7 +181,7 @@ define(['dojo/_base/declare',
 		},
 		
 		activate: function(){
-			topic.publish("/dojo-mama/updateSubNav", {back: '/manDatabase', title: "Turn rebooting on or off"} );
+			topic.publish("/dojo-mama/updateSubNav", {back: '/manDatabase', title: "Reboot Settings"} );
 
 			this.checkRebootSetting().then(lang.hitch(this, function(obj){
 				var result = obj;

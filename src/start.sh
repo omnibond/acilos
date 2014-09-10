@@ -99,13 +99,13 @@ EOF
 echo "Writing The Amazon Reboot Manager"
 cat > cron/callAmazonRebootManager.sh << 'EOF'
 #!/bin/bash
-#this script will be called by the cron every morning at 3:30 am to reboot the computer to free up resources
+#this script will be called by the cron every morning at 4:30 am to reboot the computer to free up resources
 	
 EOF
 
 cat >> cron/callAmazonRebootManager.sh << 'EOF'
 
-#This setting is currently disabled and can be changed from the app settings tab under Reset App
+#This setting is currently disabled and can be changed from the app settings tab under Manage the App -> Reboot Settings
 
 EOF
 
@@ -132,8 +132,36 @@ EOF
 
 cat >> cron/callHttpdRebootManager.sh << 'EOF'
 
-#This setting is currently disabled and can be changed from the app settings tab under Reset App
+#This setting is currently disabled and can be changed from the app settings tab under Manage the App -> Reboot Settings
 	
+EOF
+
+echo "Writing The Clear Cache Manager"
+cat > cron/callClearCacheManager.sh << 'EOF'
+#!/bin/bash
+#this script will be called every 5 minutes to empty the memory cache
+	
+EOF
+
+cat >> cron/callClearCacheManager.sh << 'EOF'
+
+#This setting is currently disabled and can be changed from the app settings tab under Manage the App -> Reboot Settings
+
+EOF
+
+echo "Writing The Clear Reboot Log Manager"
+cat > cron/callClearRebootLogManager.sh << 'EOF'
+#!/bin/bash
+#this script will be called once per week to remove the instanceRebootLog, apacheRebootLog, and the cacheClearLog
+	
+EOF
+
+cat >> cron/callClearRebootLogManager.sh << EOF
+
+rm -f $(pwd)/cron/instanceRebootLog.log
+rm -f $(pwd)/cron/cacheClearLog.log
+rm -f $(pwd)/cron/apacheRebootLog.log
+
 EOF
 
 CRONGREP=`crontab -l | grep /cron/`
@@ -146,8 +174,10 @@ if [ "$CRONGREP" = "" ]; then
 	(crontab -l 2>/dev/null; echo "*/20 * * * * sh "$MAINPATH"/cron/poller/clearLogPoller.sh") | crontab -
 	(crontab -l 2>/dev/null; echo "*/3 * * * * sh "$MAINPATH"/cron/esHeartbeat.sh") | crontab -
 	#should run every day at 3:30am
-	(crontab -l 2>/dev/null; echo "30 3 * * * sh "$MAINPATH"/cron/callAmazonRebootManager.sh") | crontab -
+	(crontab -l 2>/dev/null; echo "30 4 * * * sh "$MAINPATH"/cron/callAmazonRebootManager.sh") | crontab -
 	(crontab -l 2>/dev/null; echo "*/10 * * * * sh "$MAINPATH"/cron/callHttpdRebootManager.sh") | crontab -
+	(crontab -l 2>/dev/null; echo "*/5 * * * * sh "$MAINPATH"/cron/callClearCacheManager.sh") | crontab -
+	(crontab -l 2>/dev/null; echo "0 6 * * 1 sh "$MAINPATH"/cron/callClearRebootLogManager.sh") | crontab -
 	
 	echo "\nDone"
 else 

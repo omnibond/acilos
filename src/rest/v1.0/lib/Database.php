@@ -172,7 +172,7 @@ class Database{
 				}else{
 					$settingsObj['rebootOptions']['system'] = false;
 
-					file_put_contents("../../cron/callAmazonRebootManager.sh", "This setting can be changed from the app settings tab under Manage the App -> Reboot Settings");
+					file_put_contents("../../cron/callAmazonRebootManager.sh", "This setting is currently disabled and can be changed from the app settings tab under Manage the App -> Reboot Settings");
 				}
 
 				if($obj['rebootOptions']['apache'] === true){
@@ -184,7 +184,19 @@ class Database{
 				}else{
 					$settingsObj['rebootOptions']['apache'] = false;
 
-					file_put_contents("../../cron/callHttpdRebootManager.sh", "This setting can be changed from the app settings tab under Manage the App -> Reboot Settings");	
+					file_put_contents("../../cron/callHttpdRebootManager.sh", "This setting is currently disabled and can be changed from the app settings tab under Manage the App -> Reboot Settings");	
+				}
+
+				if($obj['rebootOptions']['cache'] === true){
+					$settingsObj['rebootOptions']['cache'] = true;
+
+					$file = $thing."cron/createClearCacheScript.sh";
+
+					$output = exec("sh " . $file . " " . $thing . "cron/callClearCacheManager.sh " . $thing . "cron/cacheClearLog.log");
+				}else{
+					$settingsObj['rebootOptions']['cache'] = false;
+
+					file_put_contents("../../cron/callClearCacheManager.sh", "This setting is currently disabled and can be changed from the app settings tab under Manage the App -> Reboot Settings");
 				}
 
 				file_put_contents($fileName, json_encode($settingsObj));
