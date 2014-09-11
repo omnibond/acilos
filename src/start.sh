@@ -136,30 +136,16 @@ cat >> cron/callHttpdRebootManager.sh << 'EOF'
 	
 EOF
 
-echo "Writing The Clear Cache Manager"
-cat > cron/callClearCacheManager.sh << 'EOF'
-#!/bin/bash
-#this script will be called every 5 minutes to empty the memory cache
-	
-EOF
-
-cat >> cron/callClearCacheManager.sh << 'EOF'
-
-#This setting is currently disabled and can be changed from the app settings tab under Manage the App -> Reboot Settings
-
-EOF
-
 echo "Writing The Clear Reboot Log Manager"
 cat > cron/callClearRebootLogManager.sh << 'EOF'
 #!/bin/bash
-#this script will be called once per week to remove the instanceRebootLog, apacheRebootLog, and the cacheClearLog
+#this script will be called once per week to remove the instanceRebootLog and the apacheRebootLog
 	
 EOF
 
 cat >> cron/callClearRebootLogManager.sh << EOF
 
 rm -f $(pwd)/cron/instanceRebootLog.log
-rm -f $(pwd)/cron/cacheClearLog.log
 rm -f $(pwd)/cron/apacheRebootLog.log
 
 EOF
@@ -176,7 +162,6 @@ if [ "$CRONGREP" = "" ]; then
 	#should run every day at 3:30am
 	(crontab -l 2>/dev/null; echo "30 4 * * * sh "$MAINPATH"/cron/callAmazonRebootManager.sh") | crontab -
 	(crontab -l 2>/dev/null; echo "*/10 * * * * sh "$MAINPATH"/cron/callHttpdRebootManager.sh") | crontab -
-	(crontab -l 2>/dev/null; echo "*/5 * * * * sh "$MAINPATH"/cron/callClearCacheManager.sh") | crontab -
 	(crontab -l 2>/dev/null; echo "0 6 * * 1 sh "$MAINPATH"/cron/callClearRebootLogManager.sh") | crontab -
 	
 	echo "\nDone"
