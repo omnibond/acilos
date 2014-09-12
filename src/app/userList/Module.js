@@ -30,7 +30,8 @@ define(['dojo/_base/declare',
 		
 		'app/util/xhrManager',
 		'app/userList/MainView',
-		'app/userList/UserView'
+		'app/userList/UserView',
+		'app/mainFeed/BlastView'
 ], function(
 	declare, 
 	Module, 
@@ -39,7 +40,8 @@ define(['dojo/_base/declare',
 	
 	xhrManager, 
 	MainView, 
-	UserView
+	UserView,
+	BlastView
 ) {
 	return declare([Module], {
 		
@@ -50,21 +52,32 @@ define(['dojo/_base/declare',
 			if(!kernel.global.feedCount){
 				kernel.global.feedCount = {};
 			}
+
+			this.blastView = new BlastView({
+				route: '/BlastView',
+				mod: 'people',
+				
+				sendPostFile: lang.hitch(this, this.sendPostFile),
+				runAtCommand: lang.hitch(this, this.runAtCommand),
+				getServiceCreds: lang.hitch(this, this.getServiceCreds)
+			});
 			
 			this.UserView = new UserView({
 				route: '/UserView',
 				
+				blastView: this.blastView,
 				searchUser: lang.hitch(this, this.searchUser),
 				getSpecificClients: lang.hitch(this, this.getSpecificClients),
 				setStarred: lang.hitch(this, this.setStarred),
 				setStarredClient: lang.hitch(this, this.setStarredClient),
 				manualRefresh: lang.hitch(this, this.manualRefresh)
-			})
+			});
 			
 			this.rootView = new MainView({
 				route: '/',
 				
 				RecentView: this.RecentView,
+				blastView: this.blastView,
 				getRecentContacts: lang.hitch(this, this.getRecentContacts),
 				getAlphaContacts: lang.hitch(this, this.getAlphaContacts),
 				getChattyContacts: lang.hitch(this, this.getChattyContacts),
@@ -73,12 +86,28 @@ define(['dojo/_base/declare',
 			});
 			this.registerView(this.rootView);
 			this.registerView(this.UserView);
-
+			this.registerView(this.blastView);
 		},
 		
 		searchUser: function(user, from){
 			var params = {user: user, from: from};
 			return xhrManager.send('GET', 'rest/v1.0/Search/user', params);
+		},
+
+		sendPostFile: function(file, fileType, tokenArr, msg){
+			params = {file: file, fileType: fileType, tokenArr: tokenArr, msg: msg};
+			console.log("Module.js: Params for sendPostFile are: ", params);
+			return xhrManager.send('POST', 'rest/v1.0/Post/postFiles', params);
+		},
+
+		runAtCommand: function(time, file, fileType, tokenArr, msg){
+			params = {time: time, file: file, fileType: fileType, tokenArr: tokenArr, msg: msg};
+			return xhrManager.send('POST', 'rest/v1.0/Post/runAtCommand', params);
+		},
+		
+		getServiceCreds: function(){
+			params = {};
+			return xhrManager.send('POST', 'rest/v1.0/Credentials/getServiceCreds', params);
 		},
 		
 		setStarredClient: function(status, id){

@@ -144,7 +144,7 @@ define(['dojo/_base/declare',
 			    .x(function(d) { return x(d.TotalPosts); })
 			    .y(function(d) { return y(d.service); });
 
-			this.div = domConstruct.create("div", {id: "oneTwo", style: "margin-top: 40px"});
+			this.div = domConstruct.create("div", {id: "oneTwo", style: "margin-top: 50px"});
 			this.domNode.appendChild(this.div);
 
 			var div = d3.select(this.div).append("div")   

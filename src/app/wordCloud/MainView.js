@@ -76,7 +76,7 @@ define(['dojo/_base/declare',
 			console.log(obj);
 			this.objects = obj;
 			this.list = new RoundRectList({
-				style: "margin-top:40px"
+				style: "margin-top:50px"
 			});
 			this.addChild(this.list);
 			

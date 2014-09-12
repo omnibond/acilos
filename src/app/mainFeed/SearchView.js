@@ -376,7 +376,7 @@ define([
 				if(this.queryObj == undefined){
 					this.emptyItem = new ListItem({
 						variableHeight: true,
-						style: "border:none;margin-top:40px",
+						style: "border:none;margin-top:50px",
 						label: "Enter a search term in the textbox above to search the database"
 					});
 					this.addChild(this.emptyItem);

@@ -88,7 +88,7 @@ define(['dojo/_base/declare',
 					});
 					this.addChild(this.errorMsg);
 				}else{
-					this.div = domConstruct.create("div", {id: "oneTwo", style: "margin-top: 40px"});
+					this.div = domConstruct.create("div", {id: "oneTwo", style: "margin-top: 50px"});
 					this.domNode.appendChild(this.div);
 					
 					var fill = d3.scale.category20();

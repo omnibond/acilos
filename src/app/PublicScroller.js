@@ -72,7 +72,7 @@ define([
 		ready
 	){
 		return declare("SearchScroller",[EdgeToEdgeList], {
-			"class": "feedScrollerRoundRectClass",
+			"class": "publicScrollerRoundRectClass",
 
 			constructor: function(){
 				this.ListEnded = false;

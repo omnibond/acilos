@@ -75,7 +75,7 @@ define(['dojo/_base/declare',
 			console.log("buildMainList: ", obj);
 			
 			this.mainList = new EdgeToEdgeList({
-				style: "margin-top: 40px;"
+				style: "margin-top: 50px;"
 			});
 
 			if(!this.selectorItem){

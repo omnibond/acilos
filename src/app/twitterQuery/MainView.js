@@ -126,7 +126,7 @@ define([
 
 			buildList: function(){
 				this.infoList = new RoundRectList({
-					"style": "margin-top: 40px"
+					"style": "margin-top: 50px"
 				});
 
 				this.infoListItem = new ListItem({

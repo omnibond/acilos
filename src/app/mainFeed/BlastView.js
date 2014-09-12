@@ -75,7 +75,7 @@ define(['dojo/_base/declare',
 	return declare([ModuleScrollableView], {		
 		buildMainList: function(){
 			this.mainList = new RoundRectList({
-				style: "margin:none;border:none"
+				style: "margin-top:10px;border:none"
 			});
 
 			this.buildUploadBar();

@@ -202,7 +202,7 @@ define(['dojo/_base/declare',
 			
 			this.list = new RoundRectList({
 				select: "multiple",
-				style: "margin-top:40px",
+				style: "margin-top:50px",
 				onCheckStateChanged: lang.hitch(this, function(){
 					this.counter = 0;
 					if(arguments[1] == true){
@@ -315,7 +315,7 @@ define(['dojo/_base/declare',
 			this.selectorBar.placeAt(this.domNode.parentNode);
 				
 			this.list = new RoundRectList({
-				style: "margin-top:40px"
+				style: "margin-top:50px"
 			});
 			this.addChild(this.list);
 

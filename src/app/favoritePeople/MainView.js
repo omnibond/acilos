@@ -169,6 +169,7 @@ define([
 				
 				this.list = new SearchScroller({
 					feedName: idStr,
+					blastView: this.blastView,
 					getFeedData: lang.hitch(this, this.searchUser),
 					setStarred: lang.hitch(this, this.setStarred),
 					setStarredClient: lang.hitch(this, this.setStarredClient),

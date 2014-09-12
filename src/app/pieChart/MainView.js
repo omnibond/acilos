@@ -137,7 +137,7 @@ define(['dojo/_base/declare',
 			    .sort(null)
 			    .value(function(d) { return d.NumUsers; });
 
-			this.helpDiv = domConstruct.create("div", {innerHTML: "Mouse over or tap and hold on a service to see the number of users", style: "font-weight: bold; color: #000000; text-align: center; margin-top: 40px"});
+			this.helpDiv = domConstruct.create("div", {innerHTML: "Mouse over or tap and hold on a service to see the number of users", style: "font-weight: bold; color: #000000; text-align: center; margin-top: 50px"});
 			this.domNode.appendChild(this.helpDiv);
 
 			this.div = domConstruct.create("div", {id: "blah"});

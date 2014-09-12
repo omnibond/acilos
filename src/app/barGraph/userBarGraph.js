@@ -134,7 +134,7 @@ define(['dojo/_base/declare',
 			    .orient("left")
 			    .tickFormat(formatPercent);
 
-			this.div = domConstruct.create("div", {id: "oneTwo", style: "margin-top: 40px"});
+			this.div = domConstruct.create("div", {id: "oneTwo", style: "margin-top: 50px"});
 			this.domNode.appendChild(this.div);
 
 			var div = d3.select(this.div).append("div")   

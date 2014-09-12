@@ -32,11 +32,12 @@ define(['dojo/_base/declare',
 	'dojo-mama/Module',
 	
 	'app/SelEdgeToEdgeList',
+	'app/mainFeed/BlastView',
 	
 	'app/favoritePosts/MainView',
 	'app/util/error-utils',
 	'app/util/xhrManager'
-], function(declare, kernel, domConstruct, lang, topic, Module, EdgeToEdgeList, MainView, errorUtils, xhrManager) {
+], function(declare, kernel, domConstruct, lang, topic, Module, EdgeToEdgeList, BlastView, MainView, errorUtils, xhrManager) {
 	return declare([Module], {
 		
 		postCreate: function(){
@@ -46,17 +47,28 @@ define(['dojo/_base/declare',
 			if(!kernel.global.feedCount){
 				kernel.global.feedCount = {};
 			}
+
+			this.blastView = new BlastView({
+				route: '/BlastView',
+				mod: 'favoritePosts',
+				
+				sendPostFile: lang.hitch(this, this.sendPostFile),
+				runAtCommand: lang.hitch(this, this.runAtCommand),
+				getServiceCreds: lang.hitch(this, this.getServiceCreds)
+			});
 			
 			this.rootView = new MainView({
 				route: '/',
 				title: "Your favorite posts",
 				
+				blastView: this.blastView,
 				searchStarred: lang.hitch(this, this.searchStarred),
 				setStarred: lang.hitch(this, this.setStarred),
 				setStarredClient: lang.hitch(this, this.setStarredClient),
 				manualRefresh: lang.hitch(this, this.manualRefresh)
 			});	
 			this.registerView(this.rootView);
+			this.registerView(this.blastView);
 		},
 		
 		searchStarred: function(star, from){
@@ -72,6 +84,22 @@ define(['dojo/_base/declare',
 		setStarredClient: function(status, id){
 			var params = {status: status, id: id};
 			return xhrManager.send('POST', 'rest/v1.0/FeedData/setStarredClient', params);
+		},
+
+		sendPostFile: function(file, fileType, tokenArr, msg){
+			params = {file: file, fileType: fileType, tokenArr: tokenArr, msg: msg};
+			console.log("Module.js: Params for sendPostFile are: ", params);
+			return xhrManager.send('POST', 'rest/v1.0/Post/postFiles', params);
+		},
+
+		runAtCommand: function(time, file, fileType, tokenArr, msg){
+			params = {time: time, file: file, fileType: fileType, tokenArr: tokenArr, msg: msg};
+			return xhrManager.send('POST', 'rest/v1.0/Post/runAtCommand', params);
+		},
+		
+		getServiceCreds: function(){
+			params = {};
+			return xhrManager.send('POST', 'rest/v1.0/Credentials/getServiceCreds', params);
 		},
 		
 		manualRefresh: function(serviceObj){

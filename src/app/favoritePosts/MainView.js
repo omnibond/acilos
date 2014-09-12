@@ -151,6 +151,7 @@ define([
 				//class still works
 				this.list = new SearchScroller({
 					feedName: 'all',
+					blastView: this.blastView,
 					getFeedData: lang.hitch(this, this.searchStarred),
 					setStarred: lang.hitch(this, this.setStarred),
 					setStarredClient: this.setStarredClient,
