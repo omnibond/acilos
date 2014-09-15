@@ -91,13 +91,13 @@ define([
 			variableHeight: true,
 			"class": "feedItemListItemClass",
 			
-			sendFaceLike: function(idFirstPart, idSecondPart, accessToken){
-				var params = {idFirstPart: idFirstPart, idSecondPart: idSecondPart, accessToken: accessToken};
+			sendFaceLike: function(id, accessToken){
+				var params = {id: id, accessToken: accessToken};
 				return xhrManager.send('POST', 'rest/v1.0/Post/sendFaceLike', params);
 			},
 			
-			sendFaceUnLike: function(idFirstPart, idSecondPart, accessToken){
-				var params = {idFirstPart: idFirstPart, idSecondPart: idSecondPart, accessToken: accessToken};
+			sendFaceUnLike: function(id, accessToken){
+				var params = {id: id, accessToken: accessToken};
 				return xhrManager.send('POST', 'rest/v1.0/Post/sendFaceUnLike', params);
 			},
 			
@@ -733,11 +733,9 @@ define([
 											if(domClass.contains(likeDiv, "twitterOrangeDiv")){
 												var likeId = id;
 
-												var id = content.id.split("_");
-												idFirstPart = id[0];
-												idSecondPart = id[1];
+												var id = content.id;
 												
-												this.sendFaceLike(idFirstPart, idSecondPart, accessToken).then(lang.hitch(this, function(obj){
+												this.sendFaceLike(id, accessToken).then(lang.hitch(this, function(obj){
 													console.log("obj is: ", obj);
 
 													if(obj['Failure']){
@@ -775,11 +773,9 @@ define([
 											}else{	
 												var likeId = id;
 																						
-												var id = content.id.split("_");
-												idFirstPart = id[0];
-												idSecondPart = id[1];
+												var id = content.id;
 												
-												this.sendFaceUnLike(idFirstPart, idSecondPart, accessToken).then(lang.hitch(this, function(obj){
+												this.sendFaceUnLike(id, accessToken).then(lang.hitch(this, function(obj){
 													console.log("obj is: ", obj);
 
 													if(obj['Failure']){
@@ -840,6 +836,14 @@ define([
 						this.blastView.blastObj.url = source.content.picture;
 						this.blastView.blastObj.finalUrl = "app/post/tmpUpload/" + this.blastView.blastObj.imgName;
 					}
+
+					if(this.blastView.blastObj.finalUrl == "" || this.blastView.blastObj.finalUrl == undefined || this.blastView.blastObj.finalUrl == null){
+						console.log("this.blastObj.finalUrl in facebookFeedItem is not valid");
+						this.blastView.blastObj.url = "?";
+						this.blastView.blastObj.imgName = "?";
+					}
+
+					console.log("this.blastObj.finalUrl in facebookFeedItem is: ", this.blastView.blastObj.finalUrl);
 					
 					this.downloadImage(this.blastView.blastObj.url, this.blastView.blastObj.imgName).then(lang.hitch(this, function(){
 						window.location = "#/"+this.blastView.mod+this.blastView.route;

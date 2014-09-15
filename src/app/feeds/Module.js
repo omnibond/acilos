@@ -274,10 +274,10 @@ define(['dojo/_base/declare',
 			return xhrManager.send('POST', 'rest/v1.0/FeedData/setStarredClient', params);
 		},
 		
-		sendPostFile: function(file, fileType, tokenArr, msg){
-			params = {file: file, fileType: fileType, tokenArr: tokenArr, msg: msg};
+		sendPostFile: function(time, file, tokenArr, msg){
+			params = {time: time, file: file, tokenArr: tokenArr, msg: msg};
 			console.log("Module.js: Params for sendPostFile are: ", params);
-			return xhrManager.send('POST', 'rest/v1.0/Post/postFiles', params);
+			return xhrManager.send('POST', 'rest/v1.0/Blast/blastFiles', params);
 		},
 
 		runAtCommand: function(time, file, fileType, tokenArr, msg){

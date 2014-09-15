@@ -110,6 +110,16 @@ define([
 
 			activate: function() {				
 				topic.publish("/dojo-mama/updateSubNav", {back: '/', title: "Search Public Data"} );
+
+				document.body.onkeydown = lang.hitch(this, function(event){
+					switch(event.keyCode){
+						case 13: 
+							this.queryButton.onClick();
+						break;
+						
+						default: 
+					}
+				});	
 			},
 
 			postCreate: function(){

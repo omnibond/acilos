@@ -40,7 +40,7 @@ define(['dojo/_base/declare',
 		"dojox/mobile/RadioButton",
 		
 		"dojox/form/Uploader",
-		//"dojox/form/FileInputAuto",
+		'dojox/mobile/ProgressIndicator',
 		
 		"app/post/FileList",
 		"dijit/Dialog",
@@ -65,6 +65,7 @@ define(['dojo/_base/declare',
 	RadioButton,
 	
 	Uploader,
+	ProgressIndicator,
 	
 	FileList,
 	Dialog,
@@ -74,8 +75,15 @@ define(['dojo/_base/declare',
 ) {
 	return declare([ModuleScrollableView], {		
 		buildMainList: function(){
+			if(this.mod == "query"){
+				var myClass = "largeMarginTopOnPhone";
+			}else{
+				var myClass = "";
+			}
+
 			this.mainList = new RoundRectList({
-				style: "margin-top:10px;border:none"
+				style: "border: none",
+				"class": myClass
 			});
 
 			this.buildUploadBar();
@@ -238,6 +246,10 @@ define(['dojo/_base/declare',
 				label: "Blast",
 				style: "margin-left: 0px;margin-top:20px",
 				onClick: lang.hitch(this, function(){
+					this.pi = new ProgressIndicator();
+					this.pi.placeAt(document.body);
+					this.pi.start();
+
 					document.body.onkeyup = ""; 
 					var msg = this.textArea.get("value");
 					
@@ -253,9 +265,9 @@ define(['dojo/_base/declare',
 						}
 					}
 
-					/*if(this.blastObj.finalUrl != ""){
-						this.blastObj.imgName = "";
-					}*/
+					if(this.blastObj.finalUrl == "" || this.blastObj.finalUrl == undefined || this.blastObj.finalUrl == null){
+						this.blastObj.imgName = "?";
+					}
 						
 					console.log("tokenArr is: ", tokenArr);
 
@@ -264,6 +276,10 @@ define(['dojo/_base/declare',
 					time = Date.now() / 1000;
 					
 					this.sendPostFile(time, this.blastObj.imgName, tokenArr, msg).then(lang.hitch(this, function(obj){
+						if(this.pi){
+							this.pi.stop();
+						}
+
 						console.log("obj is: ", obj);
 
 						var returnStuff = obj['returnArray'];
@@ -285,6 +301,29 @@ define(['dojo/_base/declare',
 						if(this.failureFlag == "false"){
 							window.location = "#/mainFeed";
 						}
+
+						//redefining this here otherwise the character count for twitter doesn't work after the response comes back (in case you try to post a status that is too long)
+						document.body.onkeyup = lang.hitch(this, function(event){
+							var flag = 0;
+							for(var x = 0; x < this.checkArray.length; x++){
+								if((this.checkArray[x].params.leKey == "twitter") && (this.checkArray[x].checked == true)){
+									console.log("it's 1");
+									flag = 1;
+								}
+							}
+
+							if(flag == 1){
+								this.textAreaCountDiv.innerHTML = this.textArea.get("value").length + "/140 characters";
+							}else{
+								this.textAreaCountDiv.innerHTML = this.textArea.get("value").length + " characters";
+							}
+
+							if((this.textArea.get('value').length > 140) && (flag == 1)){
+								this.textAreaCountDiv.style.color = "red";
+							}else{
+								this.textAreaCountDiv.style.color = "black";
+							}
+						});
 
 						var responseListItem = new ListItem({
 							variableHeight: true,
@@ -319,7 +358,7 @@ define(['dojo/_base/declare',
 
 											var postedDiv = domConstruct.create("span", {innerHTML: "-Posted", style: "font-weight: bold; margin-top: 5px; text-align: left; margin-left: 5px; margin-right: 5px; vertical-align: -1px"});
 
-											this.checkArray[b].domNode.parentNode.parentNode.appendChild(postedDiv);
+											this.checkArray[b].domNode.parentNode.appendChild(postedDiv);
 										}
 									}
 								}
@@ -375,6 +414,10 @@ define(['dojo/_base/declare',
 
 		deactivate: function(){
 			document.body.onkeyup = "";
+
+			if(this.pi){
+				this.pi.stop();
+			}
 
 			if(this.mainList){
 				this.mainList.destroyRecursive();

@@ -255,7 +255,7 @@ define([
 					}
 				}
 
-				console.log("OBJ IS: ", obj);
+				//console.log("OBJ IS: ", obj);
 
 				this.paneLeft = new Pane({
 					"class": "paneLeftClass"
@@ -1076,17 +1076,80 @@ define([
 							this.blastView.blastObj.finalUrl = "app/post/tmpUpload/" + this.blastView.blastObj.imgName;
 						}
 
-						if(source.title == "DISCUSS"){
-							if(source.content.discussion.summary.text){
-								this.blastView.blastObj.msg = source.content.discussion.summary.text;
-							}
-						}else{
-							if(!source.content.text){
-								this.blastView.blastObj.msg = source.content.status.text;
+						if(source.title){
+							if(source.title == "DISCUSS"){
+								if(source.content){
+									if(source.content.discussion){
+										if(source.content.discussion.summary){
+											if(source.content.discussion.summary.text){
+												this.blastView.blastObj.msg = source.content.discussion.summary.text;
+											}
+										}
+									}
+								}
 							}else{
-								this.blastView.blastObj.msg = source.content.text.text;
+								if(!source.content.text){
+									if(source.content){
+										if(source.content.status){
+											if(source.content.status.text){
+												this.blastView.blastObj.msg = source.content.status.text;
+											}
+										}
+									}
+								}else{
+									if(source.content){
+										if(source.content.text){
+											if(source.content.text.text){
+												this.blastView.blastObj.msg = source.content.text.text;
+											}
+										}
+									}
+								}
 							}
 						}
+
+						if(source.title == "CMPY"){
+							if(source.content){
+								if(source.content.job){
+									if(source.content.job.jobPosition && source.content.job.jobPosition != "N/A" && source.content.job.jobPosition != undefined && source.content.job.jobPosition != null && source.content.job.jobPosition != ""){
+										var jobPosition = source.content.job.jobPosition;
+									}
+
+									if(source.content.job.jobLocation && source.content.job.jobLocation != "N/A" && source.content.job.jobLocation != undefined && source.content.job.jobLocation != null && source.content.job.jobLocation != ""){
+										var jobLocation = source.content.job.jobLocation;
+									}
+
+									if(source.content.job.jobURL && source.content.job.jobURL != "N/A" && source.content.job.jobURL != undefined && source.content.job.jobURL != null && source.content.job.jobURL != ""){
+										var jobURL = source.content.job.jobURL;
+									}
+								}
+							}
+
+							if(!jobPosition){
+								var jobPosition = "";
+							}
+
+							if(!jobLocation){
+								var jobLocation = "";
+							}
+
+							if(!jobURL){
+								var jobURL = "";
+							}
+						}
+
+						if(this.blastView.blastObj.msg == "" || this.blastView.blastObj.msg == "N/A" || this.blastView.blastObj.msg == undefined || this.blastView.blastObj.msg == null){
+							this.blastView.blastObj.msg = jobPosition + " - " + jobLocation + " " + jobURL;
+						}
+
+						if(this.blastView.blastObj.finalUrl == "" || this.blastView.blastObj.finalUrl == undefined || this.blastView.blastObj.finalUrl == null){
+							console.log("this.blastObj.finalUrl in linkedinFeedItem is not valid");
+							this.blastView.blastObj.url = "?";
+							this.blastView.blastObj.imgName = "?";
+						}
+
+						console.log("this.blastObj.finalUrl in linkedinFeedItem is: ", this.blastView.blastObj.finalUrl);
+
 						this.downloadImage(this.blastView.blastObj.url, this.blastView.blastObj.imgName).then(lang.hitch(this, function(){
 							window.location = "#/"+this.blastView.mod+this.blastView.route;
 						}))

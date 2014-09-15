@@ -468,15 +468,16 @@ Class Post{
 	function sendFaceLike(){
 		$var = file_get_contents("php://input");
 		$varObj = json_decode($var, true);
-		$idFirstPart = $varObj['idFirstPart'];
-		$idSecondPart = $varObj['idSecondPart'];
+		$id = $varObj['id'];
 		$access_token = $varObj['accessToken'];
 
-		$likeURL = 'https://graph.facebook.com/' . $idSecondPart . '/likes';
+		//print_R($varObj);
+
+		$likeURL = 'https://graph.facebook.com/' . $id . '/likes';
 			
 		$params = array(
 			'access_token' => $access_token,
-			"url" => 'https://graph.facebook.com/' . $idSecondPart . '/likes'
+			"url" => 'https://graph.facebook.com/' . $id . '/likes'
 		);
 			
 		$ch = curl_init($likeURL);
@@ -510,11 +511,10 @@ Class Post{
 	function sendFaceUnLike(){
 		$var = file_get_contents("php://input");
 		$varObj = json_decode($var, true);
-		$idFirstPart = $varObj['idFirstPart'];
-		$idSecondPart = $varObj['idSecondPart'];
+		$id = $varObj['id'];
 		$access_token = $varObj['accessToken'];
 
-		$likeURL = 'https://graph.facebook.com/' . $idSecondPart . '/likes?access_token='.$access_token;
+		$likeURL = 'https://graph.facebook.com/' . $id . '/likes?access_token='.$access_token;
 	
 		$ch = curl_init($likeURL);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");

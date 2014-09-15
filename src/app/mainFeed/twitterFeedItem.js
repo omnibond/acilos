@@ -724,6 +724,12 @@ define([
 							this.blastView.blastObj.finalUrl = "app/post/tmpUpload/" + this.blastView.blastObj.imgName;
 						}
 
+						if(this.blastView.blastObj.finalUrl == "" || this.blastView.blastObj.finalUrl == undefined || this.blastView.blastObj.finalUrl == null){
+							console.log("this.blastObj.finalUrl in twitterFeedItem is not valid");
+							this.blastView.blastObj.url = "?";
+							this.blastView.blastObj.imgName = "?";
+						}
+
 						console.log("this.blastObj.finalUrl in twitterFeedItem is: ", this.blastView.blastObj.finalUrl);
 						
 						this.downloadImage(this.blastView.blastObj.url, this.blastView.blastObj.imgName).then(lang.hitch(this, function(){

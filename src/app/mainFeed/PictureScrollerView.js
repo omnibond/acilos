@@ -206,6 +206,14 @@ define([
 								this.blastView.blastObj.url = this.albumLinks[d];
 								this.blastView.blastObj.finalUrl = "app/post/tmpUpload/" + this.blastView.blastObj.imgName;
 							}
+
+							if(this.blastView.blastObj.finalUrl == "" || this.blastView.blastObj.finalUrl == undefined || this.blastView.blastObj.finalUrl == null){
+								console.log("this.blastObj.finalUrl in PictureScrollerView.js is not valid");
+								this.blastView.blastObj.url = "?";
+								this.blastView.blastObj.imgName = "?";
+							}
+
+							console.log("this.blastObj.finalUrl in PictureScrollerView is: ", this.blastView.blastObj.finalUrl);
 							
 							this.downloadImage(this.blastView.blastObj.url, this.blastView.blastObj.imgName).then(lang.hitch(this, function(){
 								window.location = "#/"+this.blastView.mod+this.blastView.route;

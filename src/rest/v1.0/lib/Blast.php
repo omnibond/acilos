@@ -34,16 +34,23 @@ class Blast{
 	function downloadImage(){
 		$var = file_get_contents("php://input");
 		$imgURL = json_decode($var, true);
+
+		//print_r($imgURL);
+
+		if(isset($imgURL['url'])){
+			if($imgURL['url'] == "?"){
+				return json_encode(array("failure" => "there is no valid url to download the image from"));
+			}else{
+				$url = $imgURL['url'];
+			}
+		}else{
+			$url = '';
+		}
 		
 		if(isset($imgURL['imgName'])){
 			$imgName = $imgURL['imgName'];
 		}else{
 			$imgName = '';
-		}
-		if(isset($imgURL['url'])){
-			$url = $imgURL['url'];
-		}else{
-			$url = '';
 		}
 		
 		if($url == '' || $imgName == ''){
@@ -81,6 +88,8 @@ class Blast{
 		$var = file_get_contents("php://input");
 		$varObj = json_decode($var, true);
 
+		//print_r($varObj);
+
 		if(isset($varObj['msg'])){
 			$msg = $varObj['msg'];
 		}else{
@@ -93,10 +102,16 @@ class Blast{
 			$tokenArr = "";
 		}
 
-		if(isset($varObj['file']) && $varObj['file'] != ""){
+		if(isset($varObj['file']) && $varObj['file'] != "?"){
 			$fileName = $varObj['file'];
 		}else{
 			$fileName = "";
+		}
+
+		if(isset($varObj['fileType']) && $varObj['fileType'] !== "?"){
+			$fileType = $varObj['fileType'];
+		}else{
+			$fileType = "";
 		}
 
 		if(isset($varObj['time']) && $varObj['time'] != "" && $varObj['time'] != "?"){
@@ -191,10 +206,12 @@ class Blast{
 
 						$statusURL = 'https://graph.facebook.com/me/feed';
 
-						if($fileName == ""){
-							$url = $statusURL;
-						}else{
-							$url = $photoURL;
+						if(isset($fileName)){
+							if($fileName == ""){
+								$url = $statusURL;
+							}else{
+								$url = $photoURL;
+							}
 						}
 
 						$ch = curl_init($url);
@@ -222,7 +239,7 @@ class Blast{
 						$response = curl_exec($ch);
 						curl_close($ch);
 
-						//print_r($response);
+						//var_dump($response);
 										
 						$res = json_decode($response, true);
 
@@ -280,7 +297,7 @@ class Blast{
 
 						$status = $connection->upload($url, $stuff);
 
-						//print_r($status);
+						//var_dump($status);
 
 						if(isset($status)){
 							if(isset($status->errors[0]->message)){
