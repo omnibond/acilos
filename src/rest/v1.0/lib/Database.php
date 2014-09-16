@@ -432,6 +432,29 @@ class Database{
 		}
 	}
 
+	public function copyJsonBackupFile(){
+		$var = file_get_contents("php://input");
+		$obj = json_decode($var, true);
+
+		if(isset($obj['fileName'])){
+			$fileName = $obj['fileName'];
+		}else{
+			$fileName = "?";
+		}
+
+		if(isset($_SERVER['HTTP_REFERER'])){
+			$referer = $_SERVER['HTTP_REFERER'];
+		}else{
+			$referer = "";
+		}
+
+		if(copy("../../private/config/" . $fileName . "-backup.json", "../../" . $fileName . "-backup.json") == true){
+			return json_encode(array("referer" => $referer, "success" => "the file was moved successfully"));
+		}else{
+			return json_encode(array("referer" => $referer, "failure" => "unable to move the file"));
+		}
+	}
+
 	function getBackUpCounts(){		
 		$oneWeek = (60 * 60 * 24) * 7;
 		$twoWeeks = (60 * 60 * 24) * 14;

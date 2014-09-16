@@ -99,7 +99,9 @@ define(['dojo/_base/declare',
 					this.saveBackupData(wipeCurrentData).then(lang.hitch(this, function(obj){
 						console.log("obj is: ", obj);
 
-						this.pi.stop();
+						if(this.pi){
+							this.pi.stop();
+						}
 
 						this.router.goToAbsoluteRoute("/settings");
 					}));	

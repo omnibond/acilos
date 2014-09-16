@@ -121,21 +121,16 @@ define(['dojo/_base/declare',
 
 			this.credentialsWrapperDiv = domConstruct.create("div", {});
 
-			this.wipeDataBox = new CheckBox({
-				checked: false,
-				style: "-webkit-transform: scale(1.4); -moz-transform: scale(1.4); -ms-transform: scale(1.4); -o-transform: scale(1.4)"
-			});
-
-			this.wipeDataDiv = domConstruct.create("div", {innerHTML: "Check this box to also wipe the current data in the database before you restore your backed up data.", style: "display: inline-block; margin-left: 5px"});
-
-			this.wipeDataWrapperDiv = domConstruct.create("div", {});
-
 			this.restoreButton = new Button({
-				label: "Restore data from backup",
+				label: "Download backed up data",
 				style: "margin-top: 10px",
 				onClick: lang.hitch(this, function(){
-					if(fileName == ""){
-						alert("You must select a file to back up from");
+					if(this.a){
+						this.a.parentNode.removeChild(this.a);
+					}
+
+					if(this.backupFileComboBox.textbox.value == ""){
+						alert("You must select a backed up file to download");
 					}else{
 						this.pi = new ProgressIndicator();
 						this.pi.placeAt(document.body);
@@ -147,12 +142,6 @@ define(['dojo/_base/declare',
 							var restoreServiceCreds = "true";
 						}
 
-						if(this.wipeDataBox.get("checked") == false){
-							var wipeDBData = "false";
-						}else if(this.wipeDataBox.get("checked") == true){
-							var wipeDBData = "true";
-						}
-
 						for(var y = 0; y < this.backupList.length; y++){
 							if(this.backupList[y]['name'] == this.backupFileComboBox.textbox.value){
 								var fileName = this.backupList[y]['originalName'];
@@ -161,15 +150,41 @@ define(['dojo/_base/declare',
 
 						console.log("the fileName is: ", fileName);
 
-						this.importBackupData(fileName, restoreServiceCreds, wipeDBData).then(lang.hitch(this, function(obj){
+						this.copyJsonBackupFile(fileName).then(lang.hitch(this, function(obj){
 							console.log("obj is: ", obj);
+
+							if(obj['referer']){
+								var referer = obj['referer'];
+							}
 
 							if(this.pi){
 								this.pi.stop();
 							}
 
-							this.router.goToAbsoluteRoute("/settings");
+							if(obj['success']){
+								this.a = document.createElement('a');
+								this.a.href = referer + fileName + "-backup.json";
+								this.a.download = referer + fileName + "-backup.json";
+								this.a.textContent = 'Download file!';
+								domConstruct.place(this.a, this.credentialsWrapperDiv, "after");
+
+								this.a.style.display = "none";
+
+								console.log("a is: ", this.a);
+
+								this.a.click();
+							}else{
+								alert("There was an error downloading the file");
+							}
 						}));
+
+						/*this.importBackupData(fileName, restoreServiceCreds, wipeDBData).then(lang.hitch(this, function(obj){
+							console.log("obj is: ", obj);
+
+							this.pi.stop();
+
+							this.router.goToAbsoluteRoute("/settings");
+						}));*/
 					}
 				})
 			});
@@ -177,14 +192,10 @@ define(['dojo/_base/declare',
 			this.credentialsWrapperDiv.appendChild(this.credentialsBox.domNode);
 			this.credentialsWrapperDiv.appendChild(this.credsOptionDiv);
 
-			this.wipeDataWrapperDiv.appendChild(this.wipeDataBox.domNode);
-			this.wipeDataWrapperDiv.appendChild(this.wipeDataDiv);
-
 			this.mainList.domNode.appendChild(this.instructionDiv);
 			this.mainList.domNode.appendChild(this.selectOptionsDiv);
 			this.mainList.addChild(this.backupFileComboBox);
 			this.mainList.domNode.appendChild(this.credentialsWrapperDiv);
-			this.mainList.domNode.appendChild(this.wipeDataWrapperDiv);
 
 			this.mainList.addChild(this.restoreButton);
 
@@ -207,7 +218,7 @@ define(['dojo/_base/declare',
 		},
 		
 		activate: function() {
-			topic.publish("/dojo-mama/updateSubNav", {back: '/settings', title: "Restore backed up data"} );		
+			topic.publish("/dojo-mama/updateSubNav", {back: '/settings', title: "Download backed up data"} );		
 
 			this.checkForBackupData().then(lang.hitch(this, function(obj){
 				if(obj){

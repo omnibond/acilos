@@ -246,7 +246,10 @@ define([
 					this.resize();
 				}
 				this.loading = false;
-				this.pi.stop();
+
+				if(this.pi){
+					this.pi.stop();
+				}
 			},
 
 			postAddToList: function(from){

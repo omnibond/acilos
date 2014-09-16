@@ -664,7 +664,9 @@ define([
 													this.mineFacebookCommentPics(databasePostId, facebookPostId, commentArr, accessToken).then(lang.hitch(this, function(obj){
 														console.log("the returned obj is: ", obj);
 
-														this.pi.stop();
+														if(this.pi){
+															this.pi.stop();
+														}
 
 														if(obj && obj['success']){
 															this.data.hits.hits[this.counter]._source = obj['success'];

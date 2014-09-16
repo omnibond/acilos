@@ -279,7 +279,9 @@ define([
 										this.addChild(this.list);
 										this.resize();
 
-										this.pi.stop();
+										if(this.pi){
+											this.pi.stop();
+										}
 									}))
 								}
 							}

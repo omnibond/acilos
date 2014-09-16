@@ -170,7 +170,9 @@ define(['dojo/_base/declare',
 						//build and return a list for each user/ownedGroup
 						this.buildCloud(this.clients, this.numWords);
 
-						this.pi.stop();
+						if(this.pi){
+							this.pi.stop();
+						}
 					}, mainUser))
 				}
 			}))
