@@ -108,7 +108,7 @@ define(['dojo/_base/declare',
 
 			console.log("this.backupFileComboBox is: ", this.backupFileComboBox);
 
-			this.instructionDiv = domConstruct.create("div", {innerHTML: "This page will allow you to restore backed up items to your database. You can also choose to restore your backed up service credentials.", style: "margin-bottom: 10px"});
+			this.instructionDiv = domConstruct.create("div", {innerHTML: "This page will allow you to download the json backup files you have created to your device. There is another page that will allow you to upload them to the server. This is useful if you have to reinstall acilos and want to save your data.", style: "margin-bottom: 10px"});
 
 			this.selectOptionsDiv = domConstruct.create("div", {innerHTML: "You may select any of the following options that apply to you.", style: "margin-bottom: 10px; font-weight: bold"});
 
@@ -117,29 +117,29 @@ define(['dojo/_base/declare',
 				style: "-webkit-transform: scale(1.4); -moz-transform: scale(1.4); -ms-transform: scale(1.4); -o-transform: scale(1.4)"
 			});
 
-			this.credsOptionDiv = domConstruct.create("div", {innerHTML: "Check this box to restore your service credentials in addition to your other data.", style: "display: inline-block; margin-left: 5px"});
+			this.credsOptionDiv = domConstruct.create("div", {innerHTML: "Check this box to download your service credentials in addition to your other data.", style: "display: inline; margin-left: 5px"});
 
 			this.credentialsWrapperDiv = domConstruct.create("div", {});
 
 			this.restoreButton = new Button({
-				label: "Download backed up data",
+				label: "Download backup data",
 				style: "margin-top: 10px",
 				onClick: lang.hitch(this, function(){
-					if(this.a){
-						this.a.parentNode.removeChild(this.a);
+					if(this.jsonDownloadButton){
+						this.jsonDownloadButton.parentNode.removeChild(this.jsonDownloadButton);
 					}
 
 					if(this.backupFileComboBox.textbox.value == ""){
-						alert("You must select a backed up file to download");
+						alert("You must select a backup file to download");
 					}else{
 						this.pi = new ProgressIndicator();
 						this.pi.placeAt(document.body);
 						this.pi.start();
 
 						if(this.credentialsBox.get("checked") == false){
-							var restoreServiceCreds = "false";
+							var downloadServiceCreds = "false";
 						}else if(this.credentialsBox.get("checked") == true){
-							var restoreServiceCreds = "true";
+							var downloadServiceCreds = "true";
 						}
 
 						for(var y = 0; y < this.backupList.length; y++){
@@ -150,7 +150,7 @@ define(['dojo/_base/declare',
 
 						console.log("the fileName is: ", fileName);
 
-						this.copyJsonBackupFile(fileName).then(lang.hitch(this, function(obj){
+						this.downloadJsonBackupFile(fileName, downloadServiceCreds).then(lang.hitch(this, function(obj){
 							console.log("obj is: ", obj);
 
 							if(obj['referer']){
@@ -161,30 +161,40 @@ define(['dojo/_base/declare',
 								this.pi.stop();
 							}
 
-							if(obj['success']){
-								this.a = document.createElement('a');
-								this.a.href = referer + fileName + "-backup.json";
-								this.a.download = referer + fileName + "-backup.json";
-								this.a.textContent = 'Download file!';
-								domConstruct.place(this.a, this.credentialsWrapperDiv, "after");
+							if(obj['jsonBackup']['success']){
+								this.jsonDownloadButton = document.createElement('a');
+								this.jsonDownloadButton.href = referer + fileName + "-backup.json";
+								this.jsonDownloadButton.download = referer + fileName + "-backup.json";
+								this.jsonDownloadButton.textContent = 'Download file!';
+								domConstruct.place(this.jsonDownloadButton, this.credentialsWrapperDiv, "after");
 
-								this.a.style.display = "none";
+								this.jsonDownloadButton.style.display = "none";
 
-								console.log("a is: ", this.a);
+								console.log("jsonDownloadButton is: ", this.jsonDownloadButton);
 
-								this.a.click();
+								this.jsonDownloadButton.click();
 							}else{
-								alert("There was an error downloading the file");
+								alert("There was an error downloading the backup file");
+							}
+
+							if(obj['serviceCredsBackup']){
+								if(obj['serviceCredsBackup']['success']){
+									this.serviceCredsDownloadButton = document.createElement('a');
+									this.serviceCredsDownloadButton.href = referer + "serviceCredsBackup.json";
+									this.serviceCredsDownloadButton.download = referer + "serviceCredsBackup.json";
+									this.serviceCredsDownloadButton.textContent = 'Download file!';
+									domConstruct.place(this.serviceCredsDownloadButton, this.credentialsWrapperDiv, "after");
+
+									this.serviceCredsDownloadButton.style.display = "none";
+
+									console.log("serviceCredsDownloadButton is: ", this.serviceCredsDownloadButton);
+
+									this.serviceCredsDownloadButton.click();
+								}else{
+									alert("There was an error downloading the service credentials file");
+								}
 							}
 						}));
-
-						/*this.importBackupData(fileName, restoreServiceCreds, wipeDBData).then(lang.hitch(this, function(obj){
-							console.log("obj is: ", obj);
-
-							this.pi.stop();
-
-							this.router.goToAbsoluteRoute("/settings");
-						}));*/
 					}
 				})
 			});
@@ -210,7 +220,7 @@ define(['dojo/_base/declare',
 
 			this.mainList = new EdgeToEdgeList({ });
 
-			this.noDataDiv = domConstruct.create("div", {innerHTML: "You currently do not have any backed up data to restore.", style: "margin-top: 10px; font-weight: bold"});
+			this.noDataDiv = domConstruct.create("div", {innerHTML: "You currently do not have any backup data to restore.", style: "margin-top: 10px; font-weight: bold"});
 
 			this.mainList.domNode.appendChild(this.noDataDiv);
 
@@ -218,7 +228,7 @@ define(['dojo/_base/declare',
 		},
 		
 		activate: function() {
-			topic.publish("/dojo-mama/updateSubNav", {back: '/settings', title: "Download backed up data"} );		
+			topic.publish("/dojo-mama/updateSubNav", {back: '/settings', title: "Download backup data"} );		
 
 			this.checkForBackupData().then(lang.hitch(this, function(obj){
 				if(obj){

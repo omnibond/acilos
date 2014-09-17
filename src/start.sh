@@ -150,6 +150,20 @@ rm -f $(pwd)/cron/apacheRebootLog.log
 
 EOF
 
+echo "Writing Remove Backup Files Manager"
+cat > cron/callRemoveBackupFilesManager.sh << 'EOF'
+#!/bin/bash
+#this script will be called hourly to remove any json backup files from src or app-production
+	
+EOF
+
+cat >> cron/callRemoveBackupFilesManager.sh << EOF
+
+rm -f $(pwd)/*-backup.json
+rm -f $(pwd)/serviceCredsBackup.json
+
+EOF
+
 CRONGREP=`crontab -l | grep /cron/`
 if [ "$CRONGREP" = "" ]; then
 	echo "no socialreader crons were found... adding cronjobs"
@@ -163,6 +177,7 @@ if [ "$CRONGREP" = "" ]; then
 	(crontab -l 2>/dev/null; echo "30 4 * * * sh "$MAINPATH"/cron/callAmazonRebootManager.sh") | crontab -
 	(crontab -l 2>/dev/null; echo "*/10 * * * * sh "$MAINPATH"/cron/callHttpdRebootManager.sh") | crontab -
 	(crontab -l 2>/dev/null; echo "0 6 * * 1 sh "$MAINPATH"/cron/callClearRebootLogManager.sh") | crontab -
+	(crontab -l 2>/dev/null; echo "0 * * * * sh "$MAINPATH"/cron/callRemoveBackupFilesManager.sh") | crontab -
 	
 	echo "\nDone"
 else 

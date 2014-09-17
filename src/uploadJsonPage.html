@@ -1,23 +1,7 @@
-<?php
-
-	if(isset($_GET['message'])){
-		$message = $_GET['message'];
-	}else{
-		$message = "";
-	}
-
-	if(isset($_GET['token'])){
-		$tokenArr = explode(",", $_GET['token']);
-	}else{
-		$token = array();
-	}
-
-	$redirect = $_SERVER['HTTP_HOST'];
-?>
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Upload a photo and message</title>	
+	<title>Upload a json backup file</title>	
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -85,7 +69,6 @@
 
 				this.fUploader = document.createElement("input");
 				this.fUploader.setAttribute("type", "file");
-				this.fUploader.setAttribute("accept", "image/*");
 				this.fUploader.setAttribute("name", "file[]");
 				this.fUploader.style.class = "roundedBorder5pxClass";
 
@@ -98,24 +81,33 @@
 				leftPane.domNode.appendChild(this.fUploader);
 
 				this.response = '';
-				this.responseDiv = '';
+				this.jsonBackupDiv = '';
+				this.serviceCredsBackupDiv = '';
+				this.genericErrorDiv = '';
 
 				var myButton = new Button({
 					label: "Upload",
 					style: "float: left; margin-top: 10px; margin-left: 7px",
 					onClick: lang.hitch(this, function(){
-						if(this.responseDiv){
-							this.responseDiv.innerHTML = '';
-							this.responseDiv = null;
-
+						if(this.jsonBackupDiv){
+							this.jsonBackupDiv.innerHTML = '';
+							this.jsonBackupDiv = null;
 						}
+
+						if(this.serviceCredsBackupDiv){
+							this.serviceCredsBackupDiv.innerHTML = '';
+							this.serviceCredsBackupDiv = null;
+						}
+
+						if(this.genericErrorDiv){
+							this.genericErrorDiv.innerHTML = '';
+							this.genericErrorDiv = null;
+						}
+
 						console.log("THE FILE IS: ", this.fUploader.files[0]);
 
 						var fd = new FormData();
-						fd.append("fUploader", this.fUploader.files[0]);
-
-						console.log("fd is: ", fd);
-
+						fd.append("fUploader", fUploader.files[0]);
 						var xhr = new XMLHttpRequest();
 
 						xhr.onreadystatechange = lang.hitch(this, function(){
@@ -125,20 +117,36 @@
 						        this.response = JSON.parse(this.response);
 
 						        if(this.response){
-						        	if(this.response['success']){
-						        		this.responseDiv = domConstruct.create("div", {innerHTML: this.response['success'], style: "margin-top: 5px"});
+						        	if(this.response['jsonBackup']){
+						        		if(this.response['jsonBackup']['success']){
+							        		this.jsonBackupDiv = domConstruct.create("div", {innerHTML: this.response['jsonBackup']['success'], style: "margin-top: 5px"});
 
-						        		leftPane.domNode.appendChild(this.responseDiv);
-						        	}else if(this.response['error']){
-						        		this.responseDiv = domConstruct.create("div", {innerHTML: this.response['error'], style: "margin-top: 5px"});
+							        		leftPane.domNode.appendChild(this.jsonBackupDiv);
+							        	}else if(this.response['jsonBackup']['failure']){
+							        		this.jsonBackupDiv = domConstruct.create("div", {innerHTML: this.response['jsonBackup']['failure'], style: "margin-top: 5px"});
 
-						        		leftPane.domNode.appendChild(this.responseDiv);
+							        		leftPane.domNode.appendChild(this.jsonBackupDiv);
+							        	}
+						        	}else if(this.response['serviceCredsBackup']){
+						        		if(this.response['serviceCredsBackup']['success']){
+							        		this.serviceCredsBackupDiv = domConstruct.create("div", {innerHTML: this.response['serviceCredsBackup']['success'], style: "margin-top: 5px"});
+
+							        		leftPane.domNode.appendChild(this.serviceCredsBackupDiv);
+							        	}else if(this.response['serviceCredsBackup']['failure']){
+							        		this.serviceCredsBackupDiv = domConstruct.create("div", {innerHTML: this.response['serviceCredsBackup']['failure'], style: "margin-top: 5px"});
+
+							        		leftPane.domNode.appendChild(this.serviceCredsBackupDiv);
+							        	}
+						        	}else{
+						        		this.genericErrorDiv = domConstruct.create("div", {innerHTML: "An error occurred while uploading file", style: "margin-top: 5px"});
+
+						        		leftPane.domNode.appendChild(this.genericErrorDiv);
 						        	}
 						        }
 						    }
 						});
 
-						xhr.open("POST", "app/post/UploadFiles.php");
+						xhr.open("POST", "rest/v1.0/Database/uploadJsonBackupFile");
 						xhr.send(fd);
 					})
 				});

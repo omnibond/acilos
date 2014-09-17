@@ -51,7 +51,7 @@ define(['dojo/_base/declare',
 				
 				checkForBackupData: lang.hitch(this, this.checkForBackupData),
 				importBackupData: lang.hitch(this, this.importBackupData),
-				copyJsonBackupFile: lang.hitch(this, this.copyJsonBackupFile)
+				downloadJsonBackupFile: lang.hitch(this, this.downloadJsonBackupFile)
 			});
 			this.registerView(this.rootView);
 		},
@@ -65,9 +65,9 @@ define(['dojo/_base/declare',
 			return xhrManager.send('POST', 'rest/v1.0/Database/importBackupData', params);
 		},
 
-		copyJsonBackupFile: function(fileName){
-			var params = {fileName: fileName};
-			return xhrManager.send('POST', 'rest/v1.0/Database/copyJsonBackupFile', params);
+		downloadJsonBackupFile: function(fileName, downloadServiceCreds){
+			var params = {fileName: fileName, downloadServiceCreds: downloadServiceCreds};
+			return xhrManager.send('POST', 'rest/v1.0/Database/downloadJsonBackupFile', params);
 		}
 	})
 });

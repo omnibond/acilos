@@ -259,10 +259,6 @@ define(['dojo/_base/declare',
 						checked: true,
 						name: "post",
 						onClick: lang.hitch(this, function(){
-							this.pi = new ProgressIndicator();
-							this.pi.placeAt(document.body);
-							this.pi.start();
-
 							if(this.atDate){
 								this.atDate.destroyRecursive();
 								this.atDate = null;
@@ -285,6 +281,10 @@ define(['dojo/_base/declare',
 								label: "Post",
 								style: "margin-left: 0px",
 								onClick: lang.hitch(this, function(){
+									this.pi = new ProgressIndicator();
+									this.pi.placeAt(document.body);
+									this.pi.start();
+									
 									if(this.errorDialog){
 										this.errorDialog.destroyRecursive();
 										this.errorDialog = null;

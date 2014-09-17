@@ -1,15 +1,6 @@
 #!/bin/bash
-#this script will be called every 10 minutes to check the available memory on the system... if it's below a certain #amount the script will reboot apache/httpd
-#
-#This setting is currently enabled and can be changed from the app settings tab under Manage the App -> Reboot Settings
+#this script will be called by the cron every morning at 4:30 am to reboot the computer to free up resources
+	
 
-logFile='/home/aaron/github/acilos/src/cron/instanceRebootLog.log'
-
-timestamp=$(date +"%m-%d-%y %H:%M:%S")
-
-echo ""$timestamp" Reboot script called by cron" >> "$logFile"
-
-command=$(/sbin/shutdown -r now)
-
-echo "$command" >> "$logFile"
+#This setting is currently disabled and can be changed from the app settings tab under Manage the App -> Reboot Settings
 

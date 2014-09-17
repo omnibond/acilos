@@ -126,7 +126,7 @@ define(['dojo/_base/declare',
 				style: "-webkit-transform: scale(1.4); -moz-transform: scale(1.4); -ms-transform: scale(1.4); -o-transform: scale(1.4)"
 			});
 
-			this.wipeDataDiv = domConstruct.create("div", {innerHTML: "Check this box to also wipe the current data in the database before you restore your backed up data.", style: "display: inline-block; margin-left: 5px"});
+			this.wipeDataDiv = domConstruct.create("div", {innerHTML: "Check this box to also wipe the current data in the database before you restore your backup data.", style: "display: inline-block; margin-left: 5px"});
 
 			this.wipeDataWrapperDiv = domConstruct.create("div", {});
 
@@ -199,7 +199,7 @@ define(['dojo/_base/declare',
 
 			this.mainList = new EdgeToEdgeList({ });
 
-			this.noDataDiv = domConstruct.create("div", {innerHTML: "You currently do not have any backed up data to restore.", style: "margin-top: 10px; font-weight: bold"});
+			this.noDataDiv = domConstruct.create("div", {innerHTML: "You currently do not have any backup data to restore.", style: "margin-top: 10px; font-weight: bold"});
 
 			this.mainList.domNode.appendChild(this.noDataDiv);
 
@@ -207,7 +207,7 @@ define(['dojo/_base/declare',
 		},
 		
 		activate: function() {
-			topic.publish("/dojo-mama/updateSubNav", {back: '/settings', title: "Restore backed up data"} );		
+			topic.publish("/dojo-mama/updateSubNav", {back: '/settings', title: "Restore backup data"} );		
 
 			this.checkForBackupData().then(lang.hitch(this, function(obj){
 				if(obj){

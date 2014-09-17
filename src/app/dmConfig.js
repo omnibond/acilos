@@ -212,17 +212,17 @@ define({
 			selectedPrimaryNavItem: "settings"
 		},
 		restoreData: {
-			title: 'Restore backed up data',
+			title: 'Restore backup data',
 			moduleId: 'app/restoreData/Module',
 			selectedPrimaryNavItem: "settings"
 		},
 		downloadData: {
-			title: 'Download backed up data',
+			title: 'Download backup data',
 			moduleId: 'app/downloadData/Module',
 			selectedPrimaryNavItem: "settings"
 		},
 		uploadData: {
-			title: 'Upload backed up data',
+			title: 'Upload backup data',
 			moduleId: 'app/uploadData/Module',
 			selectedPrimaryNavItem: "settings"
 		},
