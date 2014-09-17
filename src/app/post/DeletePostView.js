@@ -114,25 +114,28 @@ define(['dojo/_base/declare',
 					var color = 'white';
 
 					if(successObj[key]['facebook']){
-						if(successObj[key]['facebook']['result']){
-							if(successObj[key]['facebook']['result'] == 'failure'){
+						if(successObj[key]['facebook']['response']){
+							if(successObj[key]['facebook']['response']['failure']){
 								color = '#FF9494';
+								var facebookFailure = "true";
 							}
 						}
 					}
 
 					if(successObj[key]['linkedin']){
-						if(successObj[key]['linkedin']['result']){
-							if(successObj[key]['linkedin']['result'] == 'failure'){
+						if(successObj[key]['linkedin']['response']){
+							if(successObj[key]['linkedin']['response']['failure']){
 								color = '#FF9494';
+								var linkedinFailure = "true";
 							}
 						}
 					}
 
 					if(successObj[key]['twitter']){
-						if(successObj[key]['twitter']['result']){
-							if(successObj[key]['twitter']['result'] == 'failure'){
+						if(successObj[key]['twitter']['response']){
+							if(successObj[key]['twitter']['response']['failure']){
 								color = '#FF9494';
+								var twitterFailure = "true";
 							}
 						}
 					}
