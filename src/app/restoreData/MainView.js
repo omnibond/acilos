@@ -168,7 +168,7 @@ define(['dojo/_base/declare',
 								this.pi.stop();
 							}
 
-							this.router.goToAbsoluteRoute("/settings");
+							this.activate();
 						}));
 					}
 				})

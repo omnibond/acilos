@@ -126,7 +126,9 @@ define(['dojo/_base/declare',
 				style: "margin-top: 10px",
 				onClick: lang.hitch(this, function(){
 					if(this.jsonDownloadButton){
-						this.jsonDownloadButton.parentNode.removeChild(this.jsonDownloadButton);
+						if(this.jsonDownloadButton.parentNode){
+							this.jsonDownloadButton.parentNode.removeChild(this.jsonDownloadButton);
+						}
 					}
 
 					if(this.backupFileComboBox.textbox.value == ""){
@@ -194,6 +196,8 @@ define(['dojo/_base/declare',
 									alert("There was an error downloading the service credentials file");
 								}
 							}
+
+							this.credentialsBox.set("checked", false);
 						}));
 					}
 				})
@@ -220,7 +224,7 @@ define(['dojo/_base/declare',
 
 			this.mainList = new EdgeToEdgeList({ });
 
-			this.noDataDiv = domConstruct.create("div", {innerHTML: "You currently do not have any backup data to restore.", style: "margin-top: 10px; font-weight: bold"});
+			this.noDataDiv = domConstruct.create("div", {innerHTML: "You currently do not have any backup data to download.", style: "margin-top: 10px; font-weight: bold"});
 
 			this.mainList.domNode.appendChild(this.noDataDiv);
 

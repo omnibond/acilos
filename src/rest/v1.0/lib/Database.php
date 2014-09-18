@@ -452,7 +452,7 @@ class Database{
 
 		if(copy($_SERVER['BACKUPJSONPATH'] . $fileName . "-backup.json", "../../" . $fileName . "-backup.json") == true){
 			$returnArray['referer'] = $referer;
-			$returnArray['jsonBackup'] = array("success" => "the file was moved successfully");
+			$returnArray['jsonBackup'] = array("success" => "The file was uploaded successfully");
 		}else{
 			$returnArray['referer'] = $referer;
 			$returnArray['jsonBackup'] = array("failure" => "unable to move the file");
@@ -461,7 +461,7 @@ class Database{
 		if(isset($obj['downloadServiceCreds'])){
 			if($obj['downloadServiceCreds'] == "true"){
 				if(copy($_SERVER['SERVICECREDSBACKUP'], "../../serviceCredsBackup.json") == true){
-					$returnArray['serviceCredsBackup'] = array("success" => "the file was moved successfully");
+					$returnArray['serviceCredsBackup'] = array("success" => "The file was uploaded successfully");
 				}else{
 					$returnArray['serviceCredsBackup'] = array("failure" => "unable to move the file");
 				}
@@ -486,7 +486,7 @@ class Database{
 					$target = $_SERVER['BACKUPJSONPATH'] . $name . "-backup.json";
 
 					if(move_uploaded_file($stuff['tmp_name'], $target) === true){
-						$returnArray['jsonBackup'] = array("success" => "the file was moved successfully");
+						$returnArray['jsonBackup'] = array("success" => "The file was uploaded successfully");
 					}else{
 						$returnArray['jsonBackup'] = array("failure" => "unable to move the file");
 					}
@@ -494,7 +494,7 @@ class Database{
 					$target = $_SERVER['SERVICECREDSBACKUP'];
 
 					if(move_uploaded_file($stuff['tmp_name'], $target) === true){
-						$returnArray['serviceCredsBackup'] = array("success" => "the file was moved successfully");
+						$returnArray['serviceCredsBackup'] = array("success" => "The file was uploaded successfully");
 					}else{
 						$returnArray['serviceCredsBackup'] = array("failure" => "unable to move the file");
 					}

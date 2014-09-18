@@ -64,7 +64,7 @@
 			print_r(json_encode(array("error" => "Sorry, your file was not uploaded")));
 		}else{
 		    if(move_uploaded_file($tmp_name, $target)){
-				print_r(json_encode(array("success" => "The file has been uploaded")));
+				print_r(json_encode(array("success" => "The file was uploaded successfully")));
 		    }else{
 		        print_r(json_encode(array("error" => "Sorry, there was a problem uploading your file.")));
 		    }
