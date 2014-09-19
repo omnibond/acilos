@@ -473,34 +473,36 @@ class Database{
 
 	public function uploadJsonBackupFile(){
 		if(isset($_FILES['fUploader'])){
-			$stuff = $_FILES['fUploader'];
+			for($x = 0; $x < count($_FILES['fUploader']['name']); $x++){
+				$stuff = $_FILES['fUploader'];
+				if(isset($stuff['size'][$x]) && $stuff['size'][$x] != 0 && $stuff['size'][$x] != "undefined" && $stuff['size'][$x] != null && isset($stuff['tmp_name'][$x]) && $stuff['tmp_name'][$x] != "undefined" && $stuff['tmp_name'][$x] != null && isset($stuff['name'][$x]) && $stuff['name'][$x] != "undefined" && $stuff['name'][$x] != null){
+					$returnArray = array();
 
-			if(isset($stuff['size']) && $stuff['size'] != 0 && $stuff['size'] != "undefined" && $stuff['size'] != null && isset($stuff['tmp_name']) && $stuff['tmp_name'] != "undefined" && $stuff['tmp_name'] != null && isset($stuff['name']) && $stuff['name'] != "undefined" && $stuff['name'] != null){
-				$returnArray = array();
+					if(strpos($stuff['name'][$x], "serviceCredsBackup.json") === false){
+						$name = explode("-", $stuff['name'][$x]);
+						$junk = array_pop($name);
+						$name = array_pop($name);
 
-				if(strpos($stuff['name'], "serviceCredsBackup.json") === false){
-					$name = explode("-", $stuff['name']);
-					$junk = array_pop($name);
-					$name = array_pop($name);
+						$target = $_SERVER['BACKUPJSONPATH'] . $name . "-backup.json";
 
-					$target = $_SERVER['BACKUPJSONPATH'] . $name . "-backup.json";
-
-					if(move_uploaded_file($stuff['tmp_name'], $target) === true){
-						$returnArray['jsonBackup'] = array("success" => "The file was uploaded successfully");
+						if(move_uploaded_file($stuff['tmp_name'][$x], $target) === true){
+							$returnArray['jsonBackup'][$x] = array("success" => "The file was uploaded successfully");
+						}else{
+							$returnArray['jsonBackup'][$x] = array("failure" => "unable to move the file");
+						}
 					}else{
-						$returnArray['jsonBackup'] = array("failure" => "unable to move the file");
-					}
-				}else{
-					$target = $_SERVER['SERVICECREDSBACKUP'];
+						$target = $_SERVER['SERVICECREDSBACKUP'];
 
-					if(move_uploaded_file($stuff['tmp_name'], $target) === true){
-						$returnArray['serviceCredsBackup'] = array("success" => "The file was uploaded successfully");
-					}else{
-						$returnArray['serviceCredsBackup'] = array("failure" => "unable to move the file");
+						if(move_uploaded_file($stuff['tmp_name'][$x], $target) === true){
+							$returnArray['serviceCredsBackup'] = array("success" => "The file was uploaded successfully");
+						}else{
+							$returnArray['serviceCredsBackup'] = array("failure" => "unable to move the file");
+						}
 					}
 				}
-				return json_encode($returnArray);
 			}
+
+			return json_encode($returnArray);
 		}else{
 			return json_encode(array("failure" => "an error occurred uploading the file"));
 		}

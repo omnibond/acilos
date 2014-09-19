@@ -70,6 +70,7 @@
 				this.fUploader = document.createElement("input");
 				this.fUploader.setAttribute("type", "file");
 				this.fUploader.setAttribute("name", "file[]");
+				this.fUploader.setAttribute("multiple", "");
 				this.fUploader.style.class = "roundedBorder5pxClass";
 
 				if(isFirefox === true){
@@ -104,10 +105,13 @@
 							this.genericErrorDiv = null;
 						}
 
-						console.log("THE FILE IS: ", this.fUploader.files[0]);
-
 						var fd = new FormData();
-						fd.append("fUploader", fUploader.files[0]);
+
+						for(var x = 0; x < this.fUploader.files.length; x++){
+							console.log("appending ", this.fUploader.files[x]);
+							fd.append("fUploader[]", this.fUploader.files[x]);
+						}
+
 						var xhr = new XMLHttpRequest();
 
 						xhr.onreadystatechange = lang.hitch(this, function(){
@@ -116,17 +120,25 @@
 
 						        this.response = JSON.parse(this.response);
 
+						        var failureFlag = "false";
+
 						        if(this.response){
 						        	if(this.response['jsonBackup']){
-						        		if(this.response['jsonBackup']['success']){
-							        		this.jsonBackupDiv = domConstruct.create("div", {innerHTML: this.response['jsonBackup']['success'], style: "margin-top: 5px"});
+						        		for(var y = 0; y < this.response['jsonBackup'].length; y++){
+						        			if(this.response['jsonBackup'][y]['failure']){
+						        				failureFlag = "true";
+						        			}
+								        }
+
+								        if(this.failureFlag == "true"){
+								        	this.jsonBackupDiv = domConstruct.create("div", {innerHTML: "An error occurred during the upload", style: "margin-top: 5px"});
 
 							        		leftPane.domNode.appendChild(this.jsonBackupDiv);
-							        	}else if(this.response['jsonBackup']['failure']){
-							        		this.jsonBackupDiv = domConstruct.create("div", {innerHTML: this.response['jsonBackup']['failure'], style: "margin-top: 5px"});
+								        }else{
+								        	this.jsonBackupDiv = domConstruct.create("div", {innerHTML: "The upload was successful", style: "margin-top: 15px"});
 
 							        		leftPane.domNode.appendChild(this.jsonBackupDiv);
-							        	}
+								        }
 						        	}else if(this.response['serviceCredsBackup']){
 						        		if(this.response['serviceCredsBackup']['success']){
 							        		this.serviceCredsBackupDiv = domConstruct.create("div", {innerHTML: this.response['serviceCredsBackup']['success'], style: "margin-top: 5px"});
@@ -138,12 +150,12 @@
 							        		leftPane.domNode.appendChild(this.serviceCredsBackupDiv);
 							        	}
 						        	}else{
-						        		this.genericErrorDiv = domConstruct.create("div", {innerHTML: "An error occurred while uploading file", style: "margin-top: 5px"});
+						        		this.genericErrorDiv = domConstruct.create("div", {innerHTML: "There was an error uploading the files", style: "margin-top: 5px"});
 
 						        		leftPane.domNode.appendChild(this.genericErrorDiv);
 						        	}
 						        }
-						    }
+						    }l
 						});
 
 						xhr.open("POST", "rest/v1.0/Database/uploadJsonBackupFile");
