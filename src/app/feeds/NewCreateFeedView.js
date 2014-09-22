@@ -241,7 +241,7 @@ define([
 					"name": "saveButton",
 					"right": "true",
 					onClick: lang.hitch(this, function(){
-						var dialog = new Dialog({
+						this.dialog = new Dialog({
 							title: "Save your query",
 							draggable: false,
 							"class": "saveDijitDialog"
@@ -268,7 +268,7 @@ define([
 	
 									this.writeQueryTerm(feedNameTextBox.get("value"), this.checked, this.queryBox.get("value"), feedArr).then(lang.hitch(this, function(){
 										this.publicQueryTime();
-										dialog.hide();
+										this.dialog.hide();
 										this.router.goToAbsoluteRoute("/feeds/PublicMainView");
 									}))
 								}else{
@@ -290,8 +290,8 @@ define([
 						saveDiv.appendChild(mainFeedCheckBox.domNode);
 						saveDiv.appendChild(checkBoxLabelDiv);
 
-						dialog.set("content", saveDiv);
-						dialog.show();
+						this.dialog.set("content", saveDiv);
+						this.dialog.show();
 					})
 				});
 
@@ -418,6 +418,11 @@ define([
 				if(this.whiteoutDiv){
 					document.body.removeChild(this.whiteoutDiv);
 					this.whiteoutDiv = null;
+				}
+
+				if(this.dialog){
+					this.dialog.destroyRecursive();
+					this.dialog = null;
 				}
 			}
 		});

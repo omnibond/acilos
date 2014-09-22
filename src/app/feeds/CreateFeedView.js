@@ -204,7 +204,7 @@ define([
 					"name": "saveButton",
 					"right": "true",
 					onClick: lang.hitch(this, function(){
-						var dialog = new Dialog({
+						this.dialog = new Dialog({
 							title: "Save your query",
 							draggable: false,
 							"class": "saveDijitDialog"
@@ -221,9 +221,9 @@ define([
 								if(feedNameTextBox.get("value") != "" && this.searchBox.get("value") != ""){	
 									this.writeLocalFeed(feedNameTextBox.get("value"), this.searchBox.get("value"));
 
-									dialog.hide();
+									this.dialog.hide();
 
-									this.router.go("/");
+									this.router.go("/LocalMainView");
 								}else{
 									console.log("you must enter a name for your feed");
 								}	
@@ -235,8 +235,8 @@ define([
 						saveDiv.appendChild(feedNameTextBox.domNode);
 						saveDiv.appendChild(saveFeedButton.domNode);
 
-						dialog.set("content", saveDiv);
-						dialog.show();
+						this.dialog.set("content", saveDiv);
+						this.dialog.show();
 					})
 				});
 
@@ -323,6 +323,11 @@ define([
 				if(this.whiteoutDiv){
 					document.body.removeChild(this.whiteoutDiv);
 					this.whiteoutDiv = null;
+				}
+
+				if(this.dialog){
+					this.dialog.destroyRecursive();
+					this.dialog = null;
 				}
 			}
 		});

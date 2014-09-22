@@ -124,16 +124,8 @@ define(['dojo/_base/declare',
 					})
 				});
 
-				this.localButton = new Button({
-					"name": "localButton",
-					"right": "true",
-					onClick: lang.hitch(this, function(){
-						this.router.go("/");
-					})
-				});
-
 				this.selectorItem = new SelectorBar({
-					buttons: [this.editFeedButton, this.newFeedButton, this.deleteFeedButton, this.scrollButton, this.localButton]
+					buttons: [this.editFeedButton, this.newFeedButton, this.deleteFeedButton, this.scrollButton]
 				})
 				this.selectorItem.placeAt(this.domNode.parentNode);
 			}
@@ -160,7 +152,7 @@ define(['dojo/_base/declare',
 		},
 		
 		activate: function(e){
-			topic.publish("/dojo-mama/updateSubNav", {back: '/', title: "Your public feeds"} );
+			topic.publish("/dojo-mama/updateSubNav", {back: '/feeds', title: "Your public feeds"} );
 
 			if(this.mainList){
 				this.mainList.destroyRecursive();

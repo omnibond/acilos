@@ -42,7 +42,8 @@ define(['dojo/_base/declare',
 		'app/feeds/LocalMainView',
 		'app/feeds/NewDeleteFeed',
 		'app/feeds/NewEditFeed',
-		'app/mainFeed/BlastView'
+		'app/mainFeed/BlastView',
+		'app/feeds/MainView'
 ], function(
 	declare, 
 	Module, 
@@ -63,7 +64,8 @@ define(['dojo/_base/declare',
 	LocalMainView,
 	NewDeleteFeed,
 	NewEditFeed,
-	BlastView
+	BlastView,
+	MainView
 ) {
 	return declare([Module], {
 		
@@ -203,15 +205,21 @@ define(['dojo/_base/declare',
 				getSpecificFeedList: lang.hitch(this, this.getSpecificFeedList)
 			});
 
-			this.rootView = new LocalMainView({
-				route: '/',
+			this.LocalMainView = new LocalMainView({
+				route: '/LocalMainView',
 
 				FeedView: this.FeedView,
-
+				
 				getLocalFeedList: lang.hitch(this, this.getLocalFeedList)
 			});
+
+			this.rootView = new MainView({
+				route: '/'
+			});
 			
+
 			this.registerView(this.rootView);
+			this.registerView(this.LocalMainView);
 			this.registerView(this.FeedView);
 			this.registerView(this.CreateFeedView);
 			this.registerView(this.DeleteFeed);
