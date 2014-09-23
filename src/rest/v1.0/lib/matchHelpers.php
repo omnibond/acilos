@@ -393,6 +393,8 @@ function matchQueryString($action, $searchObj, $from){
 		'filter' => array(
 			'bool' => array(
 				'should' => array(
+				),
+				'must' => array(
 				)
 			)
 		),
@@ -408,7 +410,7 @@ function matchQueryString($action, $searchObj, $from){
 			//searchObj['normal'] is the array of items that was in termlist 
 			for($f=0; $f<count($searchObj['normal']); $f++){
 				$temp = array("term" => array("content.queryString" => strtolower($searchObj['normal'][$f])));
-				array_push($searchArr['query']['bool']['should'], $temp);
+				array_push($searchArr['query']['bool']['must'], $temp);
 			}
 		break;
 		
@@ -437,7 +439,7 @@ function matchQueryString($action, $searchObj, $from){
 			for($f=0; $f<count($searchObj['normal']); $f++){
 				if($searchObj['normal'][$f] != ""){
 					$temp = array("term" => array("content.queryString" => strtolower($searchObj['normal'][$f])));
-					array_push($searchArr['filter']['bool']['should'], $temp);
+					array_push($searchArr['filter']['bool']['must'], $temp);
 				}
 			}
 	

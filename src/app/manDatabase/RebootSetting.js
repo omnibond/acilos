@@ -132,6 +132,16 @@ define(['dojo/_base/declare',
 
 					this.saveRebootSettings(rebootOptions).then(lang.hitch(this, function(obj){
 						console.log("obj is: ", obj);
+
+						if(obj){
+							if(obj['success']){
+								this.successDiv = domConstruct.create("div", {innerHTML: obj['success'], style: "text-align: center; font-weight: bold"});
+								this.mainList.domNode.appendChild(this.successDiv);
+							}else if(obj['failure']){
+								this.failureDiv = domConstruct.create("div", {innerHTML: obj['failure'], style: "text-align: center; font-weight: bold"});
+								this.mainList.domNode.appendChild(this.failureDiv);
+							}
+						}
 					}));
 				})
 			});
