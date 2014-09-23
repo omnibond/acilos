@@ -131,6 +131,11 @@ define(['dojo/_base/declare',
 		},
 		
 		activate: function(e){
+			if(this.selectorItem){
+				this.selectorItem.destroyRecursive();
+				this.selectorItem = null;
+			}
+			
 			topic.publish("/dojo-mama/updateSubNav", {back: '/feeds/PublicMainView', title: e.params.feedTitle} );
 
 			console.log("e.params: ", e.params);
