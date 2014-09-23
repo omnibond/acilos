@@ -233,7 +233,7 @@ define([
 					"name": "saveButton",
 					"right": "true",
 					onClick: lang.hitch(this, function(){
-						var dialog = new Dialog({
+						this.dialog = new Dialog({
 							title: "Save your query",
 							draggable: false,
 							"class": "saveDijitDialog"
@@ -260,7 +260,7 @@ define([
 	
 									this.writeQueryTerm(feedNameTextBox.get("value"), this.checked, this.queryBox.get("value"), feedArr);
 
-									dialog.hide();
+									this.dialog.hide();
 
 									this.router.goToAbsoluteRoute("/feeds");
 								}else{
@@ -282,8 +282,8 @@ define([
 						saveDiv.appendChild(mainFeedCheckBox.domNode);
 						saveDiv.appendChild(checkBoxLabelDiv);
 
-						dialog.set("content", saveDiv);
-						dialog.show();
+						this.dialog.set("content", saveDiv);
+						this.dialog.show();
 					})
 				});
 
@@ -333,34 +333,6 @@ define([
 				this.publicFlag = "false";
 				this.localFlag = "false";
 
-				this.publicButton = new Button({
-					"name": "publicButton",
-					"right": "true",
-					onClick: lang.hitch(this, function(){
-						if(this.publicFlag == "false"){
-							domClass.add(this.publicButton.domNode, "darkenedButton");
-							this.publicFlag = "true";
-						}else{
-							domClass.remove(this.publicButton.domNode, "darkenedButton");
-							this.publicFlag = "false";
-						}
-					})
-				});
-
-				this.localButton = new Button({
-					"name": "localButton",
-					"right": "true",
-					onClick: lang.hitch(this, function(){
-						if(this.localFlag == "false"){
-							domClass.add(this.localButton.domNode, "darkenedButton");
-							this.localFlag = "true";
-						}else{
-							domClass.remove(this.localButton.domNode, "darkenedButton");
-							this.localFlag = "false";
-						}
-					})
-				});
-
 				this.searchBoxQueryButtonHolder = domConstruct.create("div", {"class": "displayBlockOnPhoneClass"});
 				this.searchBoxQueryButtonHolder.appendChild(this.queryBox.domNode);
 				this.searchBoxQueryButtonHolder.appendChild(this.queryButton.domNode);
@@ -374,7 +346,7 @@ define([
 
 				this.selectorItem = new SelectorBar({
 					divs: [this.searchBoxQueryButtonHolder],
-					buttons: [this.scrollButton, this.saveButton, this.publicButton, this.localButton],
+					buttons: [this.scrollButton, this.saveButton],
 					serviceSelectors: [this.services],
 					style: "text-align: center"
 				});
@@ -432,6 +404,11 @@ define([
 				if(this.whiteoutDiv){
 					document.body.removeChild(this.whiteoutDiv);
 					this.whiteoutDiv = null;
+				}
+
+				if(this.dialog){
+					this.dialog.destroyRecursive();
+					this.dialog = null;
 				}
 			}
 		});

@@ -137,23 +137,16 @@ define(['dojo/_base/declare',
 
 			console.log("dogs dogs dogs", e.params.dogs);
 
-			if(this.queryTerm != e.params.queryTerm){
-				if(this.list){
-					this.list.destroyRecursive();
-					this.list = null;
-					this.fromVar = 0;
-					this.buildFeedList(e.params.queryTerm);
-				}else{
-					this.fromVar = 0;
-					this.buildFeedList(e.params.queryTerm);
-				}
+			this.queryTerm = e.params.queryTerm.toLowerCase();
+			if(this.list){
+				this.list.destroyRecursive();
+				this.list = null;
+				this.fromVar = 0;
+				this.buildFeedList(this.queryTerm);
 			}else{
-				if(!this.list){
-					this.fromVar = 0;
-					this.buildFeedList(e.params.queryTerm);
-				}
+				this.fromVar = 0;
+				this.buildFeedList(this.queryTerm);
 			}
-			this.queryTerm = e.params.queryTerm;
 
 			if(!this.selectorItem){
 				this.scrollButton = new Button({
