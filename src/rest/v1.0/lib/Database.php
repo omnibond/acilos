@@ -286,7 +286,7 @@ class Database{
 	}
 
 	public function checkForBackupData(){
-		$backupFiles = glob("../../private/config/*-backup.json");
+		$backupFiles = glob("../../private/config/*-backup.zip");
 
 		if(isset($backupFiles)){
 			if(empty($backupFiles) === true){
@@ -295,7 +295,7 @@ class Database{
 				for($x = 0; $x < count($backupFiles); $x++){
 					$backupFiles[$x] = explode("/", $backupFiles[$x]);
 					$backupFiles[$x] = end($backupFiles[$x]);
-					$backupFiles[$x] = explode("-backup.json", $backupFiles[$x]);
+					$backupFiles[$x] = explode("-backup.zip", $backupFiles[$x]);
 					$backupFiles[$x] = $backupFiles[$x][0];
 				}
 
@@ -317,15 +317,17 @@ class Database{
 
 		$x = 0;
 
+		$arrayOfFiles = array();
+
 		while($x < $count){
-			echo "x is " . $x; ?><br/><br/><?php
+			//echo "x is " . $x;
 
 			$finalStuff = array();
 
 			$timeStamp = time();
 
 			for($y = 0; ($y < $objectsPerFile) && ($y < $count); $y += 200){
-				echo "y is " . $y; ?><br/><br/><?php
+				//echo "y is " . $y; 
 
 				$results = matchAll200($from);
 
@@ -347,16 +349,23 @@ class Database{
 					break 2;
 				}
 
-				if(isset($finalStuff)){
-					echo "the count of finalStuff is: " . count($finalStuff); ?><br/><br/><?php
-					if(count($finalStuff) > 0){
-						$fileName = $_SERVER['BACKUPJSONPATH'] . (string)$timeStamp . "-backup.json";
-
-						file_put_contents($fileName, json_encode($finalStuff));
-					}
-				}
-
 				$from += 200;
+			}
+
+			if(isset($finalStuff)){
+				//echo "the count of finalStuff is: " . count($finalStuff);
+				if(count($finalStuff) > 0){
+					$fileName = $_SERVER['BACKUPJSONPATH'] . (string)$timeStamp . "-backup.json";
+
+					$file = array();
+
+					$file['fullName'] = $fileName;
+					$file['timeStamp'] = (string)$timeStamp;
+
+					file_put_contents($file['fullName'], json_encode($finalStuff));
+
+					array_push($arrayOfFiles, $file);
+				}
 			}
 
 			//sleep for 1/2 second to ensure multiple chunks of data aren't overwritten with the same filename due to the process happening too quickly
@@ -365,9 +374,34 @@ class Database{
 			$x += $y;
 		}
 
+		$returnArray = array();
+
 		$stuff = file_get_contents($_SERVER['SERVICECREDS']);
 
 		file_put_contents($_SERVER['SERVICECREDSBACKUP'], $stuff);
+
+		$zip = new ZipArchive();
+
+		$zipTime = time();
+
+		//We are only allowing users to keep one zipped json backup at a time right now so this will delete any older ones
+		exec('rm -f ../../private/config/*-backup.zip');
+
+		if($zip->open($_SERVER['BACKUPJSONPATH'] . (string)$zipTime . '-backup.zip', ZipArchive::CREATE) !== TRUE){
+			$returnArray['failure'] = "An error occurred while backing up your data - please refresh the page and try again";
+		}else{
+			for($x = 0; $x < count($arrayOfFiles); $x++){
+				if(file_exists($arrayOfFiles[$x]['fullName']) === TRUE){
+					$zip->addFile($arrayOfFiles[$x]['fullName'], $arrayOfFiles[$x]['timeStamp'] . "-backup.json");
+				}
+			}
+
+			$zip->close();
+
+			exec('rm -f ../../private/config/*-backup.json');
+
+			$returnArray['success'] = (string)$zipTime;
+		}
 
 		$wipeCurrentData = $obj['wipeCurrentData'];
 
@@ -378,6 +412,8 @@ class Database{
 			$mapCommand = "curl -XPUT 'http://localhost:9200/app' -d @../../app_mapping.json";
 			$output = shell_exec($mapCommand);
 		}
+
+		return json_encode($returnArray);
 	}
 
 	public function importBackupData(){
@@ -450,7 +486,7 @@ class Database{
 
 		$returnArray = array();
 
-		if(copy($_SERVER['BACKUPJSONPATH'] . $fileName . "-backup.json", "../../" . $fileName . "-backup.json") == true){
+		if(copy($_SERVER['BACKUPJSONPATH'] . $fileName . "-backup.zip", "../../" . $fileName . "-backup.zip") == true){
 			$returnArray['referer'] = $referer;
 			$returnArray['jsonBackup'] = array("success" => "The file was uploaded successfully");
 		}else{

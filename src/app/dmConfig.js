@@ -93,7 +93,7 @@ define({
 		settings: {
 			title: 'Settings',
 			moduleId: 'dojo-mama/util/ModuleGroup',
-			modules: ['manAccounts', 'manContacts', 'manDatabase', 'backUpData', 'downloadData', 'uploadData', 'restoreData' /*, 'userLookup'*/]
+			modules: ['manAccounts', 'manContacts', 'manDatabase', 'downloadAndBackUpData',/*'backUpData',*/ /*'downloadData',*/ 'uploadData', 'restoreData' /*, 'userLookup'*/]
 		},
 		help: {
 			title: 'Help',
@@ -206,21 +206,26 @@ define({
 			moduleId: 'app/manDatabase/Module',
 			selectedPrimaryNavItem: "settings"
 		},
-		backUpData: {
+		downloadAndBackUpData: {
+			title: 'Download and back up your data',
+			moduleId: 'app/downloadAndBackUpData/Module',
+			selectedPrimaryNavItem: "settings"
+		},
+		/*backUpData: {
 			title: 'Back up your data',
 			moduleId: 'app/backUpData/Module',
 			selectedPrimaryNavItem: "settings"
-		},
+		},*/
 		restoreData: {
 			title: 'Restore backup data',
 			moduleId: 'app/restoreData/Module',
 			selectedPrimaryNavItem: "settings"
 		},
-		downloadData: {
+		/*downloadData: {
 			title: 'Download backup data',
 			moduleId: 'app/downloadData/Module',
 			selectedPrimaryNavItem: "settings"
-		},
+		},*/
 		uploadData: {
 			title: 'Upload backup data',
 			moduleId: 'app/uploadData/Module',

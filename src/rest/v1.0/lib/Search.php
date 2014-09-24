@@ -555,8 +555,8 @@ class Search{
 
 	public function queryFacebook($varObj, $returnObj){
 		//echo "queryFacebook ";
-	//	$var = file_get_contents("php://input");
-	//	$varObj = json_decode($var, true);
+		//$var = file_get_contents("php://input");
+		//$varObj = json_decode($var, true);
 		//print_r($varObj);
 		//query string
 		$query = $varObj['query'];
@@ -581,7 +581,11 @@ class Search{
 			$next = $response['paging']['next'];	
 		}
 
-		$response = $response['data'];
+		if(isset($response)){
+			if(isset($response['data'])){
+				$response = $response['data'];
+			}
+		}
 
 		$returnObj = $this->normalizeNewsFeedObj($response, $varObj['authStuff']['facebook'][0]['accounts'][0], $query, $returnObj);	    
 		

@@ -141,6 +141,11 @@ define(['dojo/_base/declare',
 
 			console.log("e.params is: from activate: ", e.params);
 
+			if(this.selectorItem){
+				this.selectorItem.destroyRecursive();
+				this.selectorItem = null;
+			}
+
 			if(this.feedName != e.params.feedName){
 				if(this.list){
 					this.list.destroyRecursive();

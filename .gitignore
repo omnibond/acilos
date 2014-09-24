@@ -32,4 +32,5 @@ profiles/app-development.profile.js
 elasticsearch.yml
 *.yml
 *-backup.json
+*-backup.zip
 src/cron/poller/companyObj.json
