@@ -7,5 +7,5 @@ SetEnv SERVICECREDSBACKUP /home/aaron/github/acilos/src/private/config/serviceCr
 SetEnv POSTLOG /home/aaron/github/acilos/src/private/config/postLog.json
 php_value session.cookie_lifetime 604800
 php_value session.gc_maxlifetime 604800
-php_value upload_max_filesize 30M
-php_value post_max_size 30M
+php_value upload_max_filesize 100M
+php_value post_max_size 100M

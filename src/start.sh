@@ -196,8 +196,8 @@ echo SetEnv POSTLOG $MAINPATH"/private/config/postLog.json" >> .htaccess
 
 echo "php_value session.cookie_lifetime 604800" >> .htaccess
 echo "php_value session.gc_maxlifetime 604800" >> .htaccess
-echo "php_value upload_max_filesize 30M" >> .htaccess
-echo "php_value post_max_size 30M" >> .htaccess
+echo "php_value upload_max_filesize 100M" >> .htaccess
+echo "php_value post_max_size 100M" >> .htaccess
 
 echo "Priming database and clearing data"
 #php startES.php
