@@ -134,6 +134,12 @@ define(['dojo/_base/declare',
 				label: "Restore data from backup",
 				style: "margin-top: 10px",
 				onClick: lang.hitch(this, function(){
+					for(var y = 0; y < this.backupList.length; y++){
+						if(this.backupList[y]['name'] == this.backupFileComboBox.textbox.value){
+							var fileName = this.backupList[y]['originalName'];
+						}
+					}
+					
 					if(fileName == ""){
 						alert("You must select a file to back up from");
 					}else{
@@ -151,12 +157,6 @@ define(['dojo/_base/declare',
 							var wipeDBData = "false";
 						}else if(this.wipeDataBox.get("checked") == true){
 							var wipeDBData = "true";
-						}
-
-						for(var y = 0; y < this.backupList.length; y++){
-							if(this.backupList[y]['name'] == this.backupFileComboBox.textbox.value){
-								var fileName = this.backupList[y]['originalName'];
-							}
 						}
 
 						console.log("the fileName is: ", fileName);

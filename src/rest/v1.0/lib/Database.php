@@ -422,7 +422,7 @@ class Database{
 
 		$fileName = $obj['fileName'];
 
-		$result = is_file($_SERVER['BACKUPJSONPATH'] . $fileName . "-backup.json");
+		$result = is_file($_SERVER['BACKUPJSONPATH'] . $fileName . "-backup.zip");
 
 		if(isset($result)){
 			if($result === true){
@@ -451,17 +451,44 @@ class Database{
 					}
 				}
 
-				$data = file_get_contents($_SERVER['BACKUPJSONPATH'] . $fileName . "-backup.json");
-				$data = json_decode($data, true);
+				$zip = new ZipArchive;
 
-				echo "the count is: ";
-				print_R(count($data));
-
-				for($x = 0; $x < count($data); $x++){
-					$result = $this->writeObject($data[$x]);
+				if($zip->open($_SERVER['BACKUPJSONPATH'] . $fileName . "-backup.zip") === TRUE){
+					$zip->extractTo($_SERVER['BACKUPJSONPATH']);
+					$zip->close();
+				}else{
+					return json_encode(array("failure" => "unable to unzip the files"));
 				}
 
-				unlink($_SERVER['BACKUPJSONPATH'] . $fileName . "-backup.json");
+				$backupFiles = glob("../../private/config/*-backup.json");
+
+				if(isset($backupFiles)){
+					if(empty($backupFiles) === true){
+						return json_encode(array("failure" => "there is no backup data"));
+					}else{
+						for($x = 0; $x < count($backupFiles); $x++){
+							$backupFiles[$x] = explode("/", $backupFiles[$x]);
+							$backupFiles[$x] = end($backupFiles[$x]);
+							$backupFiles[$x] = explode("-backup.json", $backupFiles[$x]);
+							$backupFiles[$x] = $backupFiles[$x][0];
+						}
+					}
+				}
+
+				for($r = 0; $r < count($backupFiles); $r++){
+					$fileName = $backupFiles[$r];
+					$data = file_get_contents($_SERVER['BACKUPJSONPATH'] . $fileName . "-backup.json");
+					$data = json_decode($data, true);
+
+					//echo "the count is: ";
+					//print_R(count($data));
+
+					for($x = 0; $x < count($data); $x++){
+						$result = $this->writeObject($data[$x]);
+					}
+
+					unlink($_SERVER['BACKUPJSONPATH'] . $fileName . "-backup.json");
+				}
 			}else{
 				return json_encode(array("failure" => "there is no backup file with that name"));
 			}
@@ -519,7 +546,7 @@ class Database{
 						$junk = array_pop($name);
 						$name = array_pop($name);
 
-						$target = $_SERVER['BACKUPJSONPATH'] . $name . "-backup.json";
+						$target = $_SERVER['BACKUPJSONPATH'] . $name . "-backup.zip";
 
 						if(move_uploaded_file($stuff['tmp_name'][$x], $target) === true){
 							$returnArray['jsonBackup'][$x] = array("success" => "The file was uploaded successfully");

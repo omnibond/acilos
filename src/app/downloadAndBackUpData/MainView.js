@@ -75,7 +75,7 @@ define(['dojo/_base/declare',
 		buildMainList: function(obj){
 			this.mainList = new EdgeToEdgeList({ });
 
-			this.instructionDiv = domConstruct.create("div", {innerHTML: "This page will allow you to back up the items in your database. Your service credentials will also be backed up. Just click 'Back up data' to back up your data.", style: "margin-bottom: 10px"});
+			this.instructionDiv = domConstruct.create("div", {innerHTML: "This page will allow you to back up the items in your database. Your service credentials will also be backed up. Just click 'Back up data' to back up your data. This may take a little while if you have a lot of data to back up.", style: "margin-bottom: 10px"});
 
 			this.wipeDataWrapperDiv = domConstruct.create("div", {});
 
@@ -262,7 +262,7 @@ define(['dojo/_base/declare',
 		},
 		
 		activate: function() {
-			topic.publish("/dojo-mama/updateSubNav", {back: '/settings', title: "Download and back up data"} );
+			topic.publish("/dojo-mama/updateSubNav", {back: '/settings', title: "Back up and download data"} );
 
 			this.checkForBackupData().then(lang.hitch(this, function(obj){
 				if(!obj){
