@@ -229,6 +229,32 @@ define([
 					})
 				});
 
+				this.helpButton = new Button({
+					"name": "helpButton",
+					onClick: lang.hitch(this, function(){
+						this.dialog = new Dialog({
+							title: "Help",
+							draggable: false,
+							"class": "helpDijitDialog",
+							onHide: lang.hitch(this, function(){
+								if(this.whiteoutDiv){
+									document.body.removeChild(this.whiteoutDiv);
+									this.whiteoutDiv = null;
+								}
+							})
+						});
+
+						var dialogDiv = domConstruct.create("div", {innerHTML: "The query results will be more specific if you enter more terms, and you can put quotes around something to search for that phrase exactly. We pass the query string along 'as is' with no normalization. Twitter supports more advanced query strings - <a href='https://dev.twitter.com/rest/public/search' target='_blank' style='outline: none'>Here is a link to Twitter's documentation.</a>"});
+
+						this.whiteoutDiv = domConstruct.create("div", {"class": "whiteoutDiv"});
+
+						this.dialog.set("content", dialogDiv);
+						this.dialog.show();
+
+						document.body.appendChild(this.whiteoutDiv);
+					})
+				});
+
 				this.saveButton = new Button({
 					"name": "saveButton",
 					"right": "true",
@@ -347,6 +373,7 @@ define([
 				this.selectorItem = new SelectorBar({
 					divs: [this.searchBoxQueryButtonHolder],
 					buttons: [this.scrollButton, this.saveButton],
+					toolTips: [this.helpButton],
 					serviceSelectors: [this.services],
 					style: "text-align: center"
 				});
