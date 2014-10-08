@@ -464,10 +464,28 @@ define([
 						this.picContent.domNode.appendChild(div);
 						this.roundRight.addChild(this.picContent);
 					}else if(obj.content.objectType == "video"){
-						var picDiv = domConstruct.create("div", {innerHTML: '<span><a href="'+obj.content.url+'" target="_blank"><img src="/app/resources/img/playButton.png" style="min-width: 200px; max-width: 90% !important; max-height: 90% !important; background-size: contain !important; background-position: center center !important; background: no-repeat url('+obj.content.picture+')" /></a></span>'});
+						var holderPicDiv = domConstruct.create("div", {innerHTML: '<span><img src="'+obj.content.picture+'" style="min-width: 200px; max-width: 100% !important; max-height: 100% !important" /></span>', style: "top: 20px"});
 
-						this.picContent.domNode.appendChild(picDiv);
+						var picDiv = domConstruct.create("div", {innerHTML: '<span><a href="'+obj.content.url+'" target="_blank"><img src="/app/resources/img/playButton.png" style="opacity: 0.7; min-width: 100px; max-width: 90% !important; max-height: 90% !important; background-size: contain !important; background-position: center center !important" /></a></span>', style: "margin: auto; position: absolute; top: 0; left: 0; bottom: 0; right: 0; height: 120px; width: 120px"});
+
+						holderPicDiv.appendChild(picDiv);
+
+						//holderPicDiv.domNode.style.width = obj.content.url.width;
+
+						this.picContent.domNode.appendChild(holderPicDiv);
 						this.roundRight.addChild(this.picContent);
+
+						var image = new Image();
+						image.src = obj.content.picture;
+
+						console.log("the picture is: ", image);
+						console.log("the picture's width is: ", image.naturalWidth);
+
+						if(image.naturalWidth >= 200){
+							holderPicDiv.style.width = image.naturalWidth + "px";
+						}else{
+							holderPicDiv.style.width = "200px";
+						}
 					}else{
 						if(obj.content.objectType == "photo"){
 							var div = domConstruct.create("div", {innerHTML: '<span><img src="'+obj.content.picture+'" style="max-width:90%;max-height:90%;min-width:200px;" /></a></span>'});

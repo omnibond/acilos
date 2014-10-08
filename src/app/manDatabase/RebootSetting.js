@@ -135,9 +135,19 @@ define(['dojo/_base/declare',
 
 						if(obj){
 							if(obj['success']){
+								if(this.successDiv){
+									this.successDiv.destroyRecursive();
+									this.successDiv = null;
+								}
+
 								this.successDiv = domConstruct.create("div", {innerHTML: obj['success'], style: "text-align: center; font-weight: bold"});
 								this.mainList.domNode.appendChild(this.successDiv);
 							}else if(obj['failure']){
+								if(this.failureDiv){
+									this.failureDiv.destroyRecursive();
+									this.failureDiv = null;
+								}
+
 								this.failureDiv = domConstruct.create("div", {innerHTML: obj['failure'], style: "text-align: center; font-weight: bold"});
 								this.mainList.domNode.appendChild(this.failureDiv);
 							}
