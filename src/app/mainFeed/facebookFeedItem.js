@@ -468,9 +468,9 @@ define([
 						image.src = "";
 						image.src = obj.content.picture;
 
-						var holderPicDiv = domConstruct.create("div", {innerHTML: '<span><img src="'+image.src+'" style="min-width: 200px; max-width: 100% !important; max-height: 100% !important" /></span>', style: "top: 20px; text-align: center"});
+						var holderPicDiv = domConstruct.create("div", {innerHTML: '<span><img src="'+image.src+'" style="max-width: 100% !important; max-height: 100% !important" /></span>', style: "text-align: center"});
 
-						var picDiv = domConstruct.create("div", {innerHTML: '<span><a href="'+obj.content.url+'" target="_blank"><img src="/app/resources/img/playButton.png" style="opacity: 0.7; min-width: 100px; max-width: 90% !important; max-height: 90% !important; background-size: contain !important; background-position: center center !important" /></a></span>', style: "margin: auto; position: absolute; top: 0; left: 0; bottom: 0; right: 0; height: 120px; width: 120px"});
+						var picDiv = domConstruct.create("div", {innerHTML: '<span><a href="'+obj.content.url+'" target="_blank"><img src="/app/resources/img/playButton.png" style="opacity: 0.7; max-width: 90% !important; max-height: 90% !important; background-size: contain !important; background-position: center center !important" /></a></span>', style: "margin: auto; position: absolute; top: 6px; left: 0; bottom: 0; right: 0; height: 120px; width: 120px"});
 
 						holderPicDiv.appendChild(picDiv);
 
@@ -479,14 +479,16 @@ define([
 
 						image.onload = function(){
 							if(image.width <= 200){
-								holderPicDiv.parentNode.style.width = "200px";
+								holderPicDiv.parentNode.style.width = image.width + "px";
+								holderPicDiv.parentNode.style.paddingBottom = "13px";
+								holderPicDiv.parentNode.style.paddingTop = "13px";
 							}
 						}
 					}else{
 						if(obj.content.objectType == "photo"){
-							var div = domConstruct.create("div", {innerHTML: '<span><img src="'+obj.content.picture+'" style="max-width:90%;max-height:90%;min-width:200px;" /></a></span>'});
+							var div = domConstruct.create("div", {innerHTML: '<span><img src="'+obj.content.picture+'" style="max-width:90%;max-height:90%" /></a></span>'});
 						}else{
-							var div = domConstruct.create("div", {innerHTML: '<span><a href="'+obj.content.url+'" target="_blank"><img src="'+obj.content.picture+'" style="max-width:90%;max-height:90%;min-width:200px;" /></a></span>'});
+							var div = domConstruct.create("div", {innerHTML: '<span><a href="'+obj.content.url+'" target="_blank"><img src="'+obj.content.picture+'" style="max-width:90%;max-height:90%" /></a></span>'});
 						}
 
 						div.onclick = lang.hitch(this, function(){
@@ -523,7 +525,7 @@ define([
 							"class": "feedPicContentItemClass"
 						});
 
-						var div = domConstruct.create("div", {innerHTML: '<span><img src="'+obj.content.url+'" style="max-width:90%;max-height:90%;min-width:200px;" /></a></span>'});
+						var div = domConstruct.create("div", {innerHTML: '<span><img src="'+obj.content.url+'" style="max-width:90%;max-height:90%" /></a></span>'});
 
 						div.onclick = lang.hitch(this, function(){
 							var dialog = new Dialog({
