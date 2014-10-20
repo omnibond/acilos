@@ -34,3 +34,6 @@ elasticsearch.yml
 *-backup.json
 *-backup.zip
 src/cron/poller/companyObj.json
+*.mp4
+testPage.html
+testPageLocal.html
