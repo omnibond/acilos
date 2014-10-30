@@ -24,6 +24,7 @@ src/util
 src/dijit
 composer.lock
 src/vendor
+src/videos
 dist
 profiles/app-production.profile.js
 profiles/app-development.profile.js
