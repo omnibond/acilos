@@ -138,14 +138,26 @@ class Search{
 		if(count(explode("\"", $searchString)) > 2){
 			$contains = $contains . "hasQuotes";
 		}
+		if(count(explode("OR", $searchString)) > 1){
+			$contains = $contains . "hasOR";
+		}
 		if((strpos($searchString, ":") !== FALSE)){
 			$contains = $contains . "hasColon";
 		}
-		if($contains != "hasQuotes" && $contains != "hasColon" && $contains != "hasQuoteshasColon"){
-			$contains = $contains . "normal";
-		}
 		if($contains == "hasQuoteshasColon"){
-			$contains = "hasBoth";
+			$contains = "hasQuotesAndColon";
+		}
+		if($contains == "hasQuoteshasOR"){
+			$contains = "hasQuotesAndOR";
+		}
+		if($contains == "hasORhasColon"){
+			$contains = "hasColonAndOR";
+		}
+		if($contains == "hasQuoteshasORhasColon"){
+			$contains = "hasAll";
+		}
+		if($contains != "hasQuotes" && $contains != "hasOR" && $contains != "hasColon" && $contains != "hasQuotesAndColon" && $contains != "hasQuotesAndOR" && $contains != "hasColonAndOR" && $contains != "hasAll"){
+			$contains = $contains . "normal";
 		}
 	
 		switch ($contains){
@@ -197,7 +209,38 @@ class Search{
 				$response = matchQueryString($contains, $searchObj, $from);
 			break;
 
-			case "hasBoth":
+			case "hasOR":
+				$searchObj = array(
+					"must" => array(),
+					"should" => array()
+				);
+
+				$termList = explode("OR", $searchString);
+				$mustList = explode("+", $termList[0]);
+				$shouldList = explode("+", $termList[1]);
+
+				for($q = 0; $q < count($mustList); $q++){
+					if(isset($mustList[$q])){
+						if($mustList[$q] != ""){
+							array_push($searchObj['must'], $mustList[$q]);
+						}
+					}
+				}
+
+				for($q = 0; $q < count($shouldList); $q++){
+					if(isset($shouldList[$q])){
+						if($shouldList[$q] != ""){
+							array_push($searchObj['should'], $shouldList[$q]);
+						}
+					}
+				}
+
+				//print_r($searchObj);
+
+				$response = matchQueryString($contains, $searchObj, $from);
+			break;
+
+			case "hasQuotesAndColon":
 				$searchObj = array(
 					"normal" => "",
 					"colon" => ""
@@ -226,6 +269,18 @@ class Search{
 				$searchObj["normal"] = $normObj;
 
 				$response = matchQueryString($contains, $searchObj, $from);
+			break;
+
+			case "hasQuotesAndOR":
+				//put some code here
+			break;
+
+			case "hasColonAndOR":
+				//put some code here
+			break;
+
+			case "hasAll":
+				//put some code here
 			break;
 
 			default:
