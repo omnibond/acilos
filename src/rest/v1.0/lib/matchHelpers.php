@@ -382,12 +382,8 @@ function matchQueryString($action, $searchObj, $from){
 		'size' => $size,
 		"query" => array(
 			'bool' => array(
-				"should" => array(
-					#array push each search term inside this array
-				),
-				"must" => array(
-					#array push each search term inside this array
-				)
+				"should" => array(),
+				"must" => array()
 			)
 		),
 		'filter' => array(
@@ -407,13 +403,11 @@ function matchQueryString($action, $searchObj, $from){
 
 	switch($action){
 		case "normal":
-			//searchObj['normal'] is the array of items that was in termlist 
 			for($f=0; $f<count($searchObj['normal']); $f++){
 				$temp = array("term" => array("content.queryString" => strtolower($searchObj['normal'][$f])));
 				array_push($searchArr['query']['bool']['must'], $temp);
 			}
 
-			#print_r($searchArr);
 			$res = $es->search($searchArr);
 		break;
 		
@@ -437,7 +431,6 @@ function matchQueryString($action, $searchObj, $from){
 				array_push($searchArr['query']['bool']['must'], $temp);
 			}
 
-			#print_r($searchArr);
 			$res = $es->search($searchArr);
 		break;
 		
@@ -464,20 +457,16 @@ function matchQueryString($action, $searchObj, $from){
 				}
 			}
 
-			#print_r($searchArr);
 			$res = $es->search($searchArr);
 		break;
 
 		case "hasOR":
-			//searchObj['normal'] is the array of items that was in termlist 
-			for($f=0; $f<count($searchObj['must']); $f++){
-				$temp = array("term" => array("content.queryString" => strtolower($searchObj['must'][$f])));
+			for($f=0; $f<count($searchObj['before']); $f++){
+				$temp = array("term" => array("content.queryString" => strtolower($searchObj['before'][$f])));
 				array_push($searchArr['query']['bool']['must'], $temp);
 			}
 
 			$res = $es->search($searchArr);
-
-			//print_r($res);
 
 			$finalResponse = array(
 				"hits" => array(
@@ -489,8 +478,6 @@ function matchQueryString($action, $searchObj, $from){
 				if(isset($res['hits'])){
 					if(isset($res['hits']['hits'])){
 						for($r = 0; $r < count($res['hits']['hits']); $r++){
-							//echo "r is: " . $r;
-
 							if(isset($res['hits']['hits'][$r])){
 								$finalResponse['hits']['hits'][$r] = $res['hits']['hits'][$r];
 							}
@@ -499,12 +486,10 @@ function matchQueryString($action, $searchObj, $from){
 				}
 			}
 
-			//echo "r after the first query is: " . $r;
-
-			for($f=0; $f<count($searchObj['should']); $f++){
-				$searchArr['query']['bool']['must'] = array();
-				$temp = array("term" => array("content.queryString" => strtolower($searchObj['should'][$f])));
-				array_push($searchArr['query']['bool']['should'], $temp);
+			$searchArr['query']['bool']['must'] = array();
+			for($f=0; $f<count($searchObj['after']); $f++){
+				$temp = array("term" => array("content.queryString" => strtolower($searchObj['after'][$f])));
+				array_push($searchArr['query']['bool']['must'], $temp);
 			}
 
 			$res = $es->search($searchArr);
@@ -515,8 +500,6 @@ function matchQueryString($action, $searchObj, $from){
 						$count = 0;
 						for($f = $r; $f < (count($res['hits']['hits']) + $r); $f++){
 							$count++;
-							//echo "f is: " . $f;
-
 							if(isset($res['hits']['hits'][$count])){
 								$finalResponse['hits']['hits'][$f] = $res['hits']['hits'][$count];
 							}
@@ -531,22 +514,11 @@ function matchQueryString($action, $searchObj, $from){
 				)
 			);
 
-			//print_R($finalResponse['hits']['hits']);
-			//print_R(count($finalResponse['hits']['hits']));
-
 			for($t = 0; $t < count($finalResponse['hits']['hits']); $t++){
 				if(isset($finalResponse['hits']['hits'][$t])){
-					//echo "it's set!!!!!!";
 					array_push($res['hits']['hits'], $finalResponse['hits']['hits'][$t]);
 				}	
 			}
-
-			/*foreach($finalResponse['hits']['hits'] as $key => $value){
-				echo "the key is: " . $key;
-				array_push($finalResponse['hits']['hits'][$key], $res['hits']['hits']);
-			}*/
-
-			//print_R($res);
 		break;
 		
 		case "hasQuotesAndColon":
@@ -590,7 +562,26 @@ function matchQueryString($action, $searchObj, $from){
 		break;
 
 		case "hasQuotesAndOR":
-			//put some code here
+			for($f=0; $f<count($searchObj['normal']); $f++){
+				if($searchObj['normal'][$f] != ""){
+					$temp = array("term" => array("content.queryString" => strtolower($searchObj['normal'][$f])));
+					array_push($searchArr['query']['bool']['should'], $temp);
+				}
+			}
+			for($f=0; $f<count($searchObj['quotes']); $f++){
+				$rep = str_replace("+", " ", $searchObj['quotes'][$f]);
+				$temp = array("match" => 
+							array("content.queryString" => 
+								array(
+									"query" => strtolower($rep),
+									"type" => "phrase"
+								)
+							)
+						);
+				array_push($searchArr['query']['bool']['must'], $temp);
+			}
+
+			$res = $es->search($searchArr);
 		break;
 
 		case "hasColonAndOR":

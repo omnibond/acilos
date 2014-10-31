@@ -211,8 +211,8 @@ class Search{
 
 			case "hasOR":
 				$searchObj = array(
-					"must" => array(),
-					"should" => array()
+					"before" => array(),
+					"after" => array()
 				);
 
 				$termList = explode("OR", $searchString);
@@ -222,7 +222,7 @@ class Search{
 				for($q = 0; $q < count($mustList); $q++){
 					if(isset($mustList[$q])){
 						if($mustList[$q] != ""){
-							array_push($searchObj['must'], $mustList[$q]);
+							array_push($searchObj['before'], $mustList[$q]);
 						}
 					}
 				}
@@ -230,7 +230,7 @@ class Search{
 				for($q = 0; $q < count($shouldList); $q++){
 					if(isset($shouldList[$q])){
 						if($shouldList[$q] != ""){
-							array_push($searchObj['should'], $shouldList[$q]);
+							array_push($searchObj['after'], $shouldList[$q]);
 						}
 					}
 				}
@@ -272,7 +272,70 @@ class Search{
 			break;
 
 			case "hasQuotesAndOR":
-				//put some code here
+				$searchObj = array(
+					"first" => array(
+						"normal" => "",
+						"quotes" => ""
+					),
+					"second" => array(
+						"normal" => "",
+						"quotes" => ""
+					)
+				);
+
+				$mainTermList = explode("OR", $searchString);
+
+				//print_R($mainTermList);
+
+				//do first half of termList
+				if (preg_match_all('/"([^"]+)"/', $mainTermList[0], $m)) {
+				    $searchObj['first']['quotes'] = $m[1];   
+				}
+
+				$var = explode('"', $mainTermList[0]);
+				$normObj = array();
+				$tempObj = array();
+				for($g = 0; $g<count($var); $g+=2){
+					array_push($tempObj, $var[$g]);
+				}
+				
+				for($h=0; $h < count($tempObj); $h++){
+					$termList = explode("+", $tempObj[$h]);
+					for($j=0; $j < count($termList); $j++){
+						if($termList[$j] != ""){
+							array_push($normObj, $termList[$j]);
+						}
+					}
+				}
+				$searchObj["first"]["normal"] = $normObj;
+
+				//do second half of termList
+				if (preg_match_all('/"([^"]+)"/', $mainTermList[1], $m)) {
+				    $searchObj['second']['quotes'] = $m[1];   
+				}
+
+				$var = explode('"', $mainTermList[1]);
+				$normObj = array();
+				$tempObj = array();
+				for($g = 0; $g<count($var); $g+=2){
+					array_push($tempObj, $var[$g]);
+				}
+				
+				for($h=0; $h < count($tempObj); $h++){
+					$termList = explode("+", $tempObj[$h]);
+					for($j=0; $j < count($termList); $j++){
+						if($termList[$j] != ""){
+							array_push($normObj, $termList[$j]);
+						}
+					}
+				}
+				$searchObj["second"]["normal"] = $normObj;
+
+				//echo "here's the separator";
+
+				//print_R($searchObj);
+
+				$response = matchQueryString($contains, $searchObj, $from);
 			break;
 
 			case "hasColonAndOR":
