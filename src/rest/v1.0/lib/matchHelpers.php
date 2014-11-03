@@ -562,34 +562,325 @@ function matchQueryString($action, $searchObj, $from){
 		break;
 
 		case "hasQuotesAndOR":
-			for($f=0; $f<count($searchObj['normal']); $f++){
-				if($searchObj['normal'][$f] != ""){
-					$temp = array("term" => array("content.queryString" => strtolower($searchObj['normal'][$f])));
-					array_push($searchArr['query']['bool']['should'], $temp);
+			//print_R($searchObj);
+			if(isset($searchObj['first']['normal']) && $searchObj['first']['normal'] != ""){
+				for($f=0; $f<count($searchObj['first']['normal']); $f++){
+					if($searchObj['first']['normal'][$f] != ""){
+						$temp = array("term" => array("content.queryString" => strtolower($searchObj['first']['normal'][$f])));
+						array_push($searchArr['query']['bool']['must'], $temp);
+					}
 				}
 			}
-			for($f=0; $f<count($searchObj['quotes']); $f++){
-				$rep = str_replace("+", " ", $searchObj['quotes'][$f]);
-				$temp = array("match" => 
-							array("content.queryString" => 
-								array(
-									"query" => strtolower($rep),
-									"type" => "phrase"
+			if(isset($searchObj['first']['quotes']) && $searchObj['first']['quotes'] != ""){
+				for($f=0; $f<count($searchObj['first']['quotes']); $f++){
+					$rep = str_replace("+", " ", $searchObj['first']['quotes'][$f]);
+					$temp = array("match" => 
+								array("content.queryString" => 
+									array(
+										"query" => strtolower($rep),
+										"type" => "phrase"
+									)
 								)
-							)
-						);
-				array_push($searchArr['query']['bool']['must'], $temp);
+							);
+					array_push($searchArr['query']['bool']['must'], $temp);
+				}
 			}
 
 			$res = $es->search($searchArr);
+
+			$finalResponse = array(
+				"hits" => array(
+					"hits" => array()
+				)
+			);
+
+			if(isset($res)){
+				if(isset($res['hits'])){
+					if(isset($res['hits']['hits'])){
+						for($r = 0; $r < count($res['hits']['hits']); $r++){
+							if(isset($res['hits']['hits'][$r])){
+								$finalResponse['hits']['hits'][$r] = $res['hits']['hits'][$r];
+							}
+						}
+					}
+				}
+			}			
+
+			$searchArr['query']['bool']['should'] = array();
+			$searchArr['query']['bool']['must'] = array();
+
+			if(isset($searchObj['second']['normal']) && $searchObj['second']['normal'] != ""){
+				for($f=0; $f<count($searchObj['second']['normal']); $f++){
+					if($searchObj['second']['normal'][$f] != ""){
+						$temp = array("term" => array("content.queryString" => strtolower($searchObj['second']['normal'][$f])));
+						array_push($searchArr['query']['bool']['must'], $temp);
+					}
+				}
+			}
+			if(isset($searchObj['second']['quotes']) && $searchObj['second']['quotes'] != ""){
+				for($f=0; $f<count($searchObj['second']['quotes']); $f++){
+					$rep = str_replace("+", " ", $searchObj['second']['quotes'][$f]);
+					$temp = array("match" => 
+								array("content.queryString" => 
+									array(
+										"query" => strtolower($rep),
+										"type" => "phrase"
+									)
+								)
+							);
+					array_push($searchArr['query']['bool']['must'], $temp);
+				}
+			}
+
+			$res = $es->search($searchArr);
+
+			if(isset($res)){
+				if(isset($res['hits'])){
+					if(isset($res['hits']['hits'])){
+						$count = 0;
+						for($f = $r; $f < (count($res['hits']['hits']) + $r); $f++){
+							$count++;
+							if(isset($res['hits']['hits'][$count])){
+								$finalResponse['hits']['hits'][$f] = $res['hits']['hits'][$count];
+							}
+						}
+					}
+				}
+			}
+
+			$res = array(
+				"hits" => array(
+					"hits" => array()
+				)
+			);
+
+			for($t = 0; $t < count($finalResponse['hits']['hits']); $t++){
+				if(isset($finalResponse['hits']['hits'][$t])){
+					array_push($res['hits']['hits'], $finalResponse['hits']['hits'][$t]);
+				}	
+			}
 		break;
 
 		case "hasColonAndOR":
-			//put some code here
+			//here is the hasOR code
+			for($f=0; $f<count($searchObj['before']); $f++){
+				$temp = array("term" => array("content.queryString" => strtolower($searchObj['before'][$f])));
+				array_push($searchArr['query']['bool']['must'], $temp);
+			}
+
+			if($searchObj['colon'] == "twitter" || $searchObj['colon'] == "Twitter" ||
+			$searchObj['colon'] == "facebook" || $searchObj['colon'] == "Facebook" ||
+			$searchObj['colon'] == "instagram" || $searchObj['colon'] == "Instagram" ||
+			$searchObj['colon'] == "linkedin" || $searchObj['colon'] == "Linkedin" || 
+			$searchObj['colon'] == "google" || $searchObj['colon'] == "Google"){
+				$temp = array("term" => array("service" => strtolower($searchObj['colon'])));
+				array_push($searchArr['query']['bool']['must'], $temp);
+			}else{
+				$replaced = explode("+", $searchObj['colon']);
+				for($r=0; $r < count($replaced); $r++){
+					$temp = array("term" => array("actor.displayName" => strtolower($replaced[$r])));
+					array_push($searchArr['query']['bool']['must'], $temp);
+				}
+			}
+
+			$res = $es->search($searchArr);
+
+			$finalResponse = array(
+				"hits" => array(
+					"hits" => array()
+				)
+			);
+
+			if(isset($res)){
+				if(isset($res['hits'])){
+					if(isset($res['hits']['hits'])){
+						for($r = 0; $r < count($res['hits']['hits']); $r++){
+							if(isset($res['hits']['hits'][$r])){
+								$finalResponse['hits']['hits'][$r] = $res['hits']['hits'][$r];
+							}
+						}
+					}
+				}
+			}
+
+			$searchArr['query']['bool']['must'] = array();
+			for($f=0; $f<count($searchObj['after']); $f++){
+				$temp = array("term" => array("content.queryString" => strtolower($searchObj['after'][$f])));
+				array_push($searchArr['query']['bool']['must'], $temp);
+			}
+
+			if($searchObj['colon'] == "twitter" || $searchObj['colon'] == "Twitter" ||
+			$searchObj['colon'] == "facebook" || $searchObj['colon'] == "Facebook" ||
+			$searchObj['colon'] == "instagram" || $searchObj['colon'] == "Instagram" ||
+			$searchObj['colon'] == "linkedin" || $searchObj['colon'] == "Linkedin" || 
+			$searchObj['colon'] == "google" || $searchObj['colon'] == "Google"){
+				$temp = array("term" => array("service" => strtolower($searchObj['colon'])));
+				array_push($searchArr['query']['bool']['must'], $temp);
+			}else{
+				$replaced = explode("+", $searchObj['colon']);
+				for($r=0; $r < count($replaced); $r++){
+					$temp = array("term" => array("actor.displayName" => strtolower($replaced[$r])));
+					array_push($searchArr['query']['bool']['must'], $temp);
+				}
+			}
+
+			$res = $es->search($searchArr);
+
+			if(isset($res)){
+				if(isset($res['hits'])){
+					if(isset($res['hits']['hits'])){
+						$count = 0;
+						for($f = $r; $f < (count($res['hits']['hits']) + $r); $f++){
+							$count++;
+							if(isset($res['hits']['hits'][$count])){
+								$finalResponse['hits']['hits'][$f] = $res['hits']['hits'][$count];
+							}
+						}
+					}
+				}
+			}
+
+			$res = array(
+				"hits" => array(
+					"hits" => array()
+				)
+			);
+
+			for($t = 0; $t < count($finalResponse['hits']['hits']); $t++){
+				if(isset($finalResponse['hits']['hits'][$t])){
+					array_push($res['hits']['hits'], $finalResponse['hits']['hits'][$t]);
+				}	
+			}
 		break;
 
 		case "hasAll":
-			//put some code here
+			//print_R($searchObj);
+			if(isset($searchObj['first']['normal']) && $searchObj['first']['normal'] != ""){
+				for($f=0; $f<count($searchObj['first']['normal']); $f++){
+					if($searchObj['first']['normal'][$f] != ""){
+						$temp = array("term" => array("content.queryString" => strtolower($searchObj['first']['normal'][$f])));
+						array_push($searchArr['query']['bool']['must'], $temp);
+					}
+				}
+			}
+			if(isset($searchObj['first']['quotes']) && $searchObj['first']['quotes'] != ""){
+				for($f=0; $f<count($searchObj['first']['quotes']); $f++){
+					$rep = str_replace("+", " ", $searchObj['first']['quotes'][$f]);
+					$temp = array("match" => 
+								array("content.queryString" => 
+									array(
+										"query" => strtolower($rep),
+										"type" => "phrase"
+									)
+								)
+							);
+					array_push($searchArr['query']['bool']['must'], $temp);
+				}
+			}
+
+			if($searchObj['colon'] == "twitter" || $searchObj['colon'] == "Twitter" ||
+			$searchObj['colon'] == "facebook" || $searchObj['colon'] == "Facebook" ||
+			$searchObj['colon'] == "instagram" || $searchObj['colon'] == "Instagram" ||
+			$searchObj['colon'] == "linkedin" || $searchObj['colon'] == "Linkedin" || 
+			$searchObj['colon'] == "google" || $searchObj['colon'] == "Google"){
+				$temp = array("term" => array("service" => strtolower($searchObj['colon'])));
+				array_push($searchArr['query']['bool']['must'], $temp);
+			}else{
+				$replaced = explode("+", $searchObj['colon']);
+				for($r=0; $r < count($replaced); $r++){
+					$temp = array("term" => array("actor.displayName" => strtolower($replaced[$r])));
+					array_push($searchArr['query']['bool']['must'], $temp);
+				}
+			}
+
+			$res = $es->search($searchArr);
+
+			$finalResponse = array(
+				"hits" => array(
+					"hits" => array()
+				)
+			);
+
+			if(isset($res)){
+				if(isset($res['hits'])){
+					if(isset($res['hits']['hits'])){
+						for($r = 0; $r < count($res['hits']['hits']); $r++){
+							if(isset($res['hits']['hits'][$r])){
+								$finalResponse['hits']['hits'][$r] = $res['hits']['hits'][$r];
+							}
+						}
+					}
+				}
+			}			
+
+			$searchArr['query']['bool']['should'] = array();
+			$searchArr['query']['bool']['must'] = array();
+
+			if(isset($searchObj['second']['normal']) && $searchObj['second']['normal'] != ""){
+				for($f=0; $f<count($searchObj['second']['normal']); $f++){
+					if($searchObj['second']['normal'][$f] != ""){
+						$temp = array("term" => array("content.queryString" => strtolower($searchObj['second']['normal'][$f])));
+						array_push($searchArr['query']['bool']['must'], $temp);
+					}
+				}
+			}
+			if(isset($searchObj['second']['quotes']) && $searchObj['second']['quotes'] != ""){
+				for($f=0; $f<count($searchObj['second']['quotes']); $f++){
+					$rep = str_replace("+", " ", $searchObj['second']['quotes'][$f]);
+					$temp = array("match" => 
+								array("content.queryString" => 
+									array(
+										"query" => strtolower($rep),
+										"type" => "phrase"
+									)
+								)
+							);
+					array_push($searchArr['query']['bool']['must'], $temp);
+				}
+			}
+
+			if($searchObj['colon'] == "twitter" || $searchObj['colon'] == "Twitter" ||
+			$searchObj['colon'] == "facebook" || $searchObj['colon'] == "Facebook" ||
+			$searchObj['colon'] == "instagram" || $searchObj['colon'] == "Instagram" ||
+			$searchObj['colon'] == "linkedin" || $searchObj['colon'] == "Linkedin" || 
+			$searchObj['colon'] == "google" || $searchObj['colon'] == "Google"){
+				$temp = array("term" => array("service" => strtolower($searchObj['colon'])));
+				array_push($searchArr['query']['bool']['must'], $temp);
+			}else{
+				$replaced = explode("+", $searchObj['colon']);
+				for($r=0; $r < count($replaced); $r++){
+					$temp = array("term" => array("actor.displayName" => strtolower($replaced[$r])));
+					array_push($searchArr['query']['bool']['must'], $temp);
+				}
+			}
+
+			$res = $es->search($searchArr);
+
+			if(isset($res)){
+				if(isset($res['hits'])){
+					if(isset($res['hits']['hits'])){
+						$count = 0;
+						for($f = $r; $f < (count($res['hits']['hits']) + $r); $f++){
+							$count++;
+							if(isset($res['hits']['hits'][$count])){
+								$finalResponse['hits']['hits'][$f] = $res['hits']['hits'][$count];
+							}
+						}
+					}
+				}
+			}
+
+			$res = array(
+				"hits" => array(
+					"hits" => array()
+				)
+			);
+
+			for($t = 0; $t < count($finalResponse['hits']['hits']); $t++){
+				if(isset($finalResponse['hits']['hits'][$t])){
+					array_push($res['hits']['hits'], $finalResponse['hits']['hits'][$t]);
+				}	
+			}
 		break;
 		
 		default:

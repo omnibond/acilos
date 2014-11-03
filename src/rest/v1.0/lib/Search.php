@@ -331,19 +331,115 @@ class Search{
 				}
 				$searchObj["second"]["normal"] = $normObj;
 
-				//echo "here's the separator";
-
 				//print_R($searchObj);
 
 				$response = matchQueryString($contains, $searchObj, $from);
 			break;
 
 			case "hasColonAndOR":
-				//put some code here
+				//here is the hasColon code
+				$searchObj = array(
+					"colon" => "",
+					"before" => array(),
+					"after" => array()
+				);
+				$var = explode(":", $searchString);
+				
+				$searchObj['colon'] = $var[0];
+
+				$termList = explode("OR", $var[1]);
+				$mustList = explode("+", $termList[0]);
+				$shouldList = explode("+", $termList[1]);
+
+				for($q = 0; $q < count($mustList); $q++){
+					if(isset($mustList[$q])){
+						if($mustList[$q] != ""){
+							array_push($searchObj['before'], $mustList[$q]);
+						}
+					}
+				}
+
+				for($q = 0; $q < count($shouldList); $q++){
+					if(isset($shouldList[$q])){
+						if($shouldList[$q] != ""){
+							array_push($searchObj['after'], $shouldList[$q]);
+						}
+					}
+				}
+
+				//print_R($searchObj);
+
+				$response = matchQueryString($contains, $searchObj, $from);
 			break;
 
 			case "hasAll":
-				//put some code here
+				$searchObj = array(
+					"colon" => "",
+					"first" => array(
+						"normal" => "",
+						"quotes" => ""
+					),
+					"second" => array(
+						"normal" => "",
+						"quotes" => ""
+					)
+				);
+
+				$var = explode(":", $searchString);
+				
+				$searchObj['colon'] = $var[0];
+
+				$mainTermList = explode("OR", $var[1]);
+
+				//print_R($mainTermList);
+
+				//do first half of termList
+				if (preg_match_all('/"([^"]+)"/', $mainTermList[0], $m)) {
+				    $searchObj['first']['quotes'] = $m[1];   
+				}
+
+				$var = explode('"', $mainTermList[0]);
+				$normObj = array();
+				$tempObj = array();
+				for($g = 0; $g<count($var); $g+=2){
+					array_push($tempObj, $var[$g]);
+				}
+				
+				for($h=0; $h < count($tempObj); $h++){
+					$termList = explode("+", $tempObj[$h]);
+					for($j=0; $j < count($termList); $j++){
+						if($termList[$j] != ""){
+							array_push($normObj, $termList[$j]);
+						}
+					}
+				}
+				$searchObj["first"]["normal"] = $normObj;
+
+				//do second half of termList
+				if (preg_match_all('/"([^"]+)"/', $mainTermList[1], $m)) {
+				    $searchObj['second']['quotes'] = $m[1];   
+				}
+
+				$var = explode('"', $mainTermList[1]);
+				$normObj = array();
+				$tempObj = array();
+				for($g = 0; $g<count($var); $g+=2){
+					array_push($tempObj, $var[$g]);
+				}
+				
+				for($h=0; $h < count($tempObj); $h++){
+					$termList = explode("+", $tempObj[$h]);
+					for($j=0; $j < count($termList); $j++){
+						if($termList[$j] != ""){
+							array_push($normObj, $termList[$j]);
+						}
+					}
+				}
+				$searchObj["second"]["normal"] = $normObj;
+
+				//print_R($searchObj);
+
+				$response = matchQueryString($contains, $searchObj, $from);
 			break;
 
 			default:

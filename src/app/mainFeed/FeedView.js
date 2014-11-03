@@ -207,7 +207,7 @@ define([
 							})
 						});
 
-						var dialogDiv = domConstruct.create("div", {innerHTML: "<span class='helpTitle'>User Search</span><br>Bob Dole: your text here<br><br><span class='helpTitle'>Service Search</span><br>Facebook: your text here<br><br><span class='helpTitle'>Exact Search</span><br>Put \"quotes\" around what you would like to search for"});
+						var dialogDiv = domConstruct.create("div", {innerHTML: "<span class='helpTitle'>User Search</span><br>Bob Dole: your text here<br><br><span class='helpTitle'>Service Search</span><br>Facebook: your text here<br><br><span class='helpTitle'>Exact Search</span><br>Put \"quotes\" around what you would like to search for<br><br><span class='helpTitle'>OR Search</span><br>Red OR Green"});
 
 						this.whiteoutDiv = domConstruct.create("div", {"class": "whiteoutDiv"});
 

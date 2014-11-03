@@ -3800,7 +3800,7 @@ select {
 .helpDijitDialog {
   color: black;
   width: 375px !important;
-  height: 275px !important;
+  height: 300px !important;
   top: 0 !important;
   left: 0 !important;
   right: 0 !important;
@@ -3971,7 +3971,7 @@ select {
   height: 15px;
   width: 15px;
 }
-l .verticalIconClass {
+.verticalIconClass {
   position: absolute;
 }
 .divHoldClass {
