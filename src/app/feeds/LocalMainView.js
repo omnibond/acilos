@@ -133,7 +133,9 @@ define(['dojo/_base/declare',
 				});	
 				this.mainList.addChild(item);	
 			}else{
+				console.log(obj);
 				for(var key in obj){
+					console.log(obj[key]['terms']);
 					var item = new ListItem({
 						label: key,
 						clickable: true,

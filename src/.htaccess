@@ -1,10 +1,10 @@
-SetEnv SERVICECREDS /home/aaron/github/acilos/src/private/config/serviceCreds.json
-SetEnv PUBLICQUERYTERMOBJ /home/aaron/github/acilos/src/private/config/publicQueryTermObj.json
-SetEnv LOCALQUERYTERMOBJ /home/aaron/github/acilos/src/private/config/localQueryTermObj.json
-SetEnv APPSETTINGS /home/aaron/github/acilos/src/private/settings/appSettings.json
-SetEnv BACKUPJSONPATH /home/aaron/github/acilos/src/private/config/
-SetEnv SERVICECREDSBACKUP /home/aaron/github/acilos/src/private/config/serviceCredsBackup.json
-SetEnv POSTLOG /home/aaron/github/acilos/src/private/config/postLog.json
+SetEnv SERVICECREDS /home/rgillet/gitHub/acilos/src/private/config/serviceCreds.json
+SetEnv PUBLICQUERYTERMOBJ /home/rgillet/gitHub/acilos/src/private/config/publicQueryTermObj.json
+SetEnv LOCALQUERYTERMOBJ /home/rgillet/gitHub/acilos/src/private/config/localQueryTermObj.json
+SetEnv APPSETTINGS /home/rgillet/gitHub/acilos/src/private/settings/appSettings.json
+SetEnv BACKUPJSONPATH /home/rgillet/gitHub/acilos/src/private/config/
+SetEnv SERVICECREDSBACKUP /home/rgillet/gitHub/acilos/src/private/config/serviceCredsBackup.json
+SetEnv POSTLOG /home/rgillet/gitHub/acilos/src/private/config/postLog.json
 php_value session.cookie_lifetime 604800
 php_value session.gc_maxlifetime 604800
 php_value upload_max_filesize 100M

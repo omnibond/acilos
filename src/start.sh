@@ -213,7 +213,7 @@ chown -R $running:$running *
 chmod -R 777 *
 
 #Restart apache so the changes to the .htaccess file will apply
-if [ "$running" == "apache" ]; then
+if [ $running = "apache" ]; then
         service httpd restart
 else
         service apache2 restart

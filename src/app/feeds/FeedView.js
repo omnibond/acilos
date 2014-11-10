@@ -73,6 +73,38 @@ define(['dojo/_base/declare',
 			this.fromVar = 0;
 		},
 		
+		setFeedCounter: function(obj){
+			this.tempCount = obj.hits.hits.length;
+			if(kernel.global.feedCount[this.id].count){
+				if(parseInt(kernel.global.feedCount[this.id].count) < (parseInt(obj.count))){
+					this.numero = (parseInt(obj.count) - parseInt(kernel.global.feedCount[this.id].count));
+					console.log("new items: " + this.numero);
+					if(this.numero < 0){
+						this.numero = 0;
+					}
+					kernel.global.feedCount[this.id].count = parseInt(obj.count);
+					
+					if(this.selectorItem){
+						this.selectorItem.destroyRecursive();
+						this.selectorItem = null;
+					}
+					
+					if(this.list){
+						this.list.destroyRecursive();
+						this.list = null;
+						this.fromVar = 0;
+						this.buildFeedList();
+					}else{
+						this.fromVar = 0;
+						this.buildFeedList();
+					}
+				}
+			}else{
+				console.log("count is set to: " + this.tempCount);
+				kernel.global.feedCount[this.id].count = obj.count;
+			}
+		},
+
 		buildFeedList: function(){
 			kernel.global.feedCount[this.id] = {};
 			kernel.global.feedCount[this.id].count = 0;
@@ -83,11 +115,11 @@ define(['dojo/_base/declare',
 				this.list = null;
 			}
 
-			console.log("this.searchString is: ", this.searchString);
-			this.searchString = this.searchString.replace(/ /gi, "+");
+			console.log("this.searchString is: ", this.feedName);
+			this.feedName = this.feedName.replace(/ /gi, "+");
 
 			this.list = new SearchScroller({
-				feedName: this.searchString,
+				feedName: this.feedName,
 				blastView: this.blastView,
 				getFeedData: lang.hitch(this, this.sendSearchString),
 				setStarred: lang.hitch(this, this.setStarred),
@@ -145,24 +177,27 @@ define(['dojo/_base/declare',
 				this.selectorItem.destroyRecursive();
 				this.selectorItem = null;
 			}
-
-			if(this.feedName != e.params.feedName){
-				if(this.list){
-					this.list.destroyRecursive();
-					this.list = null;
-					this.fromVar = 0;
-					this.buildFeedList();
-				}else{
-					this.fromVar = 0;
-					this.buildFeedList();
-				}
+			
+			if(this.searchString){
+				this.feedName = this.searchString;
 			}else{
-				if(!this.list){
-					this.fromVar = 0;
-					this.buildFeedList();
-				}
+				this.router.goToAbsoluteRoute("/feeds/LocalMainView");
 			}
-			this.feedName = e.params.feedName;
+			if(this.list){
+				this.list.destroyRecursive();
+				this.list = null;
+				this.fromVar = 0;
+				this.buildFeedList();
+			}else{
+				this.fromVar = 0;
+				this.buildFeedList();
+			}
+			
+			window.setInterval(lang.hitch(this, function(){
+				this.sendSearchString(this.feedName).then(lang.hitch(this, this.setFeedCounter));
+			//4.something minutes
+			}), 250000);	
+			//}), 5000);	
 
 			if(!this.selectorItem){
 				this.scrollButton = new Button({
