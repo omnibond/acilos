@@ -204,7 +204,7 @@ define([
 						this.mainList.addChild(deleteAuther);
 					}
 					
-					if(obj['accounts'].length == 1 && obj['accounts'][0]['authenticated'] == "true"){						
+					if(obj['accounts'][0]['authenticated'] == "true"){						
 						var addAccount = new ListItem({
 							style: "border:none",
 							variableHeight:true
