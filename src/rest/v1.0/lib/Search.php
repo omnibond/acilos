@@ -184,7 +184,8 @@ class Search{
 				}
 				
 				for($h=0; $h < count($tempObj); $h++){
-					$termList = explode("+", $tempObj[$h]);
+					t
+termList = explode("+", $tempObj[$h]);
 					for($j=0; $j < count($termList); $j++){
 						array_push($normObj, $termList[$j]);
 					}
